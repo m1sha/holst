@@ -13,7 +13,7 @@ const colors: Readonly<Colors> = {
   lineColor: '#3f3f3f',
   activeLineColor: '#3fAf3f',
   gridLineColor: '#e0f7fd',
-  selectLineColor: '#008628'
+  selectLineColor: '#a80000'
 }
 
 export default colors

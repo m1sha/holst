@@ -78,7 +78,7 @@ function drawNumbers (chart: Chart, items: Item[]): void {
     const item = items[dx * i]
     if (!item) continue
     chart.addLabel({
-      text: getDateFormat(new Date(item.Time), 'time'),
+      text: getDateFormat(new Date(item.Time), 'hh:mm'),
       x: width => chart.getPoint(dx * i, 0).x - (width / 2),
       y: _ => chart.bounds.height - chart.padding.bottom + 26,
       style
@@ -96,15 +96,14 @@ function onMove (chart: Chart, items: Item[], e: Point) {
   const layer = chart.actionLayer
   layer.style.strokeStyle = colors.selectLineColor
   layer.style.lineWidth = 2
-  const y0 = chart.padding.top
-  const y1 = chart.bounds.height - chart.padding.bottom
-  layer.path.moveTo(e.x, y0)
-  layer.path.lineTo(e.x, y1)
+  const y0 = chart.bounds.height - chart.padding.bottom
   const xValue = Math.floor(((e.x - chart.padding.left) / chart.delta.x))
   const item = items[xValue]
-  const xLabel = getDateFormat(new Date(item.Time), 'time')
-  chart.addLabel({ text: xLabel, x: p => e.x - (p / 2), y: _ => y1 + 15, style }, 'action')
+  const xLabel = getDateFormat(new Date(item.Time), 'hh:mm:ss')
+  chart.addLabel({ text: xLabel, x: p => e.x - (p / 2), y: _ => y0 + 15, style }, 'action')
   const yN = chart.getPoint(0, item.Value).y
+  layer.path.moveTo(e.x, yN)
+  layer.path.lineTo(e.x, y0)
   layer.path.moveTo(e.x, yN)
   layer.path.lineTo(chart.bounds.x + chart.padding.left, yN)
   chart.addLabel({ text: item.Value.toFixed(2).toString(), x: p => chart.bounds.x + chart.padding.left + (p / 2), y: _ => yN + 15, style }, 'action')
