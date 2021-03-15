@@ -1,0 +1,22 @@
+{
+  "name": "ts-graphic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "cross-env mode=production webpack",
+    "watch": "cross-env mode=development webpack --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-loader": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "ts-loader": "^8.0.18",
+    "typescript": "^4.2.3",
+    "typescript-loader": "^1.1.3",
+    "webpack": "^5.25.1",
+    "webpack-cli": "^4.5.0"
+  }
+}
