@@ -19,8 +19,7 @@ export class EventHandler {
   }
 
   private onWrap (cs: Scene, eventType: EventType, point: Point) {
-    cs.actionLayer.path = new Path2D()
-    cs.dynamicLabels = []
+    cs.freeDynamic()
     if (this.on) this.on(eventType, point)
   }
 }

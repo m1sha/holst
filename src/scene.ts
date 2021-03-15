@@ -3,65 +3,82 @@ import { LabelStyle } from './label-style'
 import { Rect } from './rect'
 import { Shape } from './shape'
 
+export type LabelType = 'static' | 'action'
 export abstract class Scene {
     readonly ctx: CanvasRenderingContext2D
     readonly bounds: Rect
-    readonly layers: Shape[]
-    readonly actionLayer: Shape
-    readonly labels: Label[]
-    dynamicLabels: Label[]
+    readonly shapes: Shape[]
+    readonly actionLayer: Shape // TODO actionLayer: need to create class Layer that will be contain array of shapes
+    private readonly labels: Label[]
+    private actionLabels: Label[]
 
     constructor (canvas: HTMLCanvasElement) {
       this.ctx = canvas.getContext('2d')
       this.bounds = { x: 0, y: 0, width: canvas.width, height: canvas.height }
-      this.layers = []
+      this.shapes = []
       this.labels = []
-      this.dynamicLabels = []
-      this.actionLayer = this.createLayer(false)
+      this.actionLabels = []
+      this.actionLayer = this.createShape(false)
     }
 
-    createLayer (add:boolean = true): Shape {
+    createShape (add:boolean = true): Shape {
       const result = {
         path: new Path2D(),
         style: {}
       } as Shape
 
       if (add) {
-        this.layers.push(result)
+        this.shapes.push(result)
       }
 
       return result
     }
 
+    addLabel (label: Label, labelType: LabelType): void {
+      switch (labelType) {
+        case 'action':
+          this.actionLabels.push(label)
+          break
+        case 'static':
+          this.labels.push(label)
+          break
+      }
+    }
+
     render (): void {
-      for (const layer of this.layers) {
-        this.drawLayer(layer)
+      for (const layer of this.shapes) {
+        this.drawShape(layer)
       }
 
-      this.drawLayer(this.actionLayer)
+      this.drawShape(this.actionLayer)
 
       for (const label of this.labels) {
         this.drawLabel(label)
       }
 
-      for (const label of this.dynamicLabels) {
+      for (const label of this.actionLabels) {
         this.drawLabel(label)
       }
     }
 
-    protected drawLayer (layer: Shape): void {
-      if (layer.style.strokeStyle) {
-        this.ctx.strokeStyle = layer.style.strokeStyle
-        this.ctx.lineWidth = layer.style.lineWidth
-        this.ctx.stroke(layer.path)
+    freeDynamic () {
+      this.actionLayer.path = new Path2D()
+      this.actionLabels = []
+    }
+
+    private drawShape (shape: Shape): void {
+      if (shape.style.strokeStyle) {
+        this.ctx.strokeStyle = shape.style.strokeStyle
+        this.ctx.lineWidth = shape.style.lineWidth
+        this.ctx.stroke(shape.path)
       }
-      if (layer.style.fillStyle) {
-        this.ctx.fillStyle = layer.style.fillStyle
-        this.ctx.fill(layer.path)
+      if (shape.style.fillStyle) {
+        this.ctx.fillStyle = shape.style.fillStyle
+        this.ctx.fill(shape.path)
       }
     }
 
-    protected drawLabel (label: Label) {
+    private drawLabel (label: Label) {
       const style: LabelStyle = label.style || {}
       this.ctx.fillStyle = style.color || '#000'
       const fontName = style.fontName || 'serif'
