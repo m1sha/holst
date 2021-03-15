@@ -1,16 +1,11 @@
-import colors from "./colors"
+// import colors from './colors'
 
-//alert(colors.lineColor)
+// alert(colors.lineColor)
 
- 
-function main(){
-
+export function summa (a: number, b: number): number {
+  return a + b
 }
 
-export function summa(a,b): number{
-    return a+ b
-}
-
-export function dev(): string {
-    return "dd"
+export function dev (): string {
+  return 'dd'
 }
