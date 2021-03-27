@@ -1,5 +1,5 @@
 import { drawAxis, drawBackground, drawGrid } from './layers'
-import { Chart } from './chart'
+import { Coordinates } from './coordinates'
 import colors from './colors'
 import { EventHandler } from './event-handler'
 import { LabelStyle } from './label-style'
@@ -12,7 +12,7 @@ interface Item {
 }
 
 export function linearChart (canvas: HTMLCanvasElement, items: Item[], { countTo, countFrom, dateFrom, dateTo }): void {
-  const chart = new Chart(canvas)
+  const chart = new Coordinates(canvas)
   chart.maxWidth = items.length
   chart.maxHeight = getMax(items)
   chart.padding = { top: 25, left: 50, bottom: 30, right: 50 }
@@ -38,7 +38,7 @@ export function linearChart (canvas: HTMLCanvasElement, items: Item[], { countTo
   chart.render()
 }
 
-function drawGraph (chart: Chart, items: Item[], color: string, width: number, callback?: (p: Item) => boolean): void {
+function drawGraph (chart: Coordinates, items: Item[], color: string, width: number, callback?: (p: Item) => boolean): void {
   const shape = chart.createShape()
   shape.style.strokeStyle = color
   shape.style.lineWidth = width
@@ -55,7 +55,7 @@ function drawGraph (chart: Chart, items: Item[], color: string, width: number, c
   }
 }
 
-function drawNumbers (chart: Chart, items: Item[]): void {
+function drawNumbers (chart: Coordinates, items: Item[]): void {
   const style: LabelStyle = { color: colors.lineColor }
   chart.addLabel({
     text: 0.0.toFixed(2).toString(),
@@ -86,7 +86,7 @@ function drawNumbers (chart: Chart, items: Item[]): void {
   }
 }
 
-function onMove (chart: Chart, items: Item[], e: Point) {
+function onMove (chart: Coordinates, items: Item[], e: Point) {
   const isInSector = e.x >= chart.padding.left && e.x <= chart.bounds.width - chart.padding.right
   if (!isInSector) {
     return
