@@ -4,14 +4,15 @@ module.exports = {
   mode: process.env.mode,
   devtool: 'inline-source-map',
   entry: {
-    'linear-chart': './src/linear-chart.ts'
+    'linear-chart': './src/linear-chart.ts' //,
+    // 'linear-chart2': './src/linear-chart2.ts'
   },
   target: 'web',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
-    library: 'charts' //,
-    // libraryTarget:'umd'
+    library: 'charts'//,
+    // libraryTarget: 'umd'
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js']
