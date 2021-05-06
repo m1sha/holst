@@ -12,7 +12,7 @@ const colors: Readonly<Colors> = {
   graphColor: '#1f4f8f',
   lineColor: '#3f3f3f',
   activeLineColor: '#3fAf3f',
-  gridLineColor: '#e0f7fd',
+  gridLineColor: '#e1f7fd',
   selectLineColor: '#a80000'
 }
 

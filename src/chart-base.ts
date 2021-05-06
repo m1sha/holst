@@ -2,7 +2,7 @@ import { Padding } from './padding'
 import { Point } from './point'
 import { Scene } from './scene'
 
-export class Coordinates extends Scene {
+export class ChartBase extends Scene {
   maxHeight: number
   maxWidth: number
   minHeight: number
