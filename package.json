@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cross-env mode=production webpack",
-    "watch": "cross-env mode=development webpack --watch"
+    "build:web": "cross-env mode=production libraryTarget= webpack",
+    "build:node": "cross-env mode=production libraryTarget=umd webpack",
+    "watch": "cross-env mode=development libraryTarget= webpack --watch"
   },
   "keywords": [],
   "author": "",

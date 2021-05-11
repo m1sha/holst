@@ -5,6 +5,7 @@ interface Colors{
     activeLineColor: string
     gridLineColor: string
     selectLineColor: string
+    selectLineFontColor: string
 }
 
 const colors: Readonly<Colors> = {
@@ -12,8 +13,9 @@ const colors: Readonly<Colors> = {
   graphColor: '#1f4f8f',
   lineColor: '#3f3f3f',
   activeLineColor: '#3fAf3f',
-  gridLineColor: '#e1f7fd',
-  selectLineColor: '#a80000'
+  gridLineColor: 'rgba(220,227,222, 0.11)',
+  selectLineColor: '#a80000',
+  selectLineFontColor: '#010099'
 }
 
 export default colors

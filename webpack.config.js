@@ -1,18 +1,13 @@
 const path = require('path')
 
-module.exports = {
+const config = {
   mode: process.env.mode,
   devtool: 'inline-source-map',
-  entry: {
-    'linear-chart': './src/linear-chart.ts' //,
-    // 'linear-chart2': './src/linear-chart2.ts'
-  },
+  entry: {},
   target: 'web',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js',
-    library: 'charts'//,
-    // libraryTarget: 'umd'
+    filename: '[name].js'
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js']
@@ -24,3 +19,13 @@ module.exports = {
     ]
   }
 }
+
+if (process.env.libraryTarget === 'umd') {
+  config.output.libraryTarget = 'umd'
+  config.entry['chart-bundle'] = './src/index.ts'
+} else {
+  config.entry['linear-chart'] = './src/linear-chart.ts'
+  config.output.library = 'charts'
+}
+
+module.exports = config

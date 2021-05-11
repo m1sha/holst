@@ -7,7 +7,7 @@
 </head>
 <body>
     <div>
-        <canvas id="canvas" width="640" height="480"></canvas>
+        <canvas id="canvas" width="620" height="440"></canvas>
     </div>
     <script src="dist/linear-chart.js"></script>
     <script>
@@ -41,12 +41,31 @@
             {Value: 161.65, Time: '2011-03-15T18:57:33'},
             {Value: 161.44, Time: '2011-03-15T18:58:33'},
             {Value: 161.33, Time: '2011-03-15T18:59:33'},
+            {Value: 141.33, Time: '2011-03-15T19:00:33'},
+            {Value: 120.17, Time: '2011-03-15T19:01:13'},
+            {Value: 130.44, Time: '2011-03-15T19:02:13'},
+            {Value: 150.44, Time: '2011-03-15T19:03:13'},
+            {Value: 110.44, Time: '2011-03-15T19:04:41'},
+            {Value: 80.44, Time: '2011-03-15T19:04:53'},
+            {Value: 0.44, Time: '2011-03-15T19:05:53'},
+            {Value: 112.14, Time: '2011-03-15T19:06:53'},
+            {Value: 160.14, Time: '2011-03-15T19:07:27'},
+            {Value: 150.12, Time: '2011-03-15T19:08:22'},
+            {Value: 168.32, Time: '2011-03-15T19:09:34'},
+            {Value: 161.32, Time: '2011-03-15T19:10:14'},
+            {Value: 162.12, Time: '2011-03-15T19:10:45'},
+            {Value: 163.12, Time: '2011-03-15T19:11:25'},
+            {Value: 162.12, Time: '2011-03-15T19:11:55'},
+            {Value: 169.12, Time: '2011-03-15T19:12:15'},
+            {Value: 167.12, Time: '2011-03-15T19:13:39'},
         ]
     </script>
     <script>
         var canvas = document.getElementById("canvas")
-        
-        charts.linearChart(canvas, data, {countTo: 164.21, countFrom: 45.55, dateFrom: '2011-03-15T18:30:33', dateTo: '2011-03-15T18:59:33'})
+        for (const item of data){
+            item.Time = new Date(item.Time)
+        }
+        charts.linearChart(canvas, data)
     </script>
 </body>
 </html>

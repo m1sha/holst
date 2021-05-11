@@ -2,11 +2,18 @@ import { Padding } from './padding'
 import { Point } from './point'
 import { Scene } from './scene'
 
+export interface Legend {
+  chartName?: string
+  xTitle?: string
+  yTitle?: string
+}
+
 export class ChartBase extends Scene {
   maxHeight: number
   maxWidth: number
   minHeight: number
   padding: Padding
+  legend: Legend
 
   constructor (canvas: HTMLCanvasElement) {
     super(canvas)
@@ -14,6 +21,7 @@ export class ChartBase extends Scene {
     this.maxHeight = this.bounds.height
     this.maxWidth = this.bounds.width
     this.minHeight = 0
+    this.legend = {}
   }
 
   get delta (): Point {

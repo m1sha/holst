@@ -34,4 +34,13 @@ const getMax = (items: {Value: number}[]): number => {
   return result
 }
 
-export { getDateFormat, getMax }
+const roundInt = (value: number): number => {
+  const digits = Math.floor(value).toString()
+  const digitCount = digits.length
+  if (digitCount === 1) return 10
+  if (digitCount === 2) return 100
+  const major = Math.pow(10, digitCount - 1)
+  return ((parseInt(digits.charAt(0)) + 1) * major)
+}
+
+export { getDateFormat, getMax, roundInt }

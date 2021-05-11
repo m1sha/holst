@@ -1,25 +1,27 @@
 import { EventType } from './event-type'
 import { Point } from './point'
-import { Scene } from './scene'
+
+export interface Activity {
+  readonly ctx: CanvasRenderingContext2D
+  render()
+  clear()
+}
 
 export class EventHandler {
-  constructor (scene: Scene) {
-    const { canvas } = scene.ctx
-    canvas.onmousemove = e => this.doAction('move', e, scene)
-    canvas.onmouseleave = e => this.doAction('leave', e, scene)
+  private readonly activity: Activity
+  constructor (activity: Activity) {
+    this.activity = activity
+    const { canvas } = activity.ctx
+    canvas.onmousemove = e => this.invoke('move', e)
+    canvas.onmouseleave = e => this.invoke('leave', e)
   }
 
   on: (eventType: EventType, point: Point) => void
 
-  private doAction (eventType: EventType, e: MouseEvent, scene: Scene): void {
-    const x = e.offsetX
-    const y = e.offsetY
-    this.onWrap(scene, eventType, { x, y })
-    scene.render()
-  }
-
-  private onWrap (cs: Scene, eventType: EventType, point: Point) {
-    cs.freeDynamic()
+  private invoke (eventType: EventType, e: MouseEvent): void {
+    const point = { x: e.offsetX, y: e.offsetY }
+    this.activity.clear()
     if (this.on) this.on(eventType, point)
+    this.activity.render()
   }
 }

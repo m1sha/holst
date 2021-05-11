@@ -1,110 +1,123 @@
-import { drawAxis, drawBackground, drawGrid } from './layers'
+import { createAxis, createBackground, createGrid, createThresholds, createTooltipWindow, createCorner } from './bg-templates'
 import { ChartBase } from './chart-base'
 import colors from './colors'
-import { EventHandler } from './event-handler'
 import { LabelStyle } from './label-style'
-import { getDateFormat, getMax } from './utils'
+import { getDateFormat, getMax, roundInt } from './utils'
 import { Point } from './point'
+import { Viewport } from './viewport'
 
 interface Item {
-  Time: string
+  Time: Date
   Value: number
 }
 
-export function linearChart (canvas: HTMLCanvasElement, items: Item[], { dateFrom, dateTo }): void {
+export function linearChart (canvas: HTMLCanvasElement, items: Item[]): void {
   const chart = new ChartBase(canvas)
   chart.maxWidth = items.length
-  chart.maxHeight = getMax(items)
-  chart.padding = { top: 25, left: 50, bottom: 30, right: 50 }
-  chart.shapes.push(drawBackground(colors.backgroundColor, chart.bounds))
-  chart.shapes.push(drawGrid({ bounds: chart.bounds, seed: { width: 40, height: 40 } }))
-  chart.shapes.push(drawAxis(chart.bounds, chart.padding))
-  drawGraph(chart, items, colors.graphColor, 2)
-  drawGraph(chart, items, colors.activeLineColor, 4, p => {
-    const date = new Date(p.Time)
-    return date >= dateFrom && date <= dateTo
-  })
-  drawNumbers(chart, items)
-
-  const handler = new EventHandler(chart)
-  handler.on = (et, e) => {
-    if (et !== 'move') {
-      return
-    }
-
-    onMove(chart, items, e)
-  }
-
+  chart.maxHeight = roundInt(getMax(items))
+  chart.legend.chartName = 'График расхода топлива'
+  chart.legend.yTitle = 'Топливо (л.): '
+  chart.legend.xTitle = 'Время: '
+  chart.padding = { top: 25, left: 50, bottom: 70, right: 50 }
+  addBackground(chart)
+  addGraph(chart, items, colors.graphColor, 2)
+  // addGraph(chart, items, colors.activeLineColor, 4, p => {
+  //   const date = p.Time
+  //   return date >= dateFrom && date <= dateTo
+  // })
+  addNumbers(chart, items)
+  chart.addEventListener('move', e => onMove(chart, items, e))
   chart.render()
 }
 
-function drawGraph (chart: ChartBase, items: Item[], color: string, width: number, callback?: (p: Item) => boolean): void {
-  const shape = chart.createShape()
+function addBackground (chart: ChartBase) {
+  const backgroundLayer = chart.createLayer()
+  const viewport = new Viewport(chart.bounds, chart.padding)
+  backgroundLayer.addShape(createBackground(colors.backgroundColor, chart.bounds))
+  const point = chart.delta
+  const thresholdLayer = chart.createLayer()
+  createThresholds(thresholdLayer, 'y', [
+    { value: chart.getPoint(0, 140).y, color: 'rgb(171,214,216)' },
+    { value: chart.getPoint(0, 80).y, color: 'rgb(111,84,122)' },
+    { value: chart.getPoint(0, 20).y, color: 'rgb(231,232,232)' }
+  ], chart.bounds, chart.padding)
+  backgroundLayer.createText({
+    text: chart.legend.chartName,
+    x: _ => (chart.bounds.width / 2) - (_ / 2),
+    y: _ => chart.bounds.height - 16,
+    style: { strokeStyle: '#333', fontSize: '12pt' } as LabelStyle
+  })
+  const backgroundLayer2 = chart.createLayer()
+  backgroundLayer2.addShape(createGrid({ bounds: viewport, seed: { width: point.x, height: point.y * 10 } }))
+  backgroundLayer2.addShape(createAxis(chart.bounds, chart.padding))
+}
+
+function addGraph (chart: ChartBase, items: Item[], color: string, width: number, callback?: (p: Item) => boolean): void {
+  const shape = chart.createLayer().createShape()
   shape.style.strokeStyle = color
   shape.style.lineWidth = width
   let i = 0
   for (const item of items) {
     const p = chart.getPoint(i++, item.Value)
     if (callback && callback(item) === false) {
-      shape.path.moveTo(p.x, p.y)
+      shape.moveTo(p)
       continue
     }
 
-    shape.path.lineTo(p.x, p.y)
-    shape.path.moveTo(p.x, p.y)
+    shape.lineTo(p)
+    shape.moveTo(p)
   }
 }
 
-function drawNumbers (chart: ChartBase, items: Item[]): void {
+function addNumbers (chart: ChartBase, items: Item[]): void {
+  const layer = chart.createLayer()
+  const viewport = new Viewport(chart.bounds, chart.padding)
   const style: LabelStyle = { color: colors.lineColor }
-  chart.addLabel({
-    text: 0.0.toFixed(2).toString(),
-    x: width => chart.padding.left - width - 8,
-    y: _ => chart.bounds.height - chart.getPoint(0, chart.maxHeight).y,
+  const shape = layer.createShape()
+  shape.style.strokeStyle = colors.lineColor
+  layer.createText({
+    text: '0',
+    x: _ => viewport.x - 28,
+    y: _ => viewport.bottom + 8,
     style
-  }, 'static')
-  const n = 8
+  })
+  const n = 10
   const dy = chart.maxHeight / n
   for (let i = 1; i <= n; i++) {
-    chart.addLabel({
-      text: (dy * i).toFixed(2),
-      x: width => chart.padding.left - width - 8,
+    layer.createText({
+      text: (dy * i).toFixed(0),
+      x: _ => viewport.x - 28,
       y: _ => chart.getPoint(0, dy * i).y,
       style
-    }, 'static')
+    })
+    shape.lineH({ x: viewport.x - 5, y: chart.getPoint(0, dy * i).y }, 5)
   }
   const dx = Math.floor(chart.maxWidth / n)
-  for (let i = 1; i <= n; i++) {
+  for (let i = 1; i <= n + 1; i++) {
     const item = items[dx * i]
     if (!item) continue
-    chart.addLabel({
-      text: getDateFormat(new Date(item.Time), 'hh:mm'),
+    layer.createText({
+      text: getDateFormat(item.Time, 'hh:mm'),
       x: width => chart.getPoint(dx * i, 0).x - (width / 2),
-      y: _ => chart.bounds.height - chart.padding.bottom + 26,
+      y: _ => viewport.bottom + 26,
       style
-    }, 'static')
+    })
+    shape.lineV({ x: chart.getPoint(dx * i, 0).x, y: viewport.bottom }, 5)
   }
 }
 
 function onMove (chart: ChartBase, items: Item[], e: Point) {
-  const isInSector = e.x >= chart.padding.left && e.x <= chart.bounds.width - chart.padding.right
-  if (!isInSector) {
+  const viewport = new Viewport(chart.bounds, chart.padding)
+  if (!viewport.hitTest(e)) {
     return
   }
 
-  const style: LabelStyle = { color: colors.selectLineColor, fontSize: '11pt' }
   const layer = chart.actionLayer
-  layer.style.strokeStyle = colors.selectLineColor
-  layer.style.lineWidth = 2
-  const y0 = chart.bounds.height - chart.padding.bottom
-  const xValue = Math.floor(((e.x - chart.padding.left) / chart.delta.x))
-  const item = items[xValue]
-  const xLabel = getDateFormat(new Date(item.Time), 'hh:mm:ss')
-  chart.addLabel({ text: xLabel, x: p => e.x - (p / 2), y: _ => y0 + 15, style }, 'action')
-  const yN = chart.getPoint(0, item.Value).y
-  layer.path.moveTo(e.x, yN)
-  layer.path.lineTo(e.x, y0)
-  layer.path.moveTo(e.x, yN)
-  layer.path.lineTo(chart.bounds.x + chart.padding.left, yN)
-  chart.addLabel({ text: item.Value.toFixed(2).toString(), x: p => chart.bounds.x + chart.padding.left + (p / 2), y: _ => yN + 15, style }, 'action')
+  const index = Math.floor(((e.x - chart.padding.left) / chart.delta.x))
+  const item = items[index]
+  const point = chart.getPoint(index, item.Value)
+  createCorner(layer, point, viewport.x, viewport.bottom)
+  const xText = chart.legend.xTitle + getDateFormat(item.Time, 'hh:mm:ss')
+  const yText = chart.legend.yTitle + item.Value.toFixed(2).toString()
+  createTooltipWindow(layer, point, viewport, [xText, yText])
 }
