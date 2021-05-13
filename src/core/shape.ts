@@ -40,6 +40,10 @@ export default class Shape {
     return this
   }
 
+  arc (point: Point, radius: number, startAngle: number, endAngle, anticlockwise?: boolean) {
+    this.path.arc(point.x, point.y, radius, startAngle, endAngle, anticlockwise)
+  }
+
   /** @internal */
   getPath () { return this.path }
 }

@@ -28,6 +28,14 @@ export class Layer {
     this.shapes.push(shape)
   }
 
+  measureText (text: string, style: LabelStyle) {
+    this.ctx.save()
+    this.assignTextStyle(style)
+    const result = this.ctx.measureText(text)
+    this.ctx.restore()
+    return result
+  }
+
   clear () {
     this.shapes = []
     this.labels = []
@@ -67,15 +75,19 @@ export class Layer {
 
   private drawLabel (label: Label) {
     this.ctx.save()
-    const style: LabelStyle = label.style || {}
-    this.ctx.fillStyle = style.color || '#000'
-    const fontName = style.fontName || 'serif'
-    const fontSize = style.fontSize || '10pt'
-    this.ctx.font = `${fontSize} ${fontName}`
-    const width = this.ctx.measureText(label.text).width
+    this.assignTextStyle(label.style)
+    const width = this.measureText(label.text, label.style).width
     const x = label.x(width)
     const y = label.y(width)
     this.ctx.fillText(label.text, x, y)
     this.ctx.restore()
+  }
+
+  private assignTextStyle (style: LabelStyle) {
+    style = style || {}
+    this.ctx.fillStyle = style.color || '#000'
+    const fontName = style.fontName || 'serif'
+    const fontSize = style.fontSize || '10pt'
+    this.ctx.font = `${fontSize} ${fontName}`
   }
 }

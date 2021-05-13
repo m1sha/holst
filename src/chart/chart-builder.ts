@@ -1,6 +1,6 @@
 import { ChartBase } from './chart-base'
 import { ChartOptions } from './chart-options'
-import { getMaxFromObject, roundInt } from './utils'
+import { getMax, roundInt } from './utils'
 import { Viewport } from '../core/viewport'
 
 export class ChartBuilder {
@@ -32,7 +32,7 @@ export class ChartBuilder {
 
       return {
         width: this.data.length,
-        height: roundInt(getMaxFromObject(this.data, this.options.yFieldName))
+        height: roundInt(getMax(this.data, this.options.yFieldName))
       }
     }
 

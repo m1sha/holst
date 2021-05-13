@@ -1,12 +1,7 @@
 import { Padding } from '../core/padding'
 import { Point } from '../core/point'
 import { Scene } from '../core/scene'
-
-export interface Legend {
-  chartName?: string
-  xTitle?: string
-  yTitle?: string
-}
+import { Legend } from './chart-options'
 
 export class ChartBase extends Scene {
   maxHeight: number

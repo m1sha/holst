@@ -7,8 +7,10 @@ import { Rect } from '../core/rect'
 import Shape from '../core/shape'
 import sizes from './sizes'
 import { Viewport } from '../core/viewport'
+import { Size } from '../core/size'
+import { TooltipStyle } from './chart-options'
 
-const createGrid = (options: {bounds: Rect, seed: {width: number, height: number}}): Shape => {
+const createGrid = (options: { bounds: Rect, seed: { width: number, height: number } }): Shape => {
   const shape = new Shape()
   const { bounds, seed } = options
   for (let i = bounds.y - seed.height; i < bounds.height + bounds.y; i += seed.height) {
@@ -28,16 +30,10 @@ const createBackground = (color: string, rect: Rect): Shape => {
   return shape
 }
 
-const createAxis = (bounds: Rect, padding: Padding): Shape => {
+const createAxis = (viewport: Viewport): Shape => {
   const shape = new Shape()
-  // y
-  shape
-    .moveTo({ x: padding.left, y: padding.top })
-    .lineTo({ x: padding.left, y: bounds.height - padding.bottom })
-  // x
-  shape
-    .moveTo({ x: padding.left, y: bounds.height - padding.bottom })
-    .lineTo({ x: bounds.width - padding.right, y: bounds.height - padding.bottom })
+  shape.lineV({ x: viewport.left, y: viewport.top }, viewport.height)
+  shape.lineH({ x: viewport.left, y: viewport.bottom }, viewport.width)
   shape.style.strokeStyle = colors.lineColor
   return shape
 }
@@ -61,31 +57,34 @@ const createThresholds = (layer: Layer, axis: 'x' | 'y', thresholds: { value: nu
   }
 }
 
-const createTooltipWindow = (layer: Layer, point: Point, viewport: Viewport, strings: string[]): void => {
-  const width = 140
-  const height = 40
+const createTooltipWindow = (layer: Layer, point: Point, viewport: Viewport, strings: string[], tooltipStyle: TooltipStyle): void => {
   const style: LabelStyle = { color: colors.selectLineFontColor, fontSize: '11pt' }
+  const paddingLeft = 16
+  const paddingTop = 18
+  const lineHeight = 18
+  const width = layer.measureText(strings[0], style).width + paddingLeft
+  const height = 42
   const tooltip = layer.createShape()
   let shiftLeft = 0
   if (viewport.right < point.x + width) {
-    shiftLeft = 160
+    shiftLeft = width + 16
   }
   tooltip.rect({ x: point.x + 8 - shiftLeft, y: point.y, width, height })
   tooltip.style.strokeStyle = '#3a87a0'
   tooltip.style.fillStyle = '#faf7f0'
-  layer.createText({ text: strings[0], x: _ => point.x + 16 - shiftLeft, y: _ => point.y + 18, style })
-  layer.createText({ text: strings[1], x: width => point.x + 16 - shiftLeft, y: _ => point.y + 18 + 15, style })
+  layer.createText({ text: strings[0], x: _ => point.x + paddingLeft - shiftLeft, y: _ => point.y + paddingTop, style })
+  layer.createText({ text: strings[1], x: _ => point.x + paddingLeft - shiftLeft, y: _ => point.y + paddingTop + lineHeight, style })
 }
 
-const createCorner = (layer: Layer, point: Point, width: number, height: number): void => {
+const createCorner = (layer: Layer, point: Point, size: Size): void => {
   const corner = layer.createShape()
   corner.style.strokeStyle = colors.selectLineColor
   corner.style.lineWidth = 2
   corner
     .moveTo(point)
-    .lineTo({ x: point.x, y: height })
+    .lineTo({ x: point.x, y: size.height })
     .moveTo(point)
-    .lineTo({ x: width, y: point.y })
+    .lineTo({ x: size.width, y: point.y })
 }
 
 export { createGrid, createBackground, createAxis, createThresholds, createTooltipWindow, createCorner }

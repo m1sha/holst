@@ -13,14 +13,13 @@ export class LineChartBuilder extends ChartBuilder {
   }
 
   addBgLayer (): this | LineChartBuilder {
-    const backgroundLayer = this.chart.createLayer()
-    backgroundLayer.addShape(createBackground(colors.backgroundColor, this.chart.bounds))
-    backgroundLayer.createText({
-      text: this.chart.legend.chartName,
-      x: _ => (this.chart.bounds.width / 2) - (_ / 2),
-      y: _ => this.chart.bounds.height - 16,
-      style: { strokeStyle: '#333', fontSize: '12pt' } as LabelStyle
-    })
+    const layer = this.chart.createLayer()
+    layer.addShape(createBackground(colors.backgroundColor, this.chart.bounds))
+    const name = this.chart.legend.chartName
+    const width = this.chart.bounds.width / 2
+    const height = this.chart.bounds.height - 16
+    const style = { strokeStyle: '#333', fontSize: '12pt' } as LabelStyle
+    layer.createText({ text: name, x: _ => width - (_ / 2), y: _ => height, style })
     return this
   }
 
@@ -54,7 +53,7 @@ export class LineChartBuilder extends ChartBuilder {
 
   addAxisesLayer (): this | LineChartBuilder {
     const layer = this.chart.createLayer()
-    layer.addShape(createAxis(this.chart.bounds, this.chart.padding))
+    layer.addShape(createAxis(this.viewport /* this.chart.bounds, this.chart.padding */))
     return this
   }
 
@@ -63,18 +62,15 @@ export class LineChartBuilder extends ChartBuilder {
     const style: LabelStyle = { color: colors.lineColor }
     const shape = layer.createShape()
     shape.style.strokeStyle = colors.lineColor
-    layer.createText({
-      text: '0',
-      x: _ => this.viewport.x - 28,
-      y: _ => this.viewport.bottom + 8,
-      style
-    })
-    const n = 10
+    const x0 = this.viewport.x - 28
+    const y0 = this.viewport.bottom + 8
+    layer.createText({ text: '0', x: _ => x0, y: _ => y0, style })
+    const n = this.options.xSegmentCount || 10
     const dy = this.chart.maxHeight / n
     for (let i = 1; i <= n; i++) {
       layer.createText({
         text: (dy * i).toFixed(0),
-        x: _ => this.viewport.x - 28,
+        x: _ => x0,
         y: _ => this.chart.getPoint(0, dy * i).y,
         style
       })
@@ -125,10 +121,10 @@ export class LineChartBuilder extends ChartBuilder {
     const item = this.data[index]
     if (!item) return
     const point = this.chart.getPoint(index, this.getYValue(item))
-    createCorner(layer, point, viewport.x, viewport.bottom)
+    createCorner(layer, point, { width: viewport.x, height: viewport.bottom })
     const { xValue, yValue } = this.getDisplayValues(item)
     const xText = this.chart.legend.xTitle + xValue
     const yText = this.chart.legend.yTitle + yValue
-    createTooltipWindow(layer, point, viewport, [xText, yText])
+    createTooltipWindow(layer, point, viewport, [xText, yText], this.options.tooltipStyle || {})
   }
 }
