@@ -65,7 +65,28 @@
         for (const item of data){
             item.Time = new Date(item.Time)
         }
-        charts.linearChart(canvas, data)
+        //charts.linearChart(canvas, data)
+        charts.createChart(canvas, data, {
+            legend: {
+                    chartName: 'Пример линейной диаграммы',
+                    xTitle: 'Значение по оси Х: ',
+                    yTitle: 'Значение по оси Y: '
+            },
+            thresholdOrientation: 'y',
+            thresholds: [
+                { value: 180, color: '#a26330' },
+                { value: 140, color: 'rgba(192,160,10,.33)' },
+                { value: 100, color: '#cec530' },
+                { value: 40, color: '#3ec500' },
+                { value: 20, color: '#0ea54c' }
+            ],
+            xFieldName: 'Time',
+            yFieldName: 'Value',
+            xFieldDisplayFormat: (v) => v.getHours() + ":" + v.getMinutes(), // moment(v).format('HH:mm'),
+            yFieldDisplayFormat: (v) => parseFloat(v).toFixed(0),
+            width: 640,
+            height: 480
+        })
     </script>
 </body>
 </html>

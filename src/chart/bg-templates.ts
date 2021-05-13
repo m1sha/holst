@@ -1,12 +1,12 @@
 import colors from './colors'
-import { LabelStyle } from './label-style'
-import { Layer } from './layers'
-import { Padding } from './padding'
-import { Point } from './point'
-import { Rect } from './rect'
-import Shape from './shape'
+import { LabelStyle } from '../core/label-style'
+import { Layer } from '../core/layers'
+import { Padding } from '../core/padding'
+import { Point } from '../core/point'
+import { Rect } from '../core/rect'
+import Shape from '../core/shape'
 import sizes from './sizes'
-import { Viewport } from './viewport'
+import { Viewport } from '../core/viewport'
 
 const createGrid = (options: {bounds: Rect, seed: {width: number, height: number}}): Shape => {
   const shape = new Shape()

@@ -1,6 +1,6 @@
-import { Padding } from './padding'
-import { Point } from './point'
-import { Scene } from './scene'
+import { Padding } from '../core/padding'
+import { Point } from '../core/point'
+import { Scene } from '../core/scene'
 
 export interface Legend {
   chartName?: string

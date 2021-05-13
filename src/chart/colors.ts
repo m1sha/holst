@@ -1,4 +1,4 @@
-interface Colors{
+export interface Colors{
     backgroundColor: string
     graphColor: string
     lineColor: string

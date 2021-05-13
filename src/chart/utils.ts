@@ -34,6 +34,15 @@ const getMax = (items: {Value: number}[]): number => {
   return result
 }
 
+const getMaxFromObject = (items: [], field: string): number => {
+  let result = Number.NEGATIVE_INFINITY
+  for (let i = 0; i < items.length; i++) {
+    const value = items[i][field]
+    if (value > result) result = value
+  }
+  return result
+}
+
 const roundInt = (value: number): number => {
   const digits = Math.floor(value).toString()
   const digitCount = digits.length
@@ -43,4 +52,4 @@ const roundInt = (value: number): number => {
   return ((parseInt(digits.charAt(0)) + 1) * major)
 }
 
-export { getDateFormat, getMax, roundInt }
+export { getDateFormat, getMax, roundInt, getMaxFromObject }
