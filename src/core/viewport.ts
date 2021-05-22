@@ -1,6 +1,7 @@
 import { Padding } from './padding'
 import { Point } from './point'
 import { Rect } from './rect'
+import { Size } from './size'
 
 export class Viewport implements Rect, Padding {
   readonly x: number
@@ -12,15 +13,15 @@ export class Viewport implements Rect, Padding {
   readonly bottom: number
   readonly right: number
 
-  constructor (bounds: Rect, padding: Padding) {
+  constructor (size: Size, padding: Padding) {
     this.top = padding.top
     this.left = padding.left
-    this.bottom = bounds.height - padding.bottom
-    this.right = bounds.width - padding.right
-    this.x = bounds.x + padding.left
-    this.width = bounds.width - padding.right - this.x
-    this.y = bounds.y + padding.top
-    this.height = bounds.height - padding.bottom - this.y
+    this.bottom = size.height - padding.bottom
+    this.right = size.width - padding.right
+    this.x = padding.left
+    this.width = size.width - padding.right - this.x
+    this.y = padding.top
+    this.height = size.height - padding.bottom - this.y
   }
 
   hitTest (point: Point): boolean {

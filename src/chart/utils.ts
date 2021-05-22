@@ -6,6 +6,14 @@ const getMax = (items: [], field: string): number => {
   }
   return result
 }
+const getMin = (items: [], field: string): number => {
+  let result = Number.POSITIVE_INFINITY
+  for (let i = 0; i < items.length; i++) {
+    const value = items[i][field]
+    if (value < result) result = value
+  }
+  return result
+}
 
 const roundInt = (value: number): number => {
   const digits = Math.floor(value).toString()
@@ -16,4 +24,4 @@ const roundInt = (value: number): number => {
   return ((parseInt(digits.charAt(0)) + 1) * major)
 }
 
-export { roundInt, getMax }
+export { roundInt, getMax, getMin }

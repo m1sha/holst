@@ -10,28 +10,31 @@ import { Viewport } from '../core/viewport'
 import { Size } from '../core/size'
 import { TooltipStyle } from './chart-options'
 
-const createGrid = (options: { bounds: Rect, seed: { width: number, height: number } }): Shape => {
-  const shape = new Shape()
-  const { bounds, seed } = options
-  for (let i = bounds.y - seed.height; i < bounds.height + bounds.y; i += seed.height) {
-    shape.lineH({ x: bounds.x, y: i }, bounds.width)
+const createGrid = (layer: Layer, options: { viewport: Viewport, seed: { width: number, height: number } }): Shape => {
+  const shape = new Shape(layer)
+  const { viewport, seed } = options
+  for (let i = viewport.top; i < viewport.height; i += seed.height) {
+    shape.lineH({ x: viewport.x, y: viewport.top + i }, viewport.width)
   }
-  for (let i = bounds.x + seed.width; i < bounds.x + bounds.width; i += seed.width) {
-    shape.lineV({ x: i, y: bounds.y }, bounds.height)
+
+  const dx = viewport.width / seed.width
+  for (let i = 0; i < dx; i++) {
+    shape.lineV({ x: viewport.right - (i * seed.width), y: viewport.y }, viewport.height)
   }
+
   shape.style.strokeStyle = colors.gridLineColor
   shape.style.lineWidth = sizes.gridLineWidth
   return shape
 }
 
-const createBackground = (color: string, rect: Rect): Shape => {
-  const shape = new Shape()
+const createBackground = (layer: Layer, color: string, rect: Rect): Shape => {
+  const shape = new Shape(layer)
   shape.rect(rect).style.fillStyle = color
   return shape
 }
 
-const createAxis = (viewport: Viewport): Shape => {
-  const shape = new Shape()
+const createAxis = (layer: Layer, viewport: Viewport): Shape => {
+  const shape = new Shape(layer)
   shape.lineV({ x: viewport.left, y: viewport.top }, viewport.height)
   shape.lineH({ x: viewport.left, y: viewport.bottom }, viewport.width)
   shape.style.strokeStyle = colors.lineColor
@@ -43,9 +46,9 @@ const createThresholds = (layer: Layer, axis: 'x' | 'y', thresholds: { value: nu
     const shape = layer.createShape()
     if (axis === 'y') {
       const rect = {
-        x: padding.left,
-        y: bounds.height - (bounds.y + padding.bottom),
-        width: bounds.width - padding.left - padding.right,
+        x: padding.left + 2,
+        y: bounds.height - (bounds.y + padding.bottom) - 2,
+        width: bounds.width - padding.left - padding.right - 4,
         height: (threshold.value - padding.top) - (bounds.height - padding.bottom - padding.top)
       }
       shape.rect(rect)
@@ -61,9 +64,9 @@ const createTooltipWindow = (layer: Layer, point: Point, viewport: Viewport, str
   const style: LabelStyle = { color: colors.selectLineFontColor, fontSize: '11pt' }
   const paddingLeft = 16
   const paddingTop = 18
-  const lineHeight = 18
-  const width = layer.measureText(strings[0], style).width + paddingLeft
-  const height = 42
+  const lineHeight = tooltipStyle.lineHeight || 18
+  const width = Math.max(layer.measureText(strings[0], style).width + paddingLeft, layer.measureText(strings[1], style).width + paddingLeft)
+  const height = tooltipStyle?.size?.height || 42
   const tooltip = layer.createShape()
   let shiftLeft = 0
   if (viewport.right < point.x + width) {

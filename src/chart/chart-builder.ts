@@ -13,26 +13,31 @@ export class ChartBuilder {
       this.data = data
       this.options = options
       this.chart = new ChartBase(canvas)
-      const { width, height } = this.calculateBoundary()
+      const { maxWidth, maxHeight, minWidth, minHeight } = this.calculateBoundary()
       this.chart.legend = options.legend || {}
-      this.chart.maxWidth = width
-      this.chart.maxHeight = height
-      this.chart.padding = this.options?.chartStyle?.padding || { top: 25, left: 50, bottom: 70, right: 50 }
-      this.viewport = new Viewport(this.chart.bounds, this.chart.padding)
+      this.chart.maxWidth = maxWidth
+      this.chart.maxHeight = maxHeight
+      this.chart.minWidth = minWidth
+      this.chart.minHeight = minHeight
+      const paddingLeft = this.chart.createLayer().measureText(this.chart.maxHeight.toString(), {}).width + 35
+      this.chart.padding = this.options?.chartStyle?.padding || { top: 25, left: paddingLeft, bottom: 70, right: 50 }
+      this.viewport = new Viewport(this.chart.size, this.chart.padding)
     }
 
     build () {
       this.chart.render()
     }
 
-    protected calculateBoundary (): { width: number, height: number } {
+    protected calculateBoundary (): { maxWidth: number, maxHeight: number, minWidth: number, minHeight: number } {
       if (this.options.onCalculateBoundary) {
         return this.options.onCalculateBoundary(this.data, this.options)
       }
 
       return {
-        width: this.data.length,
-        height: roundInt(getMax(this.data, this.options.yFieldName))
+        maxWidth: this.data.length,
+        maxHeight: roundInt(getMax(this.data, this.options.yFieldName)),
+        minWidth: 0,
+        minHeight: 0 // getMin(this.data, this.options.yFieldName)
       }
     }
 

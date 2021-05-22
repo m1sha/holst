@@ -1,21 +1,46 @@
+import { Context2D } from './context2d'
 import { Label } from './label'
 import { LabelStyle } from './label-style'
 import { Point } from './point'
+import { Rect } from './rect'
 import Shape from './shape'
+import { Size } from './size'
+import { rect } from './utils'
 
 export class Layer {
-  private readonly ctx: CanvasRenderingContext2D
-  private target: Point
+  private readonly ctx: Context2D
   private shapes: Shape[]
   private labels: Label[]
+  private mask: Shape | null
+  readonly ratio: Point
+  readonly location: Point
+  readonly size: Size
+  readonly originSize: Readonly<Size>
 
-  constructor (ctx: CanvasRenderingContext2D) {
+  constructor (ctx: Context2D) {
     this.ctx = ctx
+    this.ratio = { x: 0, y: 0 }
+    this.location = { x: 0, y: 0 }
+    this.size = { width: ctx.width, height: ctx.height }
+    this.originSize = { width: ctx.width, height: ctx.height }
+    this.mask = null
     this.clear()
   }
 
+  get center (): Point {
+    return { x: this.size.width / 2, y: this.size.height / 2 }
+  }
+
+  get bounds (): Readonly<Rect> {
+    return { x: this.location.x, y: this.location.y, width: this.size.width, height: this.size.height }
+  }
+
+  get orientation (): 'top-left' | 'bottom-left' {
+    return this.ctx.orientation
+  }
+
   createShape (): Shape {
-    const result = new Shape()
+    const result = new Shape(this)
     this.shapes.push(result)
     return result
   }
@@ -28,66 +53,32 @@ export class Layer {
     this.shapes.push(shape)
   }
 
-  measureText (text: string, style: LabelStyle) {
-    this.ctx.save()
-    this.assignTextStyle(style)
-    const result = this.ctx.measureText(text)
-    this.ctx.restore()
-    return result
-  }
-
   clear () {
     this.shapes = []
     this.labels = []
   }
 
-  get location (): Point {
-    return this.target
-  }
-
-  set location (point: Point) {
-    this.target = point
-  }
-
-  render () {
+  draw () {
     for (const shape of this.shapes) {
-      this.drawShape(shape)
+      this.ctx.drawShape(shape, this.mask)
     }
 
     for (const label of this.labels) {
-      this.drawLabel(label)
+      this.ctx.drawText(label, this.mask)
     }
   }
 
-  private drawShape (shape: Shape): void {
-    this.ctx.save()
-    if (shape.style.strokeStyle) {
-      this.ctx.strokeStyle = shape.style.strokeStyle
-      this.ctx.lineWidth = shape.style.lineWidth
-      this.ctx.stroke(shape.getPath())
+  measureText (text: string, style: LabelStyle) { return this.ctx.measureText(text, style) }
+
+  createMask (defaultRect?: boolean): Shape {
+    this.mask = this.createShape()
+    if (defaultRect || defaultRect === undefined) {
+      this.mask.rect(rect(0, 0, this.size.width, this.size.height))
     }
-    if (shape.style.fillStyle) {
-      this.ctx.fillStyle = shape.style.fillStyle
-      this.ctx.fill(shape.getPath())
-    }
-    this.ctx.restore()
+    return this.mask
   }
 
-  private drawLabel (label: Label) {
-    this.ctx.save()
-    this.assignTextStyle(label.style)
-    const width = this.measureText(label.text, label.style).width
-    const x = label.x(width)
-    const y = label.y(width)
-    this.ctx.fillText(label.text, x, y)
-    this.ctx.restore()
-  }
-
-  private assignTextStyle (style: LabelStyle) {
-    style = style || {}
-    this.ctx.fillStyle = style.color || '#000'
-    const fontName = style.fontName || 'serif'
-    const fontSize = style.fontSize || '10pt'
-    this.ctx.font = `${fontSize} ${fontName}`
+  removeMask (): void {
+    this.mask = null
   }
 }

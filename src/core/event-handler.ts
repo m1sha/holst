@@ -1,8 +1,9 @@
+import { Context2D } from './context2d'
 import { EventType } from './event-type'
 import { Point } from './point'
 
 export interface Activity {
-  readonly ctx: CanvasRenderingContext2D
+  readonly ctx: Context2D
   render()
   clear()
 }
