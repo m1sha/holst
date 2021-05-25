@@ -1,4 +1,4 @@
-import { Context2D } from './context2d'
+import { Context2D, Context2DOrientation } from './context2d'
 import { Label } from './label'
 import { LabelStyle } from './label-style'
 import { Point } from './point'
@@ -16,9 +16,11 @@ export class Layer {
   readonly location: Point
   readonly size: Size
   readonly originSize: Readonly<Size>
+  readonly orientation: Context2DOrientation
 
-  constructor (ctx: Context2D) {
+  constructor (ctx: Context2D, orientation: Context2DOrientation) {
     this.ctx = ctx
+    this.orientation = orientation
     this.ratio = { x: 0, y: 0 }
     this.location = { x: 0, y: 0 }
     this.size = { width: ctx.width, height: ctx.height }
@@ -33,10 +35,6 @@ export class Layer {
 
   get bounds (): Readonly<Rect> {
     return { x: this.location.x, y: this.location.y, width: this.size.width, height: this.size.height }
-  }
-
-  get orientation (): 'top-left' | 'bottom-left' {
-    return this.ctx.orientation
   }
 
   createShape (): Shape {

@@ -9,7 +9,7 @@ export class Chart extends Scene {
   minWidth: number
 
   constructor (canvas: HTMLCanvasElement, options: ChartOptions) {
-    super(canvas, 'bottom-left')
+    super(canvas)
     this.maxWidth = 0
     this.minWidth = 0
     this.maxHeight = 0

@@ -5,7 +5,7 @@ import Shape from './shape'
 export type Context2DOrientation = 'top-left' | 'bottom-left'
 export class Context2D {
   readonly ctx: CanvasRenderingContext2D
-  orientation: Context2DOrientation
+  // orientation: Context2DOrientation
 
   constructor (ctx: CanvasRenderingContext2D) {
     this.ctx = ctx

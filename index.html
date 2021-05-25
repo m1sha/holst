@@ -44,7 +44,11 @@
                 </div>
                 
             </td>
-            <td></td>
+            <td>
+                <div class="chart">
+                    <canvas id="canvas4" width="620" height="440"></canvas>
+                </div>
+            </td>
         </tr>
     </table>
     
@@ -183,6 +187,24 @@
             width: 640,
             height: 480
         })()
+
+        var canvas4 = document.getElementById("canvas4")
+        if (canvas4)
+        charts.createLinearChart2(canvas4, data2, {
+            legend: {
+                chartName: 'Пример линейной диаграммы 4',
+                xTitle: 'Значение по оси Х: ',
+                yTitle: 'Значение по оси Y: '
+            },
+            xFieldName: 'Time',
+            yFieldName: 'Value',
+            xFieldDisplayFormat: (v) => v.getHours() + ":" + v.getMinutes(), // moment(v).format('HH:mm'),
+            yFieldDisplayFormat: (v) => parseFloat(v).toFixed(0),
+            width: 640,
+            height: 480
+        })()
+
+
     </script>
 </body>
 </html>

@@ -13,18 +13,17 @@ export abstract class Scene implements Activity {
     readonly actionLayer: Layer
     readonly center: Point
 
-    constructor (canvas: HTMLCanvasElement, orientation?: Context2DOrientation) {
+    constructor (canvas: HTMLCanvasElement) {
       this.ctx = new Context2D(canvas.getContext('2d'))
-      this.ctx.orientation = orientation || 'top-left'
       this.size = { width: canvas.width, height: canvas.height }
       this.center = { x: this.size.width / 2, y: this.size.height / 2 }
       this.layers = []
-      this.actionLayer = new Layer(this.ctx)
+      this.actionLayer = new Layer(this.ctx, 'top-left')
       this.handler = new EventHandler(this)
     }
 
-    createLayer (): Layer {
-      const result = new Layer(this.ctx)
+    createLayer (orientation?: Context2DOrientation): Layer {
+      const result = new Layer(this.ctx, orientation || 'top-left')
       this.layers.push(result)
       return result
     }
