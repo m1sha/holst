@@ -3,13 +3,14 @@ import { ChartBuilder } from './chart-builder'
 import { ChartOptions } from './chart-options'
 import colors from './colors'
 import { LabelStyle } from '../core/label-style'
-import { Point } from '../core/point'
 import { Viewport } from '../core/viewport'
+import { EventInfo } from '../core/event-handler'
 
 export class LineChartBuilder extends ChartBuilder {
   constructor (canvas: HTMLCanvasElement, data: [], options: ChartOptions) {
     super(canvas, data, options)
-    this.chart.addEventListener('move', e => this.onMove(e))
+    this.chart.addEventListener('mousemove', e => this.onMove(e, options))
+    this.chart.addEventListener('mouseleave', e => this.onMouseLeave(options))
   }
 
   addBgLayer (): this | LineChartBuilder {
@@ -116,16 +117,16 @@ export class LineChartBuilder extends ChartBuilder {
     return this
   }
 
-  onMove (e: Point) {
+  onMove (e: EventInfo, options: ChartOptions) {
     const viewport = new Viewport(this.chart.size, this.chart.padding)
-    if (!viewport.hitTest(e)) {
+    if (!viewport.hitTest(e.point)) {
       return
     }
-    if (this.options.onDraw && this.options.onMove(this.chart, e) === false) {
+    if (this.options.onDraw && this.options.onMove(this.chart, e.point) === false) {
       return
     }
     const layer = this.chart.actionLayer
-    const index = Math.floor(((e.x - this.chart.padding.left) / this.chart.ratio.x))
+    const index = Math.floor(((e.point.x - this.chart.padding.left) / this.chart.ratio.x))
     const item = this.data[index]
     if (!item) return
     const point = this.chart.getPoint(index, this.getYValue(item))
@@ -133,6 +134,17 @@ export class LineChartBuilder extends ChartBuilder {
     const { xValue, yValue } = this.getDisplayValues(item)
     const xText = this.chart.legend.xTitle + xValue
     const yText = this.chart.legend.yTitle + yValue
+
+    if (options.legend?.tooltip?.onShow) {
+      e.point = point
+      options.legend.tooltip.onShow(e, { xText, yText })
+    }
     createTooltipWindow(layer, point, viewport, [xText, yText], this.options.tooltipStyle || {})
+  }
+
+  onMouseLeave (options: ChartOptions) {
+    if (options?.legend?.tooltip?.onHide) {
+      options.legend.tooltip.onHide()
+    }
   }
 }

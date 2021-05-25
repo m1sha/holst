@@ -1,1 +1,1 @@
-export type EventType = 'move' | 'leave'
+export type EventType = 'mousemove' | 'mouseleave'

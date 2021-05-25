@@ -8,21 +8,39 @@ export interface Activity {
   clear()
 }
 
+export interface EventInfo {
+  event: Event | MouseEvent | KeyboardEvent
+  eventType: EventType
+  point?: Point
+}
+
 export class EventHandler {
   private readonly activity: Activity
+  private readonly delegates: { eventType: EventType, callback: (e: EventInfo) => void }[]
   constructor (activity: Activity) {
     this.activity = activity
-    const { canvas } = activity.ctx
-    canvas.onmousemove = e => this.invoke('move', e)
-    canvas.onmouseleave = e => this.invoke('leave', e)
+    this.delegates = []
+    activity.ctx.on((et, e) => this.invoke(et, e as MouseEvent), 'mousemove', 'mouseleave')
   }
 
-  on: (eventType: EventType, point: Point) => void
+  addEventListener (eventType: EventType, callback: (e: EventInfo) => void) {
+    this.delegates.push({ eventType, callback })
+  }
 
-  private invoke (eventType: EventType, e: MouseEvent): void {
-    const point = { x: e.offsetX, y: e.offsetY }
+  private invoke (eventType: EventType, event: Event | MouseEvent | KeyboardEvent): void {
     this.activity.clear()
-    if (this.on) this.on(eventType, point)
+
+    if (event instanceof MouseEvent) {
+      const point = { x: event.offsetX, y: event.offsetY }
+      for (const delegate of this.delegates) {
+        if (delegate.eventType !== eventType) {
+          continue
+        }
+
+        delegate.callback({ eventType, event, point })
+      }
+    }
+
     this.activity.render()
   }
 }

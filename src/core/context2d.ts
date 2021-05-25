@@ -1,3 +1,4 @@
+import { EventType } from './event-type'
 import { Label } from './label'
 import { LabelStyle } from './label-style'
 import Shape from './shape'
@@ -12,7 +13,6 @@ export class Context2D {
 
   get width () { return this.ctx.canvas.width }
   get height () { return this.ctx.canvas.height }
-  get canvas () { return this.ctx.canvas }
 
   drawText (label: Label, mask?: Shape) {
     this.ctx.save()
@@ -47,6 +47,13 @@ export class Context2D {
     const result = this.ctx.measureText(text)
     this.ctx.restore()
     return result
+  }
+
+  on (a: (eventType: EventType, event: Event | MouseEvent | KeyboardEvent) => void, ...events: EventType[]) {
+    for (let i = 0; i < events.length; i++) {
+      const event = events[i]
+      this.ctx.canvas['on' + event] = e => a(event, e)
+    }
   }
 
   private assignTextStyle (style: LabelStyle) {

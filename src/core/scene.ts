@@ -1,5 +1,5 @@
 import { Context2D, Context2DOrientation } from './context2d'
-import { EventHandler, Activity } from './event-handler'
+import { EventHandler, Activity, EventInfo } from './event-handler'
 import { EventType } from './event-type'
 import { Layer } from './layers'
 import { Point } from './point'
@@ -38,13 +38,7 @@ export abstract class Scene implements Activity {
       this.actionLayer.clear()
     }
 
-    addEventListener (eventType: EventType, callback: (e) => void) {
-      this.handler.on = (et, e) => {
-        if (et !== eventType) {
-          return
-        }
-
-        callback(e)
-      }
+    addEventListener (eventType: EventType, callback: (e: EventInfo) => void) {
+      this.handler.addEventListener(eventType, callback)
     }
 }

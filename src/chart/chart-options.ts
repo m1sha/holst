@@ -4,10 +4,16 @@ import { Padding } from '../core/padding'
 import { Point } from '../core/point'
 import { Size } from '../core/size'
 
+export interface Tooltip {
+  onShow?: (e: unknown, i: unknown) => void
+  onHide?: () => void
+}
+
 export interface Legend {
     chartName?: string
     xTitle?: string
     yTitle?: string
+    tooltip?: Tooltip
 }
 
 export interface Threshold {
