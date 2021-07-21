@@ -18,10 +18,11 @@ export class LinearChart extends Chart {
   addGraphLayer () {
     const layer = this.createLayer('bottom-left')
 
-    layer.location.x = 10
+    layer.location.x = 1
     layer.location.y = 10
     layer.size.width += -40
     layer.size.height += -40
+    layer.padding = { left: 10, top: 10, bottom: 10, right: 10 }
     layer.createMask()
     const s = layer.createShape()
     s.style.strokeStyle = '#f00'

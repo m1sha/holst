@@ -13,7 +13,7 @@ export default class Shape {
   private readonly path: Path2D
   readonly style: ShapeStyle
 
-  constructor ({ location, size, originSize, orientation, ratio }) {
+  constructor ({ location, size, originSize, orientation, ratio, padding }) {
     this.location = location
     this.layerSize = size
     this.originSize = originSize
@@ -44,22 +44,31 @@ export default class Shape {
   }
 
   lineH (point: Point, width: number): this | Shape {
-    this
-      .moveTo(point)
-      .lineTo({ x: point.x + width, y: point.y })
+    this.moveTo(point).lineTo({ x: point.x + width, y: point.y })
     return this
   }
 
   lineV (point: Point, height: number): this | Shape {
-    this
-      .moveTo(point)
-      .lineTo({ x: point.x, y: point.y + height })
+    this.moveTo(point).lineTo({ x: point.x, y: point.y + height })
     return this
   }
 
   arc (point: Point, radius: number, startAngle: number, endAngle, anticlockwise?: boolean) {
     point = this.getPoint(point)
     this.path.arc(point.x, point.y, radius, startAngle, endAngle, anticlockwise)
+  }
+
+  ellipse (point: Point, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle, anticlockwise?: boolean) {
+    point = this.getPoint(point)
+    this.path.ellipse(point.x, point.y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
+  }
+
+  closePath () {
+    this.path.closePath()
+  }
+
+  merge (shape: Shape) {
+    this.path.addPath(shape.getPath())
   }
 
   private getPoint (point: Point) : Point {

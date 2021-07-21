@@ -1,6 +1,7 @@
 import { Context2D, Context2DOrientation } from './context2d'
 import { Label } from './label'
 import { LabelStyle } from './label-style'
+import { Padding } from './padding'
 import { Point } from './point'
 import { Rect } from './rect'
 import Shape from './shape'
@@ -17,6 +18,7 @@ export class Layer {
   readonly size: Size
   readonly originSize: Readonly<Size>
   readonly orientation: Context2DOrientation
+  padding: Padding
 
   constructor (ctx: Context2D, orientation: Context2DOrientation) {
     this.ctx = ctx
