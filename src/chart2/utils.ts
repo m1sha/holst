@@ -20,25 +20,15 @@ const getMin = (items: [], field: string): number => {
 
 const roundInt = (value: number): number => {
   const sign = value < 0 ? -1 : 1
-  const p = Math.abs(value)
-  const digits = Math.floor(p).toString()
+  const digits = Math.floor(Math.abs(value)).toString()
   const digitCount = digits.length
   if (digitCount === 1) return 10 * sign
-  if (p < 25) return 50 * sign
-  if (p < 50) return 50 * sign
-  if (digitCount === 2) return 100 * sign
-  if (p < 150) return 150 * sign
-  if (p < 250) return 250 * sign
-  if (p < 500) return 500 * sign
-  if (p < 750) return 750 * sign
-  if (p < 1000) return 1000 * sign
-  if (p < 1500) return 1500 * sign
-  if (p < 2500) return 2500 * sign
-  if (p < 5000) return 5000 * sign
-  if (p < 7500) return 7500 * sign
-  if (p < 10000) return 10000 * sign
+  const second = parseInt(digits.charAt(1))
   const major = Math.pow(10, digitCount - 1)
-  return ((parseInt(digits.charAt(0)) + 1) * major) * sign
+  if (second >= 5) {
+    return (parseInt(digits.charAt(0)) + 1) * major * sign
+  }
+  return ((parseInt(digits.charAt(0) + '5')) * major / 10) * sign
 }
 
 export { roundInt, getMax, getMin }
