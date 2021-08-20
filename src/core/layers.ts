@@ -1,3 +1,5 @@
+import { getRatio } from '../chart2/utils'
+import { Constraints } from './constraints'
 import { Context2D, Context2DOrientation } from './context2d'
 import { Text } from './label'
 import { TextStyle } from './label-style'
@@ -13,17 +15,16 @@ export class Layer {
   private shapes: Shape[]
   private labels: Text[]
   private mask: Shape | null
-  readonly ratio: Point
   readonly location: Point
   readonly size: Size
   readonly originSize: Readonly<Size>
   readonly orientation: Context2DOrientation
-  padding: Padding
+  constraints: Constraints
 
   constructor (ctx: Context2D, orientation: Context2DOrientation) {
     this.ctx = ctx
     this.orientation = orientation
-    this.ratio = { x: 0, y: 0 }
+    this.constraints = { minX: 0, minY: 0, maxX: ctx.width, maxY: ctx.height }
     this.location = { x: 0, y: 0 }
     this.size = { width: ctx.width, height: ctx.height }
     this.originSize = { width: ctx.width, height: ctx.height }
@@ -81,6 +82,10 @@ export class Layer {
     this.location.y = padding.top
     this.size.width = this.size.width - (padding.right + padding.left * 2)
     this.size.height = this.size.height - (padding.bottom + padding.top * 2)
+  }
+
+  get ratio (): Point {
+    return getRatio(this.constraints, this.bounds)
   }
 
   createMask (defaultRect?: boolean): Shape {

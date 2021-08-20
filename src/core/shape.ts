@@ -1,4 +1,5 @@
 import { Context2DOrientation } from './context2d'
+import { Layer } from './layers'
 import { Point } from './point'
 import { Rect } from './rect'
 import { ShapeStyle } from './shape-style'
@@ -13,12 +14,12 @@ export default class Shape {
   private readonly path: Path2D
   readonly style: ShapeStyle
 
-  constructor ({ location, size, originSize, orientation, ratio, padding }) {
-    this.location = location
-    this.layerSize = size
-    this.originSize = originSize
-    this.orientation = orientation
-    this.ratio = ratio
+  constructor (layer: Layer) {
+    this.location = layer.location
+    this.layerSize = layer.size
+    this.originSize = layer.originSize
+    this.orientation = layer.orientation
+    this.ratio = layer.ratio
     this.path = new Path2D()
     this.style = {}
   }

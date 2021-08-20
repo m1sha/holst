@@ -1,3 +1,4 @@
+import { Constraints } from '../core/constraints'
 import { Point } from '../core/point'
 import { Rect } from '../core/rect'
 
@@ -33,8 +34,8 @@ const roundInt = (value: number): number => {
 
 export { roundInt, getMax, getMin }
 
-export function getRatio (minX: number, minY: number, maxX: number, maxY: number, bounds: Rect): Point {
-  const x = bounds.width / (maxX + minX)
-  const y = bounds.height / (maxY + Math.abs(minY))
+export function getRatio (constraints: Constraints, bounds: Rect): Point {
+  const x = bounds.width / (constraints.maxX + constraints.minX)
+  const y = bounds.height / (constraints.maxY + Math.abs(constraints.minY))
   return { x, y }
 }

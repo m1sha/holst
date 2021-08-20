@@ -22,7 +22,6 @@ export class LinearChart extends Chart {
     layer.location.y = 10
     layer.size.width += -40
     layer.size.height += -40
-    layer.padding = { left: 10, top: 10, bottom: 10, right: 10 }
     layer.createMask()
     const s = layer.createShape()
     s.style.strokeStyle = '#f00'

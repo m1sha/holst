@@ -9,6 +9,7 @@ export class Context2D {
 
   constructor (ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
+    this.ctx.imageSmoothingEnabled = true
   }
 
   get width () { return this.ctx.canvas.width }
@@ -32,6 +33,7 @@ export class Context2D {
     if (style.strokeStyle) {
       this.ctx.strokeStyle = style.strokeStyle
       this.ctx.lineWidth = style.lineWidth
+      this.ctx.lineJoin = style.lineJoin
       this.ctx.lineDashOffset = style.lineDashOffset
       if (style.lineDash) this.ctx.setLineDash(style.lineDash)
       this.ctx.stroke(shape.getPath())
