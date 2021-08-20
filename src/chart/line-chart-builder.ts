@@ -2,7 +2,7 @@ import { createAxis, createBackground, createCorner, createGrid, createThreshold
 import { ChartBuilder } from './chart-builder'
 import { ChartOptions } from './chart-options'
 import colors from './colors'
-import { LabelStyle } from '../core/label-style'
+import { TextStyle } from '../core/label-style'
 import { Viewport } from '../core/viewport'
 import { EventInfo } from '../core/event-handler'
 
@@ -19,8 +19,8 @@ export class LineChartBuilder extends ChartBuilder {
     const name = this.chart.legend.chartName
     const width = this.chart.size.width / 2
     const height = this.chart.size.height - 16
-    const style = { strokeStyle: '#333', fontSize: '12pt' } as LabelStyle
-    layer.createText({ text: name, x: _ => width - (_ / 2), y: _ => height, style })
+    const style = { strokeStyle: '#333', fontSize: '12pt' } as TextStyle
+    layer.createText({ value: name, x: _ => width - (_ / 2), y: _ => height, style })
     return this
   }
 
@@ -67,18 +67,18 @@ export class LineChartBuilder extends ChartBuilder {
 
   addNumbers (): this | LineChartBuilder {
     const layer = this.chart.createLayer()
-    const style: LabelStyle = { color: colors.lineColor }
+    const style: TextStyle = { color: colors.lineColor }
     const shape = layer.createShape()
     shape.style.strokeStyle = colors.lineColor
     const x0 = this.viewport.x - 28
     const y0 = this.viewport.bottom + 8
-    layer.createText({ text: this.chart.minHeight.toFixed(0), x: _ => x0, y: _ => y0, style })
+    layer.createText({ value: this.chart.minHeight.toFixed(0), x: _ => x0, y: _ => y0, style })
     const n = this.options.xSegmentCount || 10
     const dy = this.chart.maxHeight / n
     for (let i = 1; i <= n; i++) {
       const yText = (dy * i).toFixed(0)
       layer.createText({
-        text: yText,
+        value: yText,
         x: _ => x0 - (_ / 2) - 12,
         y: _ => this.chart.getPoint(0, dy * i).y,
         style
@@ -91,7 +91,7 @@ export class LineChartBuilder extends ChartBuilder {
       if (!item) continue
       const { xValue } = this.getDisplayValues(item)
       layer.createText({
-        text: xValue.toString(),
+        value: xValue.toString(),
         x: width => this.chart.getPoint(dx * i, 0).x - (width / 2),
         y: _ => this.viewport.bottom + 26,
         style

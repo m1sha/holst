@@ -7,8 +7,8 @@ export default class metric {
     const width = bounds.width
     const height = bounds.height
     return {
-      x: width / (thickness.maxWidth - thickness.minWidth),
-      y: height / (thickness.maxHeight - thickness.minHeight)
+      x: width / (thickness.maxWidth + thickness.minWidth),
+      y: height / (thickness.maxHeight + Math.abs(thickness.minHeight))
     }
   }
 }

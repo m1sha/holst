@@ -35,6 +35,11 @@
                 </div>
                 
             </td>
+            <td>
+                <div class="chart">
+                    <canvas id="canvas6" width="590" height="440"></canvas>
+                </div>
+            </td>
         </tr>
         <tr>
             <td>
@@ -49,6 +54,30 @@
                     <canvas id="canvas4" width="620" height="440"></canvas>
                 </div>
             </td>
+            <td>
+                <div class="chart">
+                    <canvas id="canvas5" width="590" height="440"></canvas>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="chart">
+                    <canvas id="canvas7" width="620" height="440"></canvas>
+                    
+                </div>
+                
+            </td>
+            <td>
+                <div class="chart">
+                    <canvas id="canvas8" width="620" height="440"></canvas>
+                </div>
+            </td>
+            <td>
+                <div class="chart">
+                    <canvas id="canvas9" width="590" height="440"></canvas>
+                </div>
+            </td>
         </tr>
     </table>
     
@@ -58,25 +87,112 @@
     </script>
     <script>
         var data2 = [
-            { "Value": 90, "Time": "2021-05-13T23:48:35" },
-            { "Value": 50, "Time": "2021-05-13T23:49:35" },
-            { "Value": 30, "Time": "2021-05-13T23:50:35" },
-            { "Value": 10, "Time": "2021-05-13T23:50:35" },
-            { "Value": 5, "Time": "2021-05-13T23:51:35" },
+            { "Value": 10, "Time": "2021-05-13T23:48:35" },
+            { "Value": 30, "Time": "2021-05-13T23:48:35" },
+            { "Value": 20, "Time": "2021-05-13T23:49:35" },
+            { "Value": -5, "Time": "2021-05-13T23:50:35" },
+            { "Value": 20, "Time": "2021-05-13T23:50:35" },
+            { "Value": 0, "Time": "2021-05-13T23:51:35" },
+            { "Value": 50, "Time": "2021-05-13T23:52:35" },
             { "Value": -10, "Time": "2021-05-13T23:52:35" },
-            { "Value": 1, "Time": "2021-05-13T23:52:35" },
-            { "Value": 150, "Time": "2021-05-13T23:53:35" },
-            { "Value": 195, "Time": "2021-05-13T23:54:35" },
-            { "Value": 155, "Time": "2021-05-13T23:55:35" },
-            { "Value": 155, "Time": "2021-05-13T23:56:35" },
-            { "Value": 175, "Time": "2021-05-13T23:57:35" },
-            { "Value": 155, "Time": "2021-05-13T23:58:35" },
-            { "Value": 155, "Time": "2021-05-13T23:59:35" },
-            { "Value": 155, "Time": "2021-06-13T01:01:35" },
-            { "Value": 155, "Time": "2021-06-13T01:02:35" },
-            { "Value": 155, "Time": "2021-06-13T01:03:35" },
-            { "Value": 155, "Time": "2021-06-13T01:04:35" },
-            { "Value": 155, "Time": "2021-06-13T01:05:35" },
+            { "Value": 70, "Time": "2021-05-13T23:53:35" },
+            { "Value": 100, "Time": "2021-05-13T23:53:35" },
+            // { "Value": 195, "Time": "2021-05-13T23:54:35" },
+            // { "Value": 155, "Time": "2021-05-13T23:55:35" },
+            // { "Value": 155, "Time": "2021-05-13T23:56:35" },
+            // { "Value": 175, "Time": "2021-05-13T23:57:35" },
+            // { "Value": 155, "Time": "2021-05-13T23:58:35" },
+            // { "Value": 155, "Time": "2021-05-13T23:59:35" },
+            // { "Value": 155, "Time": "2021-06-13T01:01:35" },
+            // { "Value": 155, "Time": "2021-06-13T01:02:35" },
+            // { "Value": 155, "Time": "2021-06-13T01:03:35" },
+            // { "Value": 155, "Time": "2021-06-13T01:04:35" },
+            // { "Value": 155, "Time": "2021-06-13T01:05:35" },
+        ]
+
+        var data3 = [
+            { "Value": 120.22, "Time": "2021-05-13T23:48:35" },
+            { "Value": 20.88, "Time": "2021-05-13T23:49:35" },
+            { "Value": -51.77, "Time": "2021-05-13T23:50:35" },
+            { "Value": 20.88, "Time": "2021-05-13T23:50:35" },
+            { "Value": 10.22, "Time": "2021-05-13T23:51:35" },
+            { "Value": 50.22, "Time": "2021-05-13T23:52:35" },
+            { "Value": 10.33, "Time": "2021-05-13T23:52:35" },
+            { "Value": 70.44, "Time": "2021-05-13T23:53:35" },
+            { "Value": 300, "Time": "2021-05-13T23:53:35" },
+            { "Value": 200, "Time": "2021-05-13T23:53:35" },
+            { "Value": 40, "Time": "2021-05-13T23:53:35" },
+            { "Value": 40, "Time": "2021-05-13T23:53:35" },
+            { "Value": 40, "Time": "2021-05-13T23:53:35" },
+            { "Value": 40, "Time": "2021-05-13T23:53:35" },
+            { "Value": 10, "Time": "2021-05-13T23:53:35" },
+            { "Value": 10, "Time": "2021-05-13T23:53:35" },
+            { "Value": -10, "Time": "2021-05-13T23:53:35" },
+            { "Value": 0, "Time": "2021-05-13T23:53:35" },
+            { "Value": 0, "Time": "2021-05-13T23:53:35" },
+            { "Value": 0, "Time": "2021-05-13T23:53:35" },
+            { "Value": 0, "Time": "2021-05-13T23:53:35" },
+            { "Value": 5, "Time": "2021-05-13T23:53:35" },
+            { "Value": 10, "Time": "2021-05-13T23:53:35" },
+        ]
+
+        var data4 = [
+            { "Value": 120.22, "Time": "2021-05-13T23:48:35" },
+            { "Value": 20.88, "Time": "2021-05-13T23:49:35" },
+            { "Value": 51.77, "Time": "2021-05-13T23:50:35" },
+            { "Value": 20.88, "Time": "2021-05-13T23:50:35" },
+            { "Value": 10.22, "Time": "2021-05-13T23:51:35" },
+            { "Value": 50.22, "Time": "2021-05-13T23:52:35" },
+            { "Value": 10.33, "Time": "2021-05-13T23:52:35" },
+            { "Value": 70.44, "Time": "2021-05-13T23:53:35" },
+            { "Value": 300, "Time": "2021-05-13T23:53:35" },
+            { "Value": 200, "Time": "2021-05-13T23:53:35" },
+            { "Value": 40, "Time": "2021-05-13T23:53:35" },
+            { "Value": 40, "Time": "2021-05-13T23:53:35" },
+            { "Value": 1140, "Time": "2021-05-13T23:53:35" },
+            { "Value": 40, "Time": "2021-05-13T23:53:35" },
+            { "Value": 10, "Time": "2021-05-13T23:53:35" },
+            { "Value": 10, "Time": "2021-05-13T23:53:35" },
+            { "Value": 10, "Time": "2021-05-13T23:53:35" },
+            { "Value": 0, "Time": "2021-05-13T23:53:35" },
+            { "Value": 0, "Time": "2021-05-13T23:53:35" },
+            { "Value": 0, "Time": "2021-05-13T23:53:35" },
+            { "Value": 0, "Time": "2021-05-13T23:53:35" },
+            { "Value": 5, "Time": "2021-05-13T23:53:35" },
+            { "Value": 10, "Time": "2021-05-13T23:53:35" },
+        ]
+
+        var data5 = [
+            { "Value": 20.22, "Time": "2021-05-13T23:48:35" },
+            { "Value": 20.88, "Time": "2021-05-13T23:49:35" },
+            { "Value": -51.77, "Time": "2021-05-13T23:50:35" },
+            { "Value": 20.88, "Time": "2021-05-13T23:50:35" },
+            { "Value": 10.22, "Time": "2021-05-13T23:51:35" },
+            { "Value": -520.22, "Time": "2021-05-13T23:52:35" },
+            { "Value": -10.33, "Time": "2021-05-13T23:52:35" },
+            { "Value": -70.44, "Time": "2021-05-13T23:53:35" },
+        ]
+
+        var data6 = [
+            { "Value": 1020.22, "Time": "2021-05-13T23:48:35" },
+            { "Value": 20.88, "Time": "2021-05-13T23:49:35" },
+            { "Value": -51.77, "Time": "2021-05-13T23:50:35" },
+            { "Value": 20.88, "Time": "2021-05-13T23:50:35" },
+            { "Value": 10.22, "Time": "2021-05-13T23:51:35" },
+            { "Value": -520.22, "Time": "2021-05-13T23:52:35" },
+            { "Value": -10.33, "Time": "2021-05-13T23:52:35" },
+            { "Value": -70.44, "Time": "2021-05-13T23:53:35" },
+        ]
+
+        var data7 = [
+            { "Value": 20.22, "Time": "2021-05-13T23:48:35" },
+            { "Value": 20.88, "Time": "2021-05-13T23:49:35" },
+            { "Value": 11.77, "Time": "2021-05-13T23:50:35" },
+            { "Value": 20.88, "Time": "2021-05-13T23:50:35" },
+            { "Value": 10.22, "Time": "2021-05-13T23:51:35" },
+            { "Value": 20.22, "Time": "2021-05-13T23:52:35" },
+            { "Value": 10.33, "Time": "2021-05-13T23:52:35" },
+            { "Value": 70.44, "Time": "2021-05-13T23:53:35" },
         ]
     </script>
     <script>
@@ -150,14 +266,14 @@
                     }
                 }
             },
-            thresholdOrientation: 'y',
-            thresholds: [
-                { value: 180, color: '#a26330' },
-                { value: 140, color: 'rgba(192,160,10,.33)' },
-                { value: 100, color: '#cec530' },
-                { value: 40, color: '#3ec500' },
-                { value: 20, color: '#0ea54c' }
-            ],
+            // thresholdOrientation: 'y',
+            // thresholds: [
+            //     { value: 180, color: '#a26330' },
+            //     { value: 140, color: 'rgba(192,160,10,.33)' },
+            //     { value: 100, color: '#cec530' },
+            //     { value: 40, color: '#3ec500' },
+            //     { value: 20, color: '#0ea54c' }
+            // ],
             xFieldName: 'Time',
             yFieldName: 'Value',
             xSegmentCount: 8,
@@ -169,41 +285,53 @@
     </script>
     <script src="dist/linear-chart2.js"></script>
     <script>
-        var canvas3 = document.getElementById("canvas3")
-        // for (const item of data2){
-        //     item.Time = new Date(item.Time)
-        // }
-        if (canvas3)
-        charts.createLinearChart(canvas3, data2, {
-            legend: {
-                chartName: 'Пример линейной диаграммы 3',
-                xTitle: 'Значение по оси Х: ',
-                yTitle: 'Значение по оси Y: '
-            },
-            xFieldName: 'Time',
-            yFieldName: 'Value',
-            xFieldDisplayFormat: (v) => v.getHours() + ":" + v.getMinutes(), // moment(v).format('HH:mm'),
-            yFieldDisplayFormat: (v) => parseFloat(v).toFixed(0),
-            width: 640,
-            height: 480
-        })()
+        // var canvas3 = document.getElementById("canvas3")
+        // // for (const item of data2){
+        // //     item.Time = new Date(item.Time)
+        // // }
+        // if (canvas3)
+        // charts.createLinearChart(canvas3, data2, {
+        //     legend: {
+        //         chartName: 'Пример линейной диаграммы 3',
+        //         xTitle: 'Значение по оси Х: ',
+        //         yTitle: 'Значение по оси Y: '
+        //     },
+        //     xFieldName: 'Time',
+        //     yFieldName: 'Value',
+        //     xFieldDisplayFormat: (v) => v.getHours() + ":" + v.getMinutes(), // moment(v).format('HH:mm'),
+        //     yFieldDisplayFormat: (v) => parseFloat(v).toFixed(0),
+        //     width: 640,
+        //     height: 480
+        // })()
 
-        var canvas4 = document.getElementById("canvas4")
-        if (canvas4)
-        charts.createLinearChart2(canvas4, data2, {
-            legend: {
-                chartName: 'Пример линейной диаграммы 4',
-                xTitle: 'Значение по оси Х: ',
-                yTitle: 'Значение по оси Y: '
-            },
-            xFieldName: 'Time',
-            yFieldName: 'Value',
-            xFieldDisplayFormat: (v) => v.getHours() + ":" + v.getMinutes(), // moment(v).format('HH:mm'),
-            yFieldDisplayFormat: (v) => parseFloat(v).toFixed(0),
-            width: 640,
-            height: 480
-        })()
+        // var canvas4 = document.getElementById("canvas4")
+        // if (canvas4)
+        // charts.createLinearChart2(canvas4, data2, {
+        //     legend: {
+        //         chartName: 'Пример линейной диаграммы 4',
+        //         xTitle: 'Значение по оси Х: ',
+        //         yTitle: 'Значение по оси Y: '
+        //     },
+        //     xFieldName: 'Time',
+        //     yFieldName: 'Value',
+        //     xFieldDisplayFormat: (v) => v.getHours() + ":" + v.getMinutes(), // moment(v).format('HH:mm'),
+        //     yFieldDisplayFormat: (v) => parseFloat(v).toFixed(0),
+        //     width: 640,
+        //     height: 480
+        // })()
 
+        setChart("canvas4", data3)
+        setChart("canvas5", data2)
+        setChart("canvas6", data)
+        setChart("canvas3", data4)
+        setChart("canvas7", data7)
+        setChart("canvas8", data6)
+        setChart("canvas9", data5)
+
+        function setChart (id, items) {
+            var canvas = document.getElementById(id)
+            if (canvas)  charts.createLinearChart3(canvas, items)
+        }
 
     </script>
 </body>

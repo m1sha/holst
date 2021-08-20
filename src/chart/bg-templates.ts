@@ -1,5 +1,5 @@
 import colors from './colors'
-import { LabelStyle } from '../core/label-style'
+import { TextStyle } from '../core/label-style'
 import { Layer } from '../core/layers'
 import { Padding } from '../core/padding'
 import { Point } from '../core/point'
@@ -61,7 +61,7 @@ const createThresholds = (layer: Layer, axis: 'x' | 'y', thresholds: { value: nu
 }
 
 const createTooltipWindow = (layer: Layer, point: Point, viewport: Viewport, strings: string[], tooltipStyle: TooltipStyle): void => {
-  const style: LabelStyle = { color: colors.selectLineFontColor, fontSize: '11pt' }
+  const style: TextStyle = { color: colors.selectLineFontColor, fontSize: '11pt' }
   const paddingLeft = 16
   const paddingTop = 18
   const lineHeight = tooltipStyle.lineHeight || 18
@@ -75,8 +75,8 @@ const createTooltipWindow = (layer: Layer, point: Point, viewport: Viewport, str
   tooltip.rect({ x: point.x + 8 - shiftLeft, y: point.y, width, height })
   tooltip.style.strokeStyle = '#3a87a0'
   tooltip.style.fillStyle = '#faf7f0'
-  layer.createText({ text: strings[0], x: _ => point.x + paddingLeft - shiftLeft, y: _ => point.y + paddingTop, style })
-  layer.createText({ text: strings[1], x: _ => point.x + paddingLeft - shiftLeft, y: _ => point.y + paddingTop + lineHeight, style })
+  layer.createText({ value: strings[0], x: _ => point.x + paddingLeft - shiftLeft, y: _ => point.y + paddingTop, style })
+  layer.createText({ value: strings[1], x: _ => point.x + paddingLeft - shiftLeft, y: _ => point.y + paddingTop + lineHeight, style })
 }
 
 const createCorner = (layer: Layer, point: Point, size: Size): void => {

@@ -27,7 +27,7 @@ export default class Shape {
     const point = this.getPoint(rect)
     const height = this.orientation === 'top-left' ? rect.height : -rect.height
     const width = rect.width
-    this.path.rect(point.x, point.y, width, height)
+    this.path.rect(point.x + this.location.x, point.y - this.location.y, width, height)
     return this
   }
 
@@ -61,6 +61,13 @@ export default class Shape {
   ellipse (point: Point, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle, anticlockwise?: boolean) {
     point = this.getPoint(point)
     this.path.ellipse(point.x, point.y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
+  }
+
+  polyline (points: Point[]) {
+    for (const point of points) {
+      this.lineTo(point)
+      this.moveTo(point)
+    }
   }
 
   closePath () {

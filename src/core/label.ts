@@ -1,8 +1,8 @@
-import { LabelStyle } from './label-style'
+import { TextStyle } from './label-style'
 
-export interface Label {
-  text: string,
+export interface Text {
+  value: string,
   x: (textWidth: number) => number,
   y: (textWidth: number) => number,
-  style: LabelStyle
+  style: TextStyle
 }

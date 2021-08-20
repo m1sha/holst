@@ -1,6 +1,6 @@
 import { EventType } from './event-type'
-import { Label } from './label'
-import { LabelStyle } from './label-style'
+import { Text } from './label'
+import { TextStyle } from './label-style'
 import Shape from './shape'
 export type Context2DOrientation = 'top-left' | 'bottom-left'
 export class Context2D {
@@ -14,14 +14,14 @@ export class Context2D {
   get width () { return this.ctx.canvas.width }
   get height () { return this.ctx.canvas.height }
 
-  drawText (label: Label, mask?: Shape) {
+  drawText (label: Text, mask?: Shape) {
     this.ctx.save()
     this.assignMask(mask)
     this.assignTextStyle(label.style)
-    const width = this.measureText(label.text, label.style).width
+    const width = this.measureText(label.value, label.style).width
     const x = label.x(width)
     const y = label.y(width)
-    this.ctx.fillText(label.text, x, y)
+    this.ctx.fillText(label.value, x, y)
     this.ctx.restore()
   }
 
@@ -32,6 +32,8 @@ export class Context2D {
     if (style.strokeStyle) {
       this.ctx.strokeStyle = style.strokeStyle
       this.ctx.lineWidth = style.lineWidth
+      this.ctx.lineDashOffset = style.lineDashOffset
+      if (style.lineDash) this.ctx.setLineDash(style.lineDash)
       this.ctx.stroke(shape.getPath())
     }
     if (style.fillStyle) {
@@ -41,7 +43,7 @@ export class Context2D {
     this.ctx.restore()
   }
 
-  measureText (text: string, style: LabelStyle) {
+  measureText (text: string, style: TextStyle) {
     this.ctx.save()
     this.assignTextStyle(style)
     const result = this.ctx.measureText(text)
@@ -56,7 +58,7 @@ export class Context2D {
     }
   }
 
-  private assignTextStyle (style: LabelStyle) {
+  private assignTextStyle (style: TextStyle) {
     style = style || {}
     this.ctx.fillStyle = style.color || '#000'
     const fontName = style.fontName || 'serif'

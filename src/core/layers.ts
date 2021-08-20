@@ -1,17 +1,17 @@
 import { Context2D, Context2DOrientation } from './context2d'
-import { Label } from './label'
-import { LabelStyle } from './label-style'
+import { Text } from './label'
+import { TextStyle } from './label-style'
 import { Padding } from './padding'
 import { Point } from './point'
 import { Rect } from './rect'
 import Shape from './shape'
 import { Size } from './size'
-import { rect } from './utils'
+import { rect, toAbsolute } from './utils'
 
 export class Layer {
   private readonly ctx: Context2D
   private shapes: Shape[]
-  private labels: Label[]
+  private labels: Text[]
   private mask: Shape | null
   readonly ratio: Point
   readonly location: Point
@@ -45,8 +45,8 @@ export class Layer {
     return result
   }
 
-  createText (label: Label): void {
-    this.labels.push(label)
+  createText (text: Text): void {
+    this.labels.push(text)
   }
 
   addShape (shape: Shape): void {
@@ -64,11 +64,24 @@ export class Layer {
     }
 
     for (const label of this.labels) {
-      this.ctx.drawText(label, this.mask)
+      const l = {
+        value: label.value,
+        x: w => toAbsolute({ x: label.x(w), y: 0 }, this.orientation, this.location, this.originSize).x + this.location.x,
+        y: w => toAbsolute({ x: 0, y: label.y(w) }, this.orientation, this.location, this.originSize).y - this.location.y,
+        style: label.style
+      }
+      this.ctx.drawText(l, this.mask)
     }
   }
 
-  measureText (text: string, style: LabelStyle) { return this.ctx.measureText(text, style) }
+  measureText (text: string, style: TextStyle) { return this.ctx.measureText(text, style) }
+
+  setPadding (padding: Padding): void {
+    this.location.x = padding.left
+    this.location.y = padding.top
+    this.size.width = this.size.width - (padding.right + padding.left * 2)
+    this.size.height = this.size.height - (padding.bottom + padding.top * 2)
+  }
 
   createMask (defaultRect?: boolean): Shape {
     this.mask = this.createShape()

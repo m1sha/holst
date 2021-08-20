@@ -3,6 +3,7 @@
 export interface ShapeStyle {
     lineCap?: CanvasLineCap
     lineDashOffset?: number
+    lineDash?: number[]
     lineJoin?: CanvasLineJoin
     lineWidth?: number
     miterLimit?: number

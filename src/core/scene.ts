@@ -5,7 +5,7 @@ import { Layer } from './layers'
 import { Point } from './point'
 import { Size } from './size'
 
-export abstract class Scene implements Activity {
+export class Scene implements Activity {
     readonly ctx: Context2D
     private readonly handler: EventHandler
     readonly size: Size
