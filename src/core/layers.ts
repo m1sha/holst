@@ -42,7 +42,8 @@ export class Layer {
   }
 
   createShape (): Shape {
-    const result = new Shape(this)
+    const path = this.ctx.createPath()
+    const result = new Shape(this, path)
     this.shapes.push(result)
     return result
   }

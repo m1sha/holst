@@ -54,6 +54,10 @@ export class Context2D implements Context2DBase {
     return result
   }
 
+  createPath (): Path2D {
+    return new Path2D()
+  }
+
   on (a: (eventType: EventType, event: Event | MouseEvent | KeyboardEvent) => void, ...events: EventType[]) {
     for (let i = 0; i < events.length; i++) {
       const event = events[i]

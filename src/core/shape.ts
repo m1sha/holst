@@ -14,13 +14,13 @@ export default class Shape {
   private readonly path: Path2D
   readonly style: ShapeStyle
 
-  constructor (layer: Layer) {
+  constructor (layer: Layer, path: Path2D) {
     this.location = layer.location
     this.layerSize = layer.size
     this.originSize = layer.originSize
     this.orientation = layer.orientation
     this.ratio = layer.ratio
-    this.path = new Path2D()
+    this.path = path
     this.style = {}
   }
 

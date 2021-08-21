@@ -8,5 +8,6 @@ export default interface Context2DBase {
   drawText(label: Text, mask?: Shape): void
   drawShape (shape: Shape, mask?: Shape): void
   measureText (text: string, style: TextStyle)
+  createPath(): Path2D
   on (a: (eventType: EventType, event: Event | MouseEvent | KeyboardEvent) => void, ...events: EventType[])
 }

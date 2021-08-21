@@ -3,8 +3,20 @@ import { EventType } from '../src/core/event-type'
 import { Text } from '../src/core/label'
 import { TextStyle } from '../src/core/label-style'
 import shape from '../src/core/shape'
+import { TestCommandDispatcher } from './test-draw-command'
+import TestPath2D from './test-path2d'
 
 export default class TestContext2D implements Context2DBase {
+  private dispatcher: TestCommandDispatcher
+
+  constructor (dispatcher?: TestCommandDispatcher) {
+    this.dispatcher = dispatcher
+  }
+
+  createPath (): Path2D {
+    return new TestPath2D(this.dispatcher)
+  }
+
   get width (): number { return 100 }
   get height (): number { return 100 }
 
