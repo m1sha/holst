@@ -11,7 +11,7 @@ import { Size } from '../core/size'
 import { TooltipStyle } from './chart-options'
 
 const createGrid = (layer: Layer, options: { viewport: Viewport, seed: { width: number, height: number } }): Shape => {
-  const shape = new Shape(layer)
+  const shape = new Shape(layer, new Path2D())
   const { viewport, seed } = options
   for (let i = viewport.top; i < viewport.height; i += seed.height) {
     shape.lineH({ x: viewport.x, y: viewport.top + i }, viewport.width)
@@ -28,13 +28,13 @@ const createGrid = (layer: Layer, options: { viewport: Viewport, seed: { width: 
 }
 
 const createBackground = (layer: Layer, color: string, rect: Rect): Shape => {
-  const shape = new Shape(layer)
+  const shape = new Shape(layer, new Path2D())
   shape.rect(rect).style.fillStyle = color
   return shape
 }
 
 const createAxis = (layer: Layer, viewport: Viewport): Shape => {
-  const shape = new Shape(layer)
+  const shape = new Shape(layer, new Path2D())
   shape.lineV({ x: viewport.left, y: viewport.top }, viewport.height)
   shape.lineH({ x: viewport.left, y: viewport.bottom }, viewport.width)
   shape.style.strokeStyle = colors.lineColor
