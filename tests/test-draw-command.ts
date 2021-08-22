@@ -1,6 +1,4 @@
-export interface TestCommand {
-
-}
+export interface TestCommand {}
 
 export class ArcCommand implements TestCommand {
   readonly x: number
@@ -45,5 +43,11 @@ export class TestCommandDispatcher {
 
   add (item: TestCommand) {
     this.items.push(item)
+  }
+
+  pop<T> (): T {
+    const item = this.items[0] as T
+    this.items.splice(0, 1)
+    return item
   }
 }

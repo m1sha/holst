@@ -6,7 +6,9 @@
   "scripts": {
     "build:web": "cross-env mode=production libraryTarget= webpack",
     "build:node": "cross-env mode=production libraryTarget=umd webpack",
-    "watch": "cross-env mode=development libraryTarget= webpack --watch"
+    "watch": "cross-env mode=development libraryTarget= webpack --watch",
+    "test:watch": "npx jest --watch",
+    "format": "prettier --write src/**/*.ts tests/**/*.ts"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +25,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
     "jest": "^27.0.6",
+    "prettier": "^2.3.2",
     "ts-jest": "^27.0.5",
     "ts-loader": "^8.0.18",
     "typescript": "^4.2.3",

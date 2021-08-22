@@ -17,8 +17,13 @@ export default class TestContext2D implements Context2DBase {
     return new TestPath2D(this.dispatcher)
   }
 
-  get width (): number { return 100 }
-  get height (): number { return 100 }
+  get width (): number {
+    return 100
+  }
+
+  get height (): number {
+    return 100
+  }
 
   drawShape (shape: shape, mask?: shape): void {
     throw new Error('Method not implemented.')
