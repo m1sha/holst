@@ -28,19 +28,19 @@ export default class Shape {
     const point = this.getPoint(rect)
     const height = this.orientation === 'top-left' ? rect.height : -rect.height
     const width = rect.width
-    this.path.rect(point.x + this.location.x, point.y - this.location.y, width, height)
+    this.path.rect(point.x, point.y, width, height)
     return this
   }
 
   moveTo (point: Point): this | Shape {
     point = this.getPoint(point)
-    this.path.moveTo(point.x + this.location.x, point.y - this.location.y)
+    this.path.moveTo(point.x, point.y)
     return this
   }
 
   lineTo (point: Point): this | Shape {
     point = this.getPoint(point)
-    this.path.lineTo(point.x + this.location.x, point.y - this.location.y)
+    this.path.lineTo(point.x, point.y)
     return this
   }
 

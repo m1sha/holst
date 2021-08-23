@@ -41,7 +41,9 @@ export function createLinearChart3 (canvas: HTMLCanvasElement, data: []) {
   outer(layer0)
 
   const layer = scene.createLayer('bottom-left')
-  layer.setPadding(padding(30, 20, 25, 10))
+  const textStyle = { color: '#222222', fontSize: '12px', fontName: 'Arial' }
+  const paddingLeft = layer.measureText(constraints.maxY.toString(), textStyle).width + 20
+  layer.setPadding(padding(25, paddingLeft, 25, 30))
   layer.constraints = constraints
   const d = layer.ratio
   const frame = layer.createShape()
@@ -69,13 +71,13 @@ export function createLinearChart3 (canvas: HTMLCanvasElement, data: []) {
   coordinateCross.lineH({ x: 0, y: Math.abs(constraints.minY) * d.y }, layer.size.width)
   coordinateCross.lineV({ x: 0, y: 0 }, (Math.abs(constraints.maxY) + Math.abs(constraints.minY)) * d.y)
 
-  const textStyle = { color: '#222222', fontSize: '12px', fontName: 'Arial' }
+  
   const text = { value: '0', x: () => -15, y: () => Math.abs(constraints.minY) * d.y, style: textStyle }
   layer.createText(text)
 
   const yy = Math.abs(constraints.maxY) / 5
   for (let i = 1; i <= 5; i++) {
-    const text = { value: (i * yy).toString(), x: () => -25, y: () => (Math.abs(i * yy) + Math.abs(constraints.minY)) * d.y, style: textStyle }
+    const text = { value: (i * yy).toString(), x: w => -w - 10, y: () => (Math.abs(i * yy) + Math.abs(constraints.minY)) * d.y, style: textStyle }
     layer.createText(text)
   }
 
@@ -87,7 +89,7 @@ export function createLinearChart3 (canvas: HTMLCanvasElement, data: []) {
   }
 
   for (let i = 1; i <= 5; i++) {
-    const text = { value: (i * yy * -1).toString(), x: () => -25, y: () => (Math.abs(constraints.minY) - Math.abs(i * yy)) * d.y, style: textStyle }
+    const text = { value: (i * yy * -1).toString(), x: w => -w - 10, y: () => (Math.abs(constraints.minY) - Math.abs(i * yy)) * d.y, style: textStyle }
     layer.createText(text)
   }
 

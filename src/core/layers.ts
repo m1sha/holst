@@ -69,8 +69,8 @@ export class Layer {
     for (const label of this.labels) {
       const l = {
         value: label.value,
-        x: w => toAbsolute({ x: label.x(w), y: 0 }, this.orientation, this.location, this.originSize).x + this.location.x,
-        y: w => toAbsolute({ x: 0, y: label.y(w) }, this.orientation, this.location, this.originSize).y - this.location.y,
+        x: w => toAbsolute({ x: label.x(w), y: 0 }, this.orientation, this.location, this.originSize).x,
+        y: w => toAbsolute({ x: 0, y: label.y(w) }, this.orientation, this.location, this.originSize).y,
         style: label.style
       }
       this.ctx.drawText(l, this.mask)
@@ -82,8 +82,8 @@ export class Layer {
   setPadding (padding: Padding): void {
     this.location.x = padding.left
     this.location.y = padding.top
-    this.size.width = this.size.width - (padding.right + padding.left * 2)
-    this.size.height = this.size.height - (padding.bottom + padding.top * 2)
+    this.size.width = padding.right > 0 ? this.size.width - (padding.right + padding.left) : this.size.width
+    this.size.height = padding.bottom > 0 ? this.size.height - (padding.bottom + padding.top) : this.size.height
   }
 
   get ratio (): Point {
