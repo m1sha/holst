@@ -22,7 +22,7 @@ const config = {
 
 if (process.env.libraryTarget === 'umd') {
   config.output.libraryTarget = 'umd'
-  config.entry['chart-bundle'] = './src/chart/index.ts'
+  config.entry['chart-bundle'] = './src/chart3/index.ts'
 } else {
   config.entry['linear-chart'] = './src/chart/index.ts'
   config.entry['linear-chart2'] = './src/chart2/index.ts'

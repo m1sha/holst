@@ -27,5 +27,9 @@ export function createChartVersion3 (canvas: HTMLCanvasElement, data: [], option
   builder.addAxisesLayer()
   builder.addNumbers()
 
+  options.onMoveRaw = (_, p) => {
+    return builder.onMoveHandler(p)
+  }
+
   return () => builder.build()
 }

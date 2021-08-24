@@ -19,7 +19,7 @@ export class Layer {
   readonly location: Point
   readonly size: Size
   readonly originSize: Readonly<Size>
-  readonly orientation: Context2DOrientation
+  orientation: Context2DOrientation
   constraints: Constraints
 
   constructor (ctx: Context2DBase, orientation: Context2DOrientation) {
@@ -88,6 +88,11 @@ export class Layer {
 
   get ratio (): Point {
     return getRatio(this.constraints, this.bounds)
+  }
+
+  hitTest (point: Point): boolean {
+    return point.x >= this.location.x && point.x <= this.size.width + this.location.x &&
+           point.y >= this.location.y && point.y <= this.size.height + this.location.y
   }
 
   createMask (defaultRect?: boolean): Shape {

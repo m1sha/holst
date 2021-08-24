@@ -71,7 +71,6 @@ export function createLinearChart3 (canvas: HTMLCanvasElement, data: []) {
   coordinateCross.lineH({ x: 0, y: Math.abs(constraints.minY) * d.y }, layer.size.width)
   coordinateCross.lineV({ x: 0, y: 0 }, (Math.abs(constraints.maxY) + Math.abs(constraints.minY)) * d.y)
 
-  
   const text = { value: '0', x: () => -15, y: () => Math.abs(constraints.minY) * d.y, style: textStyle }
   layer.createText(text)
 

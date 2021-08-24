@@ -118,6 +118,9 @@ export class LineChartBuilder extends ChartBuilder {
   }
 
   onMove (e: EventInfo, options: ChartOptions) {
+    if (this.options.onMoveRaw) {
+      if (this.options.onMoveRaw(this.chart, e.point) === false) return
+    }
     const viewport = new Viewport(this.chart.size, this.chart.padding)
     if (!viewport.hitTest(e.point)) {
       return
