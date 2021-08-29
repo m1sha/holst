@@ -3,9 +3,9 @@ import { point } from '../src/core/utils'
 import TestContext2D from './test-context2d'
 import { LineToCommand, MoveToCommand, TestCommandDispatcher } from './test-draw-command'
 
-test('shape', () => {
+test('Shape global coordinates changed if layer location changed', () => {
   const commands = new TestCommandDispatcher()
-  const layer = new Layer(new TestContext2D(commands), 'bottom-left')
+  const layer = new Layer(new TestContext2D(commands), 'top-left')
   layer.location.x = 50
   const shape = layer.createShape()
   shape.lineV(point(1, 1), 50)

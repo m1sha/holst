@@ -232,6 +232,9 @@
         ]
     </script>
     <script>
+         for (const item of data2){
+            item.Time = new Date(item.Time)
+        }
         var canvas = document.getElementById("canvas")
         
         for (const item of data){
@@ -277,48 +280,7 @@
             
         })()
 
-        var canvas2 = document.getElementById("canvas2")
-        for (const item of data2){
-            item.Time = new Date(item.Time)
-        }
-        //charts.linearChart(canvas, data)
-        if (canvas2)
-        charts.createChart(canvas2, data2, {
-            legend: {
-                chartName: 'Пример линейной диаграммы 2',
-                xTitle: 'Значение по оси Х: ',
-                yTitle: 'Значение по оси Y: ',
-                tooltip: {
-                    onShow(e, i) {
-                        const style = document.getElementById('chart2t').style
-                        style.opacity = '1'
-                        style.top = e.point.y
-                        style.left = e.point.x 
-                        document.getElementById('chart2x').innerText = i.xText
-                        document.getElementById('chart2y').innerText = i.yText
-                    },
-                    onHide() {
-                        const style = document.getElementById('chart2t').style
-                        style.opacity = '0'
-                    }
-                }
-            },
-            // thresholdOrientation: 'y',
-            // thresholds: [
-            //     { value: 180, color: '#a26330' },
-            //     { value: 140, color: 'rgba(192,160,10,.33)' },
-            //     { value: 100, color: '#cec530' },
-            //     { value: 40, color: '#3ec500' },
-            //     { value: 20, color: '#0ea54c' }
-            // ],
-            xFieldName: 'Time',
-            yFieldName: 'Value',
-            xSegmentCount: 8,
-            xFieldDisplayFormat: (v) => v.getHours() + ":" + v.getMinutes(), // moment(v).format('HH:mm'),
-            yFieldDisplayFormat: (v) => parseFloat(v).toFixed(0),
-            width: 640,
-            height: 480
-        })()
+      
     </script>
     <script src="dist/linear-chart2.js"></script>
     <script>
@@ -492,6 +454,49 @@
             width: 640,
             height: 480,
             
+        })()
+
+        var canvas2 = document.getElementById("canvas2")
+        for (const item of data7){
+            item.Time = new Date(item.Time)
+        }
+        //charts.linearChart(canvas, data)
+        if (canvas2)
+        charts.createChartVersion3(canvas2, data7, {
+            legend: {
+                chartName: 'Пример линейной диаграммы 2',
+                xTitle: 'Значение по оси Х: ',
+                yTitle: 'Значение по оси Y: ',
+                tooltip: {
+                    onShow(e, i) {
+                        const style = document.getElementById('chart2t').style
+                        style.opacity = '1'
+                        style.top = e.point.y
+                        style.left = e.point.x 
+                        document.getElementById('chart2x').innerText = i.xText
+                        document.getElementById('chart2y').innerText = i.yText
+                    },
+                    onHide() {
+                        const style = document.getElementById('chart2t').style
+                        style.opacity = '0'
+                    }
+                }
+            },
+            // thresholdOrientation: 'y',
+            // thresholds: [
+            //     { value: 180, color: '#a26330' },
+            //     { value: 140, color: 'rgba(192,160,10,.33)' },
+            //     { value: 100, color: '#cec530' },
+            //     { value: 40, color: '#3ec500' },
+            //     { value: 20, color: '#0ea54c' }
+            // ],
+            xFieldName: 'Time',
+            yFieldName: 'Value',
+            xSegmentCount: 8,
+            xFieldDisplayFormat: (v) => v.getHours() + ":" + v.getMinutes(), // moment(v).format('HH:mm'),
+            yFieldDisplayFormat: (v) => parseFloat(v).toFixed(0),
+            width: 640,
+            height: 480
         })()
     </script>
 </body>

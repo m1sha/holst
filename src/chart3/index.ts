@@ -18,7 +18,7 @@ export function createChartVersion3 (canvas: HTMLCanvasElement, data: [], option
     minX: 0,
     minY: roundInt(getMin(data, 'Value'))
   }
-
+  if (constraints.minY > 0) constraints.minY = 0
   const builder = new LineChartBuilder3(canvas, data, options)
   builder.constraints = constraints
   builder.textStyle = { color: '#222222', fontSize: '12px', fontName: 'Arial' }

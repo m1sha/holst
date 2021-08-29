@@ -12,6 +12,10 @@ const point = (x: number, y: number): Point => {
   return { x, y }
 }
 
+const size = (width: number, height: number): Size => {
+  return { width, height }
+}
+
 const padding = (top: number, left: number, bottom: number, right: number): Padding => {
   return { top, left, bottom, right }
 }
@@ -24,4 +28,4 @@ const toAbsolute = (point: Point, orientation: Context2DOrientation, location: P
   }
 }
 
-export { rect, point, padding, toAbsolute }
+export { rect, point, size, padding, toAbsolute }

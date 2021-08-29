@@ -14,16 +14,14 @@ test('Layer ratio should be (1, 1)', () => {
 
   layer2.setPadding(padding(10, 10, -10, -10))
   expect(layer2.ratio).toStrictEqual(point(1, 1))
-})
 
-test('Layer ratio should be (0.5, 0.5)', () => {
-  const layer = new Layer(new TestContext2D(), 'top-left')
-  layer.setPadding(padding(50, 50, 0, 0))
-  expect(layer.ratio).toStrictEqual(point(0.5, 0.5))
+  const layer3 = new Layer(new TestContext2D(), 'top-left')
+  layer3.setPadding(padding(50, 50, 0, 0))
+  expect(layer3.ratio).toStrictEqual(point(1, 1))
 
-  const layer2 = new Layer(new TestContext2D(), 'bottom-left')
-  layer2.setPadding(padding(50, 50, 0, 0))
-  expect(layer2.ratio).toStrictEqual(point(0.5, 0.5))
+  const layer4 = new Layer(new TestContext2D(), 'bottom-left')
+  layer4.setPadding(padding(50, 50, 0, 0))
+  expect(layer4.ratio).toStrictEqual(point(1, 1))
 })
 
 test('After padding the width should be 80', () => {

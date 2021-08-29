@@ -38,6 +38,20 @@ export class LineToCommand implements TestCommand {
   }
 }
 
+export class RectCommand implements TestCommand {
+  readonly x: number
+  readonly y: number
+  readonly w: number
+  readonly h: number
+
+  constructor (x: number, y: number, w: number, h: number) {
+    this.x = x
+    this.y = y
+    this.w = w
+    this.h = h
+  }
+}
+
 export class TestCommandDispatcher {
   items: TestCommand[] = []
 

@@ -1,9 +1,11 @@
 import { Context2DOrientation } from './context2d'
 import { Layer } from './layers'
+import { LineOptions } from './line-options'
 import { Point } from './point'
 import { Rect } from './rect'
 import { ShapeStyle } from './shape-style'
 import { Size } from './size'
+import { alfa, arrow } from './transform'
 
 export default class Shape {
   private readonly location: Point
@@ -68,6 +70,25 @@ export default class Shape {
     for (const point of points) {
       this.lineTo(point)
       this.moveTo(point)
+    }
+  }
+
+  line (pointStart: Point, pointEnd: Point, options?: LineOptions) {
+    this.moveTo(pointStart)
+    this.lineTo(pointEnd)
+
+    if (!options || !options.arrow) return
+    const a = alfa(pointStart, pointEnd)
+
+    if (options.arrow.endTip) {
+      const point = this.getPoint(pointEnd)
+      arrow(this.path, point, a, options.arrow.endTip.length || 10, options.arrow.endTip.dir || 1)
+    }
+
+    if (options.arrow.startTip) {
+      const point = this.getPoint(pointStart)
+      this.moveTo(point)
+      arrow(this.path, point, a, options.arrow.startTip.length || 10, options.arrow.startTip.dir || -1)
     }
   }
 

@@ -1,33 +1,29 @@
-import { ArcCommand, LineToCommand, MoveToCommand, TestCommandDispatcher } from './test-draw-command'
+import { ArcCommand, LineToCommand, MoveToCommand, RectCommand, TestCommandDispatcher } from './test-draw-command'
 
 export default class TestPath2D implements Path2D {
   private dispatcher: TestCommandDispatcher
 
-  constructor(dispatcher: TestCommandDispatcher) {
+  constructor (dispatcher: TestCommandDispatcher) {
     this.dispatcher = dispatcher
   }
 
-  addPath(path: Path2D, transform?: unknown): void {
+  addPath (path: Path2D, transform?: unknown): void {
     throw new Error('Method not implemented.')
   }
 
-  arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void {
+  arc (x: number, y: number, radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void {
     this.dispatcher.add(new ArcCommand(x, y, radius, startAngle, endAngle, counterclockwise))
   }
 
-  arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void {
+  arcTo (x1: number, y1: number, x2: number, y2: number, radius: number): void {
     throw new Error('Method not implemented.')
   }
 
-  bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void {
+  bezierCurveTo (cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void {
     throw new Error('Method not implemented.')
   }
 
-  closePath(): void {
-    throw new Error('Method not implemented.')
-  }
-
-  ellipse(
+  ellipse (
     x: number,
     y: number,
     radiusX: number,
@@ -40,19 +36,23 @@ export default class TestPath2D implements Path2D {
     throw new Error('Method not implemented.')
   }
 
-  lineTo(x: number, y: number): void {
+  lineTo (x: number, y: number): void {
     this.dispatcher.add(new LineToCommand(x, y))
   }
 
-  moveTo(x: number, y: number): void {
+  moveTo (x: number, y: number): void {
     this.dispatcher.add(new MoveToCommand(x, y))
   }
 
-  quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void {
+  quadraticCurveTo (cpx: number, cpy: number, x: number, y: number): void {
     throw new Error('Method not implemented.')
   }
 
-  rect(x: number, y: number, w: number, h: number): void {
+  rect (x: number, y: number, w: number, h: number): void {
+    this.dispatcher.add(new RectCommand(x, y, w, h))
+  }
+
+  closePath (): void {
     throw new Error('Method not implemented.')
   }
 }

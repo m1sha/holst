@@ -3,7 +3,7 @@ import { EventType } from './event-type'
 import { Text } from './label'
 import { TextStyle } from './label-style'
 import Shape from './shape'
-export type Context2DOrientation = 'top-left' | 'bottom-left'
+export type Context2DOrientation = 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right'
 export class Context2D implements Context2DBase {
   readonly ctx: CanvasRenderingContext2D
   // orientation: Context2DOrientation
