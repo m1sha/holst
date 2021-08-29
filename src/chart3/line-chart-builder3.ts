@@ -1,4 +1,4 @@
-import { createCorner, createTooltipWindow } from '../chart/bg-templates'
+import { createCorner } from '../chart/bg-templates'
 import { LineChartBuilder } from '../chart/line-chart-builder'
 import { Constraints } from '../core/constraints'
 import { TextStyle } from '../core/label-style'
@@ -7,6 +7,7 @@ import { Padding } from '../core/padding'
 import { Point } from '../core/point'
 import { padding, point } from '../core/utils'
 import { Viewport } from '../core/viewport'
+import { createTooltipWindow } from '../tooltip'
 
 export class LineChartBuilder3 extends LineChartBuilder {
   constraints: Constraints
