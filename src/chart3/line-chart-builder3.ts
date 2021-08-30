@@ -18,7 +18,8 @@ export class LineChartBuilder3 extends LineChartBuilder {
     this.testLayer = this.createLayer()
     const layer = this.createLayer()
     const d = layer.ratio
-    const absMinY = Math.abs(this.constraints.minY)
+    const minY = this.constraints.minY
+    const absMinY = Math.abs(minY)
     const graph = layer.createShape()
     graph.style.strokeStyle = '#028f5f'
     graph.style.lineWidth = 3
@@ -26,9 +27,9 @@ export class LineChartBuilder3 extends LineChartBuilder {
     const points = []
     let i = 0
     for (const item of this.data) {
-      let value = (item as any).Value
-      value = value < 0 ? absMinY - Math.abs(value) : value + absMinY
-      points.push({ x: i++ * d.x, y: value * d.y })
+      let y = this.getYValue(item)
+      y = y < 0 ? absMinY - Math.abs(y) : y + (minY < 0 ? absMinY : 0)
+      points.push({ x: i++ * d.x, y: y * d.y })
     }
     graph.polyline(points)
 
@@ -41,17 +42,18 @@ export class LineChartBuilder3 extends LineChartBuilder {
     const layer = this.createLayer()
     const d = layer.ratio
     const constraints = this.constraints
-    const absMinY = Math.abs(this.constraints.minY)
+    const minY = this.constraints.minY
+    const absMinY = Math.abs(minY)
     const absMaxY = Math.abs(this.constraints.maxY)
     const coordinateCross = layer.createShape()
     coordinateCross.style.strokeStyle = 'rgba(11,11,11,1)'
-    coordinateCross.lineH({ x: 0, y: absMinY * d.y }, layer.size.width)
-    coordinateCross.lineV({ x: 0, y: 0 }, (absMaxY + absMinY) * d.y)
+    coordinateCross.lineH({ x: 0, y: (minY < 0 ? absMinY : 0) * d.y }, layer.size.width)
+    coordinateCross.lineV({ x: 0, y: 0 }, (absMaxY + (minY < 0 ? absMinY : 0)) * d.y)
     const yy = Math.abs(this.constraints.maxY) / yLines
     const dashY = layer.createShape()
     dashY.style.strokeStyle = 'rgba(228,228,228,1)'
     for (let i = 1; i <= yLines; i++) {
-      const y = (Math.abs(i * yy) + absMinY) * d.y
+      const y = (Math.abs(i * yy) + (minY < 0 ? absMinY : 0)) * d.y
       dashY.lineH(point(-5, y), layer.size.width + 5)
     }
     for (let i = 1; i <= yLines; i++) {
@@ -74,24 +76,27 @@ export class LineChartBuilder3 extends LineChartBuilder {
     const layer = this.createLayer()
     const d = layer.ratio
     const constraints = this.constraints
-    const absMinY = Math.abs(this.constraints.minY)
+    const minY = this.constraints.minY
+    const absMinY = Math.abs(minY)
     const absMaxY = Math.abs(this.constraints.maxY)
 
-    const text = { value: '0', x: () => -15, y: () => absMinY * d.y, style: this.textStyle }
+    const text = { value: '0', x: () => -15, y: () => (minY < 0 ? absMinY : 0) * d.y, style: this.textStyle }
     layer.createText(text)
 
     const yy = absMaxY / yLines
     for (let i = 1; i <= yLines; i++) {
-      const y = (Math.abs(i * yy) + absMinY) * d.y
+      const y = (Math.abs(i * yy) + (minY < 0 ? absMinY : 0)) * d.y
       const text = { value: (i * yy).toString(), x: w => -w - 10, y: () => y, style: this.textStyle }
       layer.createText(text)
     }
 
-    for (let i = 1; i <= yLines; i++) {
-      if (absMinY < Math.abs(i * yy)) break
-      const y = (absMinY - Math.abs(i * yy)) * d.y
-      const text = { value: (i * yy * -1).toString(), x: w => -w - 10, y: () => y, style: this.textStyle }
-      layer.createText(text)
+    if (this.constraints.maxY < 0) {
+      for (let i = 1; i <= yLines; i++) {
+        if (absMinY < Math.abs(i * yy)) break
+        const y = (absMinY - Math.abs(i * yy)) * d.y
+        const text = { value: (i * yy * -1).toString(), x: w => -w - 10, y: () => y, style: this.textStyle }
+        layer.createText(text)
+      }
     }
 
     const xx = Math.abs(constraints.maxX) / xLines
@@ -102,7 +107,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
       const text = {
         value: xValue.toString(),
         x: w => Math.abs(i * xx) * d.x - (w / 2),
-        y: () => Math.abs(this.constraints.minY) * d.y - 20,
+        y: () => (minY < 0 ? absMinY : 0) * d.y - 20,
         style: this.textStyle
       }
       layer.createText(text)
@@ -115,15 +120,17 @@ export class LineChartBuilder3 extends LineChartBuilder {
     const layer = this.chart.actionLayer
     if (!this.testLayer.hitTest(p)) return false
     const d = this.testLayer.ratio
+    const minY = this.constraints.minY
+    const absMinY = Math.abs(minY)
     const padding = this.getPadding(this.testLayer)
     const index = Math.floor(((p.x - this.chart.padding.left) / this.chart.ratio.x))
     const item = this.data[index]
     if (!item) return
     const viewport = new Viewport(this.chart.size, padding)
     let value = this.getYValue(item)
-    value = value < 0 ? Math.abs(this.constraints.minY) - Math.abs(value) : value + Math.abs(this.constraints.minY)
+    value = value < 0 ? absMinY - Math.abs(value) : value + (minY < 0 ? absMinY : 0)
     const sp = point(index * d.x + padding.left, (layer.size.height - (padding.top)) - value * d.y)
-    createCorner(layer, sp, { width: viewport.x, height: viewport.bottom - Math.abs(this.constraints.minY) })
+    createCorner(layer, sp, { width: viewport.x, height: viewport.bottom - (minY < 0 ? absMinY : 0) })
     const { xValue, yValue } = this.getDisplayValues(item)
     const xText = this.chart.legend.xTitle + xValue
     const yText = this.chart.legend.yTitle + yValue
