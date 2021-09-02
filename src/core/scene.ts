@@ -32,9 +32,9 @@ export class Scene implements Activity {
       for (const layer of [...this.layers, this.actionLayer]) layer.draw()
     }
 
-    clear () {
+    clear (soft: boolean = false) {
       this.ctx.ctx.clearRect(0, 0, this.size.width, this.size.height)
-      this.actionLayer.clear()
+      if (!soft) this.actionLayer.clear()
     }
 
     addEventListener (eventType: EventType, callback: (e: EventInfo) => void) {

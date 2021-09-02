@@ -1,5 +1,6 @@
 import { createCorner } from '../chart/bg-templates'
 import { LineChartBuilder } from '../chart/line-chart-builder'
+import { AnimationController } from '../core/animation'
 import { Constraints } from '../core/constraints'
 import { TextStyle } from '../core/label-style'
 import { Layer } from '../core/layers'
@@ -20,18 +21,27 @@ export class LineChartBuilder3 extends LineChartBuilder {
     const d = layer.ratio
     const minY = this.constraints.minY
     const absMinY = Math.abs(minY)
-    const graph = layer.createShape()
-    graph.style.strokeStyle = '#028f5f'
-    graph.style.lineWidth = 3
-    graph.style.lineJoin = 'bevel'
-    const points = []
-    let i = 0
-    for (const item of this.data) {
-      let y = this.getYValue(item)
-      y = y < 0 ? absMinY - Math.abs(y) : y + (minY < 0 ? absMinY : 0)
-      points.push({ x: i++ * d.x, y: y * d.y })
-    }
-    graph.polyline(points)
+
+    const controller = new AnimationController(this.chart)
+    controller.maxFrames = 960
+    controller.infinityLoop = false
+    controller.onFrameChange(num => {
+      layer.clear()
+      const graph = layer.createShape()
+      graph.style.strokeStyle = '#028f5f'
+      graph.style.lineWidth = 3
+      graph.style.lineJoin = 'bevel'
+      const points = []
+      let i = 0
+      const len = controller.maxFrames / this.data.length
+      for (const item of this.data) {
+        if (num < len * i) break
+        let y = this.getYValue(item)
+        y = y < 0 ? absMinY - Math.abs(y) : y + (minY < 0 ? absMinY : 0)
+        points.push({ x: i++ * d.x, y: y * d.y })
+      }
+      graph.polyline(points)
+    })
 
     return this
   }
@@ -90,7 +100,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
       layer.createText(text)
     }
 
-    if (this.constraints.maxY < 0) {
+    if (this.constraints.minY < 0) {
       for (let i = 1; i <= yLines; i++) {
         if (absMinY < Math.abs(i * yy)) break
         const y = (absMinY - Math.abs(i * yy)) * d.y
