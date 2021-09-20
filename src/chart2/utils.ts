@@ -37,6 +37,15 @@ export { roundInt, getMax, getMin }
 
 export function getRatio (constraints: Constraints, bounds: Rect): Point {
   const x = bounds.width / (constraints.maxX + constraints.minX)
-  const y = bounds.height / (constraints.maxY + Math.abs(constraints.minY))
+  let y = bounds.height / constraints.maxY
+  if (constraints.minY < 0) {
+    y = bounds.height / (constraints.maxY + Math.abs(constraints.minY))
+  }
   return { x, y }
+}
+
+export function toDisplayText (num: number) {
+  const isInt = (n: number) => Number(n) === n && n % 1 === 0
+  if (isInt(num)) return num.toString()
+  return num.toFixed(2).toString()
 }

@@ -1,6 +1,7 @@
 import { createCorner } from '../chart/bg-templates'
 import { ChartOptions } from '../chart/chart-options'
 import { LineChartBuilder } from '../chart/line-chart-builder'
+import { toDisplayText } from '../chart2/utils'
 import { AnimationController } from '../core/animation'
 import { Constraints } from '../core/constraints'
 import { Layer } from '../core/layers'
@@ -25,6 +26,8 @@ export class LineChartBuilder3 extends LineChartBuilder {
 
   constructor (canvas: HTMLCanvasElement, data: [], options: ChartOptions, constraints: Constraints) {
     super(canvas, data, options)
+    this.xSegmentCount = this.options.xSegmentCount || 10
+    this.ySegmentCount = this.options.ySegmentCount || 10
     this.constraints = constraints
     this.testLayer = this.createLayer()
     this.ratio = this.testLayer.ratio
@@ -33,8 +36,6 @@ export class LineChartBuilder3 extends LineChartBuilder {
     this.offsetY = (this.minY < 0 ? this.absMinY : 0)
     this.absMaxY = Math.abs(this.constraints.maxY)
     this.maxX = constraints.maxX
-    this.xSegmentCount = this.options.xSegmentCount || 10
-    this.ySegmentCount = this.options.ySegmentCount || 10
   }
 
   addGraphLayer (): this | LineChartBuilder3 {
@@ -103,7 +104,8 @@ export class LineChartBuilder3 extends LineChartBuilder {
     const segmentHeight = absMaxY / ySegmentCount
     for (let i = 1; i <= ySegmentCount; i++) {
       const y = (Math.abs(i * segmentHeight) + offsetY) * ratio.y
-      const text = { value: (i * segmentHeight).toString(), x: w => -w - 10, y: () => y, style }
+      const value = toDisplayText(i * segmentHeight)
+      const text = { value, x: w => -w - 10, y: () => y, style }
       layer.createText(text)
     }
 
@@ -111,7 +113,8 @@ export class LineChartBuilder3 extends LineChartBuilder {
       for (let i = 1; i <= ySegmentCount; i++) {
         if (absMinY < Math.abs(i * segmentHeight)) break
         const y = (absMinY - Math.abs(i * segmentHeight)) * ratio.y
-        const text = { value: (i * segmentHeight * -1).toString(), x: w => -w - 10, y: () => y, style }
+        const value = toDisplayText(i * segmentHeight * -1)
+        const text = { value, x: w => -w - 10, y: () => y, style }
         layer.createText(text)
       }
     }
@@ -156,8 +159,8 @@ export class LineChartBuilder3 extends LineChartBuilder {
 
   private createLayer () {
     const layer = this.chart.createLayer('bottom-left')
-    this.setPadding(layer)
     layer.constraints = this.constraints
+    this.setPadding(layer)
     return layer
   }
 
@@ -166,7 +169,15 @@ export class LineChartBuilder3 extends LineChartBuilder {
   }
 
   private getPadding (layer: Layer): Padding {
-    const paddingLeft = layer.measureText(this.constraints.maxY.toString(), styles.axisText).width + 20
+    const { absMaxY, ySegmentCount } = this
+    const segmentHeight = absMaxY / ySegmentCount
+    const axisYNumbers = []
+    for (let i = 1; i <= ySegmentCount; i++) {
+      const textWidth = layer.measureText((toDisplayText(i * segmentHeight) + ' ').toString(), styles.axisText).width
+      axisYNumbers.push(textWidth)
+    }
+    const maxWidth = Math.max.apply(null, axisYNumbers) + 20
+    const paddingLeft = maxWidth
     return padding(65, paddingLeft, 25, 30)
   }
 }
