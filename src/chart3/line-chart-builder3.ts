@@ -1,44 +1,58 @@
 import { createCorner } from '../chart/bg-templates'
+import { ChartOptions } from '../chart/chart-options'
 import { LineChartBuilder } from '../chart/line-chart-builder'
 import { AnimationController } from '../core/animation'
 import { Constraints } from '../core/constraints'
-import { TextStyle } from '../core/label-style'
 import { Layer } from '../core/layers'
 import { Padding } from '../core/padding'
 import { Point } from '../core/point'
 import { padding, point } from '../core/utils'
 import { Viewport } from '../core/viewport'
 import { createTooltipWindow } from '../tooltip'
+import styles from './styles'
 
 export class LineChartBuilder3 extends LineChartBuilder {
-  constraints: Constraints
-  textStyle: TextStyle
-  testLayer: Layer
+  private readonly constraints: Constraints
+  private readonly testLayer: Layer
+  private readonly ratio: Point
+  private readonly minY: number
+  private readonly maxX: number
+  private readonly absMinY: number
+  private readonly absMaxY: number
+  private readonly offsetY: number
+  private readonly xSegmentCount: number
+  private readonly ySegmentCount: number
+
+  constructor (canvas: HTMLCanvasElement, data: [], options: ChartOptions, constraints: Constraints) {
+    super(canvas, data, options)
+    this.constraints = constraints
+    this.testLayer = this.createLayer()
+    this.ratio = this.testLayer.ratio
+    this.minY = this.constraints.minY
+    this.absMinY = Math.abs(this.minY)
+    this.offsetY = (this.minY < 0 ? this.absMinY : 0)
+    this.absMaxY = Math.abs(this.constraints.maxY)
+    this.maxX = constraints.maxX
+    this.xSegmentCount = this.options.xSegmentCount || 10
+    this.ySegmentCount = this.options.ySegmentCount || 10
+  }
 
   addGraphLayer (): this | LineChartBuilder3 {
-    this.testLayer = this.createLayer()
+    const { ratio, absMinY, offsetY } = this
     const layer = this.createLayer()
-    const d = layer.ratio
-    const minY = this.constraints.minY
-    const absMinY = Math.abs(minY)
-
     const controller = new AnimationController(this.chart)
-    controller.maxFrames = 960
-    controller.infinityLoop = false
     controller.onFrameChange(num => {
       layer.clear()
-      const graph = layer.createShape()
-      graph.style.strokeStyle = '#028f5f'
-      graph.style.lineWidth = 3
-      graph.style.lineJoin = 'bevel'
+      const graph = layer.createShape(styles.graphLine)
       const points = []
       let i = 0
       const len = controller.maxFrames / this.data.length
       for (const item of this.data) {
         if (num < len * i) break
-        let y = this.getYValue(item)
-        y = y < 0 ? absMinY - Math.abs(y) : y + (minY < 0 ? absMinY : 0)
-        points.push({ x: i++ * d.x, y: y * d.y })
+        const x = i++
+        const valueY = this.getYValue(item)
+        const y = valueY < 0 ? absMinY - Math.abs(valueY) : valueY + offsetY
+        points.push({ x: x * ratio.x, y: y * ratio.y })
       }
       graph.polyline(points)
     })
@@ -47,80 +61,71 @@ export class LineChartBuilder3 extends LineChartBuilder {
   }
 
   addAxisesLayer (): this | LineChartBuilder {
-    const xLines = this.options.xSegmentCount || 10
-    const yLines = this.options.ySegmentCount || 10
     const layer = this.createLayer()
-    const d = layer.ratio
-    const constraints = this.constraints
-    const minY = this.constraints.minY
-    const absMinY = Math.abs(minY)
-    const absMaxY = Math.abs(this.constraints.maxY)
-    const coordinateCross = layer.createShape()
-    coordinateCross.style.strokeStyle = 'rgba(11,11,11,1)'
-    coordinateCross.lineH({ x: 0, y: (minY < 0 ? absMinY : 0) * d.y }, layer.size.width)
-    coordinateCross.lineV({ x: 0, y: 0 }, (absMaxY + (minY < 0 ? absMinY : 0)) * d.y)
-    const yy = Math.abs(this.constraints.maxY) / yLines
-    const dashY = layer.createShape()
-    dashY.style.strokeStyle = 'rgba(228,228,228,1)'
-    for (let i = 1; i <= yLines; i++) {
-      const y = (Math.abs(i * yy) + (minY < 0 ? absMinY : 0)) * d.y
-      dashY.lineH(point(-5, y), layer.size.width + 5)
+    const { ratio, absMinY, absMaxY, offsetY, maxX, ySegmentCount, xSegmentCount } = this
+    const topY = (absMaxY + offsetY) * ratio.y
+
+    const axises = layer.createShape(styles.axises)
+    axises.lineH({ x: 0, y: offsetY * ratio.y }, layer.size.width)
+    axises.lineV({ x: 0, y: 0 }, topY)
+
+    const segmentHeight = absMaxY / ySegmentCount
+    const segments = layer.createShape(styles.segments)
+    for (let i = 1; i <= ySegmentCount; i++) {
+      const y = (Math.abs(i * segmentHeight) + offsetY) * ratio.y
+      segments.lineH(point(-5, y), layer.size.width + 5)
     }
-    for (let i = 1; i <= yLines; i++) {
-      if (absMinY < Math.abs(i * yy)) break
-      const y = (absMinY - Math.abs(i * yy)) * d.y
-      dashY.lineH(point(-5, y), layer.size.width)
+    for (let i = 1; i <= ySegmentCount; i++) {
+      if (absMinY < Math.abs(i * segmentHeight)) break
+      const y = (absMinY - Math.abs(i * segmentHeight)) * ratio.y
+      segments.lineH(point(-5, y), layer.size.width)
     }
 
-    const xx = Math.abs(constraints.maxX) / xLines
-    for (let i = 1; i <= xLines; i++) {
-      const x = Math.abs(i * xx) * d.x
-      dashY.lineV(point(x, 0), (absMaxY + (minY < 0 ? absMinY : 0)) * d.y)
+    const segmentWidth = maxX / xSegmentCount
+    for (let i = 1; i <= xSegmentCount; i++) {
+      const x = Math.abs(i * segmentWidth) * ratio.x
+      segments.lineV(point(x, 0), topY)
     }
+
     return this
   }
 
   addNumbers (): this | LineChartBuilder {
-    const xLines = this.options.xSegmentCount || 10
-    const yLines = this.options.ySegmentCount || 10
+    const { ratio, minY, absMinY, absMaxY, offsetY, maxX, ySegmentCount, xSegmentCount } = this
     const layer = this.createLayer()
-    const d = layer.ratio
-    const constraints = this.constraints
-    const minY = this.constraints.minY
-    const absMinY = Math.abs(minY)
-    const absMaxY = Math.abs(this.constraints.maxY)
+    const style = styles.axisText
 
-    if (minY <= 0) {
-      const text = { value: '0', x: () => -15, y: () => (minY < 0 ? absMinY : 0) * d.y, style: this.textStyle }
+    // if (minY <= 0) {
+    const text = { value: '0', x: () => -15, y: () => offsetY * ratio.y, style }
+    layer.createText(text)
+    // }
+
+    const segmentHeight = absMaxY / ySegmentCount
+    for (let i = 1; i <= ySegmentCount; i++) {
+      const y = (Math.abs(i * segmentHeight) + offsetY) * ratio.y
+      const text = { value: (i * segmentHeight).toString(), x: w => -w - 10, y: () => y, style }
       layer.createText(text)
     }
 
-    const yy = absMaxY / yLines
-    for (let i = 1; i <= yLines; i++) {
-      const y = (Math.abs(i * yy) + (minY < 0 ? absMinY : 0)) * d.y
-      const text = { value: (i * yy).toString(), x: w => -w - 10, y: () => y, style: this.textStyle }
-      layer.createText(text)
-    }
-
-    if (this.constraints.minY < 0) {
-      for (let i = 1; i <= yLines; i++) {
-        if (absMinY < Math.abs(i * yy)) break
-        const y = (absMinY - Math.abs(i * yy)) * d.y
-        const text = { value: (i * yy * -1).toString(), x: w => -w - 10, y: () => y, style: this.textStyle }
+    if (minY < 0) {
+      for (let i = 1; i <= ySegmentCount; i++) {
+        if (absMinY < Math.abs(i * segmentHeight)) break
+        const y = (absMinY - Math.abs(i * segmentHeight)) * ratio.y
+        const text = { value: (i * segmentHeight * -1).toString(), x: w => -w - 10, y: () => y, style }
         layer.createText(text)
       }
     }
 
-    const xx = Math.abs(constraints.maxX) / xLines
-    for (let i = 1; i <= xLines; i++) {
-      const item = this.data[parseInt((i * xx).toString())]
+    const segmentWidth = maxX / xSegmentCount
+    for (let i = 1; i <= xSegmentCount; i++) {
+      const item = this.data[parseInt((i * segmentWidth).toString())]
       if (!item) continue
       const { xValue } = this.getDisplayValues(item)
       const text = {
         value: xValue.toString(),
-        x: w => Math.abs(i * xx) * d.x - (w / 2),
-        y: () => (minY < 0 ? absMinY : 0) * d.y - 20,
-        style: this.textStyle
+        x: w => Math.abs(i * segmentWidth) * ratio.x - (w / 2),
+        y: () => offsetY * ratio.y - 20,
+        style
       }
       layer.createText(text)
     }
@@ -131,17 +136,16 @@ export class LineChartBuilder3 extends LineChartBuilder {
   onMoveHandler (p: Point): boolean {
     const layer = this.chart.actionLayer
     if (!this.testLayer.hitTest(p)) return false
-    const d = this.testLayer.ratio
+    const { ratio, absMinY, offsetY } = this
     const minY = this.constraints.minY
-    const absMinY = Math.abs(minY)
     const padding = this.getPadding(this.testLayer)
     const index = Math.floor(((p.x - this.chart.padding.left) / this.chart.ratio.x))
     const item = this.data[index]
     if (!item) return
     const viewport = new Viewport(this.chart.size, padding)
     let value = this.getYValue(item)
-    value = value < 0 ? absMinY - Math.abs(value) : value + (minY < 0 ? absMinY : 0)
-    const sp = point(index * d.x + padding.left, (layer.size.height - (padding.top)) - value * d.y)
+    value = value < 0 ? absMinY - Math.abs(value) : value + offsetY
+    const sp = point(index * ratio.x + padding.left, (layer.size.height - (padding.top)) - value * ratio.y)
     createCorner(layer, sp, { width: viewport.x, height: viewport.bottom - (minY < 0 ? absMinY : 0) })
     const { xValue, yValue } = this.getDisplayValues(item)
     const xText = this.chart.legend.xTitle + xValue
@@ -162,7 +166,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
   }
 
   private getPadding (layer: Layer): Padding {
-    const paddingLeft = layer.measureText(this.constraints.maxY.toString(), this.textStyle).width + 20
+    const paddingLeft = layer.measureText(this.constraints.maxY.toString(), styles.axisText).width + 20
     return padding(65, paddingLeft, 25, 30)
   }
 }

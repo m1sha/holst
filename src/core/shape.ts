@@ -14,16 +14,16 @@ export default class Shape {
   private readonly orientation: Context2DOrientation
   private readonly ratio: Point
   private readonly path: Path2D
-  readonly style: ShapeStyle
+  style: ShapeStyle
 
-  constructor (layer: Layer, path: Path2D) {
+  constructor (layer: Layer, path: Path2D, style: ShapeStyle = null) {
     this.location = layer.location
     this.layerSize = layer.size
     this.originSize = layer.originSize
     this.orientation = layer.orientation
     this.ratio = layer.ratio
     this.path = path
-    this.style = {}
+    this.style = style || {}
   }
 
   rect (rect: Rect): this | Shape {

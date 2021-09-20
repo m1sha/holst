@@ -10,8 +10,8 @@ export class AnimationController {
   private timerId!: number
   private delegates: ((frameNum: number) => void)[] = []
   private startFrameNum: number
-  maxFrames: number = 100
-  infinityLoop: boolean
+  maxFrames: number = 960
+  infinityLoop: boolean = false
   // keyFrames: KeyFrame[] = []
 
   constructor (scene: Scene) {

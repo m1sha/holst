@@ -8,6 +8,7 @@ import { Padding } from './padding'
 import { Point } from './point'
 import { Rect } from './rect'
 import Shape from './shape'
+import { ShapeStyle } from './shape-style'
 import { Size } from './size'
 import { rect, toAbsolute } from './utils'
 
@@ -41,9 +42,9 @@ export class Layer {
     return { x: this.location.x, y: this.location.y, width: this.size.width, height: this.size.height }
   }
 
-  createShape (): Shape {
+  createShape (style: ShapeStyle = null): Shape {
     const path = this.ctx.createPath()
-    const result = new Shape(this, path)
+    const result = new Shape(this, path, style)
     this.shapes.push(result)
     return result
   }
