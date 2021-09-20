@@ -75,7 +75,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
     const xx = Math.abs(constraints.maxX) / xLines
     for (let i = 1; i <= xLines; i++) {
       const x = Math.abs(i * xx) * d.x
-      dashY.lineV(point(x, 0), layer.size.height)
+      dashY.lineV(point(x, 0), (absMaxY + (minY < 0 ? absMinY : 0)) * d.y)
     }
     return this
   }
@@ -90,8 +90,10 @@ export class LineChartBuilder3 extends LineChartBuilder {
     const absMinY = Math.abs(minY)
     const absMaxY = Math.abs(this.constraints.maxY)
 
-    const text = { value: '0', x: () => -15, y: () => (minY < 0 ? absMinY : 0) * d.y, style: this.textStyle }
-    layer.createText(text)
+    if (minY <= 0) {
+      const text = { value: '0', x: () => -15, y: () => (minY < 0 ? absMinY : 0) * d.y, style: this.textStyle }
+      layer.createText(text)
+    }
 
     const yy = absMaxY / yLines
     for (let i = 1; i <= yLines; i++) {

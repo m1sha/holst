@@ -53,5 +53,7 @@ export interface ChartOptions {
   onDraw?: (chart: ChartBase) => boolean,
   onMove?: (chart: ChartBase, point: Point) => boolean
   onMoveRaw?: (chart: ChartBase, point: Point) => boolean
-  onCalculateBoundary?: (data: [], options: ChartOptions) => { maxWidth: number, maxHeight: number, minWidth: number, minHeight: number }
+  onCalculateBoundary?: (data: [], options: ChartOptions) => { maxWidth: number, maxHeight: number, minWidth: number, minHeight: number },
+  maxY?: number,
+  minY?: number
 }
