@@ -3,7 +3,6 @@ import { Layer } from '../core/layers'
 import { Scene } from '../core/scene'
 import { padding, point, rect } from '../core/utils'
 import { LinearChartBuilder } from './linear-chart-builder'
-import { getMax, getMin, roundInt } from './utils'
 
 export function createLinearChart (canvas: HTMLCanvasElement, data: [], options: ChartOptions) {
   const builder = new LinearChartBuilder(canvas, data, options)
@@ -31,9 +30,9 @@ export function createLinearChart2 (canvas: HTMLCanvasElement, data: [], options
 export function createLinearChart3 (canvas: HTMLCanvasElement, data: []) {
   const constraints = {
     maxX: data.length,
-    maxY: roundInt(getMax(data, 'Value')),
+    maxY: 0, // roundInt(getMax(data, 'Value')),
     minX: 0,
-    minY: roundInt(getMin(data, 'Value'))
+    minY: 0 // roundInt(getMin(data, 'Value'))
   }
 
   const scene = new Scene(canvas)

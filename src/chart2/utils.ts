@@ -19,21 +19,7 @@ const getMin = (items: [], field: string): number => {
   return result
 }
 
-const roundInt = (value: number): number => {
-  const sign = value < 0 ? -1 : 1
-  const digits = Math.floor(Math.abs(value)).toString()
-  const digitCount = digits.length
-  if (value < 9) return Math.floor(Math.abs(value)) + 1
-  if (digitCount === 1) return 10 * sign
-  const second = parseInt(digits.charAt(1))
-  const major = Math.pow(10, digitCount - 1)
-  if (second >= 5) {
-    return (parseInt(digits.charAt(0)) + 1) * major * sign
-  }
-  return ((parseInt(digits.charAt(0) + '5')) * major / 10) * sign
-}
-
-export { roundInt, getMax, getMin }
+export { getMax, getMin }
 
 export function getRatio (constraints: Constraints, bounds: Rect): Point {
   const x = bounds.width / (constraints.maxX + constraints.minX)

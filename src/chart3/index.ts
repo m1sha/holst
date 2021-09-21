@@ -1,5 +1,6 @@
 import { ChartOptions } from '../chart/chart-options'
-import { getMax, getMin, roundInt } from '../chart2/utils'
+import { getMax, getMin } from '../chart2/utils'
+import { roundInt } from '../tools/round-int'
 import { LineChartBuilder3 } from './line-chart-builder3'
 
 export function createChart (canvas: HTMLCanvasElement, data: [], options: ChartOptions) {
@@ -14,9 +15,9 @@ export function createChart (canvas: HTMLCanvasElement, data: [], options: Chart
 
   const constraints = {
     maxX: data.length,
-    maxY: options.maxY !== undefined ? options.maxY : roundInt(getMax(data, 'Value')),
+    maxY: options.maxY !== undefined ? options.maxY : roundInt(getMax(data, 'Value'), 10),
     minX: 0,
-    minY: options.minY !== undefined ? options.minY : roundInt(getMin(data, 'Value'))
+    minY: options.minY !== undefined ? options.minY : roundInt(getMin(data, 'Value'), 10)
   }
   // if (constraints.minY > 0) constraints.minY = 0
   const builder = new LineChartBuilder3(canvas, data, options, constraints)
