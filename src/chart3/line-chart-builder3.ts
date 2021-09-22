@@ -7,7 +7,7 @@ import { Constraints } from '../core/constraints'
 import { Layer } from '../core/layers'
 import { Padding } from '../core/padding'
 import { Point } from '../core/point'
-import { padding, point } from '../core/utils'
+import { padding, point, rect } from '../core/utils'
 import { Viewport } from '../core/viewport'
 import { createTooltipWindow } from '../tooltip'
 import styles from './styles'
@@ -33,9 +33,10 @@ export class LineChartBuilder3 extends LineChartBuilder {
     this.ratio = this.testLayer.ratio
     this.minY = this.constraints.minY
     this.absMinY = Math.abs(this.minY)
-    this.offsetY = (this.minY < 0 ? this.absMinY : 0)
+    this.offsetY = (this.minY < 0 ? this.absMinY : -this.absMinY)
     this.absMaxY = Math.abs(this.constraints.maxY)
     this.maxX = constraints.maxX
+    this.chart.createLayer().createShape({ strokeStyle: '#A31199' }).rect(rect(0, 0, canvas.width, canvas.height))
   }
 
   addGraphLayer (): this | LineChartBuilder3 {
@@ -63,11 +64,11 @@ export class LineChartBuilder3 extends LineChartBuilder {
 
   addAxisesLayer (): this | LineChartBuilder {
     const layer = this.createLayer()
-    const { ratio, absMinY, absMaxY, offsetY, maxX, ySegmentCount, xSegmentCount } = this
+    const { ratio, minY, absMinY, absMaxY, offsetY, maxX, ySegmentCount, xSegmentCount } = this
     const topY = (absMaxY + offsetY) * ratio.y
 
     const axises = layer.createShape(styles.axises)
-    axises.lineH({ x: 0, y: offsetY * ratio.y }, layer.size.width)
+    axises.lineH({ x: 0, y: minY < 0 ? absMinY * ratio.y : 0 }, layer.size.width)
     axises.lineV({ x: 0, y: 0 }, topY)
 
     const segmentHeight = absMaxY / ySegmentCount
@@ -127,7 +128,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
       const text = {
         value: xValue.toString(),
         x: w => Math.abs(i * segmentWidth) * ratio.x - (w / 2),
-        y: () => offsetY * ratio.y - 20,
+        y: () => (minY < 0 ? absMinY * ratio.y : 0) - 20,
         style
       }
       layer.createText(text)

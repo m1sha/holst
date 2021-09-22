@@ -15,9 +15,9 @@ export function createChart (canvas: HTMLCanvasElement, data: [], options: Chart
 
   const constraints = {
     maxX: data.length,
-    maxY: options.maxY !== undefined ? options.maxY : roundInt(getMax(data, 'Value'), 10),
+    maxY: options.maxY !== undefined ? options.maxY : roundInt(getMax(data, 'Value'), 5, true),
     minX: 0,
-    minY: options.minY !== undefined ? options.minY : roundInt(getMin(data, 'Value'), 10)
+    minY: options.minY !== undefined ? options.minY : roundInt(getMin(data, 'Value'), 5, false)
   }
   // if (constraints.minY > 0) constraints.minY = 0
   const builder = new LineChartBuilder3(canvas, data, options, constraints)

@@ -23,7 +23,7 @@ export { getMax, getMin }
 
 export function getRatio (constraints: Constraints, bounds: Rect): Point {
   const x = bounds.width / (constraints.maxX + constraints.minX)
-  let y = bounds.height / constraints.maxY
+  let y = bounds.height / (constraints.maxY - constraints.minY)
   if (constraints.minY < 0) {
     y = bounds.height / (constraints.maxY + Math.abs(constraints.minY))
   }

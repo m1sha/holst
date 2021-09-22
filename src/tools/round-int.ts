@@ -1,3 +1,4 @@
-export function roundInt (value: number, round: number): number {
-  return Math.floor(value + (value * round / 100))
+export function roundInt (value: number, round: number, up: boolean): number {
+  const proc = (value * round / 100)
+  return Math.floor(value + (up ? proc : -proc))
 }
