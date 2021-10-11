@@ -1,5 +1,6 @@
 import Context2DBase from '../src/core/context2d-base'
 import { EventType } from '../src/core/event-type'
+import { AnyImageType } from '../src/core/image'
 import { Text } from '../src/core/label'
 import { TextStyle } from '../src/core/label-style'
 import shape from '../src/core/shape'
@@ -11,6 +12,10 @@ export default class TestContext2D implements Context2DBase {
 
   constructor (dispatcher?: TestCommandDispatcher) {
     this.dispatcher = dispatcher
+  }
+
+  drawImage (image: AnyImageType, sx: number, sy: number, sWidth: number, sHeight: number, dx: number, dy: number, dWidth: number, dHeight: number): void {
+    throw new Error('Method not implemented.')
   }
 
   createPath (): Path2D {

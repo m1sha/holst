@@ -28,6 +28,7 @@ if (process.env.libraryTarget === 'umd') {
   config.entry['linear-chart2'] = './src/chart2/index.ts'
   config.entry['linear-chart3'] = './src/chart3/index.ts'
   config.entry['test-bundle'] = './src/test-index.ts'
+  config.entry['schema-picker.bundle'] = './src/schema-picker/index.ts'
   config.output.library = 'charts'
 }
 

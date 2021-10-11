@@ -53,14 +53,23 @@ export class ChartBuilder {
       return value
     }
 
-    protected getDisplayValues (item: unknown) {
+    protected getDisplayValues (item: unknown, tooltip: boolean) {
       let xValue: unknown = this.getXValue(item)
-      if (this.options.xFieldDisplayFormat) {
-        xValue = this.options.xFieldDisplayFormat(xValue)
+      if (tooltip && this.options.xFieldToolTipFormat) {
+        xValue = this.options.xFieldToolTipFormat(xValue)
+      } else {
+        if (this.options.xFieldDisplayFormat) {
+          xValue = this.options.xFieldDisplayFormat(xValue)
+        }
       }
+
       let yValue: unknown = this.getYValue(item)
-      if (this.options.yFieldDisplayFormat) {
-        yValue = this.options.yFieldDisplayFormat(yValue)
+      if (tooltip && this.options.yFieldToolTipFormat) {
+        yValue = this.options.yFieldToolTipFormat(yValue)
+      } else {
+        if (this.options.yFieldDisplayFormat) {
+          yValue = this.options.yFieldDisplayFormat(yValue)
+        }
       }
       return { xValue, yValue }
     }

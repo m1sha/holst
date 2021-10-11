@@ -2,6 +2,7 @@ import { getRatio } from '../chart2/utils'
 import { Constraints } from './constraints'
 import { Context2DOrientation } from './context2d'
 import Context2DBase from './context2d-base'
+import { Image, Images } from './image'
 import { Text } from './label'
 import { TextStyle } from './label-style'
 import { Padding } from './padding'
@@ -16,6 +17,7 @@ export class Layer {
   private readonly ctx: Context2DBase
   private shapes: Shape[]
   private labels: Text[]
+  private images: Images
   private mask: Shape | null
   readonly location: Point
   readonly size: Size
@@ -57,12 +59,21 @@ export class Layer {
     this.shapes.push(shape)
   }
 
+  createImage (img: Image) {
+    this.images.push(img)
+  }
+
   clear () {
     this.shapes = []
     this.labels = []
+    this.images = []
   }
 
   draw () {
+    for (const image of this.images) {
+      this.ctx.drawImage(image.src, image.sx, image.sy, image.sWidth, image.sHeight, image.dx, image.dy, image.dWidth, image.dHeight)
+    }
+
     for (const shape of this.shapes) {
       this.ctx.drawShape(shape, this.mask)
     }

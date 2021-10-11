@@ -13,6 +13,10 @@ export class Context2D implements Context2DBase {
     this.ctx.imageSmoothingEnabled = true
   }
 
+  drawImage (image: HTMLCanvasElement | HTMLImageElement | SVGImageElement | HTMLVideoElement | ImageBitmap, sx: number, sy: number, sWidth: number, sHeight: number, dx: number, dy: number, dWidth: number, dHeight: number): void {
+    this.ctx.drawImage(image, sx, sy)
+  }
+
   get width () { return this.ctx.canvas.width }
   get height () { return this.ctx.canvas.height }
 

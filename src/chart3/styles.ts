@@ -20,4 +20,10 @@ export default class {
     fontSize: '12px',
     fontName: 'Arial'
   }
+
+  static chartNameText: TextStyle = {
+    color: '#222222',
+    fontSize: '14px',
+    fontName: 'Arial'
+  }
 }
