@@ -15,6 +15,7 @@ export default class Shape {
   private readonly ratio: Point
   private readonly path: Path2D
   style: ShapeStyle
+  name: string
 
   constructor (layer: Layer, path: Path2D, style: ShapeStyle = null) {
     this.location = layer.location
@@ -24,6 +25,7 @@ export default class Shape {
     this.ratio = layer.ratio
     this.path = path
     this.style = style || {}
+    this.name = 'shape'
   }
 
   rect (rect: Rect): this | Shape {

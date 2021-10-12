@@ -9,7 +9,7 @@ export class Scene implements Activity {
     readonly ctx: Context2D
     private readonly handler: EventHandler
     readonly size: Size
-    private readonly layers: Layer []
+    private layers: Layer []
     readonly actionLayer: Layer
     readonly center: Point
 
@@ -37,7 +37,17 @@ export class Scene implements Activity {
       if (!soft) this.actionLayer.clear()
     }
 
+    clearAll () {
+      for (const layer of [...this.layers]) layer.clear()
+      this.layers = []
+      this.clear()
+    }
+
     addEventListener (eventType: EventType, callback: (e: EventInfo) => void) {
       this.handler.addEventListener(eventType, callback)
+    }
+
+    get allLayers (): Readonly<Layer>[] {
+      return this.layers
     }
 }

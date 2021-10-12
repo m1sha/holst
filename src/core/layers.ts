@@ -118,4 +118,8 @@ export class Layer {
   removeMask (): void {
     this.mask = null
   }
+
+  get allShapes (): Shape[] {
+    return this.shapes
+  }
 }
