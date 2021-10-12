@@ -1,33 +1,43 @@
+import { EventInfo } from '../core/event-handler'
+import { CommandController } from './command-controller'
 import { Environment } from './environment'
+import { cursor } from './utils/cursor'
 
 export class RuntimeController {
   private environment: Environment
-  constructor (environment: Environment) {
+  private commandController: CommandController
+  constructor (environment: Environment, commandController: CommandController) {
     this.environment = environment
+    this.commandController = commandController
   }
 
   start () {
     const scene = this.environment.scene
-    scene.addEventListener('mousemove', e => {
-      const point = e.point
-      if (!point) return
-      const layers = scene.allLayers
-      for (const layer of layers) {
-        for (const shape of layer.allShapes) {
-          const block = this.environment.blocks.filter(p => p._uid === parseInt(shape.name))[0]
-          if (!block) continue
-          const yes = scene.ctx.ctx.isPointInPath(shape.getPath(), point.x, point.y)
-          if (!yes) {
-            block.selected = false
-            document.body.style.cursor = 'default'
-            continue
-          }
-          block.selected = true
-          document.body.style.cursor = 'pointer'
-          break
-        }
-      }
-      this.environment.update()
-    })
+    scene.addEventListener('mousemove', e => this.mousemove(e))
+    scene.addEventListener('click', e => this.click(e))
+  }
+
+  private click (e: EventInfo) {
+    const point = e.point
+    if (!point) return
+    const block = this.environment.findHoverBlock(point)
+    if (!block) return
+    if (block.selected) this.commandController.unselectBlock(block)
+    else this.commandController.selectBlock(block)
+    this.environment.update()
+  }
+
+  private mousemove (e: EventInfo) {
+    const point = e.point
+    if (!point) return
+    this.environment.clearHover()
+    const block = this.environment.findHoverBlock(point)
+    if (block) {
+      block.hovered = true
+      cursor('pointer')
+    } else {
+      cursor('default')
+    }
+    this.environment.update()
   }
 }

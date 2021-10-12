@@ -8,6 +8,7 @@ export class Block {
   next: Block
   previous: Block
   selected: boolean
+  hovered: boolean
   _uid: number
 
   constructor (_uid: number, type: string) {
@@ -16,6 +17,7 @@ export class Block {
     this.position = point(0, 0)
     this.text = ''
     this.selected = false
+    this.hovered = false
     this.next = null
     this.previous = null
   }

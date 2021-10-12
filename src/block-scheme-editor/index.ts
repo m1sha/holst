@@ -8,10 +8,10 @@ export function createEditor (canvas: HTMLCanvasElement) {
   const block1 = ElementFactory.createActionBlock()
   const environment = new Environment(canvas)
 
-  const runtimeController = new RuntimeController(environment)
+  const commandController = new CommandController(environment)
+  const runtimeController = new RuntimeController(environment, commandController)
   runtimeController.start()
 
-  const commandController = new CommandController(environment)
   commandController.createBlock(block0, { position: { x: 10, y: 10 }, text: 'ToDo' })
   commandController.createBlock(block1, { position: { x: 70, y: 10 }, text: 'ToDo' })
   commandController.selectBlock(block0)
