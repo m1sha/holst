@@ -13,6 +13,8 @@ export class CreateBlockCommand implements Command {
   execute (environment: Environment) {
     this.origin.position = this.option.position
     this.origin.text = this.option.text
+    this.origin.selected = false
+    this.origin.hovered = false
     environment.addBlock(this.origin)
   }
 }

@@ -19,7 +19,14 @@ export class CommandExecuter {
   }
 
   undo () {
+    if (this.stackPosition <= 0) return
     this.stackPosition--
+    this.recallCommands()
+  }
+
+  redo () {
+    if (this.stackPosition >= this.commands.length) return
+    this.stackPosition++
     this.recallCommands()
   }
 

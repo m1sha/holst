@@ -7,12 +7,83 @@
 </head>
 <body>
     <div>
+        <button id="createBlockDialogOpen">New Block</button>
+        <button id="undo">Undo</button>
+        <button id="redo">Redo</button>
+    </div>
+    <div>
         <canvas id="canvas"></canvas>
     </div>
+    <dialog id="createBlockDialog">
+        <div>
+            <label for="x">X</label>
+            <input id="x" type="number">
+        </div>
+        <div>
+            <label for="y">Y</label>
+            <input id="y" type="number">
+        </div>
+        <div>
+            <label for="text">Text</label>
+            <input id="text" type="text">
+        </div>
+        <div>
+            <button id="createBlockOk">Ok</button>
+            <button id="createBlockCancel">Отмена</button>
+        </div>
+            
+    </dialog>
     <script src="dist/editor.bundle.js"></script>
     <script>
-        const canvas = document.getElementById("canvas")
-        charts.createEditor(canvas)
+        
+        (function() {
+        const byId = (id) => document.getElementById(id)
+        const canvas = byId("canvas")
+        const undoButton = byId("undo")
+        const redoButton = byId("redo")
+        const createBlockButton = byId("createBlockDialogOpen")
+        const createBlockCancelButton = byId("createBlockCancel")
+        const createBlockOkButton = byId("createBlockOk")
+        
+        const createBlockDialog = byId("createBlockDialog")
+        const res = charts.createEditor(canvas)
+        const controller = res.controller
+        const factory = res.factory
+
+        const block0 = factory.createActionBlock()
+        const block1 = factory.createActionBlock()
+
+        controller.createBlock(block0, { position: { x: 10, y: 10 }, text: 'ToDo 1' })
+        controller.createBlock(block1, { position: { x: 70, y: 10 }, text: 'ToDo 2' })
+        controller.selectBlock(block0)
+        controller.unselectBlock(block0)
+        controller.moveBlock(block0, 10, 70)
+
+        undoButton.addEventListener('click', e => {
+          controller.undo()
+        })
+        redoButton.addEventListener('click', e => {
+          controller.redo()
+        })
+        createBlockButton.addEventListener('click', e => {
+            createBlockDialog.showModal();
+        })
+
+        createBlockOkButton.addEventListener('click', e => {
+            const block = factory.createActionBlock()
+            const x = parseInt(byId('x').value)
+            const y = parseInt(byId('y').value)
+            const text = byId('text').value
+            controller.createBlock(block, { position: { x: x, y: y }, text: text })
+            createBlockDialog.close();
+        })
+
+        createBlockCancelButton.addEventListener('click', e => {
+            createBlockDialog.close();
+        })
+    })();
+
+    
     </script>
 </body>
 </html>

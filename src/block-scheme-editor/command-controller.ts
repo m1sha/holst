@@ -35,4 +35,8 @@ export class CommandController {
   undo () {
     this.executer.undo()
   }
+
+  redo () {
+    this.executer.redo()
+  }
 }
