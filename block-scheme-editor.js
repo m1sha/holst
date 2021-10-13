@@ -55,9 +55,9 @@ const app = {
     },
 
     getBlocks () {
-      if (!this.editor) return []
       // eslint-disable-next-line no-unused-vars
       const foo = this.trigger
+      if (!this.editor) return []
       return this.editor.storage.blocks
     }
   }
