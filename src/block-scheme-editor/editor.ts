@@ -1,16 +1,23 @@
 import { Point } from '../core/point'
 import { Rect } from '../core/rect'
 import { Scene } from '../core/scene'
+import { CommandController } from './command-controller'
 import { Block } from './elements/block'
+import { ElementFactory } from './elements/element-factory'
 import drawBlock from './handlers/draw-block-action'
 import drawSelectRegion from './handlers/draw-select-region'
+import { RuntimeController } from './runtime-controller'
 export class Editor {
   scene: Scene
   blocks: Block[] = []
   selectRegion: Rect | null = null
+  controller: CommandController
 
   constructor (canvas: HTMLCanvasElement) {
     this.scene = new Scene(canvas)
+    this.controller = new CommandController(this)
+    const runtimeController = new RuntimeController(this, this.controller)
+    runtimeController.start()
   }
 
   addBlock (block: Block) {
@@ -56,5 +63,9 @@ export class Editor {
     for (const index of forDelete) {
       this.blocks.splice(index, 1)
     }
+  }
+
+  get factory () {
+    return ElementFactory
   }
 }
