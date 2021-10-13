@@ -4,86 +4,51 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
 </head>
 <body>
-    <div>
-        <button id="createBlockDialogOpen">New Block</button>
-        <button id="undo">Undo</button>
-        <button id="redo">Redo</button>
+    <div id="app">
+        <div>
+            <button v-on:click="createBlockDialogOpen">New Block</button>
+            <button v-on:click="undo">Undo</button>
+            <button v-on:click="redo">Redo</button>
+            <button v-on:click="doDefault">Default</button>
+        </div>
+
+        <div>
+            <canvas ref="canvas"></canvas>
+        </div>
+
+        <div>
+            <ul>
+                <li v-for="block in getBlocks()">
+                    {{ block.text }}
+                </li>
+            </ul>
+        </div>
+        
+        <dialog ref="createBlockDialog">
+            <div>
+                <label for="x">X</label>
+                <input id="x" type="number" v-model="x">
+            </div>
+            <div>
+                <label for="y">Y</label>
+                <input id="y" type="number" v-model="y">
+            </div>
+            <div>
+                <label for="text">Text</label>
+                <input id="text" type="text" v-model="text">
+            </div>
+            <div>
+                <button v-on:click="createBlockOk">Ok</button>
+                <button v-on:click="createBlockCancel">Отмена</button>
+            </div>
+
+        </dialog>
     </div>
-    <div>
-        <canvas id="canvas"></canvas>
-    </div>
-    <dialog id="createBlockDialog">
-        <div>
-            <label for="x">X</label>
-            <input id="x" type="number">
-        </div>
-        <div>
-            <label for="y">Y</label>
-            <input id="y" type="number">
-        </div>
-        <div>
-            <label for="text">Text</label>
-            <input id="text" type="text">
-        </div>
-        <div>
-            <button id="createBlockOk">Ok</button>
-            <button id="createBlockCancel">Отмена</button>
-        </div>
-            
-    </dialog>
-    <script src="dist/editor.bundle.js"></script>
-    <script>
-        
-        (function() {
-        const byId = (id) => document.getElementById(id)
-        const canvas = byId("canvas")
-        const undoButton = byId("undo")
-        const redoButton = byId("redo")
-        const createBlockButton = byId("createBlockDialogOpen")
-        const createBlockCancelButton = byId("createBlockCancel")
-        const createBlockOkButton = byId("createBlockOk")
-        
-        const createBlockDialog = byId("createBlockDialog")
-        const editor = charts.createEditor(canvas)
-        const controller = editor.controller
-
-        controller.createBlock({ position: { x: 10, y: 10 }, text: 'ToDo 1' })
-        controller.createBlock({ position: { x: 70, y: 10 }, text: 'ToDo 2' })
-
-        const block0 = editor.storage.blocks[0]
-        
-        ///controller.createBlock({ position: { x: 160, y: 10 }, text: 'ToDo 3' })
-        controller.selectBlock(block0)
-        controller.unselectBlock(block0)
-        controller.moveBlock(block0, 10, 70)
-
-        undoButton.addEventListener('click', e => {
-          controller.undo()
-        })
-        redoButton.addEventListener('click', e => {
-          controller.redo()
-        })
-        createBlockButton.addEventListener('click', e => {
-            createBlockDialog.showModal();
-        })
-
-        createBlockOkButton.addEventListener('click', e => {
-            
-            const x = parseInt(byId('x').value)
-            const y = parseInt(byId('y').value)
-            const text = byId('text').value
-            controller.createBlock({ position: { x: x, y: y }, text: text })
-            createBlockDialog.close();
-        })
-
-        createBlockCancelButton.addEventListener('click', e => {
-            createBlockDialog.close();
-        })
-    })();
-
     
-    </script>
+    <script src="dist/editor.bundle.js"></script>
+    <script src="block-scheme-editor.js"></script>
 </body>
 </html>
