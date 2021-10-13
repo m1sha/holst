@@ -39,7 +39,7 @@ export class ElementStorage {
     return null
   }
 
-  render (): void {
+  applyChanges (): void {
     this.scene.clearAll()
     for (const block of this.blocks) {
       drawBlock(this.scene, block)

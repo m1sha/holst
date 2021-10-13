@@ -2,7 +2,7 @@ import { Scene } from '../core/scene'
 import { CommandController } from './command-controller'
 import { ElementStorage } from './elements/element-storage'
 
-import { RuntimeController } from './runtime-controller'
+import { Runtime } from './runtime-controller'
 export class Editor {
   private scene: Scene
   storage: ElementStorage
@@ -12,11 +12,7 @@ export class Editor {
     this.scene = new Scene(canvas)
     this.storage = new ElementStorage(this.scene)
     this.controller = new CommandController(this)
-    const runtimeController = new RuntimeController(this, this.controller)
-    runtimeController.start(this.scene)
-  }
-
-  update () {
-    this.storage.render()
+    const runtime = new Runtime(this)
+    runtime.start(this.scene)
   }
 }

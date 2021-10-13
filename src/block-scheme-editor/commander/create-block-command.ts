@@ -1,7 +1,7 @@
 import { Block, CreateBlockOption } from '../elements/block'
-import { Editor } from '../editor'
 import { Command } from './command'
 import { ElementFactory } from '../elements/element-factory'
+import { ElementStorage } from '../elements/element-storage'
 
 export class CreateBlockCommand implements Command {
   private option: CreateBlockOption
@@ -11,7 +11,7 @@ export class CreateBlockCommand implements Command {
     this.option = option
   }
 
-  execute (editor: Editor) {
+  execute (storage: ElementStorage) {
     if (!this.block) {
       this.block = ElementFactory.createActionBlock()
       this.id = this.block._uid
@@ -21,7 +21,7 @@ export class CreateBlockCommand implements Command {
     this.block.text = this.option.text
     this.block.selected = false
     this.block.hovered = false
-    editor.storage.addBlock(this.block)
+    storage.addBlock(this.block)
   }
 
   get originUid () {

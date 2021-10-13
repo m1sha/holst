@@ -1,29 +1,29 @@
-import { Editor } from '../editor'
+import { ElementStorage } from '../elements/element-storage'
 import { Command } from './command'
 import { CreateBlockCommand } from './create-block-command'
 
 export class CommandExecuter {
   private commands: Command[] = []
-  private env: Editor
+  private storage: ElementStorage
   private stackPosition = 0
 
-  constructor (environment: Editor) {
-    this.env = environment
+  constructor (storage: ElementStorage) {
+    this.storage = storage
   }
 
   addCommand (command: Command) {
     while (this.stackPosition < this.commands.length) this.commands.pop()
     this.commands.push(command)
     this.stackPosition = this.commands.length
-    command.execute(this.env)
-    this.env.update()
+    command.execute(this.storage)
+    this.storage.applyChanges()
   }
 
   undo () {
     if (this.stackPosition <= 0) return
     this.stackPosition--
     const blockIds = this.getBlockUidFromCreateCommands()
-    this.env.storage.removeUnlinked({ blockIds })
+    this.storage.removeUnlinked({ blockIds })
     this.recallCommands()
   }
 
@@ -35,9 +35,9 @@ export class CommandExecuter {
 
   private recallCommands () {
     for (let i = 0; i < this.stackPosition; i++) {
-      this.commands[i].execute(this.env)
+      this.commands[i].execute(this.storage)
     }
-    this.env.update()
+    this.storage.applyChanges()
   }
 
   private getBlockUidFromCreateCommands () {

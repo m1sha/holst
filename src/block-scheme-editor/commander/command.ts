@@ -1,5 +1,5 @@
-import { Editor } from '../editor'
+import { ElementStorage } from '../elements/element-storage'
 
 export interface Command {
-   execute (editor: Editor)
+   execute (storage: ElementStorage)
  }

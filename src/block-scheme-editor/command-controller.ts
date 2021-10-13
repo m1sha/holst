@@ -8,8 +8,8 @@ import { Editor } from './editor'
 
 export class CommandController {
   private executer: CommandExecuter
-  constructor (environment: Editor) {
-    this.executer = new CommandExecuter(environment)
+  constructor (editor: Editor) {
+    this.executer = new CommandExecuter(editor.storage)
   }
 
   createBlock (option: CreateBlockOption) {

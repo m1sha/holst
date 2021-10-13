@@ -2,17 +2,15 @@ import { EventInfo } from '../core/event-handler'
 import { Point } from '../core/point'
 import { Scene } from '../core/scene'
 import { rect } from '../core/utils'
-import { CommandController } from './command-controller'
 import { Editor } from './editor'
 import { cursor } from './utils/cursor'
 
-export class RuntimeController {
+export class Runtime {
   private editor: Editor
-  private commandController: CommandController
+
   private lastClickPos: Point
-  constructor (editor: Editor, commandController: CommandController) {
+  constructor (editor: Editor) {
     this.editor = editor
-    this.commandController = commandController
   }
 
   start (scene: Scene) {
@@ -25,16 +23,17 @@ export class RuntimeController {
   private click (e: EventInfo) {
     const point = e.point
     if (!point) return
-    const block = this.editor.storage.findHoverBlock(point)
+    const { controller, storage } = this.editor
+    const block = storage.findHoverBlock(point)
     if (!block) return
-    if (block.selected) this.commandController.unselectBlock(block)
-    else this.commandController.selectBlock(block)
-    this.editor.update()
+    if (block.selected) controller.unselectBlock(block)
+    else controller.selectBlock(block)
+    storage.applyChanges()
   }
 
   private mousemove (e: EventInfo) {
     const point = e.point
-    const storage = this.editor.storage
+    const { storage } = this.editor
     if (!point) return
     storage.clearHover()
     const block = storage.findHoverBlock(point)
@@ -49,18 +48,20 @@ export class RuntimeController {
       const start = this.lastClickPos
       storage.selectRegion = rect(start.x, start.y, e.point.x, e.point.y)
     }
-    this.editor.update()
+    storage.applyChanges()
   }
 
   private mousedown (e: EventInfo) {
     this.lastClickPos = e.point
-    this.editor.storage.selectRegion = rect(e.point.x, e.point.y, 5, 5)
-    this.editor.update()
+    const { storage } = this.editor
+    storage.selectRegion = rect(e.point.x, e.point.y, 5, 5)
+    storage.applyChanges()
   }
 
   private mouseup (e: EventInfo) {
-    this.editor.storage.selectRegion = null
+    const { storage } = this.editor
     this.lastClickPos = null
-    this.editor.update()
+    storage.selectRegion = null
+    storage.applyChanges()
   }
 }
