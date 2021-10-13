@@ -1,10 +1,13 @@
 import { Point } from '../core/point'
+import { Rect } from '../core/rect'
 import { Scene } from '../core/scene'
 import { Block } from './elements/block'
 import drawBlock from './handlers/draw-block-action'
+import drawSelectRegion from './handlers/draw-select-region'
 export class Environment {
   scene: Scene
   blocks: Block[] = []
+  selectRegion: Rect | null = null
 
   constructor (canvas: HTMLCanvasElement) {
     this.scene = new Scene(canvas)
@@ -38,7 +41,20 @@ export class Environment {
     this.scene.clearAll()
     for (const block of this.blocks) {
       drawBlock(this.scene, block)
+      if (this.selectRegion) drawSelectRegion(this.scene, this.selectRegion)
     }
     this.scene.render()
+  }
+
+  garbageCollector (ids: number[]) {
+    const forDelete = []
+    for (let i = 0; i < this.blocks.length; i++) {
+      const uid = this.blocks[i]._uid
+      if (ids.indexOf(uid) > -1) continue
+      forDelete.push(i)
+    }
+    for (const index of forDelete) {
+      this.blocks.splice(index, 1)
+    }
   }
 }

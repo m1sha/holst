@@ -1,5 +1,6 @@
 import { Environment } from '../environment'
 import { Command } from './command'
+import { CreateBlockCommand } from './create-block-command'
 
 export class CommandExecuter {
   private commands: Command[] = []
@@ -21,6 +22,8 @@ export class CommandExecuter {
   undo () {
     if (this.stackPosition <= 0) return
     this.stackPosition--
+    const links = this.getBlockLinks()
+    this.env.garbageCollector(links)
     this.recallCommands()
   }
 
@@ -35,5 +38,16 @@ export class CommandExecuter {
       this.commands[i].execute(this.env)
     }
     this.env.update()
+  }
+
+  private getBlockLinks () {
+    const result = []
+    for (let i = 0; i < this.stackPosition; i++) {
+      const command = this.commands[i]
+      if (command instanceof CreateBlockCommand) {
+        result.push(command.originUid)
+      }
+    }
+    return result
   }
 }

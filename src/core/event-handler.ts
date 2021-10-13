@@ -20,7 +20,7 @@ export class EventHandler {
   constructor (activity: Activity) {
     this.activity = activity
     this.delegates = []
-    activity.ctx.on((et, e) => this.invoke(et, e as MouseEvent), 'mousemove', 'mouseleave', 'click')
+    activity.ctx.on((et, e) => this.invoke(et, e as MouseEvent), 'mousemove', 'mouseleave', 'click', 'mouseup', 'mousedown')
   }
 
   addEventListener (eventType: EventType, callback: (e: EventInfo) => void) {

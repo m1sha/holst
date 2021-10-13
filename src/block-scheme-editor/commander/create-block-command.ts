@@ -17,4 +17,8 @@ export class CreateBlockCommand implements Command {
     this.origin.hovered = false
     environment.addBlock(this.origin)
   }
+
+  get originUid () {
+    return this.origin._uid
+  }
 }

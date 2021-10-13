@@ -1,1 +1,1 @@
-export type EventType = 'click' | 'mousemove' | 'mouseleave'
+export type EventType = 'click' | 'mousemove' | 'mouseleave' | 'mousedown' | 'mouseup'
