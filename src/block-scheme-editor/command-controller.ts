@@ -12,8 +12,8 @@ export class CommandController {
     this.executer = new CommandExecuter(environment)
   }
 
-  createBlock (origin: Block, option: CreateBlockOption) {
-    this.executer.addCommand(new CreateBlockCommand(origin, option))
+  createBlock (option: CreateBlockOption) {
+    this.executer.addCommand(new CreateBlockCommand(option))
   }
 
   // createArrow () {

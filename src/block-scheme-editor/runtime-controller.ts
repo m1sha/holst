@@ -1,5 +1,6 @@
 import { EventInfo } from '../core/event-handler'
 import { Point } from '../core/point'
+import { Scene } from '../core/scene'
 import { rect } from '../core/utils'
 import { CommandController } from './command-controller'
 import { Editor } from './editor'
@@ -14,8 +15,7 @@ export class RuntimeController {
     this.commandController = commandController
   }
 
-  start () {
-    const scene = this.editor.scene
+  start (scene: Scene) {
     scene.addEventListener('mousemove', e => this.mousemove(e))
     scene.addEventListener('click', e => this.click(e))
     scene.addEventListener('mousedown', e => this.mousedown(e))

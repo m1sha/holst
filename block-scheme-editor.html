@@ -46,17 +46,15 @@
         const createBlockOkButton = byId("createBlockOk")
         
         const createBlockDialog = byId("createBlockDialog")
-        const res = charts.createEditor(canvas)
-        const controller = res.controller
-        const factory = res.factory
+        const editor = charts.createEditor(canvas)
+        const controller = editor.controller
 
-        const block0 = factory.createActionBlock()
-        const block1 = factory.createActionBlock()
-        //const block2 = factory.createActionBlock()
+        controller.createBlock({ position: { x: 10, y: 10 }, text: 'ToDo 1' })
+        controller.createBlock({ position: { x: 70, y: 10 }, text: 'ToDo 2' })
 
-        controller.createBlock(block0, { position: { x: 10, y: 10 }, text: 'ToDo 1' })
-        controller.createBlock(block1, { position: { x: 70, y: 10 }, text: 'ToDo 2' })
-        ///controller.createBlock(block2, { position: { x: 160, y: 10 }, text: 'ToDo 3' })
+        const block0 = editor.storage.blocks[0]
+        
+        ///controller.createBlock({ position: { x: 160, y: 10 }, text: 'ToDo 3' })
         controller.selectBlock(block0)
         controller.unselectBlock(block0)
         controller.moveBlock(block0, 10, 70)
@@ -72,11 +70,11 @@
         })
 
         createBlockOkButton.addEventListener('click', e => {
-            const block = factory.createActionBlock()
+            
             const x = parseInt(byId('x').value)
             const y = parseInt(byId('y').value)
             const text = byId('text').value
-            controller.createBlock(block, { position: { x: x, y: y }, text: text })
+            controller.createBlock({ position: { x: x, y: y }, text: text })
             createBlockDialog.close();
         })
 
