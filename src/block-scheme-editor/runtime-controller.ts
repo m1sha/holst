@@ -6,16 +6,16 @@ import { Editor } from './editor'
 import { cursor } from './utils/cursor'
 
 export class RuntimeController {
-  private environment: Editor
+  private editor: Editor
   private commandController: CommandController
   private lastClickPos: Point
-  constructor (environment: Editor, commandController: CommandController) {
-    this.environment = environment
+  constructor (editor: Editor, commandController: CommandController) {
+    this.editor = editor
     this.commandController = commandController
   }
 
   start () {
-    const scene = this.environment.scene
+    const scene = this.editor.scene
     scene.addEventListener('mousemove', e => this.mousemove(e))
     scene.addEventListener('click', e => this.click(e))
     scene.addEventListener('mousedown', e => this.mousedown(e))
@@ -25,18 +25,19 @@ export class RuntimeController {
   private click (e: EventInfo) {
     const point = e.point
     if (!point) return
-    const block = this.environment.findHoverBlock(point)
+    const block = this.editor.storage.findHoverBlock(point)
     if (!block) return
     if (block.selected) this.commandController.unselectBlock(block)
     else this.commandController.selectBlock(block)
-    this.environment.update()
+    this.editor.update()
   }
 
   private mousemove (e: EventInfo) {
     const point = e.point
+    const storage = this.editor.storage
     if (!point) return
-    this.environment.clearHover()
-    const block = this.environment.findHoverBlock(point)
+    storage.clearHover()
+    const block = storage.findHoverBlock(point)
     if (block) {
       block.hovered = true
       cursor('pointer')
@@ -44,22 +45,22 @@ export class RuntimeController {
       cursor('default')
     }
 
-    if (this.environment.selectRegion) {
+    if (storage.selectRegion) {
       const start = this.lastClickPos
-      this.environment.selectRegion = rect(start.x, start.y, e.point.x, e.point.y)
+      storage.selectRegion = rect(start.x, start.y, e.point.x, e.point.y)
     }
-    this.environment.update()
+    this.editor.update()
   }
 
   private mousedown (e: EventInfo) {
     this.lastClickPos = e.point
-    this.environment.selectRegion = rect(e.point.x, e.point.y, 5, 5)
-    this.environment.update()
+    this.editor.storage.selectRegion = rect(e.point.x, e.point.y, 5, 5)
+    this.editor.update()
   }
 
   private mouseup (e: EventInfo) {
-    this.environment.selectRegion = null
+    this.editor.storage.selectRegion = null
     this.lastClickPos = null
-    this.environment.update()
+    this.editor.update()
   }
 }

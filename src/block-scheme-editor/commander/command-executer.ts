@@ -22,8 +22,8 @@ export class CommandExecuter {
   undo () {
     if (this.stackPosition <= 0) return
     this.stackPosition--
-    const links = this.getBlockLinks()
-    this.env.garbageCollector(links)
+    const blockIds = this.getBlockUidFromCreateCommands()
+    this.env.storage.removeUnlinked({ blockIds })
     this.recallCommands()
   }
 
@@ -40,7 +40,7 @@ export class CommandExecuter {
     this.env.update()
   }
 
-  private getBlockLinks () {
+  private getBlockUidFromCreateCommands () {
     const result = []
     for (let i = 0; i < this.stackPosition; i++) {
       const command = this.commands[i]
