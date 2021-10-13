@@ -2,14 +2,14 @@ import { EventInfo } from '../core/event-handler'
 import { Point } from '../core/point'
 import { rect } from '../core/utils'
 import { CommandController } from './command-controller'
-import { Environment } from './environment'
+import { Editor } from './editor'
 import { cursor } from './utils/cursor'
 
 export class RuntimeController {
-  private environment: Environment
+  private environment: Editor
   private commandController: CommandController
   private lastClickPos: Point
-  constructor (environment: Environment, commandController: CommandController) {
+  constructor (environment: Editor, commandController: CommandController) {
     this.environment = environment
     this.commandController = commandController
   }

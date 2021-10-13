@@ -4,11 +4,11 @@ import { MoveBlockCommand } from './commander/move-block-command'
 import { SelectBlockCommand } from './commander/select-block-command'
 import { UnselectBlockCommand } from './commander/unselect-block-command'
 import { Block, CreateBlockOption } from './elements/block'
-import { Environment } from './environment'
+import { Editor } from './editor'
 
 export class CommandController {
   private executer: CommandExecuter
-  constructor (environment: Environment) {
+  constructor (environment: Editor) {
     this.executer = new CommandExecuter(environment)
   }
 

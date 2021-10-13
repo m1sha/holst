@@ -1,5 +1,5 @@
-import { Environment } from '../environment'
+import { Editor } from '../editor'
 
 export interface Command {
-   execute (environment: Environment)
+   execute (editor: Editor)
  }

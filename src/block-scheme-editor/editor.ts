@@ -4,7 +4,7 @@ import { Scene } from '../core/scene'
 import { Block } from './elements/block'
 import drawBlock from './handlers/draw-block-action'
 import drawSelectRegion from './handlers/draw-select-region'
-export class Environment {
+export class Editor {
   scene: Scene
   blocks: Block[] = []
   selectRegion: Rect | null = null

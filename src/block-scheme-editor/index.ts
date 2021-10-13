@@ -1,12 +1,12 @@
 import { CommandController } from './command-controller'
 import { ElementFactory } from './elements/element-factory'
-import { Environment } from './environment'
+import { Editor } from './editor'
 import { RuntimeController } from './runtime-controller'
 
 export function createEditor (canvas: HTMLCanvasElement) {
   // const block0 = ElementFactory.createActionBlock()
   // const block1 = ElementFactory.createActionBlock()
-  const environment = new Environment(canvas)
+  const environment = new Editor(canvas)
 
   const commandController = new CommandController(environment)
   const runtimeController = new RuntimeController(environment, commandController)

@@ -1,5 +1,5 @@
 import { Block, CreateBlockOption } from '../elements/block'
-import { Environment } from '../environment'
+import { Editor } from '../editor'
 import { Command } from './command'
 
 export class CreateBlockCommand implements Command {
@@ -10,7 +10,7 @@ export class CreateBlockCommand implements Command {
     this.option = option
   }
 
-  execute (environment: Environment) {
+  execute (environment: Editor) {
     this.origin.position = this.option.position
     this.origin.text = this.option.text
     this.origin.selected = false

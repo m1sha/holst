@@ -1,13 +1,13 @@
-import { Environment } from '../environment'
+import { Editor } from '../editor'
 import { Command } from './command'
 import { CreateBlockCommand } from './create-block-command'
 
 export class CommandExecuter {
   private commands: Command[] = []
-  private env: Environment
+  private env: Editor
   private stackPosition = 0
 
-  constructor (environment: Environment) {
+  constructor (environment: Editor) {
     this.env = environment
   }
 
