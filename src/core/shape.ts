@@ -1,13 +1,14 @@
 import { Context2DOrientation } from './context2d'
 import { Layer } from './layers'
 import { LineOptions } from './line-options'
+import Orderable from './orderable'
 import { Point } from './point'
 import { Rect } from './rect'
 import { ShapeStyle } from './shape-style'
 import { Size } from './size'
 import { alfa, arrow } from './transform'
 
-export default class Shape {
+export default class Shape implements Orderable {
   private readonly location: Point
   private readonly layerSize: Size
   private readonly originSize: Size
@@ -16,14 +17,18 @@ export default class Shape {
   private readonly path: Path2D
   style: ShapeStyle
   name: string
+  order: number
+  after?: Orderable
+  before?: Orderable
 
-  constructor (layer: Layer, path: Path2D, style: ShapeStyle = null) {
+  constructor (layer: Layer, path: Path2D, order: number, style: ShapeStyle = null) {
     this.location = layer.location
     this.layerSize = layer.size
     this.originSize = layer.originSize
     this.orientation = layer.orientation
     this.ratio = layer.ratio
     this.path = path
+    this.order = order
     this.style = style || {}
     this.name = 'shape'
   }

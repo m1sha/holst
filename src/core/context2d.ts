@@ -1,6 +1,6 @@
 import Context2DBase from './context2d-base'
 import { EventType } from './event-type'
-import { Text } from './label'
+import { Text, TextBlock } from './label'
 import { TextStyle } from './label-style'
 import Shape from './shape'
 export type Context2DOrientation = 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right'
@@ -28,6 +28,22 @@ export class Context2D implements Context2DBase {
     const x = label.x(width)
     const y = label.y(width)
     this.ctx.fillText(label.value, x, y)
+    this.ctx.restore()
+  }
+
+  drawTextBlock (block: TextBlock, mask?: Shape): void {
+    this.ctx.save()
+    this.assignMask(mask)
+    this.assignTextStyle(block.style)
+    if (!block.multiline) {
+      this.ctx.fillText(block.text, block.target.x, block.target.y)
+    } else {
+      let y = block.target.y
+      for (const line of block.lines) {
+        this.ctx.fillText(line, block.target.x, y)
+        y += block.lineHeight
+      }
+    }
     this.ctx.restore()
   }
 

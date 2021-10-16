@@ -3,7 +3,7 @@ import { Constraints } from './constraints'
 import { Context2DOrientation } from './context2d'
 import Context2DBase from './context2d-base'
 import { Image, Images } from './image'
-import { Text } from './label'
+import { Text, TextBlock } from './label'
 import { TextStyle } from './label-style'
 import { Padding } from './padding'
 import { Point } from './point'
@@ -17,8 +17,10 @@ export class Layer {
   private readonly ctx: Context2DBase
   private shapes: Shape[]
   private labels: Text[]
+  private textBlocks: TextBlock[]
   private images: Images
   private mask: Shape | null
+  private orderCounter: number
   readonly location: Point
   readonly size: Size
   readonly originSize: Readonly<Size>
@@ -46,7 +48,7 @@ export class Layer {
 
   createShape (style: ShapeStyle = null): Shape {
     const path = this.ctx.createPath()
-    const result = new Shape(this, path, style)
+    const result = new Shape(this, path, ++this.orderCounter, style)
     this.shapes.push(result)
     return result
   }
@@ -55,7 +57,15 @@ export class Layer {
     this.labels.push(text)
   }
 
+  createTextBlock (text: string, style: TextStyle, target?: Point): TextBlock {
+    const result = new TextBlock(text, style, ++this.orderCounter, (text, style) => this.measureText(text, style))
+    if (target) result.target = target
+    this.textBlocks.push(result)
+    return result
+  }
+
   addShape (shape: Shape): void {
+    if (!shape.order) shape.order = ++this.orderCounter
     this.shapes.push(shape)
   }
 
@@ -64,6 +74,8 @@ export class Layer {
   }
 
   clear () {
+    this.orderCounter = 0
+    this.textBlocks = []
     this.shapes = []
     this.labels = []
     this.images = []
@@ -76,6 +88,10 @@ export class Layer {
 
     for (const shape of this.shapes) {
       this.ctx.drawShape(shape, this.mask)
+    }
+
+    for (const textBlock of this.textBlocks) {
+      this.ctx.drawTextBlock(textBlock, this.mask)
     }
 
     for (const label of this.labels) {
