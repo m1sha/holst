@@ -24,7 +24,7 @@ export default function (s: Scene, block: Block) {
 }
 
 const helpers = {
-  textStyle: { fontName: 'Roboto', fontSize: '18px', color: '#ff0000' } as TextStyle,
+  textStyle: { fontName: 'Roboto', fontSize: '18px', color: '#000000' } as TextStyle,
   // shapeStyle: { fillStyle: color },
   drawSelectionRect ({ x, y, width, height }: Rect, layer: Layer): void {
     const margin = 5
