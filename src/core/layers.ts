@@ -1,4 +1,5 @@
 import { getRatio } from '../chart2/utils'
+import array from '../tools/array'
 import { Constraints } from './constraints'
 import { Context2DOrientation } from './context2d'
 import Context2DBase from './context2d-base'
@@ -86,23 +87,13 @@ export class Layer {
       this.ctx.drawImage(image.src, image.sx, image.sy, image.sWidth, image.sHeight, image.dx, image.dy, image.dWidth, image.dHeight)
     }
 
-    for (const shape of this.shapes) {
-      this.ctx.drawShape(shape, this.mask)
+    const renderList = [...this.shapes, ...this.textBlocks].sort(array.asc('order'))
+    for (const item of renderList) {
+      if (item instanceof Shape) this.ctx.drawShape(item, this.mask)
+      if (item instanceof TextBlock) this.ctx.drawTextBlock(item, this.mask)
     }
 
-    for (const textBlock of this.textBlocks) {
-      this.ctx.drawTextBlock(textBlock, this.mask)
-    }
-
-    for (const label of this.labels) {
-      const l = {
-        value: label.value,
-        x: w => toAbsolute({ x: label.x(w), y: 0 }, this.orientation, this.location, this.originSize).x,
-        y: w => toAbsolute({ x: 0, y: label.y(w) }, this.orientation, this.location, this.originSize).y,
-        style: label.style
-      }
-      this.ctx.drawText(l, this.mask)
-    }
+    this.drawOldTextLabels()
   }
 
   measureText (text: string, style: TextStyle) { return this.ctx.measureText(text, style) }
@@ -137,5 +128,17 @@ export class Layer {
 
   get allShapes (): Shape[] {
     return this.shapes
+  }
+
+  private drawOldTextLabels () {
+    for (const label of this.labels) {
+      const l = {
+        value: label.value,
+        x: w => toAbsolute({ x: label.x(w), y: 0 }, this.orientation, this.location, this.originSize).x,
+        y: w => toAbsolute({ x: 0, y: label.y(w) }, this.orientation, this.location, this.originSize).y,
+        style: label.style
+      }
+      this.ctx.drawText(l, this.mask)
+    }
   }
 }
