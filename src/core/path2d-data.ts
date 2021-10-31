@@ -63,6 +63,7 @@ type Path2dItem = MoveTo | LineTo | HorizontalLine | VerticalLine | CubicBezierC
 
 export class Path2dData {
   private items: Path2dItem[] = []
+  private position: Point = point(0, 0)
   add (item: Path2dItem): void {
     this.items.push(item)
   }
@@ -145,43 +146,43 @@ export class Path2dData {
     return result
   }
 
-  toPath2D (): Path2D {
-    const path = new Path2D()
-    let position = point(0, 0)
+  toPath2D (path2d?: Path2D): Path2D {
+    const path = path2d || new Path2D()
+    this.position = point(0, 0)
     for (const item of this.items) {
       switch (item.type) {
         case 'M':
-          position = item.point
+          this.position = item.point
           continue
         case 'm':
-          position = POINT.sum(position, item.point)
+          this.position = POINT.sum(this.position, item.point)
           continue
         case 'V':
-          position.y = item.height
-          path.lineTo(position.x, position.y)
+          this.position.y = item.height
+          path.lineTo(this.position.x, this.position.y)
           continue
         case 'v': {
-          path.moveTo(position.x, position.y)
-          position.y += item.height
-          path.lineTo(position.x, position.y)
+          path.moveTo(this.position.x, this.position.y)
+          this.position.y += item.height
+          path.lineTo(this.position.x, this.position.y)
           continue
         }
         case 'H':
-          position.x = item.width
-          path.lineTo(position.x, position.y)
+          this.position.x = item.width
+          path.lineTo(this.position.x, this.position.y)
           continue
         case 'h': {
-          path.moveTo(position.x, position.y)
-          position.x += item.width
-          path.lineTo(position.x, position.y)
+          path.moveTo(this.position.x, this.position.y)
+          this.position.x += item.width
+          path.lineTo(this.position.x, this.position.y)
           continue
         }
         case 'L':
-          position = POINT.sum(position, item.point)
-          path.lineTo(position.x, position.y)
+          this.position = POINT.sum(this.position, item.point)
+          path.lineTo(this.position.x, this.position.y)
           continue
         case 'l':
-          position = POINT.sum(position, item.point)
+          this.position = POINT.sum(this.position, item.point)
           path.lineTo(item.point.x, item.point.y)
           continue
         case 'Z':
@@ -191,5 +192,9 @@ export class Path2dData {
       }
     }
     return path
+  }
+
+  get currentPosition (): Readonly<Point> {
+    return this.position
   }
 }
