@@ -146,34 +146,36 @@ export class Path2dData {
     return result
   }
 
-  toPath2D (path2d?: Path2D): Path2D {
+  toPath2D (path2d?: Path2D, ratio?: Point, scale: number = 1, move: Point = { x: 0, y: 0 }): Path2D {
     const path = path2d || new Path2D()
-    this.position = point(0, 0)
+    const dx = ratio ? ratio.x : 1
+    const dy = ratio ? ratio.y : 1
+    this.position = point(move.x, move.y)
     for (const item of this.items) {
       switch (item.type) {
         case 'M':
-          this.position = item.point
+          this.position = POINT.sum(POINT.mul(POINT.mul(item.point, point(dx, dy)), point(scale, scale)), move)
           continue
         case 'm':
-          this.position = POINT.sum(this.position, item.point)
+          this.position = POINT.mul(POINT.mul(POINT.sum(this.position, item.point), point(dx, dy)), point(scale, scale))
           continue
         case 'V':
-          this.position.y = item.height
+          this.position.y = item.height * dy
           path.lineTo(this.position.x, this.position.y)
           continue
         case 'v': {
           path.moveTo(this.position.x, this.position.y)
-          this.position.y += item.height
+          this.position.y += item.height * dy * scale
           path.lineTo(this.position.x, this.position.y)
           continue
         }
         case 'H':
-          this.position.x = item.width
+          this.position.x = item.width * dx
           path.lineTo(this.position.x, this.position.y)
           continue
         case 'h': {
           path.moveTo(this.position.x, this.position.y)
-          this.position.x += item.width
+          this.position.x += item.width * dx * scale
           path.lineTo(this.position.x, this.position.y)
           continue
         }
