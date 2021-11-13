@@ -1,4 +1,4 @@
-import { Context2DOrientation } from './context2d'
+import { Context2DOrientation } from './renderer2D'
 import { Layer } from './layers'
 import { Point } from './point'
 import { Size } from './size'

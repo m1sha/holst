@@ -1,4 +1,4 @@
-import { Renderer2D } from './context2d'
+import { Renderer2D } from './renderer2D'
 import { EventType } from './event-type'
 import { Point } from './point'
 import { Scene } from './scene'

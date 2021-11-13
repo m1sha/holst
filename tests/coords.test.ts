@@ -1,4 +1,4 @@
-import { Context2DOrientation } from '../src/core/context2d'
+import { Context2DOrientation } from '../src/core/renderer2D'
 import { Coords } from '../src/core/coords'
 import { point, size } from '../src/core/utils'
 

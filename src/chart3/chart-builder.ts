@@ -2,7 +2,7 @@ import { ChartBase } from './chart-base'
 import { ChartOptions } from './chart-options'
 // import { getMax, roundInt } from './utils'
 import { Viewport } from '../core/viewport'
-import { Renderer2D } from '../core/context2d'
+import { Renderer2D } from '../core/renderer2D'
 
 export class ChartBuilder {
     protected readonly render: Renderer2D

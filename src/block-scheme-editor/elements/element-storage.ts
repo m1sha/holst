@@ -5,7 +5,7 @@ import drawBlock from '../handlers/draw-block-action'
 import drawSelectRegion from '../handlers/draw-select-region'
 import { Rect } from '../../core/rect'
 import { GarbageCollector } from '../garbage-collector'
-import { Renderer2D } from '../../core/context2d'
+import { Renderer2D } from '../../core/renderer2D'
 
 export class ElementStorage {
   private scene: Scene

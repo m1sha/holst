@@ -1,4 +1,4 @@
-import { Renderer2D } from './context2d'
+import { Renderer2D } from './renderer2D'
 import { Scene } from './scene'
 
 export interface KeyFrame {

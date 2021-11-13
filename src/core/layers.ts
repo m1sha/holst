@@ -1,6 +1,6 @@
 import { getRatio } from '../chart3/utils'
 import { Constraints } from './constraints'
-import { Context2DOrientation } from './context2d'
+import { Context2DOrientation } from './renderer2D'
 import { Image, Images } from './image'
 import { Text, TextBlock } from './label'
 import { TextStyle } from './label-style'

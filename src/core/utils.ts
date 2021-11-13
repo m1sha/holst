@@ -1,4 +1,4 @@
-import { Context2DOrientation } from './context2d'
+import { Context2DOrientation } from './renderer2D'
 import { Padding } from './padding'
 import { Point } from './point'
 import { Rect } from './rect'

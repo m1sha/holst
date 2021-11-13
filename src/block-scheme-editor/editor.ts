@@ -1,4 +1,4 @@
-import { Renderer2D } from '../core/context2d'
+import { Renderer2D } from '../core/renderer2D'
 import { EventHandler } from '../core/event-handler'
 import { Scene } from '../core/scene'
 import { CommandController } from './command-controller'
