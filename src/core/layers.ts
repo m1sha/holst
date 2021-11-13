@@ -12,6 +12,7 @@ import { Rect } from './rect'
 import Shape from './shape'
 import { ShapeStyle } from './shape-style'
 import { Size } from './size'
+import { TransformationPath } from './transformation-path'
 import { rect, toAbsolute } from './utils'
 
 export class Layer {
@@ -48,7 +49,7 @@ export class Layer {
   }
 
   createShape (style: ShapeStyle = null): Shape {
-    const path = this.ctx.createPath()
+    const path = new TransformationPath()
     const result = new Shape(this, path, ++this.orderCounter, style)
     this.shapes.push(result)
     return result

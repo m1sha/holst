@@ -51,17 +51,18 @@ export class Context2D implements Context2DBase {
     this.ctx.save()
     this.assignMask(mask)
     const { style } = shape
+    const path = shape.createPath()
     if (style.strokeStyle) {
       this.ctx.strokeStyle = style.strokeStyle
       this.ctx.lineWidth = style.lineWidth
       this.ctx.lineJoin = style.lineJoin
       this.ctx.lineDashOffset = style.lineDashOffset
       if (style.lineDash) this.ctx.setLineDash(style.lineDash)
-      this.ctx.stroke(shape.getPath())
+      this.ctx.stroke(path)
     }
     if (style.fillStyle) {
       this.ctx.fillStyle = style.fillStyle
-      this.ctx.fill(shape.getPath())
+      this.ctx.fill(path)
     }
     this.ctx.restore()
   }
@@ -95,6 +96,6 @@ export class Context2D implements Context2DBase {
 
   private assignMask (mask?: Shape) {
     if (!mask) return
-    this.ctx.clip(mask.getPath())
+    this.ctx.clip(mask.createPath())
   }
 }

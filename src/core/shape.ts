@@ -2,28 +2,30 @@ import { Context2DOrientation } from './context2d'
 import { Layer } from './layers'
 import { LineOptions } from './line-options'
 import Orderable from './orderable'
+import { Path2DBase } from './path2d-base'
 import { Point } from './point'
 import { Rect } from './rect'
 import { ShapeStyle } from './shape-style'
 import { Size } from './size'
 import { alfa, arrow } from './transform'
+import { TransformationPath } from './transformation-path'
 
 export default class Shape implements Orderable {
   private readonly location: Point
   private readonly originSize: Size
   private readonly orientation: Context2DOrientation
-  private readonly path: Path2D
+  private readonly transformationObject: TransformationPath
   style: ShapeStyle
   name: string
   order: number
   after?: Orderable
   before?: Orderable
 
-  constructor (layer: Layer, path: Path2D, order: number, style: ShapeStyle = null) {
+  constructor (layer: Layer, transformationObject: TransformationPath, order: number, style: ShapeStyle = null) {
     this.location = layer.location
     this.originSize = layer.originSize
     this.orientation = layer.orientation
-    this.path = path
+    this.transformationObject = transformationObject
     this.order = order
     this.style = style || {}
     this.name = 'shape'
@@ -33,19 +35,19 @@ export default class Shape implements Orderable {
     const point = this.getPoint(rect)
     const height = this.orientation === 'top-left' ? rect.height : -rect.height
     const width = rect.width
-    this.path.rect(point.x, point.y, width, height)
+    this.transformationObject.rect(point.x, point.y, width, height)
     return this
   }
 
   moveTo (point: Point): this | Shape {
     point = this.getPoint(point)
-    this.path.moveTo(point.x, point.y)
+    this.transformationObject.moveTo(point.x, point.y)
     return this
   }
 
   lineTo (point: Point): this | Shape {
     point = this.getPoint(point)
-    this.path.lineTo(point.x, point.y)
+    this.transformationObject.lineTo(point.x, point.y)
     return this
   }
 
@@ -61,12 +63,12 @@ export default class Shape implements Orderable {
 
   arc (point: Point, radius: number, startAngle: number, endAngle, anticlockwise?: boolean) {
     point = this.getPoint(point)
-    this.path.arc(point.x, point.y, radius, startAngle, endAngle, anticlockwise)
+    this.transformationObject.arc(point.x, point.y, radius, startAngle, endAngle, anticlockwise)
   }
 
   ellipse (point: Point, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle, anticlockwise?: boolean) {
     point = this.getPoint(point)
-    this.path.ellipse(point.x, point.y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
+    this.transformationObject.ellipse(point.x, point.y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
   }
 
   polyline (points: Point[]) {
@@ -85,22 +87,22 @@ export default class Shape implements Orderable {
 
     if (options.arrow.endTip) {
       const point = this.getPoint(pointEnd)
-      arrow(this.path, point, a, options.arrow.endTip.length || 10, options.arrow.endTip.dir || 1)
+      arrow(this.transformationObject, point, a, options.arrow.endTip.length || 10, options.arrow.endTip.dir || 1)
     }
 
     if (options.arrow.startTip) {
       const point = this.getPoint(pointStart)
       this.moveTo(point)
-      arrow(this.path, point, a, options.arrow.startTip.length || 10, options.arrow.startTip.dir || -1)
+      arrow(this.transformationObject, point, a, options.arrow.startTip.length || 10, options.arrow.startTip.dir || -1)
     }
   }
 
   closePath () {
-    this.path.closePath()
+    this.transformationObject.closePath()
   }
 
   merge (shape: Shape) {
-    this.path.addPath(shape.getPath())
+    this.transformationObject.addPath(shape.createPath())
   }
 
   private getPoint (point: Point) : Point {
@@ -111,6 +113,7 @@ export default class Shape implements Orderable {
     }
   }
 
-  /** @internal */
-  getPath () { return this.path }
+  createPath (): Path2DBase {
+    return this.transformationObject.createPath2D()
+  }
 }
