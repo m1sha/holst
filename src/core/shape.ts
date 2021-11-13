@@ -10,10 +10,8 @@ import { alfa, arrow } from './transform'
 
 export default class Shape implements Orderable {
   private readonly location: Point
-  private readonly layerSize: Size
   private readonly originSize: Size
   private readonly orientation: Context2DOrientation
-  private readonly ratio: Point
   private readonly path: Path2D
   style: ShapeStyle
   name: string
@@ -23,10 +21,8 @@ export default class Shape implements Orderable {
 
   constructor (layer: Layer, path: Path2D, order: number, style: ShapeStyle = null) {
     this.location = layer.location
-    this.layerSize = layer.size
     this.originSize = layer.originSize
     this.orientation = layer.orientation
-    this.ratio = layer.ratio
     this.path = path
     this.order = order
     this.style = style || {}
