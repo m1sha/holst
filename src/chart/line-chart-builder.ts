@@ -1,13 +1,15 @@
 import { createThresholds } from './bg-templates'
 import { ChartBuilder } from './chart-builder'
 import { ChartOptions } from './chart-options'
-import { EventInfo } from '../core/event-handler'
+import { EventHandler, EventInfo } from '../core/event-handler'
 
 export class LineChartBuilder extends ChartBuilder {
+  protected eventHandler: EventHandler
   constructor (canvas: HTMLCanvasElement, data: [], options: ChartOptions) {
     super(canvas, data, options)
-    this.chart.addEventListener('mousemove', e => this.onMove(e, options))
-    this.chart.addEventListener('mouseleave', e => this.onMouseLeave(options))
+    this.eventHandler = new EventHandler(this.chart, this.render)
+    this.eventHandler.addEventListener('mousemove', e => this.onMove(e, options))
+    this.eventHandler.addEventListener('mouseleave', e => this.onMouseLeave(options))
   }
 
   addBgLayer (): this | LineChartBuilder {

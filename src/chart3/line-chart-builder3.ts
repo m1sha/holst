@@ -7,7 +7,7 @@ import { Constraints } from '../core/constraints'
 import { Layer } from '../core/layers'
 import { Padding } from '../core/padding'
 import { Point } from '../core/point'
-import { padding, point, rect } from '../core/utils'
+import { padding, point } from '../core/utils'
 import { Viewport } from '../core/viewport'
 import { createTooltipWindow } from '../tooltip'
 import styles from './styles'
@@ -47,7 +47,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
   addGraphLayer (): this | LineChartBuilder3 {
     const { ratio, absMinY, offsetY } = this
     const layer = this.createLayer()
-    const controller = new AnimationController(this.chart)
+    const controller = new AnimationController(this.chart, this.render)
     controller.onFrameChange(num => {
       layer.clear()
       const graph = layer.createShape(styles.graphLine)

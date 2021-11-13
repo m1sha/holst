@@ -1,9 +1,9 @@
 import { Renderer2D } from './context2d'
 import { EventType } from './event-type'
 import { Point } from './point'
+import { Scene } from './scene'
 
 export interface Activity {
-  readonly renderer: Renderer2D
   render()
   clear()
 }
@@ -15,12 +15,14 @@ export interface EventInfo {
 }
 
 export class EventHandler {
-  private readonly activity: Activity
+  private readonly scene: Scene
+  private readonly render: Renderer2D
   private readonly delegates: { eventType: EventType, callback: (e: EventInfo) => void }[]
-  constructor (activity: Activity) {
-    this.activity = activity
+  constructor (scene: Scene, render: Renderer2D) {
+    this.scene = scene
+    this.render = render
     this.delegates = []
-    activity.renderer.on((et, e) => this.invoke(et, e as MouseEvent), 'mousemove', 'mouseleave', 'click', 'mouseup', 'mousedown')
+    render.on((et, e) => this.invoke(et, e as MouseEvent), 'mousemove', 'mouseleave', 'click', 'mouseup', 'mousedown')
   }
 
   addEventListener (eventType: EventType, callback: (e: EventInfo) => void) {
@@ -28,7 +30,8 @@ export class EventHandler {
   }
 
   private invoke (eventType: EventType, event: Event | MouseEvent | KeyboardEvent): void {
-    this.activity.clear()
+    this.scene.clearActiveLayer()
+    this.render.clear()
 
     if (event instanceof MouseEvent) {
       const point = { x: event.offsetX, y: event.offsetY }
@@ -41,6 +44,6 @@ export class EventHandler {
       }
     }
 
-    this.activity.render()
+    this.render.render(this.scene)
   }
 }

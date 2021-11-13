@@ -2,8 +2,10 @@ import { ChartBase } from './chart-base'
 import { ChartOptions } from './chart-options'
 import { getMax, roundInt } from './utils'
 import { Viewport } from '../core/viewport'
+import { Renderer2D } from '../core/context2d'
 
 export class ChartBuilder {
+    protected readonly render: Renderer2D
     protected readonly chart: ChartBase
     protected readonly data: []
     protected readonly options: ChartOptions
@@ -13,6 +15,7 @@ export class ChartBuilder {
       this.data = data
       this.options = options
       this.chart = new ChartBase(canvas)
+      this.render = new Renderer2D(canvas.getContext('2d'))
       const { maxWidth, maxHeight, minWidth, minHeight } = this.calculateBoundary()
       this.chart.legend = options.legend || {}
       this.chart.maxWidth = maxWidth
@@ -25,7 +28,7 @@ export class ChartBuilder {
     }
 
     build () {
-      this.chart.render()
+      this.render.render(this.chart)
     }
 
     protected calculateBoundary (): { maxWidth: number, maxHeight: number, minWidth: number, minHeight: number } {

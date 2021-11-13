@@ -1,3 +1,4 @@
+import { Renderer2D } from './context2d'
 import { Scene } from './scene'
 
 export interface KeyFrame {
@@ -6,6 +7,7 @@ export interface KeyFrame {
 }
 
 export class AnimationController {
+  private renderer: Renderer2D
   private scene: Scene
   private timerId!: number
   private delegates: ((frameNum: number) => void)[] = []
@@ -14,8 +16,9 @@ export class AnimationController {
   infinityLoop: boolean = false
   // keyFrames: KeyFrame[] = []
 
-  constructor (scene: Scene) {
+  constructor (scene: Scene, renderer: Renderer2D) {
     this.scene = scene
+    this.renderer = renderer
     this.init()
   }
 
@@ -47,8 +50,9 @@ export class AnimationController {
       this.startFrameNum = frameNum
     }
     for (const d of this.delegates) d(frameNum - this.startFrameNum)
-    this.scene.clear(true)
-    this.scene.render()
+    this.scene.clearActiveLayer()
+    this.renderer.clear()
+    this.renderer.render(this.scene)
 
     this.timerId = window.requestAnimationFrame(r => {
       this.onKeyFrame(r)
