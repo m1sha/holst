@@ -1,6 +1,6 @@
 import { ChartBase } from './chart-base'
 import { ChartOptions } from './chart-options'
-import { getMax, roundInt } from './utils'
+// import { getMax, roundInt } from './utils'
 import { Viewport } from '../core/viewport'
 import { Renderer2D } from '../core/context2d'
 
@@ -38,7 +38,7 @@ export class ChartBuilder {
 
       return {
         maxWidth: this.data.length,
-        maxHeight: roundInt(getMax(this.data, this.options.yFieldName)),
+        maxHeight: 0, // roundInt(getMax(this.data, this.options.yFieldName)),
         minWidth: 0,
         minHeight: 0 // getMin(this.data, this.options.yFieldName)
       }

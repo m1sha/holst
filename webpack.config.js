@@ -24,11 +24,7 @@ if (process.env.libraryTarget === 'umd') {
   config.output.libraryTarget = 'umd'
   config.entry['chart-bundle'] = './src/chart3/index.ts'
 } else {
-  config.entry['linear-chart'] = './src/chart/index.ts'
-  config.entry['linear-chart2'] = './src/chart2/index.ts'
   config.entry['linear-chart3'] = './src/chart3/index.ts'
-  config.entry['test-bundle'] = './src/test-index.ts'
-  config.entry['schema-picker.bundle'] = './src/schema-picker/index.ts'
   config.entry['editor.bundle'] = './src/block-scheme-editor/index.ts'
   config.output.library = 'charts'
 }

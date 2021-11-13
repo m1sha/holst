@@ -1,5 +1,5 @@
 import { ChartOptions } from '../chart/chart-options'
-import { getMax, getMin } from '../chart2/utils'
+import { getMax, getMin } from './utils'
 import { roundInt } from '../tools/round-int'
 import { LineChartBuilder3 } from './line-chart-builder3'
 

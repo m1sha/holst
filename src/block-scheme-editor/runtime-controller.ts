@@ -1,23 +1,24 @@
-import { EventInfo } from '../core/event-handler'
+import { EventHandler, EventInfo } from '../core/event-handler'
 import { Point } from '../core/point'
-import { Scene } from '../core/scene'
 import { rect } from '../core/utils'
 import { Editor } from './editor'
 import { cursor } from './utils/cursor'
 
 export class Runtime {
   private editor: Editor
+  private eventHandler: EventHandler
 
   private lastClickPos: Point
   constructor (editor: Editor) {
     this.editor = editor
+    this.eventHandler = editor.evenHandler
   }
 
-  start (scene: Scene) {
-    scene.addEventListener('mousemove', e => this.mousemove(e))
-    scene.addEventListener('click', e => this.click(e))
-    scene.addEventListener('mousedown', e => this.mousedown(e))
-    scene.addEventListener('mouseup', e => this.mouseup(e))
+  start () {
+    this.eventHandler.addEventListener('mousemove', e => this.mousemove(e))
+    this.eventHandler.addEventListener('click', e => this.click(e))
+    this.eventHandler.addEventListener('mousedown', e => this.mousedown(e))
+    this.eventHandler.addEventListener('mouseup', e => this.mouseup(e))
   }
 
   private click (e: EventInfo) {

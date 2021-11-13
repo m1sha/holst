@@ -1,4 +1,4 @@
-import { getRatio } from '../chart2/utils'
+import { getRatio } from '../chart3/utils'
 import { Constraints } from './constraints'
 import { Context2DOrientation } from './context2d'
 import { Image, Images } from './image'
