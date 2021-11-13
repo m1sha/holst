@@ -2,15 +2,26 @@ import Context2DBase from './context2d-base'
 import { EventType } from './event-type'
 import { Text, TextBlock } from './label'
 import { TextStyle } from './label-style'
+import { Layer } from './layers'
+import { Scene } from './scene'
 import Shape from './shape'
+import array from '../tools/array'
+import { toAbsolute } from './utils'
 export type Context2DOrientation = 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right'
-export class Context2D implements Context2DBase {
+export class Renderer2D implements Context2DBase {
   readonly ctx: CanvasRenderingContext2D
-  // orientation: Context2DOrientation
 
   constructor (ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
     this.ctx.imageSmoothingEnabled = true
+  }
+
+  render (scene: Scene): void {
+    for (const layer of [...scene.allLayers, scene.actionLayer]) this.drawLayer(layer)
+  }
+
+  clear (): void {
+    this.ctx.clearRect(0, 0, this.width, this.height)
   }
 
   drawImage (image: HTMLCanvasElement | HTMLImageElement | SVGImageElement | HTMLVideoElement | ImageBitmap, sx: number, sy: number, sWidth: number, sHeight: number, dx: number, dy: number, dWidth: number, dHeight: number): void {
@@ -97,5 +108,31 @@ export class Context2D implements Context2DBase {
   private assignMask (mask?: Shape) {
     if (!mask) return
     this.ctx.clip(mask.createPath())
+  }
+
+  private drawLayer (layer: Readonly<Layer>) {
+    for (const image of layer.images) {
+      this.ctx.drawImage(image.src, image.sx, image.sy, image.sWidth, image.sHeight, image.dx, image.dy, image.dWidth, image.dHeight)
+    }
+
+    const renderList = [...layer.allShapes, ...layer.textBlocks].sort(array.asc('order'))
+    for (const item of renderList) {
+      if (item instanceof Shape) this.drawShape(item, layer.mask)
+      if (item instanceof TextBlock) this.drawTextBlock(item, layer.mask)
+    }
+
+    this.drawOldTextLabels(layer)
+  }
+
+  private drawOldTextLabels (layer: Readonly<Layer>) {
+    for (const label of layer.labels) {
+      const l = {
+        value: label.value,
+        x: w => toAbsolute({ x: label.x(w), y: 0 }, layer.orientation, layer.location, layer.originSize).x,
+        y: w => toAbsolute({ x: 0, y: label.y(w) }, layer.orientation, layer.location, layer.originSize).y,
+        style: label.style
+      }
+      this.drawText(l, layer.mask)
+    }
   }
 }

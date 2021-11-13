@@ -1,9 +1,9 @@
-import { Context2D } from './context2d'
+import { Renderer2D } from './context2d'
 import { EventType } from './event-type'
 import { Point } from './point'
 
 export interface Activity {
-  readonly ctx: Context2D
+  readonly renderer: Renderer2D
   render()
   clear()
 }
@@ -20,7 +20,7 @@ export class EventHandler {
   constructor (activity: Activity) {
     this.activity = activity
     this.delegates = []
-    activity.ctx.on((et, e) => this.invoke(et, e as MouseEvent), 'mousemove', 'mouseleave', 'click', 'mouseup', 'mousedown')
+    activity.renderer.on((et, e) => this.invoke(et, e as MouseEvent), 'mousemove', 'mouseleave', 'click', 'mouseup', 'mousedown')
   }
 
   addEventListener (eventType: EventType, callback: (e: EventInfo) => void) {

@@ -31,7 +31,7 @@ export class ElementStorage {
       for (const shape of layer.allShapes) {
         const block = this.blocks.filter(p => p._uid === parseInt(shape.name))[0]
         if (!block) continue
-        const yes = this.scene.ctx.ctx.isPointInPath(shape.getPath(), point.x, point.y)
+        const yes = this.scene.renderer.ctx.isPointInPath(shape.createPath(), point.x, point.y)
         if (!yes) continue
         return block
       }

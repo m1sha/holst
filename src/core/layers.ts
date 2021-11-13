@@ -1,8 +1,6 @@
 import { getRatio } from '../chart2/utils'
-import array from '../tools/array'
 import { Constraints } from './constraints'
 import { Context2DOrientation } from './context2d'
-import Context2DBase from './context2d-base'
 import { Image, Images } from './image'
 import { Text, TextBlock } from './label'
 import { TextStyle } from './label-style'
@@ -12,16 +10,16 @@ import { Rect } from './rect'
 import Shape from './shape'
 import { ShapeStyle } from './shape-style'
 import { Size } from './size'
+import { TextMeasurer } from './text-measurer'
 import { TransformationPath } from './transformation-path'
-import { rect, toAbsolute } from './utils'
+import { rect } from './utils'
 
 export class Layer {
-  private readonly ctx: Context2DBase
   private shapes: Shape[]
-  private labels: Text[]
-  private textBlocks: TextBlock[]
-  private images: Images
-  private mask: Shape | null
+  labels: Text[]
+  textBlocks: TextBlock[]
+  images: Images
+  mask: Shape | null
   private orderCounter: number
   readonly location: Point
   readonly size: Size
@@ -29,13 +27,12 @@ export class Layer {
   orientation: Context2DOrientation
   constraints: Constraints
 
-  constructor (ctx: Context2DBase, orientation: Context2DOrientation) {
-    this.ctx = ctx
+  constructor (size: Size, orientation: Context2DOrientation) {
     this.orientation = orientation
-    this.constraints = { minX: 0, minY: 0, maxX: ctx.width, maxY: ctx.height }
+    this.constraints = { minX: 0, minY: 0, maxX: size.width, maxY: size.height }
     this.location = { x: 0, y: 0 }
-    this.size = { width: ctx.width, height: ctx.height }
-    this.originSize = { width: ctx.width, height: ctx.height }
+    this.size = { width: size.width, height: size.height }
+    this.originSize = { width: size.width, height: size.height }
     this.mask = null
     this.clear()
   }
@@ -83,21 +80,7 @@ export class Layer {
     this.images = []
   }
 
-  draw () {
-    for (const image of this.images) {
-      this.ctx.drawImage(image.src, image.sx, image.sy, image.sWidth, image.sHeight, image.dx, image.dy, image.dWidth, image.dHeight)
-    }
-
-    const renderList = [...this.shapes, ...this.textBlocks].sort(array.asc('order'))
-    for (const item of renderList) {
-      if (item instanceof Shape) this.ctx.drawShape(item, this.mask)
-      if (item instanceof TextBlock) this.ctx.drawTextBlock(item, this.mask)
-    }
-
-    this.drawOldTextLabels()
-  }
-
-  measureText (text: string, style: TextStyle) { return this.ctx.measureText(text, style) }
+  measureText (text: string, style: TextStyle) { return TextMeasurer.measureText(text, style) }
 
   setPadding (padding: Padding): void {
     this.location.x = padding.left
@@ -129,17 +112,5 @@ export class Layer {
 
   get allShapes (): Shape[] {
     return this.shapes
-  }
-
-  private drawOldTextLabels () {
-    for (const label of this.labels) {
-      const l = {
-        value: label.value,
-        x: w => toAbsolute({ x: label.x(w), y: 0 }, this.orientation, this.location, this.originSize).x,
-        y: w => toAbsolute({ x: 0, y: label.y(w) }, this.orientation, this.location, this.originSize).y,
-        style: label.style
-      }
-      this.ctx.drawText(l, this.mask)
-    }
   }
 }
