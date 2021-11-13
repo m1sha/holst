@@ -1,5 +1,5 @@
 import { createCorner } from './bg-templates'
-import { ChartOptions } from '../chart/chart-options'
+import { ChartOptions } from './chart-options'
 import { LineChartBuilder } from './line-chart-builder'
 import { toDisplayText } from './utils'
 import { AnimationController } from '../core/animation'

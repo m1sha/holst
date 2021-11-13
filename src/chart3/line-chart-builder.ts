@@ -1,6 +1,6 @@
 import { createThresholds } from './bg-templates'
-import { ChartBuilder } from '../chart/chart-builder'
-import { ChartOptions } from '../chart/chart-options'
+import { ChartBuilder } from './chart-builder'
+import { ChartOptions } from './chart-options'
 import { EventHandler, EventInfo } from '../core/event-handler'
 
 export class LineChartBuilder extends ChartBuilder {

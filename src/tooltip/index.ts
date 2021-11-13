@@ -1,9 +1,9 @@
-import colors from '../chart/colors'
+import colors from '../chart3/colors'
 import { TextStyle } from '../core/label-style'
 import { Layer } from '../core/layers'
 import { Point } from '../core/point'
 import { Viewport } from '../core/viewport'
-import { TooltipStyle } from '../chart/chart-options'
+import { TooltipStyle } from '../chart3/chart-options'
 
 const createTooltipWindow = (layer: Layer, point: Point, viewport: Viewport, strings: string[], tooltipStyle: TooltipStyle): void => {
   const style: TextStyle = { color: colors.selectLineFontColor, fontSize: '11pt' }
