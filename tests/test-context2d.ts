@@ -1,4 +1,4 @@
-import Context2DBase from '../src/core/context2d-base'
+import Renderer2DBase from '../src/core/renderer2d-base'
 import { EventType } from '../src/core/event-type'
 import { AnyImageType } from '../src/core/image'
 import { Text, TextBlock } from '../src/core/label'
@@ -7,7 +7,7 @@ import shape from '../src/core/shape'
 import { TestCommandDispatcher } from './test-draw-command'
 import TestPath2D from './test-path2d'
 
-export default class TestContext2D implements Context2DBase {
+export default class TestContext2D implements Renderer2DBase {
   private dispatcher: TestCommandDispatcher
 
   constructor (dispatcher?: TestCommandDispatcher) {

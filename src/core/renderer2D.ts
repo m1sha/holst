@@ -1,4 +1,4 @@
-import Context2DBase from './context2d-base'
+import Renderer2DBase from './renderer2d-base'
 import { EventType } from './event-type'
 import { Text, TextBlock } from './label'
 import { TextStyle } from './label-style'
@@ -8,7 +8,7 @@ import Shape from './shape'
 import array from '../tools/array'
 import { toAbsolute } from './utils'
 export type Context2DOrientation = 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right'
-export class Renderer2D implements Context2DBase {
+export class Renderer2D implements Renderer2DBase {
   readonly ctx: CanvasRenderingContext2D
 
   constructor (ctx: CanvasRenderingContext2D) {

@@ -2,7 +2,7 @@ import Shape from './shape'
 import { Text, TextBlock } from './label'
 import { TextStyle } from './label-style'
 import { EventType } from './event-type'
-export default interface Context2DBase {
+export default interface Renderer2DBase {
   width: number
   height: number
   drawText(label: Text, mask?: Shape): void
