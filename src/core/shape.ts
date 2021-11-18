@@ -11,10 +11,17 @@ import { alfa, arrow } from './transform'
 import { TransformationPath } from './transformation-path'
 
 export default class Shape implements Orderable {
+  /**
+  * @deprecated The method should not be used. Use property position
+  */
   private readonly location: Point
   private readonly originSize: Size
   private readonly orientation: Context2DOrientation
   private readonly transformationObject: TransformationPath
+  readonly position: Point
+  readonly scale: Point
+  width: number = 0
+  height: number = 0
   style: ShapeStyle
   name: string
   order: number
@@ -29,6 +36,37 @@ export default class Shape implements Orderable {
     this.order = order
     this.style = style || {}
     this.name = 'shape'
+    this.width = layer.size.width
+    this.height = layer.size.height
+    const self = this
+    this.position = {
+      get x (): number {
+        return self.transformationObject.transform.e
+      },
+      set x (value: number) {
+        self.transformationObject.transform.e = value
+      },
+      get y (): number {
+        return self.transformationObject.transform.f
+      },
+      set y (value: number) {
+        self.transformationObject.transform.f = value
+      }
+    }
+    this.scale = {
+      get x (): number {
+        return self.transformationObject.transform.a
+      },
+      set x (value: number) {
+        self.transformationObject.transform.a = value
+      },
+      get y (): number {
+        return self.transformationObject.transform.d
+      },
+      set y (value: number) {
+        self.transformationObject.transform.d = value
+      }
+    }
   }
 
   rect (rect: Rect): this | Shape {
@@ -103,6 +141,17 @@ export default class Shape implements Orderable {
 
   merge (shape: Shape) {
     this.transformationObject.addPath(shape.createPath())
+  }
+
+  get bounds (): Rect {
+    const point = this.transformationObject.toPoints()
+    const xList = point.map(p => p.x)
+    const yList = point.map(p => p.y)
+    const x = Math.min.apply(null, xList)
+    const y = Math.min.apply(null, yList)
+    const x1 = Math.max.apply(null, xList)
+    const y1 = Math.max.apply(null, yList)
+    return { x, y, width: x1 - x, height: y1 - y }
   }
 
   private getPoint (point: Point) : Point {

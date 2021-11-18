@@ -32,6 +32,16 @@ class MATRIX {
     return m1
   }
 
+  static sum (m1: Matrix2D, m2: Matrix2D | number): Matrix2D {
+    const result: Matrix2D = {}
+    const keys = Object.keys(m1)
+    for (const key of keys) {
+      const value = typeof (m2) === 'number' ? m2 : m2[key]
+      result[key] = m1[key] + value
+    }
+    return result
+  }
+
   /***
   * x' = a x + c y + e
   * y' = b x + d y + f
