@@ -28,18 +28,18 @@ class MATRIX {
     return matrix(1, 0, 0, 1, 0, 0)
   }
 
+  static rotateMatrix (angle: number): Matrix2D {
+    const sin = Math.sin(angle)
+    const cos = Math.cos(angle)
+    return matrix(cos, -sin, sin, cos, 0, 0)
+  }
+
   static mul (m1: Matrix2D, m2: Matrix2D | number): Matrix2D {
-    return m1
+    return this.walk(m1, m2, (value1, value2) => value1 * value2)
   }
 
   static sum (m1: Matrix2D, m2: Matrix2D | number): Matrix2D {
-    const result: Matrix2D = {}
-    const keys = Object.keys(m1)
-    for (const key of keys) {
-      const value = typeof (m2) === 'number' ? m2 : m2[key]
-      result[key] = m1[key] + value
-    }
-    return result
+    return this.walk(m1, m2, (value1, value2) => value1 + value2)
   }
 
   /***
@@ -52,6 +52,16 @@ class MATRIX {
  */
   static applyMatrix (m: Matrix2D, p: Point): Point {
     return point(m.a * p.x + m.c * p.y + m.e, m.b * p.x + m.d * p.y + m.f)
+  }
+
+  private static walk (m1: Matrix2D, m2: Matrix2D | number, delegate: (value1: number, value2: number) => number): Matrix2D {
+    const result: Matrix2D = {}
+    const keys = Object.keys(m1)
+    for (const key of keys) {
+      const value = typeof (m2) === 'number' ? m2 : m2[key]
+      result[key] = delegate(m1[key], value)
+    }
+    return result
   }
 }
 
