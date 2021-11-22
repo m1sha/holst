@@ -34,8 +34,21 @@ class MATRIX {
     return matrix(cos, -sin, sin, cos, 0, 0)
   }
 
+  /***
+   * a  c  e m1.a * m2.a + m1.c * m2.b + m1.0 * m.e, m1.a * m2.c + m1.c * m2.d + m1.0 * m2.e, m1.a * m2.e + m1.c * m2.f + m1.e * 1
+   * b  d  f m1.b * m2.a + m1.d * m2.b + m1.f * m2.0, m1.b * m2.c + m1.d * m2.d + m.f * m2.0, m1.b * m2.e + m1.d * m2.f + m1.f * 1
+   * 0  0  1
+   */
   static mul (m1: Matrix2D, m2: Matrix2D | number): Matrix2D {
-    return this.walk(m1, m2, (value1, value2) => value1 * value2)
+    if (typeof (m2) === 'number') return this.walk(m1, m2, (value1, value2) => value1 * value2)
+    return matrix(
+      m1.a * m2.a + m1.c * m2.b,
+      m1.b * m2.a + m1.d * m2.b,
+      m1.a * m2.c + m1.c * m2.d,
+      m1.b * m2.c + m1.d * m2.d,
+      m1.a * m2.e + m1.c * m2.f + m1.e,
+      m1.b * m2.e + m1.d * m2.f + m1.f
+    )
   }
 
   static sum (m1: Matrix2D, m2: Matrix2D | number): Matrix2D {
