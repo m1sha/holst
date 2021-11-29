@@ -226,8 +226,8 @@
                 xSegmentCount: 8,
                 xFieldDisplayFormat: (v) => v.getHours() + ":" + v.getMinutes(), // moment(v).format('HH:mm'),
                 xFieldToolTipFormat: (v) => moment(new Date(v)).format('HH:mm'),
-                yFieldDisplayFormat: (v) => parseFloat(v * 0.001).toFixed(0),
-                yAxisValueFormat: (v) => parseFloat(v * 0.001).toFixed(0),
+                yFieldDisplayFormat: (v) => parseFloat(v).toFixed(0),
+                yAxisValueFormat: (v) => parseFloat(v).toFixed(0),
                 width: 640,
                 height: 480
             })()

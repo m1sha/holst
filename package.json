@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:web": "cross-env mode=production libraryTarget= webpack",
+    "build:dev": "cross-env mode=production libraryTarget= webpack --watch",
     "build:node": "cross-env mode=production libraryTarget=umd webpack",
-    "watch": "cross-env mode=development libraryTarget= webpack --watch",
     "test:watch": "npx jest --watch",
     "format": "prettier --write src/**/*.ts tests/**/*.ts"
   },
