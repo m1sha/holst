@@ -28,6 +28,10 @@ class MATRIX {
     return matrix(1, 0, 0, 1, 0, 0)
   }
 
+  static scaleMatrix (point: Point): Matrix2D {
+    return change(this.identity, { a: point.x, d: point.y })
+  }
+
   static rotateMatrix (angle: number): Matrix2D {
     const sin = Math.sin(angle)
     const cos = Math.cos(angle)
@@ -89,4 +93,16 @@ export function matrix (a: number, b: number, c: number, d: number, e: number, f
   result.e = result.m41 = e
   result.f = result.m42 = f
   return result
+}
+
+function change (matrix: Matrix2D, m: { a?: number; b?: number; c?: number; d?: number; e?: number; f?: number }): Matrix2D {
+  if (!matrix) return
+  if (!m) return
+  if (typeof (m.a) === 'number') matrix.a = m.a
+  if (typeof (m.b) === 'number') matrix.b = m.b
+  if (typeof (m.c) === 'number') matrix.c = m.c
+  if (typeof (m.d) === 'number') matrix.d = m.d
+  if (typeof (m.e) === 'number') matrix.e = m.e
+  if (typeof (m.f) === 'number') matrix.f = m.f
+  return matrix
 }

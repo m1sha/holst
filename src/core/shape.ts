@@ -9,6 +9,7 @@ import { ShapeStyle } from './shape-style'
 import { Size } from './size'
 import { alfa, arrow } from './transform'
 import { TransformationPath } from './transformation-path'
+import { MATRIX } from './matrix'
 
 export default class Shape implements Orderable {
   /**
@@ -19,7 +20,7 @@ export default class Shape implements Orderable {
   private readonly orientation: Context2DOrientation
   private readonly transformationObject: TransformationPath
   readonly position: Point
-  readonly scale: Point
+  // readonly scale: Point
   width: number = 0
   height: number = 0
   style: ShapeStyle
@@ -53,20 +54,20 @@ export default class Shape implements Orderable {
         self.transformationObject.transform.f = value
       }
     }
-    this.scale = {
-      get x (): number {
-        return self.transformationObject.transform.a
-      },
-      set x (value: number) {
-        self.transformationObject.transform.a = value
-      },
-      get y (): number {
-        return self.transformationObject.transform.d
-      },
-      set y (value: number) {
-        self.transformationObject.transform.d = value
-      }
-    }
+    // this.scale = {
+    //   get x (): number {
+    //     return self.transformationObject.transform.a
+    //   },
+    //   set x (value: number) {
+    //     self.transformationObject.transform.a = value
+    //   },
+    //   get y (): number {
+    //     return self.transformationObject.transform.d
+    //   },
+    //   set y (value: number) {
+    //     self.transformationObject.transform.d = value
+    //   }
+    // }
   }
 
   rect (rect: Rect): this | Shape {
@@ -141,6 +142,24 @@ export default class Shape implements Orderable {
 
   merge (shape: Shape) {
     this.transformationObject.addPath(shape.createPath())
+  }
+
+  move (point: Point) {
+    const matrix = MATRIX.identity
+    matrix.e = point.x
+    matrix.f = point.y
+    this.transformationObject.transform = MATRIX.mul(this.transformationObject.transform, matrix)
+  }
+
+  scale (point: Point) {
+    const matrix = MATRIX.scaleMatrix(point)
+    this.transformationObject.transform = MATRIX.mul(this.transformationObject.transform, matrix)
+  }
+
+  flipY () {
+    const matrix = MATRIX.identity
+    matrix.d = -1
+    this.transformationObject.transform = MATRIX.mul(this.transformationObject.transform, matrix)
   }
 
   get bounds (): Rect {

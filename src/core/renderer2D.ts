@@ -7,6 +7,7 @@ import { Scene } from './scene'
 import Shape from './shape'
 import array from '../tools/array'
 import { toAbsolute } from './utils'
+import { deepCopyFast } from '../tools/deep-copy'
 export type Context2DOrientation = 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right'
 export class Renderer2D implements Renderer2DBase {
   readonly ctx: CanvasRenderingContext2D
@@ -102,7 +103,9 @@ export class Renderer2D implements Renderer2DBase {
     this.ctx.fillStyle = style.color || '#000'
     const fontName = style.fontName || 'serif'
     const fontSize = style.fontSize || '10pt'
-    this.ctx.font = `${fontSize} ${fontName}`
+    const bold = style.bold ? 'bold ' : ''
+    const italic = style.italic ? 'italic ' : ''
+    this.ctx.font = `${italic}${bold}${fontSize} ${fontName}`
   }
 
   private assignMask (mask?: Shape) {
@@ -118,7 +121,12 @@ export class Renderer2D implements Renderer2DBase {
     const renderList = [...layer.allShapes, ...layer.textBlocks].sort(array.asc('order'))
     for (const item of renderList) {
       if (item instanceof Shape) this.drawShape(item, layer.mask)
-      if (item instanceof TextBlock) this.drawTextBlock(item, layer.mask)
+      if (item instanceof TextBlock) {
+        // TODO Text relative coords to abs transform need convert to matrix
+        const newItem = deepCopyFast(item)
+        newItem.target = toAbsolute(newItem.target, layer.orientation, layer.location, layer.originSize)
+        this.drawTextBlock(newItem, layer.mask)
+      }
     }
 
     this.drawOldTextLabels(layer)
