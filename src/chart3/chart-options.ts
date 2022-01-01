@@ -17,8 +17,10 @@ export interface Legend {
 }
 
 export interface Threshold {
-  value: number,
-  color: string
+  maxValue: number,
+  minValue: number,
+  color: string,
+  showLimits: boolean
 }
 
 export interface ChartStyle {
@@ -40,6 +42,8 @@ export interface ChartOptions {
   legend?: Legend,
   thresholds?: Threshold[],
   thresholdOrientation: 'x' | 'y',
+  yMaxThresholdValue?: (value: unknown) => string,
+  yMinThresholdValue?: (value: unknown) => string,
   chartStyle?: ChartStyle,
   xFieldName: string,
   yFieldName: string,

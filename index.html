@@ -50,9 +50,9 @@
             { "Value": 4.22222, "Time": "2021-05-13T23:50:35" },
             { "Value": 1, "Time": "2021-05-13T23:51:35" },
             { "Value": 5, "Time": "2021-05-13T23:52:35" },
-            { "Value": 4, "Time": "2021-05-13T23:52:35" },
+            { "Value": 1, "Time": "2021-05-13T23:52:35" },
             { "Value": 3, "Time": "2021-05-13T23:53:35" },
-            { "Value": 2, "Time": "2021-05-13T23:53:35" },
+            { "Value": 1, "Time": "2021-05-13T23:53:35" },
             // { "Value": 195, "Time": "2021-05-13T23:54:35" },
             // { "Value": 155, "Time": "2021-05-13T23:55:35" },
             // { "Value": 155, "Time": "2021-05-13T23:56:35" },
@@ -213,21 +213,25 @@
                         }
                     }
                 },
-                // thresholdOrientation: 'y',
-                // thresholds: [
-                //     { value: 180, color: '#a26330' },
-                //     { value: 140, color: 'rgba(192,160,10,.33)' },
-                //     { value: 100, color: '#cec530' },
-                //     { value: 40, color: '#3ec500' },
-                //     { value: 20, color: '#0ea54c' }
-                // ],
+                thresholdOrientation: 'y',
+                thresholds: [
+                    // { value: 180, color: '#a26330' },
+                    // { value: 140, color: 'rgba(192,160,10,.33)' },
+                    // { minValue: 100000, maxValue: 177216713, color: '#fe1530' },
+                     { minValue: 80, maxValue: 228, color: '#3e7510', showLimits: true },
+                    // { minValue: 67, maxValue: 70, color: '#fe1530' },
+                    // { minValue: 40, maxValue: 60, color: '#cec530' },
+                    // { minValue: 20, maxValue: 40, color: '#3ec500' },
+                    { minValue: 10,  maxValue: 36, color: '#1ea54c', showLimits: true },
+                    { minValue: 1.5,  maxValue: 2.5, color: '#1ea54c', showLimits: true }
+                ],
                 xFieldName: 'Time',
                 yFieldName: 'Value',
                 xSegmentCount: 8,
                 xFieldDisplayFormat: (v) => v.getHours() + ":" + v.getMinutes(), // moment(v).format('HH:mm'),
                 xFieldToolTipFormat: (v) => moment(new Date(v)).format('HH:mm'),
                 yFieldDisplayFormat: (v) => parseFloat(v).toFixed(0),
-                yAxisValueFormat: (v) => parseFloat(v).toFixed(0),
+                yAxisValueFormat: (v) => parseFloat(v).toFixed(2),
                 width: 640,
                 height: 480
             })()

@@ -7,7 +7,7 @@ import { Constraints } from '../core/constraints'
 import { Layer } from '../core/layers'
 import { Padding } from '../core/padding'
 import { Point } from '../core/point'
-import { padding, point } from '../core/utils'
+import { padding, point, rect } from '../core/utils'
 import { Viewport } from '../core/viewport'
 import { createTooltipWindow } from '../tooltip'
 import styles from './styles'
@@ -63,7 +63,6 @@ export class LineChartBuilder3 extends LineChartBuilder {
       }
       graph.polyline(points)
     })
-
     return this
   }
 
@@ -107,8 +106,8 @@ export class LineChartBuilder3 extends LineChartBuilder {
     const style = styles.axisText
 
     if (minY <= 0) {
-      const text = { value: '0', x: () => -15, y: () => offsetY * ratio.y, style }
-      layer.createText(text)
+      const yText = layer.createTextBlock('0', style)
+      yText.target = point(-15, offsetY * ratio.y)
     }
 
     const segmentHeight = absMaxY / ySegmentCount
@@ -116,8 +115,8 @@ export class LineChartBuilder3 extends LineChartBuilder {
       if (absMinY > Math.abs(i * segmentHeight) && minY > 0) continue
       const y = (Math.abs(i * segmentHeight) + offsetY) * ratio.y
       const value = this.options.yAxisValueFormat ? this.options.yAxisValueFormat(i * segmentHeight) : toDisplayText(i * segmentHeight)
-      const text = { value, x: w => -w - 10, y: () => y, style }
-      layer.createText(text)
+      const yText = layer.createTextBlock(value, style)
+      yText.target = point(-yText.width - 10, y)
     }
 
     if (minY < 0) {
@@ -125,8 +124,8 @@ export class LineChartBuilder3 extends LineChartBuilder {
         if (absMinY < Math.abs(i * segmentHeight)) break
         const y = (absMinY - Math.abs(i * segmentHeight)) * ratio.y
         const value = this.options.yAxisValueFormat ? this.options.yAxisValueFormat(i * segmentHeight) : toDisplayText(i * segmentHeight * -1)
-        const text = { value, x: w => -w - 10, y: () => y, style }
-        layer.createText(text)
+        const yText = layer.createTextBlock('-' + value, style)
+        yText.target = point(-yText.width - 10, y)
       }
     }
 
@@ -135,15 +134,81 @@ export class LineChartBuilder3 extends LineChartBuilder {
       const item = this.data[parseInt((i * segmentWidth).toString())]
       if (!item) continue
       const { xValue } = this.getDisplayValues(item, false)
-      const text = {
-        value: xValue.toString(),
-        x: w => Math.abs(i * segmentWidth) * ratio.x - (w / 2),
-        y: () => -20,
-        style
-      }
-      layer.createText(text)
+      const xText = layer.createTextBlock(xValue.toString(), style)
+      const x = Math.abs(i * segmentWidth) * ratio.x - (xText.width / 2)
+      xText.target = point(x, -20)
     }
 
+    return this
+  }
+
+  addThresholdLayer () : this | LineChartBuilder {
+    if (!this.options.thresholds) return this
+    const thresholdLayer = this.createLayer()
+    const orientation = this.options.thresholdOrientation
+    if (!orientation) throw new Error('thresholdOrientation is not defined')
+    for (const item of this.options.thresholds) {
+      if (orientation !== 'y') continue
+      if (item.minValue < this.minY && item.maxValue < this.minY) continue
+      // if (item.maxValue > this.absMaxY && item.maxValue > this.absMaxY) continue
+      const minY = item.minValue < 0 ? this.absMinY - Math.abs(item.minValue) : item.minValue + this.offsetY
+      const maxY = item.maxValue < 0 ? this.absMinY - Math.abs(item.maxValue) : item.maxValue + this.offsetY
+      const currMaxY = Math.abs(item.maxValue) > this.absMaxY ? this.absMaxY + this.offsetY : Math.abs(maxY)
+      const currMinY = Math.abs(item.minValue) < this.absMinY ? this.absMinY + this.offsetY : Math.abs(minY)
+      const upLineY = currMaxY * this.ratio.y
+      const downLineY = currMinY * this.ratio.y
+      const thickness = upLineY - downLineY
+
+      thresholdLayer.createShape({ strokeStyle: item.color, lineWidth: thickness }).lineH(point(0, upLineY - thickness / 2), thresholdLayer.size.width)
+    }
+    return this
+  }
+
+  addThresholdLimitsLayer () : this | LineChartBuilder {
+    if (!this.options.thresholds) return this
+    const thresholdLayer = this.createLayer()
+    const orientation = this.options.thresholdOrientation
+    if (!orientation) throw new Error('thresholdOrientation is not defined')
+    for (const item of this.options.thresholds) {
+      if (orientation !== 'y') continue
+      if (item.minValue < this.minY && item.maxValue < this.minY) continue
+      // if (item.maxValue > this.absMaxY && item.maxValue > this.absMaxY) continue
+      const minY = item.minValue < 0 ? this.absMinY - Math.abs(item.minValue) : item.minValue + this.offsetY
+      const maxY = item.maxValue < 0 ? this.absMinY - Math.abs(item.maxValue) : item.maxValue + this.offsetY
+      const currMaxY = Math.abs(item.maxValue) > this.absMaxY ? this.absMaxY + this.offsetY : Math.abs(maxY)
+      const currMinY = Math.abs(item.minValue) < this.absMinY ? this.absMinY + this.offsetY : Math.abs(minY)
+      const upLineY = (currMaxY) * this.ratio.y
+      const downLineY = (currMinY) * this.ratio.y
+
+      const maxUpBorder = (this.absMaxY + this.offsetY) * this.ratio.y
+      // console.log(`maxUpBorder = ${maxUpBorder}`)
+      // console.log(`upLineY = ${upLineY}`)
+      const style = { color: '#000000', fontSize: '18px', bold: true }
+      if (upLineY + 20 <= maxUpBorder && item.showLimits) {
+        const text = this.options.yMaxThresholdValue ? this.options.yMaxThresholdValue(item.maxValue) : item.maxValue.toString()
+        const textWidth = thresholdLayer.measureText(text, style).width
+        // const by = thresholdLayer.size.width / 2
+        thresholdLayer
+          .createShape({ strokeStyle: '#ff0000', fillStyle: '#fff', lineWidth: 2 })
+          .rect(rect(-12 - textWidth, upLineY, textWidth + 8, 30))
+        const upBorderText = thresholdLayer.createTextBlock(text, style)
+        upBorderText.target = point(-textWidth - 8, upLineY + 10)
+        thresholdLayer.createShape({ strokeStyle: '#ff0000', lineWidth: 2 }).lineH(point(0, upLineY), thresholdLayer.size.width)
+      }
+
+      const maxDownBorder = (this.absMinY + this.offsetY) * this.ratio.y
+      if (downLineY - 20 > maxDownBorder && item.showLimits) {
+        const text = this.options.yMinThresholdValue ? this.options.yMinThresholdValue(item.minValue) : item.minValue.toString()
+        const textWidth = thresholdLayer.measureText(text, style).width
+        // const by = thresholdLayer.size.width / 2
+        thresholdLayer
+          .createShape({ strokeStyle: '#ff0000', fillStyle: '#fff', lineWidth: 2 })
+          .rect(rect(-12 - textWidth, downLineY, textWidth + 8, 30))
+        const bottomBorderText = thresholdLayer.createTextBlock(text, style)
+        bottomBorderText.target = point(-textWidth - 8, downLineY + 10)
+        thresholdLayer.createShape({ strokeStyle: '#ff0000', lineWidth: 2 }).lineH(point(0, downLineY), thresholdLayer.size.width)
+      }
+    }
     return this
   }
 

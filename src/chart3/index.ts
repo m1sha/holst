@@ -22,9 +22,11 @@ export function createChart (canvas: HTMLCanvasElement, data: [], options: Chart
   // if (constraints.minY > 0) constraints.minY = 0
   const builder = new LineChartBuilder3(canvas, data, options, constraints)
   builder.addBgLayer()
+  builder.addThresholdLayer()
   builder.addGraphLayer()
   builder.addAxisesLayer()
   builder.addNumbers()
+  builder.addThresholdLimitsLayer()
 
   options.onMoveRaw = (_, p) => {
     return builder.onMoveHandler(p)
