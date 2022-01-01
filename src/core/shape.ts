@@ -9,7 +9,7 @@ import { ShapeStyle } from './shape-style'
 import { Size } from './size'
 import { alfa, arrow } from './transform'
 import { TransformationPath } from './transformation-path'
-import { MATRIX } from './matrix'
+import { Matrix2D } from './matrix'
 
 export default class Shape implements Orderable {
   /**
@@ -145,21 +145,21 @@ export default class Shape implements Orderable {
   }
 
   move (point: Point) {
-    const matrix = MATRIX.identity
+    const matrix = Matrix2D.identity
     matrix.e = point.x
     matrix.f = point.y
-    this.transformationObject.transform = MATRIX.mul(this.transformationObject.transform, matrix)
+    this.transformationObject.transform.mul(matrix) // = MATRIX.mul(this.transformationObject.transform, matrix)
   }
 
   scale (point: Point) {
-    const matrix = MATRIX.scaleMatrix(point)
-    this.transformationObject.transform = MATRIX.mul(this.transformationObject.transform, matrix)
+    const matrix = Matrix2D.identity.scale(point)
+    this.transformationObject.transform.mul(matrix) // = MATRIX.mul(this.transformationObject.transform, matrix)
   }
 
   flipY () {
-    const matrix = MATRIX.identity
+    const matrix = Matrix2D.identity
     matrix.d = -1
-    this.transformationObject.transform = MATRIX.mul(this.transformationObject.transform, matrix)
+    this.transformationObject.transform.mul(matrix) // = MATRIX.mul(this.transformationObject.transform, matrix)
   }
 
   get bounds (): Rect {

@@ -1,7 +1,7 @@
 import { Point } from './point'
 import { point } from './utils'
 
-export interface Matrix2D {
+export class Matrix2D {
   // m11 Horizontal scaling. A value of 1 results in no scaling
   a?: number
   // m12 Vertical skewing.
@@ -21,21 +21,36 @@ export interface Matrix2D {
   m22?: number
   m41?: number
   m42?: number
-}
 
-class MATRIX {
-  static get identity (): Matrix2D {
-    return matrix(1, 0, 0, 1, 0, 0)
+  constructor (m?: { a?: number; b?: number; c?: number; d?: number; e?: number; f?: number }) {
+    this.a = this.m11 = 1
+    this.b = this.m12 = 0
+    this.c = this.m21 = 0
+    this.d = this.m22 = 1
+    this.e = this.m41 = 0
+    this.f = this.m42 = 0
+    if (m) this.change(m)
   }
 
-  static scaleMatrix (point: Point): Matrix2D {
-    return change(this.identity, { a: point.x, d: point.y })
+  change (m: { a?: number; b?: number; c?: number; d?: number; e?: number; f?: number }): Matrix2D {
+    if (!m) return this
+    if (typeof (m.a) === 'number') this.a = this.m11 = m.a
+    if (typeof (m.b) === 'number') this.b = this.m12 = m.b
+    if (typeof (m.c) === 'number') this.c = this.m21 = m.c
+    if (typeof (m.d) === 'number') this.d = this.m22 = m.d
+    if (typeof (m.e) === 'number') this.e = this.m41 = m.e
+    if (typeof (m.f) === 'number') this.f = this.m42 = m.f
+    return this
   }
 
-  static rotateMatrix (angle: number): Matrix2D {
+  scale (point: Point): Matrix2D {
+    return this.change({ a: point.x, d: point.y })
+  }
+
+  rotate (angle: number): Matrix2D {
     const sin = Math.sin(angle)
     const cos = Math.cos(angle)
-    return matrix(cos, -sin, sin, cos, 0, 0)
+    return this.change({ a: cos, b: -sin, c: sin, d: cos })
   }
 
   /***
@@ -43,20 +58,19 @@ class MATRIX {
    * b  d  f m1.b * m2.a + m1.d * m2.b + m1.f * m2.0, m1.b * m2.c + m1.d * m2.d + m.f * m2.0, m1.b * m2.e + m1.d * m2.f + m1.f * 1
    * 0  0  1
    */
-  static mul (m1: Matrix2D, m2: Matrix2D | number): Matrix2D {
-    if (typeof (m2) === 'number') return this.walk(m1, m2, (value1, value2) => value1 * value2)
-    return matrix(
-      m1.a * m2.a + m1.c * m2.b,
-      m1.b * m2.a + m1.d * m2.b,
-      m1.a * m2.c + m1.c * m2.d,
-      m1.b * m2.c + m1.d * m2.d,
-      m1.a * m2.e + m1.c * m2.f + m1.e,
-      m1.b * m2.e + m1.d * m2.f + m1.f
+  mul (m: Matrix2D /* | number */): Matrix2D {
+    // if (typeof (m2) === 'number') return this.walk(m1, m2, (value1, value2) => value1 * value2)
+    const { a, b, c, d, e, f } = this
+    const newMatrix = matrix(
+      a * m.a + c * m.b,
+      b * m.a + d * m.b,
+      a * m.c + c * m.d,
+      b * m.c + d * m.d,
+      a * m.e + c * m.f + e,
+      b * m.e + d * m.f + f
     )
-  }
-
-  static sum (m1: Matrix2D, m2: Matrix2D | number): Matrix2D {
-    return this.walk(m1, m2, (value1, value2) => value1 + value2)
+    this.change(newMatrix)
+    return this
   }
 
   /***
@@ -67,42 +81,53 @@ class MATRIX {
   * b  d  f
   * 0  0  1
  */
-  static applyMatrix (m: Matrix2D, p: Point): Point {
-    return point(m.a * p.x + m.c * p.y + m.e, m.b * p.x + m.d * p.y + m.f)
+  applyMatrix (p: Point): Point {
+    const { a, b, c, d, e, f } = this
+    const { x, y } = p
+    return point(a * x + c * y + e, b * x + d * y + f)
   }
 
-  private static walk (m1: Matrix2D, m2: Matrix2D | number, delegate: (value1: number, value2: number) => number): Matrix2D {
-    const result: Matrix2D = {}
-    const keys = Object.keys(m1)
-    for (const key of keys) {
-      const value = typeof (m2) === 'number' ? m2 : m2[key]
-      result[key] = delegate(m1[key], value)
-    }
-    return result
+  static get identity (): Matrix2D {
+    return matrix(1, 0, 0, 1, 0, 0)
   }
 }
-
-export { MATRIX }
 
 export function matrix (a: number, b: number, c: number, d: number, e: number, f: number): Matrix2D {
-  const result: Matrix2D = {}
-  result.a = result.m11 = a
-  result.b = result.m12 = b
-  result.c = result.m21 = c
-  result.d = result.m22 = d
-  result.e = result.m41 = e
-  result.f = result.m42 = f
-  return result
+  return new Matrix2D().change({ a, b, c, d, e, f })
 }
 
-function change (matrix: Matrix2D, m: { a?: number; b?: number; c?: number; d?: number; e?: number; f?: number }): Matrix2D {
-  if (!matrix) return
-  if (!m) return
-  if (typeof (m.a) === 'number') matrix.a = m.a
-  if (typeof (m.b) === 'number') matrix.b = m.b
-  if (typeof (m.c) === 'number') matrix.c = m.c
-  if (typeof (m.d) === 'number') matrix.d = m.d
-  if (typeof (m.e) === 'number') matrix.e = m.e
-  if (typeof (m.f) === 'number') matrix.f = m.f
-  return matrix
-}
+// class MATRIX {
+// static get identity (): Matrix2D {
+//   return matrix(1, 0, 0, 1, 0, 0)
+// }
+/***
+ * a  c  e m1.a * m2.a + m1.c * m2.b + m1.0 * m.e, m1.a * m2.c + m1.c * m2.d + m1.0 * m2.e, m1.a * m2.e + m1.c * m2.f + m1.e * 1
+ * b  d  f m1.b * m2.a + m1.d * m2.b + m1.f * m2.0, m1.b * m2.c + m1.d * m2.d + m.f * m2.0, m1.b * m2.e + m1.d * m2.f + m1.f * 1
+ * 0  0  1
+ */
+// static mul (m1: Matrix2D, m2: Matrix2D | number): Matrix2D {
+//   // if (typeof (m2) === 'number') return this.walk(m1, m2, (value1, value2) => value1 * value2)
+//   return matrix(
+//     m1.a * m2.a + m1.c * m2.b,
+//     m1.b * m2.a + m1.d * m2.b,
+//     m1.a * m2.c + m1.c * m2.d,
+//     m1.b * m2.c + m1.d * m2.d,
+//     m1.a * m2.e + m1.c * m2.f + m1.e,
+//     m1.b * m2.e + m1.d * m2.f + m1.f
+//   )
+// }
+// static sum (m1: Matrix2D, m2: Matrix2D | number): Matrix2D {
+//   return this.walk(m1, m2, (value1, value2) => value1 + value2)
+// }
+// private static walk (m1: Matrix2D, m2: Matrix2D | number, delegate: (value1: number, value2: number) => number): Matrix2D {
+//   const result: Matrix2D = {}
+//   const keys = Object.keys(m1)
+//   for (const key of keys) {
+//     const value = typeof (m2) === 'number' ? m2 : m2[key]
+//     result[key] = delegate(m1[key], value)
+//   }
+//   return result
+// }
+// }
+
+// export { MATRIX }

@@ -1,4 +1,4 @@
-import { MATRIX, Matrix2D } from './matrix'
+import { Matrix2D } from './matrix'
 import { Path2DBase } from './path2d-base'
 import { Point } from './point'
 import { point } from './utils'
@@ -51,7 +51,7 @@ type Path2DElement = Arc | ArcTo | BezierCurveTo | Ellipse | LineTo | MoveTo | Q
 export class TransformationPath implements Path2DBase {
   addPath (path: Path2DBase, transform?: Matrix2D): void {
     if (!(path instanceof TransformationPath)) throw new Error('Method unsupported.')
-    if (transform) this.transform = MATRIX.mul(this.transform, transform)
+    if (transform) this.transform.mul(transform)
     for (const item of path.stack) this.stack.push(item)
   }
 
@@ -92,25 +92,25 @@ export class TransformationPath implements Path2DBase {
   }
 
   private stack: Path2DElement[] = []
-  transform: Matrix2D = MATRIX.identity
+  transform = Matrix2D.identity
 
   createPath2D (): Path2D {
     const path = new Path2D()
     for (const i of this.stack) {
       switch (i.type) {
         case 'Arc': {
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           path.arc(p.x, p.y, i.radius, i.startAngle, i.endAngle, i.counterclockwise)
           continue
         }
         case 'ArcTo': {
-          const p1 = MATRIX.applyMatrix(this.transform, point(i.x1, i.y1))
-          const p2 = MATRIX.applyMatrix(this.transform, point(i.x2, i.y2))
+          const p1 = this.transform.applyMatrix(point(i.x1, i.y1))
+          const p2 = this.transform.applyMatrix(point(i.x2, i.y2))
           path.arcTo(p1.x, p1.y, p2.x, p2.y, i.radius)
           continue
         }
         case 'BezierCurveTo': {
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           path.bezierCurveTo(i.cp1x, i.cp1y, i.cp2x, i.cp2y, p.x, p.y)
           continue
         }
@@ -118,28 +118,28 @@ export class TransformationPath implements Path2DBase {
           path.closePath()
           continue
         case 'Ellipse': {
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           path.ellipse(p.x, p.y, i.radiusX, i.radiusY, i.rotation, i.startAngle, i.endAngle, i.counterclockwise)
           continue
         }
         case 'LineTo': {
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           path.lineTo(p.x, p.y)
           continue
         }
         case 'MoveTo': {
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           path.moveTo(p.x, p.y)
           continue
         }
         case 'QuadraticCurveTo': {
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           path.quadraticCurveTo(i.cpx, i.cpy, p.x, p.y)
           continue
         }
         case 'Rect': {
           // TODO apply matrix to Path2D.Rect?
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           path.rect(p.x, p.y, i.w, i.h)
           continue
         }
@@ -153,7 +153,7 @@ export class TransformationPath implements Path2DBase {
     for (const i of this.stack) {
       switch (i.type) {
         case 'Arc': {
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           result.push(p)
           result.push(point(p.x, i.radius))
           result.push(point(p.x, -i.radius))
@@ -162,8 +162,8 @@ export class TransformationPath implements Path2DBase {
           continue
         }
         case 'ArcTo': {
-          const p1 = MATRIX.applyMatrix(this.transform, point(i.x1, i.y1))
-          const p2 = MATRIX.applyMatrix(this.transform, point(i.x2, i.y2))
+          const p1 = this.transform.applyMatrix(point(i.x1, i.y1))
+          const p2 = this.transform.applyMatrix(point(i.x2, i.y2))
           result.push(p1)
           result.push(p2)
           result.push(point(p1.x, i.radius))
@@ -173,7 +173,7 @@ export class TransformationPath implements Path2DBase {
           continue
         }
         case 'BezierCurveTo': {
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           result.push(p)
           result.push(p.x + i.cp1x)
           result.push(p.x + i.cp2x)
@@ -184,7 +184,7 @@ export class TransformationPath implements Path2DBase {
         case 'ClosePath':
           continue
         case 'Ellipse': {
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           result.push(p)
           result.push(point(p.x, i.radiusX))
           result.push(point(p.x, -i.radiusX))
@@ -193,24 +193,24 @@ export class TransformationPath implements Path2DBase {
           continue
         }
         case 'LineTo': {
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           result.push(p)
           continue
         }
         case 'MoveTo': {
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           result.push(p)
           continue
         }
         case 'QuadraticCurveTo': {
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           result.push(p)
           result.push(point(p.x, i.cpx))
           result.push(point(p.y, i.cpy))
           continue
         }
         case 'Rect': {
-          const p = MATRIX.applyMatrix(this.transform, i)
+          const p = this.transform.applyMatrix(i)
           result.push(p)
           result.push(point(p.x + i.w, p.y + i.h))
           continue
