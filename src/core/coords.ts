@@ -4,7 +4,8 @@ import { Size } from './size'
 
 export class Coords {
   static getScreenOrientation (point: Point, size: Size, orientation: Context2DOrientation): Point {
-    let x, y
+    let x = 0
+    let y = 0
     const o = orientation.split('-')
     if (o[0] === 'top') {
       y = point.y

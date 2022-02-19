@@ -24,14 +24,14 @@ const gradToRad = (angle: number): number => {
   return angle * Math.PI / 180
 }
 
-const arrow = (context, point: Point, angle: number, r: number, dir: number) => {
-  const cos1 = dir * Math.cos(angle - Math.PI / 6)
-  const sin1 = dir * Math.sin(angle - Math.PI / 6)
-  context.lineTo(point.x - r * cos1, point.y - r * sin1)
-  context.moveTo(point.x, point.y)
-  const cos2 = dir * Math.cos(angle + Math.PI / 6)
-  const sin2 = dir * Math.sin(angle + Math.PI / 6)
-  context.lineTo(point.x - r * cos2, point.y - r * sin2)
-}
+// const arrow = (context, point: Point, angle: number, r: number, dir: number) => {
+//   const cos1 = dir * Math.cos(angle - Math.PI / 6)
+//   const sin1 = dir * Math.sin(angle - Math.PI / 6)
+//   context.lineTo(point.x - r * cos1, point.y - r * sin1)
+//   context.moveTo(point.x, point.y)
+//   const cos2 = dir * Math.cos(angle + Math.PI / 6)
+//   const sin2 = dir * Math.sin(angle + Math.PI / 6)
+//   context.lineTo(point.x - r * cos2, point.y - r * sin2)
+// }
 
-export { rotate, alfa, arrow }
+export { rotate, alfa }

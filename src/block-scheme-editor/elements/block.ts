@@ -1,12 +1,11 @@
 import { Point } from '../../core/point'
-import { point } from '../../core/utils'
 
 export class Block {
   type: string
   position: Point
   text: string
-  next: Block
-  previous: Block
+  next: Block | null
+  previous: Block | null
   selected: boolean
   hovered: boolean
   _uid: number
@@ -14,7 +13,7 @@ export class Block {
   constructor (_uid: number, type: string) {
     this.type = type
     this._uid = _uid
-    this.position = point(0, 0)
+    this.position = new Point(0, 0)
     this.text = ''
     this.selected = false
     this.hovered = false

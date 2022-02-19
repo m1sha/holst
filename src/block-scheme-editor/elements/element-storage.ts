@@ -28,7 +28,7 @@ export class ElementStorage {
     this.blocks.forEach(p => (p.hovered = false))
   }
 
-  findHoverBlock (point: Point): Block {
+  findHoverBlock (point: Point): Block | null {
     const layers = this.scene.allLayers
     for (const layer of layers) {
       for (const shape of layer.allShapes) {

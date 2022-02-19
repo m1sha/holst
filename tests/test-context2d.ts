@@ -8,10 +8,10 @@ import { TestCommandDispatcher } from './test-draw-command'
 import TestPath2D from './test-path2d'
 
 export default class TestContext2D implements Renderer2DBase {
-  private dispatcher: TestCommandDispatcher
+  private dispatcher: TestCommandDispatcher | null
 
   constructor (dispatcher?: TestCommandDispatcher) {
-    this.dispatcher = dispatcher
+    this.dispatcher = dispatcher || null
   }
 
   drawTextBlock (block: TextBlock, mask?: shape): void {

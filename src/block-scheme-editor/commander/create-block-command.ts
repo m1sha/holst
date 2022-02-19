@@ -6,7 +6,7 @@ import { ElementStorage } from '../elements/element-storage'
 export class CreateBlockCommand implements Command {
   private option: CreateBlockOption
   private id: number = 0
-  private block: Block = null
+  private block: Block | null = null
   constructor (option: CreateBlockOption) {
     this.option = option
   }

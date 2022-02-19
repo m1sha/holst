@@ -5,7 +5,7 @@ import { TextStyle } from './label-style'
 import { Layer } from './layers'
 import { Scene } from './scene'
 import Shape from './shape'
-import array from '../tools/array'
+// import array from '../tools/array'
 import { toAbsolute } from './utils'
 import { deepCopyFast } from '../tools/deep-copy'
 export type Context2DOrientation = 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right'
@@ -32,7 +32,7 @@ export class Renderer2D implements Renderer2DBase {
   get width () { return this.ctx.canvas.width }
   get height () { return this.ctx.canvas.height }
 
-  drawText (label: Text, mask?: Shape) {
+  drawText (label: Text, mask?: Shape | null) {
     this.ctx.save()
     this.assignMask(mask)
     this.assignTextStyle(label.style)
@@ -43,7 +43,7 @@ export class Renderer2D implements Renderer2DBase {
     this.ctx.restore()
   }
 
-  drawTextBlock (block: TextBlock, mask?: Shape): void {
+  drawTextBlock (block: TextBlock, mask?: Shape | null): void {
     this.ctx.save()
     this.assignMask(mask)
     this.assignTextStyle(block.style)
@@ -59,16 +59,16 @@ export class Renderer2D implements Renderer2DBase {
     this.ctx.restore()
   }
 
-  drawShape (shape: Shape, mask?: Shape) {
+  drawShape (shape: Shape, mask?: Shape | null) {
     this.ctx.save()
     this.assignMask(mask)
     const { style } = shape
     const path = shape.createPath()
     if (style.strokeStyle) {
       this.ctx.strokeStyle = style.strokeStyle
-      this.ctx.lineWidth = style.lineWidth
-      this.ctx.lineJoin = style.lineJoin
-      this.ctx.lineDashOffset = style.lineDashOffset
+      this.ctx.lineWidth = style.lineWidth || 1
+      this.ctx.lineJoin = style.lineJoin || 'bevel'
+      this.ctx.lineDashOffset = style.lineDashOffset || 0
       if (style.lineDash) this.ctx.setLineDash(style.lineDash)
       this.ctx.stroke(path)
     }
@@ -93,8 +93,8 @@ export class Renderer2D implements Renderer2DBase {
 
   on (a: (eventType: EventType, event: Event | MouseEvent | KeyboardEvent) => void, ...events: EventType[]) {
     for (let i = 0; i < events.length; i++) {
-      const event = events[i]
-      this.ctx.canvas['on' + event] = e => a(event, e)
+    // const event = events[i]
+    // this.ctx.canvas['on' + event] = e => a(event, e)
     }
   }
 
@@ -108,17 +108,17 @@ export class Renderer2D implements Renderer2DBase {
     this.ctx.font = `${italic}${bold}${fontSize} ${fontName}`
   }
 
-  private assignMask (mask?: Shape) {
+  private assignMask (mask?: Shape | null) {
     if (!mask) return
     this.ctx.clip(mask.createPath())
   }
 
   private drawLayer (layer: Readonly<Layer>) {
     for (const image of layer.images) {
-      this.ctx.drawImage(image.src, image.sx, image.sy, image.sWidth, image.sHeight, image.dx, image.dy, image.dWidth, image.dHeight)
+      this.ctx.drawImage(image.src, image.sx, image.sy, image.sWidth || 0, image.sHeight || 0, image.dx || 0, image.dy || 0, image.dWidth || 0, image.dHeight || 0)
     }
 
-    const renderList = [...layer.allShapes, ...layer.textBlocks].sort(array.asc('order'))
+    const renderList = [...layer.allShapes, ...layer.textBlocks]// .sort(array.asc('order'))
     for (const item of renderList) {
       if (item instanceof Shape) this.drawShape(item, layer.mask)
       if (item instanceof TextBlock) {
@@ -136,8 +136,8 @@ export class Renderer2D implements Renderer2DBase {
     for (const label of layer.labels) {
       const l = {
         value: label.value,
-        x: w => toAbsolute({ x: label.x(w), y: 0 }, layer.orientation, layer.location, layer.originSize).x,
-        y: w => toAbsolute({ x: 0, y: label.y(w) }, layer.orientation, layer.location, layer.originSize).y,
+        x: (w: number) => toAbsolute({ x: label.x(w), y: 0 }, layer.orientation, layer.location, layer.originSize).x,
+        y: (w: number) => toAbsolute({ x: 0, y: label.y(w) }, layer.orientation, layer.location, layer.originSize).y,
         style: label.style
       }
       this.drawText(l, layer.mask)

@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
-        "strict": false,
+        "strict": true,
         "target": "es5",
         "declaration": false,
         "rootDir": ".",
         "stripInternal": true, 
-        "sourceMap": true       
+        "sourceMap": true ,
+        "importHelpers":true,
+        "forceConsistentCasingInFileNames":true
     },
     "exclude": ["node_modules"]
 }

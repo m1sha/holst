@@ -1,15 +1,15 @@
 export default {
-  asc (field, fieldType?) {
-    return sort(1, field, fieldType)
+  asc (field: string, fieldType?: string) {
+    return sort(1, field, fieldType || '')
   },
 
-  desk (field, fieldType) { // desc
+  desk (field: string, fieldType: string) { // desc
     return sort(-1, field, fieldType)
   }
 }
 
-function sort (direct, field, fieldType) {
-  return function (a, b) {
+function sort (direct: number, field: string, fieldType: string) {
+  return function (a: Record<string, unknown>, b: Record<string, unknown>) {
     const l = toType(a[field], fieldType)
     const r = toType(b[field], fieldType)
 
@@ -19,7 +19,7 @@ function sort (direct, field, fieldType) {
   }
 }
 
-function toType (value, fieldType) {
+function toType (value: unknown, fieldType: string) {
   const nValue = value
   //   if (fieldType === 'date') {
   //     if (nValue.indexOf('-') > -1) {
@@ -33,5 +33,5 @@ function toType (value, fieldType) {
   //     return toHs(value)
   //   }
 
-  return nValue
+  return nValue as number
 }

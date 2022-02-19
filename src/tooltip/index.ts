@@ -4,6 +4,7 @@ import { Layer } from '../core/layers'
 import { Point } from '../core/point'
 import { Viewport } from '../core/viewport'
 import { TooltipStyle } from '../chart3/chart-options'
+import { Rect } from '../core/rect'
 
 const createTooltipWindow = (layer: Layer, point: Point, viewport: Viewport, strings: string[], tooltipStyle: TooltipStyle): void => {
   const style: TextStyle = { color: colors.selectLineFontColor, fontSize: '11pt' }
@@ -17,7 +18,7 @@ const createTooltipWindow = (layer: Layer, point: Point, viewport: Viewport, str
   if (viewport.right < point.x + width) {
     shiftLeft = width + 16
   }
-  tooltip.rect({ x: point.x + 8 - shiftLeft, y: point.y, width, height })
+  tooltip.rect(new Rect(point.x + 8 - shiftLeft, point.y, width, height))
   tooltip.style.strokeStyle = '#3a87a0'
   tooltip.style.fillStyle = '#faf7f0'
   let y = point.y + paddingTop

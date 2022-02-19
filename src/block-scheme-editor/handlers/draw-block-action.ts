@@ -1,8 +1,8 @@
 import { TextStyle } from '../../core/label-style'
 import { Layer } from '../../core/layers'
+import { Point } from '../../core/point'
 import { Rect } from '../../core/rect'
 import { Scene } from '../../core/scene'
-import { point, rect } from '../../core/utils'
 import { Block } from '../elements/block'
 
 export default function (s: Scene, block: Block) {
@@ -15,11 +15,11 @@ export default function (s: Scene, block: Block) {
 
   const { x, y } = block.position
 
-  shape.rect(rect(x, y, width + 10, height))
+  shape.rect(new Rect(x, y, width + 10, height))
 
-  layer.createTextBlock(block.text, helpers.textStyle, point(x + 5, y + height - height / 4))
+  layer.createTextBlock(block.text, helpers.textStyle, new Point(x + 5, y + height - height / 4))
   if (block.selected) {
-    helpers.drawSelectionRect(rect(x, y, width + 10, height), layer)
+    helpers.drawSelectionRect(new Rect(x, y, width + 10, height), layer)
   }
 }
 
@@ -34,7 +34,7 @@ const helpers = {
       lineDashOffset: 2,
       lineWidth: 3
     })
-      .rect(rect(x - margin, y - margin, width + (margin * 2), height + (margin * 2)))
+      .rect(new Rect(x - margin, y - margin, width + (margin * 2), height + (margin * 2)))
   },
   getTextWidth (text: string, layer: Layer): number {
     return layer.measureText(text, this.textStyle).width

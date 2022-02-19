@@ -8,8 +8,8 @@ export default interface Renderer2DBase {
   drawText(label: Text, mask?: Shape): void
   drawTextBlock(label: TextBlock, mask?: Shape): void
   drawShape (shape: Shape, mask?: Shape): void
-  measureText (text: string, style: TextStyle)
+  measureText (text: string, style: TextStyle): void
   createPath(): Path2D
   drawImage(image: HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap, sx: number, sy?: number, sWidth?: number, sHeight?: number, dx?: number, dy?: number, dWidth?: number, dHeight?: number): void
-  on (a: (eventType: EventType, event: Event | MouseEvent | KeyboardEvent) => void, ...events: EventType[])
+  on (a: (eventType: EventType, event: Event | MouseEvent | KeyboardEvent) => void, ...events: EventType[]): void
 }

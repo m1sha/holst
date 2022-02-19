@@ -1,9 +1,9 @@
 import { ArcCommand, LineToCommand, MoveToCommand, RectCommand, TestCommandDispatcher } from './test-draw-command'
 
 export default class TestPath2D implements Path2D {
-  private dispatcher: TestCommandDispatcher
+  private dispatcher?: TestCommandDispatcher | null
 
-  constructor (dispatcher: TestCommandDispatcher) {
+  constructor (dispatcher?: TestCommandDispatcher | null) {
     this.dispatcher = dispatcher
   }
 
@@ -12,7 +12,7 @@ export default class TestPath2D implements Path2D {
   }
 
   arc (x: number, y: number, radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void {
-    this.dispatcher.add(new ArcCommand(x, y, radius, startAngle, endAngle, counterclockwise))
+    if (this.dispatcher) this.dispatcher.add(new ArcCommand(x, y, radius, startAngle, endAngle, counterclockwise))
   }
 
   arcTo (x1: number, y1: number, x2: number, y2: number, radius: number): void {
@@ -37,11 +37,11 @@ export default class TestPath2D implements Path2D {
   }
 
   lineTo (x: number, y: number): void {
-    this.dispatcher.add(new LineToCommand(x, y))
+    if (this.dispatcher) this.dispatcher.add(new LineToCommand(x, y))
   }
 
   moveTo (x: number, y: number): void {
-    this.dispatcher.add(new MoveToCommand(x, y))
+    if (this.dispatcher) this.dispatcher.add(new MoveToCommand(x, y))
   }
 
   quadraticCurveTo (cpx: number, cpy: number, x: number, y: number): void {
@@ -49,7 +49,7 @@ export default class TestPath2D implements Path2D {
   }
 
   rect (x: number, y: number, w: number, h: number): void {
-    this.dispatcher.add(new RectCommand(x, y, w, h))
+    if (this.dispatcher) this.dispatcher.add(new RectCommand(x, y, w, h))
   }
 
   closePath (): void {

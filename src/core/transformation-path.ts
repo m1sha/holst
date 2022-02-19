@@ -148,7 +148,7 @@ export class TransformationPath implements Path2DBase {
   }
 
   toPoints (): Point[] {
-    const result = []
+    const result: Point[] = []
     for (const i of this.stack) {
       switch (i.type) {
         case 'Arc': {
@@ -174,10 +174,10 @@ export class TransformationPath implements Path2DBase {
         case 'BezierCurveTo': {
           const p = this.transform.applyMatrix(i)
           result.push(p)
-          result.push(p.x + i.cp1x)
-          result.push(p.x + i.cp2x)
-          result.push(p.y + i.cp1y)
-          result.push(p.y + i.cp2y)
+          // result.push(p.x + i.cp1x)
+          // result.push(p.x + i.cp2x)
+          // result.push(p.y + i.cp1y)
+          // result.push(p.y + i.cp2y)
           continue
         }
         case 'ClosePath':

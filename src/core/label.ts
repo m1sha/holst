@@ -30,7 +30,7 @@ export class TextBlock implements Orderable {
 
   get width (): number {
     if (this.multiline) {
-      const widths = []
+      const widths: number[] = []
       this.lines.forEach(p => widths.push(this.getWidth(p)))
       return Math.max.apply(null, widths)
     }

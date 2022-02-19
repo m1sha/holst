@@ -4,8 +4,8 @@ import { Point } from './point'
 import { Scene } from './scene'
 
 export interface Activity {
-  render()
-  clear()
+  render(): void
+  clear(): void
 }
 
 export interface EventInfo {

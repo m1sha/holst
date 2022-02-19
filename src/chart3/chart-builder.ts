@@ -15,7 +15,9 @@ export class ChartBuilder {
       this.data = data
       this.options = options
       this.chart = new ChartBase(canvas)
-      this.render = new Renderer2D(canvas.getContext('2d'))
+      const ctx = canvas.getContext('2d')
+      if (!ctx) throw new Error('e')
+      this.render = new Renderer2D(ctx)
       const { maxWidth, maxHeight, minWidth, minHeight } = this.calculateBoundary()
       this.chart.legend = options.legend || {}
       this.chart.maxWidth = maxWidth
@@ -44,34 +46,34 @@ export class ChartBuilder {
       }
     }
 
-    protected getXValue (obj: unknown) {
+    protected getXValue (obj: Record<string, unknown>): number {
       const value = obj[this.options.xFieldName]
       if (value === undefined || value === null) throw new Error('X value is not defined')
-      return value
+      return value as number
     }
 
-    protected getYValue (obj: unknown) {
+    protected getYValue (obj: Record<string, unknown>): number {
       const value = obj[this.options.yFieldName]
       if (value === undefined || value === null) throw new Error('Y value is not defined')
-      return value
+      return value as number
     }
 
-    protected getDisplayValues (item: unknown, tooltip: boolean) {
-      let xValue: unknown = this.getXValue(item)
+    protected getDisplayValues (item: Record<string, unknown>, tooltip: boolean) {
+      let xValue: number = this.getXValue(item)
       if (tooltip && this.options.xFieldToolTipFormat) {
-        xValue = this.options.xFieldToolTipFormat(xValue)
+        xValue = this.options.xFieldToolTipFormat(xValue) as number
       } else {
         if (this.options.xFieldDisplayFormat) {
-          xValue = this.options.xFieldDisplayFormat(xValue)
+          xValue = this.options.xFieldDisplayFormat(xValue) as number
         }
       }
 
-      let yValue: unknown = this.getYValue(item)
+      let yValue: number = this.getYValue(item)
       if (tooltip && this.options.yFieldToolTipFormat) {
-        yValue = this.options.yFieldToolTipFormat(yValue)
+        yValue = this.options.yFieldToolTipFormat(yValue) as number
       } else {
         if (this.options.yFieldDisplayFormat) {
-          yValue = this.options.yFieldDisplayFormat(yValue)
+          yValue = this.options.yFieldDisplayFormat(yValue) as number
         }
       }
       return { xValue, yValue }

@@ -2,17 +2,17 @@ import { Point } from './point'
 
 export class Matrix2D {
   // m11 Horizontal scaling. A value of 1 results in no scaling
-  a?: number
+  a: number
   // m12 Vertical skewing.
-  b?: number
+  b: number
   // m21 Horizontal skewing.
-  c?: number
+  c: number
   // m22 Vertical scaling. A value of 1 results in no scaling
-  d?: number
+  d: number
   // dx Horizontal translation (moving).
-  e?: number
+  e: number
   // dy Vertical translation (moving).
-  f?: number
+  f: number
 
   m11?: number
   m12?: number

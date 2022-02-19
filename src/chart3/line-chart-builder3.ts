@@ -7,10 +7,11 @@ import { Constraints } from '../core/constraints'
 import { Layer } from '../core/layers'
 import { Padding } from '../core/padding'
 import { Point } from '../core/point'
-import { padding, point, rect } from '../core/utils'
+import { padding } from '../core/utils'
 import { Viewport } from '../core/viewport'
 import { createTooltipWindow } from '../tooltip'
 import styles from './styles'
+import { Rect } from '../core/rect'
 
 export class LineChartBuilder3 extends LineChartBuilder {
   private readonly constraints: Constraints
@@ -39,7 +40,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
     // this.chart.createLayer().createShape({ strokeStyle: '#A31199' }).rect(rect(0, 0, canvas.width, canvas.height))
     if (options.legend?.chartName) {
       const chartName = options.legend?.chartName
-      const text = { value: chartName, x: w => canvas.width / 2 - w / 2, y: w => canvas.height - 10, style: styles.chartNameText }
+      const text = { value: chartName, x: (w: number) => canvas.width / 2 - w / 2, y: (w: number) => canvas.height - 10, style: styles.chartNameText }
       this.chart.createLayer().createText(text)
     }
   }
@@ -80,21 +81,21 @@ export class LineChartBuilder3 extends LineChartBuilder {
     for (let i = 1; i <= ySegmentCount; i++) {
       if (absMinY > Math.abs(i * segmentHeight) && minY > 0) continue
       const y = (Math.abs(i * segmentHeight) + offsetY) * ratio.y
-      segments.lineH(point(-5, y), layer.size.width + 5)
+      segments.lineH(new Point(-5, y), layer.size.width + 5)
     }
 
     if (minY < 0) {
       for (let i = 1; i <= ySegmentCount; i++) {
         if (absMinY < Math.abs(i * segmentHeight)) break
         const y = (absMinY - Math.abs(i * segmentHeight)) * ratio.y
-        segments.lineH(point(-5, y), layer.size.width)
+        segments.lineH(new Point(-5, y), layer.size.width)
       }
     }
 
     const segmentWidth = maxX / xSegmentCount + 1
     for (let i = 1; i <= xSegmentCount; i++) {
       const x = Math.abs(i * segmentWidth) * ratio.x
-      segments.lineV(point(x, 0), topY)
+      segments.lineV(new Point(x, 0), topY)
     }
 
     return this
@@ -107,7 +108,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
 
     if (minY <= 0) {
       const yText = layer.createTextBlock('0', style)
-      yText.target = point(-15, offsetY * ratio.y)
+      yText.target = new Point(-15, offsetY * ratio.y)
     }
 
     const segmentHeight = absMaxY / ySegmentCount
@@ -116,7 +117,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
       const y = (Math.abs(i * segmentHeight) + offsetY) * ratio.y
       const value = this.options.yAxisValueFormat ? this.options.yAxisValueFormat(i * segmentHeight) : toDisplayText(i * segmentHeight)
       const yText = layer.createTextBlock(value, style)
-      yText.target = point(-yText.width - 10, y)
+      yText.target = new Point(-yText.width - 10, y)
     }
 
     if (minY < 0) {
@@ -125,7 +126,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
         const y = (absMinY - Math.abs(i * segmentHeight)) * ratio.y
         const value = this.options.yAxisValueFormat ? this.options.yAxisValueFormat(i * segmentHeight) : toDisplayText(i * segmentHeight * -1)
         const yText = layer.createTextBlock('-' + value, style)
-        yText.target = point(-yText.width - 10, y)
+        yText.target = new Point(-yText.width - 10, y)
       }
     }
 
@@ -136,7 +137,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
       const { xValue } = this.getDisplayValues(item, false)
       const xText = layer.createTextBlock(xValue.toString(), style)
       const x = Math.abs(i * segmentWidth) * ratio.x - (xText.width / 2)
-      xText.target = point(x, -20)
+      xText.target = new Point(x, -20)
     }
 
     return this
@@ -159,7 +160,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
       const downLineY = currMinY * this.ratio.y
       const thickness = upLineY - downLineY
 
-      thresholdLayer.createShape({ strokeStyle: item.color, lineWidth: thickness }).lineH(point(0, upLineY - thickness / 2), thresholdLayer.size.width)
+      thresholdLayer.createShape({ strokeStyle: item.color, lineWidth: thickness }).lineH(new Point(0, upLineY - thickness / 2), thresholdLayer.size.width)
     }
     return this
   }
@@ -190,10 +191,10 @@ export class LineChartBuilder3 extends LineChartBuilder {
         // const by = thresholdLayer.size.width / 2
         thresholdLayer
           .createShape({ strokeStyle: '#ff0000', fillStyle: '#fff', lineWidth: 2 })
-          .rect(rect(-12 - textWidth, upLineY, textWidth + 8, 30))
+          .rect(new Rect(-12 - textWidth, upLineY, textWidth + 8, 30))
         const upBorderText = thresholdLayer.createTextBlock(text, style)
-        upBorderText.target = point(-textWidth - 8, upLineY + 10)
-        thresholdLayer.createShape({ strokeStyle: '#ff0000', lineWidth: 2 }).lineH(point(0, upLineY), thresholdLayer.size.width)
+        upBorderText.target = new Point(-textWidth - 8, upLineY + 10)
+        thresholdLayer.createShape({ strokeStyle: '#ff0000', lineWidth: 2 }).lineH(new Point(0, upLineY), thresholdLayer.size.width)
       }
 
       const maxDownBorder = (this.absMinY + this.offsetY) * this.ratio.y
@@ -203,10 +204,10 @@ export class LineChartBuilder3 extends LineChartBuilder {
         // const by = thresholdLayer.size.width / 2
         thresholdLayer
           .createShape({ strokeStyle: '#ff0000', fillStyle: '#fff', lineWidth: 2 })
-          .rect(rect(-12 - textWidth, downLineY, textWidth + 8, 30))
+          .rect(new Rect(-12 - textWidth, downLineY, textWidth + 8, 30))
         const bottomBorderText = thresholdLayer.createTextBlock(text, style)
-        bottomBorderText.target = point(-textWidth - 8, downLineY + 10)
-        thresholdLayer.createShape({ strokeStyle: '#ff0000', lineWidth: 2 }).lineH(point(0, downLineY), thresholdLayer.size.width)
+        bottomBorderText.target = new Point(-textWidth - 8, downLineY + 10)
+        thresholdLayer.createShape({ strokeStyle: '#ff0000', lineWidth: 2 }).lineH(new Point(0, downLineY), thresholdLayer.size.width)
       }
     }
     return this
@@ -220,15 +221,15 @@ export class LineChartBuilder3 extends LineChartBuilder {
     const padding = this.getPadding(this.testLayer)
     const index = Math.floor(((p.x - this.chart.padding.left) / this.chart.ratio.x))
     const item = this.data[index]
-    if (!item) return
+    if (!item) return false
     const viewport = new Viewport(this.chart.size, padding)
     let value = this.getYValue(item)
     value = value < 0 ? absMinY - Math.abs(value) : value + offsetY
-    const sp = point(index * ratio.x + padding.left, (layer.size.height - (padding.top)) - value * ratio.y)
+    const sp = new Point(index * ratio.x + padding.left, (layer.size.height - (padding.top)) - value * ratio.y)
     createCorner(layer, sp, { width: viewport.x, height: viewport.bottom - (minY < 0 ? absMinY : 0) })
     const { xValue, yValue } = this.getDisplayValues(item, true)
-    const xText = this.chart.legend.xTitle + xValue
-    const yText = this.chart.legend.yTitle + yValue
+    const xText = this.chart.legend.xTitle + xValue.toString()
+    const yText = this.chart.legend.yTitle + yValue.toString()
     createTooltipWindow(layer, sp, viewport, [xText, yText], this.options.tooltipStyle || {})
     return false
   }

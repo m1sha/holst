@@ -13,7 +13,9 @@ export class Editor {
 
   constructor (canvas: HTMLCanvasElement) {
     this.scene = new Scene(canvas)
-    this.renderer = new Renderer2D(canvas.getContext('2d'))
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('')
+    this.renderer = new Renderer2D(ctx)
     this.evenHandler = new EventHandler(this.scene, this.renderer)
     this.storage = new ElementStorage(this.scene, this.renderer)
     this.controller = new CommandController(this)

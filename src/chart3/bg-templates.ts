@@ -44,16 +44,16 @@ const createThresholds = (layer: Layer, axis: 'x' | 'y', thresholds: { value: nu
   for (const threshold of thresholds) {
     const shape = layer.createShape()
     if (axis === 'y') {
-      const rect = {
-        x: padding.left + 2,
-        y: bounds.height - (bounds.y + padding.bottom) - 2,
-        width: bounds.width - padding.left - padding.right - 4,
-        height: (threshold.value - padding.top) - (bounds.height - padding.bottom - padding.top)
-      }
+      const rect = new Rect(
+        padding.left + 2,
+        bounds.height - (bounds.y + padding.bottom) - 2,
+        bounds.width - padding.left - padding.right - 4,
+        (threshold.value - padding.top) - (bounds.height - padding.bottom - padding.top)
+      )
       shape.rect(rect)
     }
     if (axis === 'x') {
-      shape.rect({ x: threshold.value, y: bounds.y, width: threshold.value, height: bounds.height })
+      shape.rect(new Rect(threshold.value, bounds.y, threshold.value, bounds.height))
     }
     shape.style.fillStyle = threshold.color
   }

@@ -8,7 +8,7 @@ export class Runtime {
   private editor: Editor
   private eventHandler: EventHandler
 
-  private lastClickPos: Point
+  private lastClickPos: Point | null = null
   constructor (editor: Editor) {
     this.editor = editor
     this.eventHandler = editor.evenHandler
@@ -47,12 +47,14 @@ export class Runtime {
 
     if (storage.selectRegion) {
       const start = this.lastClickPos
+      if (!e.point || !start) return
       storage.selectRegion = new Rect(start.x, start.y, e.point.x, e.point.y)
     }
     storage.applyChanges()
   }
 
   private mousedown (e: EventInfo) {
+    if (!e.point) return
     this.lastClickPos = e.point
     const { storage } = this.editor
     storage.selectRegion = new Rect(e.point.x, e.point.y, 5, 5)

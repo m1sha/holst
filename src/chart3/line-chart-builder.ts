@@ -36,7 +36,7 @@ export class LineChartBuilder extends ChartBuilder {
   }
 
   onMove (e: EventInfo, options: ChartOptions): void {
-    if (this.options.onMoveRaw) {
+    if (this.options.onMoveRaw && e.point) {
       this.options.onMoveRaw(this.chart, e.point)
     }
   }

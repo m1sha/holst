@@ -14,12 +14,12 @@ import { TextMeasurer } from './text-measurer'
 import { TransformationPath } from './transformation-path'
 
 export class Layer {
-  private shapes: Shape[]
-  labels: Text[]
-  textBlocks: TextBlock[]
-  images: Images
+  private shapes: Shape[] = []
+  labels: Text[] = []
+  textBlocks: TextBlock[] = []
+  images: Images = []
   mask: Shape | null
-  private orderCounter: number
+  private orderCounter: number = 0
   readonly location: Point
   readonly size: Size
   readonly originSize: Readonly<Size>
@@ -44,7 +44,7 @@ export class Layer {
     return new Rect(this.location.x, this.location.y, this.size.width, this.size.height)
   }
 
-  createShape (style: ShapeStyle = null): Shape {
+  createShape (style: ShapeStyle | null = null): Shape {
     const path = new TransformationPath()
     const result = new Shape(this, path, ++this.orderCounter, style)
     this.shapes.push(result)

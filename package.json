@@ -52,5 +52,8 @@
       "!**/node_modules/**",
       "!*.d.ts"
     ]
+  },
+  "dependencies": {
+    "tslib": "^2.3.1"
   }
 }
