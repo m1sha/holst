@@ -12,7 +12,6 @@ import { ShapeStyle } from './shape-style'
 import { Size } from './size'
 import { TextMeasurer } from './text-measurer'
 import { TransformationPath } from './transformation-path'
-import { rect } from './utils'
 
 export class Layer {
   private shapes: Shape[]
@@ -30,7 +29,7 @@ export class Layer {
   constructor (size: Size, orientation: Context2DOrientation) {
     this.orientation = orientation
     this.constraints = { minX: 0, minY: 0, maxX: size.width, maxY: size.height }
-    this.location = { x: 0, y: 0 }
+    this.location = new Point(0, 0)
     this.size = { width: size.width, height: size.height }
     this.originSize = { width: size.width, height: size.height }
     this.mask = null
@@ -42,7 +41,7 @@ export class Layer {
   }
 
   get bounds (): Readonly<Rect> {
-    return { x: this.location.x, y: this.location.y, width: this.size.width, height: this.size.height }
+    return new Rect(this.location.x, this.location.y, this.size.width, this.size.height)
   }
 
   createShape (style: ShapeStyle = null): Shape {
@@ -101,7 +100,7 @@ export class Layer {
   createMask (defaultRect?: boolean): Shape {
     this.mask = this.createShape()
     if (defaultRect || defaultRect === undefined) {
-      this.mask.rect(rect(0, 0, this.size.width, this.size.height))
+      this.mask.rect(new Rect(0, 0, this.size.width, this.size.height))
     }
     return this.mask
   }

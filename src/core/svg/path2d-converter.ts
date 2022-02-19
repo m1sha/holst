@@ -1,6 +1,5 @@
-import { POINT, Point } from '../point'
+import { Point } from '../point'
 import { TransformationPath } from '../transformation-path'
-import { point } from '../utils'
 import { SvgPathDElement } from './svg-path-d-element'
 
 export function toPath2D (items: SvgPathDElement[], position: Point, path2d?: TransformationPath, ratio?: Point, scale: number = 1, move: Point = { x: 0, y: 0 }): TransformationPath {
@@ -12,13 +11,13 @@ export function toPath2D (items: SvgPathDElement[], position: Point, path2d?: Tr
   for (const item of items) {
     switch (item.type) {
       case 'M': {
-        const p = POINT.mul(POINT.mul(item.point, point(dx, dy)), point(scale, scale))
+        const p = Point.mul(Point.mul(item.point, new Point(dx, dy)), new Point(scale, scale))
         position.x = p.x
         position.y = p.y
         continue
       }
       case 'm': {
-        const p = POINT.mul(POINT.mul(POINT.sum(position, item.point), point(dx, dy)), point(scale, scale))
+        const p = Point.mul(Point.mul(Point.sum(position, item.point), new Point(dx, dy)), new Point(scale, scale))
         position.x = p.x
         position.y = p.y
         continue
@@ -44,11 +43,11 @@ export function toPath2D (items: SvgPathDElement[], position: Point, path2d?: Tr
         continue
       }
       case 'L':
-        position = POINT.sum(position, item.point)
+        position = Point.sum(position, item.point)
         path.lineTo(position.x, position.y)
         continue
       case 'l':
-        position = POINT.sum(position, item.point)
+        position = Point.sum(position, item.point)
         path.lineTo(item.point.x, item.point.y)
         continue
       case 'Z':

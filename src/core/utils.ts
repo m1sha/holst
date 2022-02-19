@@ -1,16 +1,7 @@
 import { Context2DOrientation } from './renderer2D'
 import { Padding } from './padding'
 import { Point } from './point'
-import { Rect } from './rect'
 import { Size } from './size'
-
-const rect = (x: number, y: number, width: number, height: number): Rect => {
-  return { x, y, width, height }
-}
-
-const point = (x: number, y: number): Point => {
-  return { x, y }
-}
 
 const size = (width: number, height: number): Size => {
   return { width, height }
@@ -28,4 +19,4 @@ const toAbsolute = (point: Point, orientation: Context2DOrientation, location: P
   }
 }
 
-export { rect, point, size, padding, toAbsolute }
+export { size, padding, toAbsolute }

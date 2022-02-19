@@ -1,9 +1,8 @@
 import { Padding } from './padding'
 import { Point } from './point'
-import { Rect } from './rect'
 import { Size } from './size'
 
-export class Viewport implements Rect, Padding {
+export class Viewport implements Padding {
   readonly x: number
   readonly y: number
   readonly width: number

@@ -1,13 +1,12 @@
 import { Point } from '../point'
 import { parseSvgPathD, toSvgPathD } from './svg-path-d-parser'
-import { point } from '../utils'
 import { SvgPathDElement } from './svg-path-d-element'
 import { toPath2D } from './path2d-converter'
 import { TransformationPath } from '../transformation-path'
 
 export class SvgPathD {
   private items: SvgPathDElement[] = []
-  private position: Point = point(0, 0)
+  private position = new Point(0, 0)
   constructor (d?: string) {
     if (d) this.items = parseSvgPathD(d)
   }

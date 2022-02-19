@@ -170,15 +170,15 @@ export default class Shape implements Orderable {
     const y = Math.min.apply(null, yList)
     const x1 = Math.max.apply(null, xList)
     const y1 = Math.max.apply(null, yList)
-    return { x, y, width: x1 - x, height: y1 - y }
+    return new Rect(x, y, x1 - x, y1 - y)
   }
 
   private getPoint (point: Point) : Point {
     const isTopLeft = this.orientation === 'top-left'
-    return {
-      x: this.location.x + point.x,
-      y: isTopLeft ? point.y + this.location.y : (this.originSize.height - point.y) - this.location.y
-    }
+    return new Point(
+      this.location.x + point.x,
+      isTopLeft ? point.y + this.location.y : (this.originSize.height - point.y) - this.location.y
+    )
   }
 
   createPath (): Path2DBase {

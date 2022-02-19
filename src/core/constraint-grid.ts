@@ -1,7 +1,6 @@
 import { Size } from './size'
 import { Rect } from './rect'
 import { Point } from './point'
-import { point, rect } from './utils'
 
 export type ConstraintGridCell = { rect: Rect, center: Point }
 export class ConstraintGrid {
@@ -32,8 +31,8 @@ export class ConstraintGrid {
         const x = cellWidth * j
         const y = cellHeight * i
         this.cells.push({
-          rect: rect(x, y, cellWidth, cellHeight),
-          center: point(cellWidth / 2 + x, cellHeight / 2 + y)
+          rect: new Rect(x, y, cellWidth, cellHeight),
+          center: new Point(cellWidth / 2 + x, cellHeight / 2 + y)
         })
       }
     }

@@ -1,6 +1,6 @@
 import { EventHandler, EventInfo } from '../core/event-handler'
 import { Point } from '../core/point'
-import { rect } from '../core/utils'
+import { Rect } from '../core/rect'
 import { Editor } from './editor'
 import { cursor } from './utils/cursor'
 
@@ -47,7 +47,7 @@ export class Runtime {
 
     if (storage.selectRegion) {
       const start = this.lastClickPos
-      storage.selectRegion = rect(start.x, start.y, e.point.x, e.point.y)
+      storage.selectRegion = new Rect(start.x, start.y, e.point.x, e.point.y)
     }
     storage.applyChanges()
   }
@@ -55,7 +55,7 @@ export class Runtime {
   private mousedown (e: EventInfo) {
     this.lastClickPos = e.point
     const { storage } = this.editor
-    storage.selectRegion = rect(e.point.x, e.point.y, 5, 5)
+    storage.selectRegion = new Rect(e.point.x, e.point.y, 5, 5)
     storage.applyChanges()
   }
 

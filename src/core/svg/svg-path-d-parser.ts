@@ -1,4 +1,4 @@
-import { point } from '../utils'
+import { Point } from '../point'
 import { SvgPathDElement } from './svg-path-d-element'
 
 export function parseSvgPathD (d: string): SvgPathDElement[] {
@@ -28,7 +28,7 @@ export function parseSvgPathD (d: string): SvgPathDElement[] {
         i = res.i
         const x = parseFloat(res.params[0])
         const y = parseFloat(res.params[1])
-        result.push({ type: chr, point: point(x, y) })
+        result.push({ type: chr, point: new Point(x, y) })
         continue
       }
       case 'H':

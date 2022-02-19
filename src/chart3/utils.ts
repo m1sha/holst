@@ -27,7 +27,7 @@ export function getRatio (constraints: Constraints, bounds: Rect): Point {
   if (constraints.minY < 0) {
     y = bounds.height / (constraints.maxY + Math.abs(constraints.minY))
   }
-  return { x, y }
+  return new Point(x, y)
 }
 
 export function toDisplayText (num: number) {

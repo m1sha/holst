@@ -1,5 +1,4 @@
 import { Point } from './point'
-import { point } from './utils'
 
 export class Matrix2D {
   // m11 Horizontal scaling. A value of 1 results in no scaling
@@ -84,7 +83,7 @@ export class Matrix2D {
   applyMatrix (p: Point): Point {
     const { a, b, c, d, e, f } = this
     const { x, y } = p
-    return point(a * x + c * y + e, b * x + d * y + f)
+    return new Point(a * x + c * y + e, b * x + d * y + f)
   }
 
   static get identity (): Matrix2D {
@@ -95,39 +94,3 @@ export class Matrix2D {
 export function matrix (a: number, b: number, c: number, d: number, e: number, f: number): Matrix2D {
   return new Matrix2D().change({ a, b, c, d, e, f })
 }
-
-// class MATRIX {
-// static get identity (): Matrix2D {
-//   return matrix(1, 0, 0, 1, 0, 0)
-// }
-/***
- * a  c  e m1.a * m2.a + m1.c * m2.b + m1.0 * m.e, m1.a * m2.c + m1.c * m2.d + m1.0 * m2.e, m1.a * m2.e + m1.c * m2.f + m1.e * 1
- * b  d  f m1.b * m2.a + m1.d * m2.b + m1.f * m2.0, m1.b * m2.c + m1.d * m2.d + m.f * m2.0, m1.b * m2.e + m1.d * m2.f + m1.f * 1
- * 0  0  1
- */
-// static mul (m1: Matrix2D, m2: Matrix2D | number): Matrix2D {
-//   // if (typeof (m2) === 'number') return this.walk(m1, m2, (value1, value2) => value1 * value2)
-//   return matrix(
-//     m1.a * m2.a + m1.c * m2.b,
-//     m1.b * m2.a + m1.d * m2.b,
-//     m1.a * m2.c + m1.c * m2.d,
-//     m1.b * m2.c + m1.d * m2.d,
-//     m1.a * m2.e + m1.c * m2.f + m1.e,
-//     m1.b * m2.e + m1.d * m2.f + m1.f
-//   )
-// }
-// static sum (m1: Matrix2D, m2: Matrix2D | number): Matrix2D {
-//   return this.walk(m1, m2, (value1, value2) => value1 + value2)
-// }
-// private static walk (m1: Matrix2D, m2: Matrix2D | number, delegate: (value1: number, value2: number) => number): Matrix2D {
-//   const result: Matrix2D = {}
-//   const keys = Object.keys(m1)
-//   for (const key of keys) {
-//     const value = typeof (m2) === 'number' ? m2 : m2[key]
-//     result[key] = delegate(m1[key], value)
-//   }
-//   return result
-// }
-// }
-
-// export { MATRIX }

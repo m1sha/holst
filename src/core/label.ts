@@ -1,7 +1,6 @@
 import { TextStyle } from './label-style'
 import Orderable from './orderable'
 import { Point } from './point'
-import { point } from './utils'
 
 export interface Text {
   value: string,
@@ -24,7 +23,7 @@ export class TextBlock implements Orderable {
     this.style = style
     this.order = order
     this.measure = measure
-    this.target = point(0, 0)
+    this.target = new Point(0, 0)
   }
 
   get multiline () : boolean { return this.lines.length > 1 }

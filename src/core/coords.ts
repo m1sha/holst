@@ -18,6 +18,6 @@ export class Coords {
     if (o[1] === 'right') {
       x = size.width - point.x
     }
-    return { x, y }
+    return new Point(x, y)
   }
 }
