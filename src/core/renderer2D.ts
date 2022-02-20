@@ -69,6 +69,7 @@ export class Renderer2D implements Renderer2DBase {
       this.ctx.lineWidth = style.lineWidth || 1
       this.ctx.lineJoin = style.lineJoin || 'bevel'
       this.ctx.lineDashOffset = style.lineDashOffset || 0
+      this.ctx.lineCap = style.lineCap || 'butt'
       if (style.lineDash) this.ctx.setLineDash(style.lineDash)
       this.ctx.stroke(path)
     }
