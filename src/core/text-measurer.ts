@@ -1,12 +1,9 @@
 import { TextStyle } from './label-style'
+import Context2DFactory from './canvas-rendering-context-2d-factory'
 
 export class TextMeasurer {
-  private static canvas: HTMLCanvasElement
-
   static measureText (text: string, style: TextStyle) {
-    if (!this.canvas) this.canvas = document.createElement('canvas')
-    const ctx = this.canvas.getContext('2d')
-    if (!ctx) throw new Error()
+    const ctx = Context2DFactory.default.ctx
     return this.measureTextInt(ctx, text, style)
   }
 
