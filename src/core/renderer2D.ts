@@ -94,8 +94,9 @@ export class Renderer2D implements Renderer2DBase {
 
   on (a: (eventType: EventType, event: Event | MouseEvent | KeyboardEvent) => void, ...events: EventType[]) {
     for (let i = 0; i < events.length; i++) {
-    // const event = events[i]
-    // this.ctx.canvas['on' + event] = e => a(event, e)
+      const event = events[i]
+      const canvas = this.ctx.canvas as unknown as Record<string, unknown>
+      canvas['on' + event] = (e: Event) => a(event, e)
     }
   }
 

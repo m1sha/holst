@@ -218,4 +218,13 @@ export class TransformationPath implements Path2DBase {
     }
     return result
   }
+
+  copy () {
+    const result = new TransformationPath()
+    for (const i of this.stack) {
+      result.stack.push(i)
+    }
+    result.transform = this.transform.copy()
+    return result
+  }
 }

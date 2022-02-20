@@ -9,8 +9,11 @@ import { ShapeStyle } from './shape-style'
 import { Size } from './size'
 import { TransformationPath } from './transformation-path'
 import { Matrix2D } from './matrix'
+import Context2DFactory from './canvas-rendering-context-2d-factory'
+import { IsPointInPolygon4 } from './utils'
 
 export default class Shape implements Orderable {
+  private p: Path2DBase | null = null
   /**
   * @deprecated The method should not be used. Use property position
   */
@@ -161,6 +164,14 @@ export default class Shape implements Orderable {
     this.transformationObject.transform.mul(matrix) // = MATRIX.mul(this.transformationObject.transform, matrix)
   }
 
+  inPath (p: Point): boolean {
+    return IsPointInPolygon4(this.transformationObject.toPoints(), p)
+  }
+
+  inStroke (p: Point): boolean {
+    return Context2DFactory.default.ctx.isPointInStroke(this.createPath(), p.x, p.y)
+  }
+
   get bounds (): Rect {
     const point = this.transformationObject.toPoints()
     const xList = point.map(p => p.x)
@@ -181,6 +192,12 @@ export default class Shape implements Orderable {
   }
 
   createPath (): Path2DBase {
-    return this.transformationObject.createPath2D()
+    if (this.p) return this.p
+    this.p = this.transformationObject.createPath2D()
+    return this.p
+  }
+
+  copyTransformationObject () {
+    return this.transformationObject.copy()
   }
 }

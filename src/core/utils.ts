@@ -19,4 +19,18 @@ const toAbsolute = (point: Point, orientation: Context2DOrientation, location: P
   }
 }
 
-export { size, padding, toAbsolute }
+const IsPointInPolygon4 = (polygon: Point[], point: Point) => {
+  let result = false
+  let j = polygon.length - 1
+  for (let i = 0; i < polygon.length; i++) {
+    if ((polygon[i].y < point.y && polygon[j].y >= point.y) || (polygon[j].y < point.y && polygon[i].y >= point.y)) {
+      if (polygon[i].x + (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) * (polygon[j].x - polygon[i].x) < point.x) {
+        result = !result
+      }
+    }
+    j = i
+  }
+  return result
+}
+
+export { size, padding, toAbsolute, IsPointInPolygon4 }

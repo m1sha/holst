@@ -86,6 +86,10 @@ export class Matrix2D {
     return new Point(a * x + c * y + e, b * x + d * y + f)
   }
 
+  copy () {
+    return new Matrix2D().change({ a: this.a, b: this.b, c: this.c, d: this.d, e: this.e, f: this.f })
+  }
+
   static get identity (): Matrix2D {
     return matrix(1, 0, 0, 1, 0, 0)
   }
