@@ -11,6 +11,7 @@ import { TransformationPath } from './transformation-path'
 import { Matrix2D } from './matrix'
 import Context2DFactory from './canvas-rendering-context-2d-factory'
 import { IsPointInPolygon4 } from './utils'
+import { deepCopyFast } from '../tools/deep-copy'
 
 export default class Shape implements Orderable {
   private p: Path2DBase | null = null
@@ -208,5 +209,9 @@ export default class Shape implements Orderable {
   importTransformation (matrix: Matrix2D): void {
     if (!matrix) throw new Error('matrix is undefined')
     this.transformationObject.transform = matrix.copy()
+  }
+
+  copyStyle (): ShapeStyle {
+    return deepCopyFast(this.style)
   }
 }
