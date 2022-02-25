@@ -63,7 +63,7 @@ export class Renderer2D implements Renderer2DBase {
     this.ctx.save()
     this.assignMask(mask)
     const { style } = shape
-    const path = shape.createPath()
+    const path = shape.toPath2D()
     if (style.strokeStyle) {
       this.ctx.strokeStyle = style.strokeStyle
       this.ctx.lineWidth = style.lineWidth || 1
@@ -112,7 +112,7 @@ export class Renderer2D implements Renderer2DBase {
 
   private assignMask (mask?: Shape | null) {
     if (!mask) return
-    this.ctx.clip(mask.createPath())
+    this.ctx.clip(mask.toPath2D())
   }
 
   private drawLayer (layer: Readonly<Layer>) {

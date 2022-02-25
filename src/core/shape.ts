@@ -143,7 +143,7 @@ export default class Shape implements Orderable {
   }
 
   merge (shape: Shape) {
-    this.transformationObject.addPath(shape.createPath())
+    this.transformationObject.addPath(shape.toPath2D())
   }
 
   move (point: Point) {
@@ -169,7 +169,7 @@ export default class Shape implements Orderable {
   }
 
   inStroke (p: Point): boolean {
-    return Context2DFactory.default.ctx.isPointInStroke(this.createPath(), p.x, p.y)
+    return Context2DFactory.default.ctx.isPointInStroke(this.toPath2D(), p.x, p.y)
   }
 
   get bounds (): Rect {
@@ -191,7 +191,7 @@ export default class Shape implements Orderable {
     )
   }
 
-  createPath (): Path2DBase {
+  toPath2D (): Path2DBase {
     if (this.p) return this.p
     this.p = this.transformationObject.createPath2D()
     return this.p
