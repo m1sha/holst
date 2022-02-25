@@ -200,4 +200,13 @@ export default class Shape implements Orderable {
   copyTransformationObject () {
     return this.transformationObject.copy()
   }
+
+  exportTransformation (): Matrix2D {
+    return this.transformationObject.transform.copy()
+  }
+
+  importTransformation (matrix: Matrix2D): void {
+    if (!matrix) throw new Error('matrix is undefined')
+    this.transformationObject.transform = matrix.copy()
+  }
 }
