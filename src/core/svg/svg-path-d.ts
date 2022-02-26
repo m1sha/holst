@@ -20,7 +20,14 @@ export class SvgPathD {
   }
 
   toPath2D (path2d?: TransformationPath, ratio?: Point, scale: number = 1, move: Point = { x: 0, y: 0 }): TransformationPath {
-    return toPath2D(this.items, this.position, path2d, ratio, scale, move)
+    const { path, position } = toPath2D(this.items, this.position, path2d, ratio, scale, move)
+    this.position = position
+    return path
+  }
+
+  calcEndPosition (): Readonly<Point> {
+    const { position } = toPath2D(this.items, this.position)
+    return position
   }
 
   get currentPosition (): Readonly<Point> {

@@ -2,7 +2,7 @@ import { Point } from '../point'
 import { TransformationPath } from '../transformation-path'
 import { SvgPathDElement } from './svg-path-d-element'
 
-export function toPath2D (items: SvgPathDElement[], position: Point, path2d?: TransformationPath, ratio?: Point, scale: number = 1, move: Point = { x: 0, y: 0 }): TransformationPath {
+export function toPath2D (items: SvgPathDElement[], position: Point, path2d?: TransformationPath, ratio?: Point, scale: number = 1, move: Point = { x: 0, y: 0 }): { path: TransformationPath, position: Point } {
   const path = path2d || new TransformationPath()
   const dx = ratio ? ratio.x : 1
   const dy = ratio ? ratio.y : 1
@@ -56,5 +56,5 @@ export function toPath2D (items: SvgPathDElement[], position: Point, path2d?: Tr
         continue
     }
   }
-  return path
+  return { path, position }
 }
