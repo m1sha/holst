@@ -30,4 +30,13 @@ export class Rect implements Size {
   get absHeight () {
     return this.y + this.height
   }
+
+  get points (): Point[] {
+    return [
+      new Point(this.x, this.y),
+      new Point(this.absWidth, this.y),
+      new Point(this.absWidth, this.absHeight),
+      new Point(this.x, this.absHeight)
+    ]
+  }
 }
