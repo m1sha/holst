@@ -8,6 +8,7 @@ import Shape from './shape'
 // import array from '../tools/array'
 import { toAbsolute } from './utils'
 import { deepCopyFast } from '../tools/deep-copy'
+import { Color } from './color'
 export type Context2DOrientation = 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right'
 export class Renderer2D implements Renderer2DBase {
   readonly ctx: CanvasRenderingContext2D
@@ -65,7 +66,7 @@ export class Renderer2D implements Renderer2DBase {
     const { style } = shape
     const path = shape.toPath2D()
     if (style.strokeStyle) {
-      this.ctx.strokeStyle = style.strokeStyle
+      this.ctx.strokeStyle = style.strokeStyle instanceof Color ? style.strokeStyle.toString() : style.strokeStyle
       this.ctx.lineWidth = style.lineWidth || 1
       this.ctx.lineJoin = style.lineJoin || 'bevel'
       this.ctx.lineDashOffset = style.lineDashOffset || 0
@@ -74,7 +75,7 @@ export class Renderer2D implements Renderer2DBase {
       this.ctx.stroke(path)
     }
     if (style.fillStyle) {
-      this.ctx.fillStyle = style.fillStyle
+      this.ctx.fillStyle = style.fillStyle instanceof Color ? this.ctx.fillStyle = style.fillStyle.toString() : style.fillStyle
       this.ctx.fill(path)
     }
     this.ctx.restore()

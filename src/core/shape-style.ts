@@ -1,4 +1,7 @@
 /* global CanvasLineCap, CanvasLineJoin */
+
+import { Color } from './color'
+
 /* eslint no-undef: "error" */
 export interface ShapeStyle {
     lineCap?: CanvasLineCap
@@ -7,6 +10,6 @@ export interface ShapeStyle {
     lineJoin?: CanvasLineJoin
     lineWidth?: number
     miterLimit?: number
-    fillStyle?: string | CanvasGradient | CanvasPattern
-    strokeStyle?: string | CanvasGradient | CanvasPattern
+    fillStyle?: string | CanvasGradient | CanvasPattern | Color
+    strokeStyle?: string | CanvasGradient | CanvasPattern | Color
 }
