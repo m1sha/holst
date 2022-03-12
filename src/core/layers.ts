@@ -20,10 +20,25 @@ export class Layer {
   images: Images = []
   mask: Shape | null
   private orderCounter: number = 0
+  /**
+  * @deprecated The method should not be used.
+  */
   readonly location: Point
+  /**
+  * @deprecated The method should not be used.
+  */
   readonly size: Size
+  /**
+  * @deprecated The method should not be used.
+  */
   readonly originSize: Readonly<Size>
+  /**
+  * @deprecated The method should not be used.
+  */
   orientation: Context2DOrientation
+  /**
+  * @deprecated The method should not be used.
+  */
   constraints: Constraints
 
   constructor (size: Size, orientation: Context2DOrientation) {
