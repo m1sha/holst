@@ -1,7 +1,9 @@
+import { Color } from './color'
+
 export interface TextStyle {
-  color?: string,
-  fontName?: string,
-  fontSize?: string,
+  color?: string | Color
+  fontName?: string
+  fontSize?: string
   bold? : boolean
   italic?: boolean
 }

@@ -103,7 +103,7 @@ export class Renderer2D implements Renderer2DBase {
 
   private assignTextStyle (style: TextStyle) {
     style = style || {}
-    this.ctx.fillStyle = style.color || '#000'
+    this.ctx.fillStyle = style.color instanceof Color ? style.color.toString() : style.color || '#000'
     const fontName = style.fontName || 'serif'
     const fontSize = style.fontSize || '10pt'
     const bold = style.bold ? 'bold ' : ''
