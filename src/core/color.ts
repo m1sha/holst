@@ -1,9 +1,9 @@
 import utils from '../tools/color-utils'
 export class Color {
-  readonly r: number = 0
-  readonly g: number = 0
-  readonly b: number = 0
-  readonly a: number = 1
+  private _r: number = 0
+  private _g: number = 0
+  private _b: number = 0
+  private _a: number = 1
 
   constructor ()
   constructor (r: number, g: number, b: number, a?: number)
@@ -47,6 +47,46 @@ export class Color {
     throw new Error('Has been not found suitable signature')
   }
 
+  get r () {
+    return this._r
+  }
+
+  set r (value: number) {
+    if (value === undefined) throw new Error('value is undefined')
+    if (value < 0 || value > 255) throw new Error('value is unsupported')
+    this._r = value
+  }
+
+  get g () {
+    return this._g
+  }
+
+  set g (value: number) {
+    if (value === undefined) throw new Error('value is undefined')
+    if (value < 0 || value > 255) throw new Error('value is unsupported')
+    this._g = value
+  }
+
+  get b () {
+    return this._b
+  }
+
+  set b (value: number) {
+    if (value === undefined) throw new Error('value is undefined')
+    if (value < 0 || value > 255) throw new Error('value is unsupported')
+    this._b = value
+  }
+
+  get a () {
+    return this._a
+  }
+
+  set a (value: number) {
+    if (value === undefined) throw new Error('value is undefined')
+    if (value < 0 || value > 1) throw new Error('value is unsupported')
+    this._a = value
+  }
+
   toString () {
     let r = this.r.toString(16)
     r = r.length === 1 ? '0' + r : r
@@ -54,7 +94,7 @@ export class Color {
     g = g.length === 1 ? '0' + g : g
     let b = this.b.toString(16)
     b = b.length === 1 ? '0' + b : b
-    return `#${r}${g}${b}`
+    return this.a === 1 ? `#${r}${g}${b}` : `rgba(${r},${g},${b},${this.a})`
   }
 
   toHSV () {
