@@ -198,17 +198,21 @@ export default class Shape implements Orderable {
     return this.p
   }
 
-  copyTransformationObject () {
+  copyPath () {
     return this.transformationObject.copy()
   }
 
-  exportTransformation (): Matrix2D {
+  private exportTransformation (): Matrix2D {
     return this.transformationObject.transform.copy()
   }
 
-  importTransformation (matrix: Matrix2D): void {
+  private importTransformation (matrix: Matrix2D): void {
     if (!matrix) throw new Error('matrix is undefined')
     this.transformationObject.transform = matrix.copy()
+  }
+
+  transformFrom (shape: Shape): void {
+    this.importTransformation(shape.exportTransformation())
   }
 
   copyStyle (): ShapeStyle {
