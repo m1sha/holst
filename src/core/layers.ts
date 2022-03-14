@@ -12,8 +12,10 @@ import { ShapeStyle } from './shape-style'
 import { Size } from './size'
 import { TextMeasurer } from './text-measurer'
 import { TransformationPath } from './transformation-path'
+import { StyleManager } from './style-manager'
 
 export class Layer {
+  private styleManager: StyleManager
   private shapes: Shape[] = []
   labels: Text[] = []
   textBlocks: TextBlock[] = []
@@ -41,13 +43,14 @@ export class Layer {
   */
   constraints: Constraints
 
-  constructor (size: Size, orientation: Context2DOrientation) {
+  constructor (size: Size, orientation: Context2DOrientation, styleManager: StyleManager) {
     this.orientation = orientation
     this.constraints = { minX: 0, minY: 0, maxX: size.width, maxY: size.height }
     this.location = new Point(0, 0)
     this.size = { width: size.width, height: size.height }
     this.originSize = { width: size.width, height: size.height }
     this.mask = null
+    this.styleManager = styleManager
     this.clear()
   }
 
@@ -59,9 +62,10 @@ export class Layer {
     return new Rect(this.location.x, this.location.y, this.size.width, this.size.height)
   }
 
-  createShape (style: ShapeStyle | null = null): Shape {
+  createShape (style: ShapeStyle | string | null = null): Shape {
+    const stl = (typeof style === 'string') ? this.styleManager.shapes(style) : style
     const path = new TransformationPath()
-    const result = new Shape(this, path, ++this.orderCounter, style)
+    const result = new Shape(this, path, ++this.orderCounter, stl)
     this.shapes.push(result)
     return result
   }
@@ -70,8 +74,9 @@ export class Layer {
     this.labels.push(text)
   }
 
-  createTextBlock (text: string, style: TextStyle, target?: Point): TextBlock {
-    const result = new TextBlock(text, style, ++this.orderCounter, (text, style) => this.measureText(text, style))
+  createTextBlock (text: string, style: TextStyle | string, target?: Point): TextBlock {
+    const stl = (typeof style === 'string') ? this.styleManager.texts(style) : style
+    const result = new TextBlock(text, stl, ++this.orderCounter, (text, style) => this.measureText(text, stl))
     if (target) result.target = target
     this.textBlocks.push(result)
     return result
