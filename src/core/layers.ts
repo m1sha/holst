@@ -62,9 +62,9 @@ export class Layer {
     return new Rect(this.location.x, this.location.y, this.size.width, this.size.height)
   }
 
-  createShape (style: ShapeStyle | string | null = null): Shape {
+  createShape (style: ShapeStyle | string | null = null, path?: TransformationPath): Shape {
     const stl = (typeof style === 'string') ? this.styleManager.shapes(style) : style
-    const path = new TransformationPath()
+    if (!path) path = new TransformationPath()
     const result = new Shape(this, path, ++this.orderCounter, stl)
     this.shapes.push(result)
     return result
