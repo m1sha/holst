@@ -1,5 +1,6 @@
 import { TextStyle } from './label-style'
 import Context2DFactory from './canvas-rendering-context-2d-factory'
+import { Color } from './color'
 
 export class TextMeasurer {
   static measureText (text: string, style: TextStyle) {
@@ -17,7 +18,7 @@ export class TextMeasurer {
 
   private static assignTextStyle (ctx: CanvasRenderingContext2D, style: TextStyle) {
     style = style || {}
-    ctx.fillStyle = style.color || '#000'
+    ctx.fillStyle = style.color instanceof Color ? style.color.toString() : style.color || '#000'
     const fontName = style.fontName || 'serif'
     const fontSize = style.fontSize || '10pt'
     ctx.font = `${fontSize} ${fontName}`
