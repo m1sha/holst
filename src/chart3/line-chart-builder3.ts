@@ -2,7 +2,7 @@ import { createCorner } from './bg-templates'
 import { ChartOptions } from './chart-options'
 import { LineChartBuilder } from './line-chart-builder'
 import { toDisplayText } from './utils'
-import { AnimationController } from '../core/animation'
+// import { AnimationController } from '../core/animation'
 import { Constraints } from '../core/constraints'
 import { Layer } from '../core/layers'
 import { Padding } from '../core/padding'
@@ -46,24 +46,24 @@ export class LineChartBuilder3 extends LineChartBuilder {
   }
 
   addGraphLayer (): this | LineChartBuilder3 {
-    const { ratio, absMinY, offsetY } = this
-    const layer = this.createLayer()
-    const controller = new AnimationController(this.chart, this.render)
-    controller.onFrameChange(num => {
-      layer.clear()
-      const graph = layer.createShape(styles.graphLine)
-      const points = []
-      let i = 0
-      const len = controller.maxFrames / this.data.length
-      for (const item of this.data) {
-        if (num < len * i) break
-        const x = i++
-        const valueY = this.getYValue(item)
-        const y = valueY < 0 ? absMinY - Math.abs(valueY) : valueY + offsetY
-        points.push({ x: x * ratio.x, y: y * ratio.y })
-      }
-      graph.polyline(points)
-    })
+    // const { ratio, absMinY, offsetY } = this
+    // const layer = this.createLayer()
+    // const controller = new AnimationController(this.chart, this.render)
+    // controller.onFrameChange(num => {
+    //   layer.clear()
+    //   const graph = layer.createShape(styles.graphLine)
+    //   const points = []
+    //   let i = 0
+    //   const len = controller.maxFrames / this.data.length
+    //   for (const item of this.data) {
+    //     if (num < len * i) break
+    //     const x = i++
+    //     const valueY = this.getYValue(item)
+    //     const y = valueY < 0 ? absMinY - Math.abs(valueY) : valueY + offsetY
+    //     points.push({ x: x * ratio.x, y: y * ratio.y })
+    //   }
+    //   graph.polyline(points)
+    // })
     return this
   }
 
