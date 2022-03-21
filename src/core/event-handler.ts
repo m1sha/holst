@@ -22,7 +22,7 @@ export class EventHandler {
     this.scene = scene
     this.render = render
     this.delegates = []
-    render.on((et, e) => this.invoke(et, e as MouseEvent), 'mousemove', 'mouseleave', 'click', 'mouseup', 'mousedown')
+    render.on((et, e) => this.invoke(et, e as MouseEvent), 'mousemove', 'mouseleave', 'click', 'mouseup', 'mousedown', 'mouseleave')
   }
 
   addEventListener (eventType: EventType, callback: (e: EventInfo) => void) {
