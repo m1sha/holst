@@ -4,6 +4,8 @@ import { uid } from '../tools/uid'
 import { Renderer2D } from './renderer2D'
 import { Scene } from './scene'
 
+const millis = () => new Date().getTime()
+
 export interface FrameInfo {
   startTime: number,
   сountdown: number
@@ -28,7 +30,7 @@ class Task {
     this.timeout = timeout
     this.duration = duration
     this.infinity = infinity
-    this.сountdown = new Date().getTime()
+    this.сountdown = millis()
     this.isDone = false
     this.isCanceled = false
     this.isStarted = false
@@ -46,12 +48,12 @@ class Task {
     this.isStarted = true
   }
 
-  execute (time: number) {
+  execute (time: number, r: number) {
     this.delegate({ startTime: time, сountdown: this.сountdown + this.timeout + this.duration - time })
   }
 
   reset () {
-    this.сountdown = new Date().getTime()
+    this.сountdown = millis()
     this.isDone = false
   }
 
@@ -128,7 +130,7 @@ export class AnimationController {
     for (const task of this.tasks) {
       if (task.isCanceled) continue
 
-      const t = new Date().getTime()
+      const t = millis()
       if (!task.isTime(t) && !task.isStarted) continue
       if (!task.isStarted) task.start()
       if (task.isDone) {
@@ -144,7 +146,7 @@ export class AnimationController {
       if (task.isCanceled) continue
       this.scene.clearActiveLayer()
       this.renderer.clear()
-      task.execute(t)
+      task.execute(t, r)
       this.renderer.render(this.scene)
     }
 
