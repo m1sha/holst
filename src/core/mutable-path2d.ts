@@ -47,9 +47,9 @@ interface ClosePath {
 
 type Path2DElement = Arc | ArcTo | BezierCurveTo | Ellipse | LineTo | MoveTo | QuadraticCurveTo | Rect | ClosePath
 
-export class TransformationPath implements Path2DBase {
+export class MutablePath2D implements Path2DBase {
   addPath (path: Path2DBase, transform?: Matrix2D): void {
-    if (!(path instanceof TransformationPath)) throw new Error('Method unsupported.')
+    if (!(path instanceof MutablePath2D)) throw new Error('Method unsupported.')
     if (transform) this.transform.mul(transform)
     for (const item of path.stack) this.stack.push(item)
   }
@@ -220,7 +220,7 @@ export class TransformationPath implements Path2DBase {
   }
 
   copy () {
-    const result = new TransformationPath()
+    const result = new MutablePath2D()
     for (const i of this.stack) {
       result.stack.push(i)
     }

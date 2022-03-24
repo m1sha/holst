@@ -11,7 +11,7 @@ import Shape from './shape'
 import { ShapeStyle } from './shape-style'
 import { Size } from './size'
 import { TextMeasurer } from './text-measurer'
-import { TransformationPath } from './transformation-path'
+import { MutablePath2D } from './mutable-path2d'
 import { StyleManager } from './style-manager'
 
 export class Layer {
@@ -62,9 +62,9 @@ export class Layer {
     return new Rect(this.location.x, this.location.y, this.size.width, this.size.height)
   }
 
-  createShape (style: ShapeStyle | string | null = null, path?: TransformationPath): Shape {
+  createShape (style: ShapeStyle | string | null = null, path?: MutablePath2D): Shape {
     const stl = (typeof style === 'string') ? this.styleManager.shapes(style) : style
-    if (!path) path = new TransformationPath()
+    if (!path) path = new MutablePath2D()
     const result = new Shape(this, path, ++this.orderCounter, stl)
     this.shapes.push(result)
     return result
