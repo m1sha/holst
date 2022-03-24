@@ -143,6 +143,32 @@ export default class Shape implements Orderable {
     this.mutablePath.closePath()
   }
 
+  moveToR (point: Point): this | Shape {
+    point = this.getPoint(point)
+    this.mutablePath.moveToR(point.x, point.y)
+    return this
+  }
+
+  arcR (radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
+    this.mutablePath.arcR(radius, startAngle, endAngle, anticlockwise)
+    return this
+  }
+
+  ellipseR (radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
+    this.mutablePath.ellipseR(radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
+    return this
+  }
+
+  lineR (point: Point): this | Shape {
+    this.mutablePath.moveToR(point.x, point.y)
+    return this
+  }
+
+  rectR (size: Size): this | Shape {
+    this.mutablePath.rectR(size.width, size.height)
+    return this
+  }
+
   merge (shape: Shape) {
     this.mutablePath.addPath(shape.toPath2D())
   }

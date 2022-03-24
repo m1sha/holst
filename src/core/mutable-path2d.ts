@@ -45,7 +45,66 @@ interface ClosePath {
   type: 'ClosePath'
 }
 
-type Path2DElement = Arc | ArcTo | BezierCurveTo | Ellipse | LineTo | MoveTo | QuadraticCurveTo | Rect | ClosePath
+interface ArcR {
+  type: 'ArcR'
+  radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean
+}
+
+interface EllipseR {
+  type: 'EllipseR'
+  radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, counterclockwise?: boolean
+}
+
+interface MoveToR {
+  type: 'MoveToR',
+  x: number, y: number
+}
+
+interface LineToR {
+  type: 'LineToR',
+  x: number, y: number
+}
+
+interface LineHR {
+  type: 'LineHR',
+  w: number
+}
+
+interface LineVR {
+  type: 'LineVR',
+  h: number
+}
+
+interface RectR {
+  type: 'RectR',
+  w: number, h: number
+}
+
+type Path2DElement =
+  | Arc
+  | ArcTo
+  | BezierCurveTo
+  | Ellipse
+  | LineTo
+  | LineHR
+  | LineVR
+  | MoveTo
+  | QuadraticCurveTo
+  | Rect
+  | ClosePath
+  | MoveToR
+  | ArcR
+  | EllipseR
+  | LineToR
+  | RectR
+
+const getLastElement = <T extends Path2DElement>(stack: Path2DElement[], type: string): T | null => {
+  const l = stack.length
+  for (let i = l; i >= 0; i--) {
+    if (stack[i].type === type) return stack[i] as T
+  }
+  return null
+}
 
 export class MutablePath2D implements Path2DBase {
   addPath (path: Path2DBase, transform?: Matrix2D): void {
@@ -88,6 +147,34 @@ export class MutablePath2D implements Path2DBase {
 
   closePath (): void {
     this.stack.push({ type: 'ClosePath' })
+  }
+
+  moveToR (x: number, y: number): void {
+    this.stack.push({ type: 'MoveToR', x, y })
+  }
+
+  arcR (radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void {
+    this.stack.push({ type: 'ArcR', radius, startAngle, endAngle, counterclockwise })
+  }
+
+  ellipseR (radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void {
+    this.stack.push({ type: 'EllipseR', radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise })
+  }
+
+  lineToR (x: number, y: number): void {
+    this.stack.push({ type: 'LineToR', x, y })
+  }
+
+  lineHR (w: number): void {
+    this.stack.push({ type: 'LineHR', w })
+  }
+
+  lineVR (h: number): void {
+    this.stack.push({ type: 'LineVR', h })
+  }
+
+  rectR (w: number, h: number): void {
+    this.stack.push({ type: 'RectR', w, h })
   }
 
   private stack: Path2DElement[] = []
@@ -140,6 +227,19 @@ export class MutablePath2D implements Path2DBase {
           // TODO apply matrix to Path2D.Rect?
           const p = this.transform.applyMatrix(i)
           path.rect(p.x, p.y, i.w, i.h)
+          continue
+        }
+        case 'MoveToR': {
+          continue
+        }
+        case 'LineToR': {
+          const moveTo = getLastElement<MoveToR>(this.stack, 'MoveToR')
+          if (!moveTo) throw new Error('MoveToR is not found on the stack')
+          const p0 = this.transform.applyMatrix(moveTo)
+          path.lineTo(p0.x, p0.y)
+
+          const p = this.transform.applyMatrix(new Point(i.x + moveTo.x, i.y + moveTo.y))
+          path.lineTo(p.x, p.y)
           continue
         }
       }
