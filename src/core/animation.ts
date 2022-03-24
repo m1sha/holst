@@ -8,7 +8,8 @@ const millis = () => new Date().getTime()
 
 export interface FrameInfo {
   startTime: number,
-  сountdown: number
+  сountdown: number,
+  percent: number
 }
 
 class Task {
@@ -49,7 +50,13 @@ class Task {
   }
 
   execute (time: number, r: number) {
-    this.delegate({ startTime: time, сountdown: this.сountdown + this.timeout + this.duration - time })
+    const сountdown = this.сountdown + this.timeout + this.duration - time
+    const percent = (100 / this.duration) * (this.duration - сountdown)
+    this.delegate({
+      startTime: time,
+      сountdown,
+      percent
+    })
   }
 
   reset () {
