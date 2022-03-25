@@ -12,7 +12,7 @@ const handlers: Record<string, (path: Path2D, element: Path2DElement, transform:
 handlers.Arc = (path, element, transform) => {
   if (element.type !== 'Arc') return
   const { radius, startAngle, endAngle, counterclockwise } = element
-  const { x, y } = transform.applyMatrix(element)
+  const { x, y } = transform.applyMatrix(new Point(element))
   path.arc(x, y, radius, startAngle, endAngle, counterclockwise)
 }
 
@@ -27,7 +27,7 @@ handlers.ArcTo = (path, element, transform) => {
 handlers.BezierCurveTo = (path, element, transform) => {
   if (element.type !== 'BezierCurveTo') return
   const { cp1x, cp1y, cp2x, cp2y } = element
-  const { x, y } = transform.applyMatrix(element)
+  const { x, y } = transform.applyMatrix(new Point(element))
   path.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y)
 }
 
@@ -39,33 +39,33 @@ handlers.ClosePath = (path, element) => {
 handlers.Ellipse = (path, element, transform) => {
   if (element.type !== 'Ellipse') return
   const { radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise } = element
-  const { x, y } = transform.applyMatrix(element)
+  const { x, y } = transform.applyMatrix(new Point(element))
   path.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise)
 }
 
 handlers.LineTo = (path, element, transform) => {
   if (element.type !== 'LineTo') return
-  const { x, y } = transform.applyMatrix(element)
+  const { x, y } = transform.applyMatrix(new Point(element))
   path.lineTo(x, y)
 }
 
 handlers.MoveTo = (path, element, transform) => {
   if (element.type !== 'MoveTo') return
-  const { x, y } = transform.applyMatrix(element)
+  const { x, y } = transform.applyMatrix(new Point(element))
   path.moveTo(x, y)
 }
 
 handlers.QuadraticCurveTo = (path, element, transform) => {
   if (element.type !== 'QuadraticCurveTo') return
   const { cpx, cpy } = element
-  const { x, y } = transform.applyMatrix(element)
+  const { x, y } = transform.applyMatrix(new Point(element))
   path.quadraticCurveTo(cpx, cpy, x, y)
 }
 
 handlers.Rect = (path, element, transform) => {
   if (element.type !== 'Rect') return
   const { w, h } = element
-  const { x, y } = transform.applyMatrix(element)
+  const { x, y } = transform.applyMatrix(new Point(element))
   path.rect(x, y, w, h)
 }
 
@@ -75,7 +75,7 @@ handlers.LineToR = (path, element, transform, stack) => {
   if (element.type !== 'LineToR') return
   const moveTo = getLastElement<MoveToR>(stack, 'MoveToR')
   if (!moveTo) throw new Error('MoveToR is not found on the stack')
-  const p0 = transform.applyMatrix(moveTo)
+  const p0 = transform.applyMatrix(new Point(element))
   path.lineTo(p0.x, p0.y)
 
   const p = transform.applyMatrix(new Point(element.x + moveTo.x, element.y + moveTo.y))

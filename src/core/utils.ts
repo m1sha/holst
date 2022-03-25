@@ -13,10 +13,10 @@ const padding = (top: number, left: number, bottom: number, right: number): Padd
 
 const toAbsolute = (point: Point, orientation: Context2DOrientation, location: Point, originSize: Size) : Point => {
   const isTopLeft = orientation === 'top-left'
-  return {
+  return new Point({
     x: location.x + point.x,
     y: isTopLeft ? point.y + location.y : (originSize.height - point.y) - location.y
-  }
+  })
 }
 
 const IsPointInPolygon4 = (polygon: Point[], point: Point) => {

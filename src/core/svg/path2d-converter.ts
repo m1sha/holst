@@ -2,12 +2,13 @@ import { Point } from '../point'
 import { MutablePath2D } from '../path2d/mutable-path2d'
 import { SvgPathDElement } from './svg-path-d-element'
 
-export function toPath2D (items: SvgPathDElement[], position: Point, path2d?: MutablePath2D, ratio?: Point, scale: number = 1, move: Point = { x: 0, y: 0 }): { path: MutablePath2D, position: Point } {
+export function toPath2D (items: SvgPathDElement[], position: Point, path2d?: MutablePath2D, ratio?: Point, scale: number = 1, move?: Point): { path: MutablePath2D, position: Point } {
   const path = path2d || new MutablePath2D()
   const dx = ratio ? ratio.x : 1
   const dy = ratio ? ratio.y : 1
-  position.x = move.x
-  position.y = move.y
+
+  position.x = 0
+  position.y = 9
   for (const item of items) {
     switch (item.type) {
       case 'M': {

@@ -10,7 +10,7 @@ import { Size } from '../core/size'
 import { MutablePath2D } from '../core/path2d/mutable-path2d'
 
 const createGrid = (layer: Layer, options: { viewport: Viewport, seed: { width: number, height: number } }): Shape => {
-  const shape = new Shape(layer, new MutablePath2D(), 0)
+  const shape = new Shape(new MutablePath2D(), 0)
   const { viewport, seed } = options
   for (let i = viewport.top; i < viewport.height; i += seed.height) {
     shape.lineH({ x: viewport.x, y: viewport.top + i }, viewport.width)
@@ -27,13 +27,13 @@ const createGrid = (layer: Layer, options: { viewport: Viewport, seed: { width: 
 }
 
 const createBackground = (layer: Layer, color: string, rect: Rect): Shape => {
-  const shape = new Shape(layer, new MutablePath2D(), 0)
+  const shape = new Shape(new MutablePath2D(), 0)
   shape.rect(rect).style.fillStyle = color
   return shape
 }
 
 const createAxis = (layer: Layer, viewport: Viewport): Shape => {
-  const shape = new Shape(layer, new MutablePath2D(), 0)
+  const shape = new Shape(new MutablePath2D(), 0)
   shape.lineV({ x: viewport.left, y: viewport.top }, viewport.height)
   shape.lineH({ x: viewport.left, y: viewport.bottom }, viewport.width)
   shape.style.strokeStyle = colors.lineColor

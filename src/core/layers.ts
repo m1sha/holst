@@ -55,7 +55,7 @@ export class Layer {
   }
 
   get center (): Point {
-    return { x: this.size.width / 2, y: this.size.height / 2 }
+    return new Point(this.size.width / 2, this.size.height / 2)
   }
 
   get bounds (): Readonly<Rect> {
@@ -65,7 +65,7 @@ export class Layer {
   createShape (style: ShapeStyle | string | null = null, path?: MutablePath2D): Shape {
     const stl = (typeof style === 'string') ? this.styleManager.shapes(style) : style
     if (!path) path = new MutablePath2D()
-    const result = new Shape(this, path, ++this.orderCounter, stl)
+    const result = new Shape(path, ++this.orderCounter, stl)
     this.shapes.push(result)
     return result
   }

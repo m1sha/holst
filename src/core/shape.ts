@@ -1,5 +1,3 @@
-import { Context2DOrientation } from './renderer2D'
-import { Layer } from './layers'
 import { LineOptions } from './line-options'
 import Orderable from './orderable'
 import { Path2DBase } from './path2d/path2d-base'
@@ -15,15 +13,7 @@ import { deepCopyFast } from '../tools/deep-copy'
 
 export default class Shape implements Orderable {
   private p: Path2DBase | null = null
-  /**
-  * @deprecated The method should not be used. Use property position
-  */
-  private readonly location: Point
-  private readonly originSize: Size
-  private readonly orientation: Context2DOrientation
   private readonly mutablePath: MutablePath2D
-  readonly position: Point
-  // readonly scale: Point
   width: number = 0
   height: number = 0
   style: ShapeStyle
@@ -32,99 +22,61 @@ export default class Shape implements Orderable {
   after?: Orderable
   before?: Orderable
 
-  constructor (layer: Layer, path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
-    this.location = layer.location
-    this.originSize = layer.originSize
-    this.orientation = layer.orientation
+  constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
     this.mutablePath = path
     this.order = order
     this.style = style || {}
     this.name = 'shape'
-    this.width = layer.size.width
-    this.height = layer.size.height
-    const self = this
-    this.position = {
-      get x (): number {
-        return self.mutablePath.transform.e
-      },
-      set x (value: number) {
-        self.mutablePath.transform.e = value
-      },
-      get y (): number {
-        return self.mutablePath.transform.f
-      },
-      set y (value: number) {
-        self.mutablePath.transform.f = value
-      }
-    }
-    // this.scale = {
-    //   get x (): number {
-    //     return self.transformationObject.transform.a
-    //   },
-    //   set x (value: number) {
-    //     self.transformationObject.transform.a = value
-    //   },
-    //   get y (): number {
-    //     return self.transformationObject.transform.d
-    //   },
-    //   set y (value: number) {
-    //     self.transformationObject.transform.d = value
-    //   }
-    // }
   }
 
   rect (rect: Rect): this | Shape {
-    const point = this.getPoint(rect)
-    const height = this.orientation === 'top-left' ? rect.height : -rect.height
-    const width = rect.width
-    this.mutablePath.rect(point.x, point.y, width, height)
+    this.mutablePath.rect(rect.x, rect.y, rect.width, rect.height)
     return this
   }
 
   moveTo (point: Point): this | Shape {
-    point = this.getPoint(point)
     this.mutablePath.moveTo(point.x, point.y)
     return this
   }
 
   lineTo (point: Point): this | Shape {
-    point = this.getPoint(point)
     this.mutablePath.lineTo(point.x, point.y)
     return this
   }
 
   lineH (point: Point, width: number): this | Shape {
-    this.moveTo(point).lineTo({ x: point.x + width, y: point.y })
+    this.moveTo(point).lineTo(new Point(point.x + width, point.y))
     return this
   }
 
   lineV (point: Point, height: number): this | Shape {
-    this.moveTo(point).lineTo({ x: point.x, y: point.y + height })
+    this.moveTo(point).lineTo(new Point(point.x, point.y + height))
     return this
   }
 
-  arc (point: Point, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean) {
-    point = this.getPoint(point)
+  arc (point: Point, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
     this.mutablePath.arc(point.x, point.y, radius, startAngle, endAngle, anticlockwise)
+    return this
   }
 
-  ellipse (point: Point, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean) {
-    point = this.getPoint(point)
+  ellipse (point: Point, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
     this.mutablePath.ellipse(point.x, point.y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
+    return this
   }
 
-  polyline (points: Point[]) {
+  polyline (points: Point[]): this | Shape {
     for (const point of points) {
       this.lineTo(point)
       this.moveTo(point)
     }
+    return this
   }
 
-  line (pointStart: Point, pointEnd: Point, options?: LineOptions) {
+  line (pointStart: Point, pointEnd: Point, options?: LineOptions): this | Shape {
     this.moveTo(pointStart)
     this.lineTo(pointEnd)
 
-    if (!options || !options.arrow) return
+    if (!options || !options.arrow) return this
     // const a = alfa(pointStart, pointEnd)
 
     if (options.arrow.endTip) {
@@ -133,18 +85,19 @@ export default class Shape implements Orderable {
     }
 
     if (options.arrow.startTip) {
-      const point = this.getPoint(pointStart)
+      const point = pointStart
       this.moveTo(point)
       // arrow(this.transformationObject, point, a, options.arrow.startTip.length || 10, options.arrow.startTip.dir || -1)
     }
+    return this
   }
 
-  closePath () {
+  closePath (): this | Shape {
     this.mutablePath.closePath()
+    return this
   }
 
   moveToR (point: Point): this | Shape {
-    point = this.getPoint(point)
     this.mutablePath.moveToR(point.x, point.y)
     return this
   }
@@ -174,21 +127,23 @@ export default class Shape implements Orderable {
   }
 
   move (point: Point) {
-    const matrix = Matrix2D.identity
-    matrix.e = point.x
-    matrix.f = point.y
-    this.mutablePath.transform.mul(matrix) // = MATRIX.mul(this.transformationObject.transform, matrix)
+    // const matrix = Matrix2D.identity
+    // matrix.e = point.x
+    // matrix.f = point.y
+    this.mutablePath.transform.e = point.x
+    this.mutablePath.transform.f = point.y
+    // this.mutablePath.transform.mul(matrix)
   }
 
   scale (point: Point) {
     const matrix = Matrix2D.identity.scale(point)
-    this.mutablePath.transform.mul(matrix) // = MATRIX.mul(this.transformationObject.transform, matrix)
+    this.mutablePath.transform.mul(matrix)
   }
 
   flipY () {
     const matrix = Matrix2D.identity
     matrix.d = -1
-    this.mutablePath.transform.mul(matrix) // = MATRIX.mul(this.transformationObject.transform, matrix)
+    this.mutablePath.transform.mul(matrix)
   }
 
   inPath (p: Point): boolean {
@@ -210,14 +165,6 @@ export default class Shape implements Orderable {
     return new Rect(x, y, x1 - x, y1 - y)
   }
 
-  private getPoint (point: Point) : Point {
-    const isTopLeft = this.orientation === 'top-left'
-    return new Point(
-      this.location.x + point.x,
-      isTopLeft ? point.y + this.location.y : (this.originSize.height - point.y) - this.location.y
-    )
-  }
-
   toPath2D (): Path2DBase {
     if (this.p) return this.p
     this.p = this.mutablePath.createPath2D()
@@ -228,6 +175,14 @@ export default class Shape implements Orderable {
     return this.mutablePath.copy()
   }
 
+  transformFrom (shape: Shape): void {
+    this.importTransformation(shape.exportTransformation())
+  }
+
+  copyStyle (): ShapeStyle {
+    return deepCopyFast(this.style)
+  }
+
   private exportTransformation (): Matrix2D {
     return this.mutablePath.transform.copy()
   }
@@ -235,13 +190,5 @@ export default class Shape implements Orderable {
   private importTransformation (transform: Matrix2D): void {
     if (!transform) throw new Error('matrix is undefined')
     this.mutablePath.transform = transform.copy()
-  }
-
-  transformFrom (shape: Shape): void {
-    this.importTransformation(shape.exportTransformation())
-  }
-
-  copyStyle (): ShapeStyle {
-    return deepCopyFast(this.style)
   }
 }

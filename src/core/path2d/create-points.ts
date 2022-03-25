@@ -6,7 +6,7 @@ const handlers: Record<string, HandlerDelegate> = {}
 
 handlers.Arc = (arr, element, transform) => {
   if (element.type !== 'Arc') return
-  const p = transform.applyMatrix(element)
+  const p = transform.applyMatrix(new Point(element))
   arr.push(p)
   arr.push(new Point(p.x, p.y + element.radius))
   arr.push(new Point(p.x, p.y + -element.radius))
@@ -28,7 +28,7 @@ handlers.ArcTo = (arr, element, transform) => {
 
 handlers.BezierCurveTo = (arr, element, transform) => {
   if (element.type !== 'BezierCurveTo') return
-  const p = transform.applyMatrix(element)
+  const p = transform.applyMatrix(new Point(element))
   arr.push(p)
 }
 
@@ -36,7 +36,7 @@ handlers.ClosePath = () => {}
 
 handlers.Ellipse = (arr, element, transform) => {
   if (element.type !== 'Ellipse') return
-  const p = transform.applyMatrix(element)
+  const p = transform.applyMatrix(new Point(element))
   arr.push(p)
   arr.push(new Point(p.x, element.radiusX))
   arr.push(new Point(p.x, -element.radiusX))
@@ -46,19 +46,19 @@ handlers.Ellipse = (arr, element, transform) => {
 
 handlers.LineTo = (arr, element, transform) => {
   if (element.type !== 'LineTo') return
-  const p = transform.applyMatrix(element)
+  const p = transform.applyMatrix(new Point(element))
   arr.push(p)
 }
 
 handlers.MoveTo = (arr, element, transform) => {
   if (element.type !== 'MoveTo') return
-  const p = transform.applyMatrix(element)
+  const p = transform.applyMatrix(new Point(element))
   arr.push(p)
 }
 
 handlers.QuadraticCurveTo = (arr, element, transform) => {
   if (element.type !== 'QuadraticCurveTo') return
-  const p = transform.applyMatrix(element)
+  const p = transform.applyMatrix(new Point(element))
   arr.push(p)
   arr.push(new Point(p.x, element.cpx))
   arr.push(new Point(p.y, element.cpy))
@@ -66,7 +66,7 @@ handlers.QuadraticCurveTo = (arr, element, transform) => {
 
 handlers.Rect = (arr, element, transform) => {
   if (element.type !== 'Rect') return
-  const p = transform.applyMatrix(element)
+  const p = transform.applyMatrix(new Point(element))
   arr.push(p)
   arr.push(new Point(p.x + element.w, p.y + element.h))
 }
