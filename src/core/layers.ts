@@ -11,7 +11,7 @@ import Shape from './shape'
 import { ShapeStyle } from './shape-style'
 import { Size } from './size'
 import { TextMeasurer } from './text-measurer'
-import { MutablePath2D } from './mutable-path2d'
+import { MutablePath2D } from './path2d/mutable-path2d'
 import { StyleManager } from './style-manager'
 
 export class Layer {

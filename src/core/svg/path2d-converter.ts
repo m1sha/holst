@@ -1,5 +1,5 @@
 import { Point } from '../point'
-import { MutablePath2D } from '../mutable-path2d'
+import { MutablePath2D } from '../path2d/mutable-path2d'
 import { SvgPathDElement } from './svg-path-d-element'
 
 export function toPath2D (items: SvgPathDElement[], position: Point, path2d?: MutablePath2D, ratio?: Point, scale: number = 1, move: Point = { x: 0, y: 0 }): { path: MutablePath2D, position: Point } {

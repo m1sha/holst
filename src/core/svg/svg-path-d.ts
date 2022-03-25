@@ -2,7 +2,7 @@ import { Point } from '../point'
 import { parseSvgPathD, toSvgPathD } from './svg-path-d-parser'
 import { SvgPathDElement } from './svg-path-d-element'
 import { toPath2D } from './path2d-converter'
-import { MutablePath2D } from '../mutable-path2d'
+import { MutablePath2D } from '../path2d/mutable-path2d'
 
 export class SvgPathD {
   private items: SvgPathDElement[] = []

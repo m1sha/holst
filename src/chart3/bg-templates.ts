@@ -7,7 +7,7 @@ import Shape from '../core/shape'
 import sizes from './sizes'
 import { Viewport } from '../core/viewport'
 import { Size } from '../core/size'
-import { MutablePath2D } from '../core/mutable-path2d'
+import { MutablePath2D } from '../core/path2d/mutable-path2d'
 
 const createGrid = (layer: Layer, options: { viewport: Viewport, seed: { width: number, height: number } }): Shape => {
   const shape = new Shape(layer, new MutablePath2D(), 0)
