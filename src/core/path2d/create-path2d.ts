@@ -8,69 +8,82 @@ const getLastElement = <T extends Path2DElement>(stack: Path2DElement[], type: s
   }
   return null
 }
+const handlers: Record<string, (path: Path2D, element: Path2DElement, transform: Matrix2D, stack: Path2DElement[]) => void> = {}
+handlers.Arc = (path, element, transform) => {
+  if (element.type !== 'Arc') return
+  const { radius, startAngle, endAngle, counterclockwise } = element
+  const { x, y } = transform.applyMatrix(element)
+  path.arc(x, y, radius, startAngle, endAngle, counterclockwise)
+}
+
+handlers.ArcTo = (path, element, transform) => {
+  if (element.type !== 'ArcTo') return
+  const { x1, x2, y1, y2, radius } = element
+  const p1 = transform.applyMatrix(new Point(x1, y1))
+  const p2 = transform.applyMatrix(new Point(x2, y2))
+  path.arcTo(p1.x, p1.y, p2.x, p2.y, radius)
+}
+
+handlers.BezierCurveTo = (path, element, transform) => {
+  if (element.type !== 'BezierCurveTo') return
+  const { cp1x, cp1y, cp2x, cp2y } = element
+  const { x, y } = transform.applyMatrix(element)
+  path.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y)
+}
+
+handlers.ClosePath = (path, element) => {
+  if (element.type !== 'ClosePath') return
+  path.closePath()
+}
+
+handlers.Ellipse = (path, element, transform) => {
+  if (element.type !== 'Ellipse') return
+  const { radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise } = element
+  const { x, y } = transform.applyMatrix(element)
+  path.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise)
+}
+
+handlers.LineTo = (path, element, transform) => {
+  if (element.type !== 'LineTo') return
+  const { x, y } = transform.applyMatrix(element)
+  path.lineTo(x, y)
+}
+
+handlers.MoveTo = (path, element, transform) => {
+  if (element.type !== 'MoveTo') return
+  const { x, y } = transform.applyMatrix(element)
+  path.moveTo(x, y)
+}
+
+handlers.QuadraticCurveTo = (path, element, transform) => {
+  if (element.type !== 'QuadraticCurveTo') return
+  const { cpx, cpy } = element
+  const { x, y } = transform.applyMatrix(element)
+  path.quadraticCurveTo(cpx, cpy, x, y)
+}
+
+handlers.Rect = (path, element, transform) => {
+  if (element.type !== 'Rect') return
+  const { w, h } = element
+  const { x, y } = transform.applyMatrix(element)
+  path.rect(x, y, w, h)
+}
+
+handlers.MoveToR = () => {}
+
+handlers.LineToR = (path, element, transform, stack) => {
+  if (element.type !== 'LineToR') return
+  const moveTo = getLastElement<MoveToR>(stack, 'MoveToR')
+  if (!moveTo) throw new Error('MoveToR is not found on the stack')
+  const p0 = transform.applyMatrix(moveTo)
+  path.lineTo(p0.x, p0.y)
+
+  const p = transform.applyMatrix(new Point(element.x + moveTo.x, element.y + moveTo.y))
+  path.lineTo(p.x, p.y)
+}
+
 export function createPath2D (stack: Path2DElement[], transform: Matrix2D): Path2D {
   const path = new Path2D()
-  for (const i of stack) {
-    switch (i.type) {
-      case 'Arc': {
-        const p = transform.applyMatrix(i)
-        path.arc(p.x, p.y, i.radius, i.startAngle, i.endAngle, i.counterclockwise)
-        continue
-      }
-      case 'ArcTo': {
-        const p1 = transform.applyMatrix(new Point(i.x1, i.y1))
-        const p2 = transform.applyMatrix(new Point(i.x2, i.y2))
-        path.arcTo(p1.x, p1.y, p2.x, p2.y, i.radius)
-        continue
-      }
-      case 'BezierCurveTo': {
-        const p = transform.applyMatrix(i)
-        path.bezierCurveTo(i.cp1x, i.cp1y, i.cp2x, i.cp2y, p.x, p.y)
-        continue
-      }
-      case 'ClosePath':
-        path.closePath()
-        continue
-      case 'Ellipse': {
-        const p = transform.applyMatrix(i)
-        path.ellipse(p.x, p.y, i.radiusX, i.radiusY, i.rotation, i.startAngle, i.endAngle, i.counterclockwise)
-        continue
-      }
-      case 'LineTo': {
-        const p = transform.applyMatrix(i)
-        path.lineTo(p.x, p.y)
-        continue
-      }
-      case 'MoveTo': {
-        const p = transform.applyMatrix(i)
-        path.moveTo(p.x, p.y)
-        continue
-      }
-      case 'QuadraticCurveTo': {
-        const p = transform.applyMatrix(i)
-        path.quadraticCurveTo(i.cpx, i.cpy, p.x, p.y)
-        continue
-      }
-      case 'Rect': {
-        // TODO apply matrix to Path2D.Rect?
-        const p = transform.applyMatrix(i)
-        path.rect(p.x, p.y, i.w, i.h)
-        continue
-      }
-      case 'MoveToR': {
-        continue
-      }
-      case 'LineToR': {
-        const moveTo = getLastElement<MoveToR>(stack, 'MoveToR')
-        if (!moveTo) throw new Error('MoveToR is not found on the stack')
-        const p0 = transform.applyMatrix(moveTo)
-        path.lineTo(p0.x, p0.y)
-
-        const p = transform.applyMatrix(new Point(i.x + moveTo.x, i.y + moveTo.y))
-        path.lineTo(p.x, p.y)
-        continue
-      }
-    }
-  }
+  for (const element of stack) handlers[element.type](path, element, transform, stack)
   return path
 }
