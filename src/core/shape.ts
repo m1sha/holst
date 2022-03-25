@@ -122,28 +122,32 @@ export default class Shape implements Orderable {
     return this
   }
 
-  merge (shape: Shape) {
+  merge (shape: Shape): this | Shape {
     this.mutablePath.addPath(shape.toPath2D())
+    return this
   }
 
-  move (point: Point) {
+  move (point: Point): this | Shape {
     // const matrix = Matrix2D.identity
     // matrix.e = point.x
     // matrix.f = point.y
     this.mutablePath.transform.e = point.x
     this.mutablePath.transform.f = point.y
     // this.mutablePath.transform.mul(matrix)
+    return this
   }
 
-  scale (point: Point) {
+  scale (point: Point): this | Shape {
     const matrix = Matrix2D.identity.scale(point)
     this.mutablePath.transform.mul(matrix)
+    return this
   }
 
-  flipY () {
+  flipY (): this | Shape {
     const matrix = Matrix2D.identity
     matrix.d = -1
     this.mutablePath.transform.mul(matrix)
+    return this
   }
 
   inPath (p: Point): boolean {
