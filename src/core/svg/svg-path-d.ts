@@ -19,8 +19,8 @@ export class SvgPathD {
     return toSvgPathD(this.items)
   }
 
-  toPath2D (path2d?: MutablePath2D, ratio?: Point, scale: number = 1, move: Point = { x: 0, y: 0 }): MutablePath2D {
-    const { path, position } = toPath2D(this.items, this.position, path2d, ratio, scale, move)
+  toPath2D (path2d?: MutablePath2D): MutablePath2D {
+    const { path, position } = toPath2D(this.items, this.position, path2d)
     this.position = position
     return path
   }
