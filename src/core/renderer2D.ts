@@ -9,7 +9,7 @@ import Shape from './shape'
 import { toAbsolute } from './utils'
 import { deepCopyFast } from '../tools/deep-copy'
 import { Color } from './color'
-export type Context2DOrientation = 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right'
+
 export class Renderer2D implements Renderer2DBase {
   readonly ctx: CanvasRenderingContext2D
 
@@ -127,7 +127,7 @@ export class Renderer2D implements Renderer2DBase {
       if (item instanceof TextBlock) {
         // TODO Text relative coords to abs transform need convert to matrix
         const newItem = deepCopyFast(item)
-        newItem.target = toAbsolute(newItem.target, layer.orientation, layer.location, layer.originSize)
+        newItem.target = toAbsolute(newItem.target, layer.location, layer.originSize)
         this.drawTextBlock(newItem, layer.mask)
       }
     }
@@ -136,14 +136,14 @@ export class Renderer2D implements Renderer2DBase {
   }
 
   private drawOldTextLabels (layer: Readonly<Layer>) {
-    for (const label of layer.labels) {
-      const l = {
-        value: label.value,
-        x: (w: number) => toAbsolute({ x: label.x(w), y: 0 }, layer.orientation, layer.location, layer.originSize).x,
-        y: (w: number) => toAbsolute({ x: 0, y: label.y(w) }, layer.orientation, layer.location, layer.originSize).y,
-        style: label.style
-      }
-      this.drawText(l, layer.mask)
-    }
+    // for (const label of layer.labels) {
+    // const l = {
+    //   value: label.value,
+    //   x: (w: number) => toAbsolute({ x: label.x(w), y: 0 }, layer.orientation, layer.location, layer.originSize).x,
+    //   y: (w: number) => toAbsolute({ x: 0, y: label.y(w) }, layer.orientation, layer.location, layer.originSize).y,
+    //   style: label.style
+    // }
+    // this.drawText(l, layer.mask)
+    // }
   }
 }

@@ -1,4 +1,3 @@
-import { Context2DOrientation } from './renderer2D'
 import { Padding } from './padding'
 import { Point } from './point'
 import { Size } from './size'
@@ -11,11 +10,10 @@ const padding = (top: number, left: number, bottom: number, right: number): Padd
   return { top, left, bottom, right }
 }
 
-const toAbsolute = (point: Point, orientation: Context2DOrientation, location: Point, originSize: Size) : Point => {
-  const isTopLeft = orientation === 'top-left'
+const toAbsolute = (point: Point, location: Point, originSize: Size) : Point => {
   return new Point({
     x: location.x + point.x,
-    y: isTopLeft ? point.y + location.y : (originSize.height - point.y) - location.y
+    y: point.y + location.y
   })
 }
 

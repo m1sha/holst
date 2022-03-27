@@ -1,6 +1,5 @@
 import { getRatio } from '../chart3/utils'
 import { Constraints } from './constraints'
-import { Context2DOrientation } from './renderer2D'
 import { Image, Images } from './image'
 import { Text, TextBlock } from './label'
 import { TextStyle } from './label-style'
@@ -35,16 +34,12 @@ export class Layer {
   */
   readonly originSize: Readonly<Size>
   /**
-  * @deprecated The method should not be used.
-  */
-  orientation: Context2DOrientation
   /**
   * @deprecated The method should not be used.
   */
   constraints: Constraints
 
-  constructor (size: Size, orientation: Context2DOrientation, styleManager: StyleManager) {
-    this.orientation = orientation
+  constructor (size: Size, styleManager: StyleManager) {
     this.constraints = { minX: 0, minY: 0, maxX: size.width, maxY: size.height }
     this.location = new Point(0, 0)
     this.size = { width: size.width, height: size.height }
