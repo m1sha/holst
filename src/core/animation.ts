@@ -7,6 +7,7 @@ import { Scene } from './scene'
 const millis = () => new Date().getTime()
 
 export interface FrameInfo {
+  timeStamp: number,
   startTime: number,
   сountdown: number,
   percent: number
@@ -49,13 +50,14 @@ class Task {
     this.isStarted = true
   }
 
-  execute (time: number, r: number) {
+  execute (time: number, timeStamp: number) {
     const сountdown = this.сountdown + this.timeout + this.duration - time
     const percent = (100 / this.duration) * (this.duration - сountdown)
     this.delegate({
       startTime: time,
       сountdown,
-      percent
+      percent,
+      timeStamp
     })
   }
 
@@ -112,8 +114,8 @@ export class AnimationController {
   }
 
   start (): void {
-    this.timerId = this.animationFrameProvider.requestAnimationFrame(r => {
-      this.invokeTasks(r)
+    this.timerId = this.animationFrameProvider.requestAnimationFrame(timeStamp => {
+      this.invokeTasks(timeStamp)
     })
   }
 
@@ -133,7 +135,7 @@ export class AnimationController {
     removeItem(this.tasks, p => p.name === name)
   }
 
-  private invokeTasks (r: number) {
+  private invokeTasks (timeStamp: number) {
     for (const task of this.tasks) {
       if (task.isCanceled) continue
 
@@ -153,7 +155,7 @@ export class AnimationController {
       if (task.isCanceled) continue
       this.scene.clearActiveLayer()
       this.renderer.clear()
-      task.execute(t, r)
+      task.execute(t, timeStamp)
       this.renderer.render(this.scene)
     }
 
