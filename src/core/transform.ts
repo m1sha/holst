@@ -1,7 +1,7 @@
 import { Point } from './point'
 
 const rotate = (point: Point, target: Point, angle: number): Point => {
-  const result = { x: point.x, y: point.y }
+  const result = new Point(point)
   const rad = gradToRad(angle)
   const sin = Math.sin(rad)
   const cos = Math.cos(rad)
