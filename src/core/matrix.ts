@@ -79,7 +79,7 @@ export class Matrix2D {
   }
 
   copy () {
-    return new Matrix2D({ a: this.a, b: this.b, c: this.c, d: this.d, e: this.e, f: this.f })
+    return new Matrix2D(this)
   }
 
   static get identity (): Matrix2D {
