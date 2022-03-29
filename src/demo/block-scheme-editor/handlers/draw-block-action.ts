@@ -1,8 +1,8 @@
-import { TextStyle } from '../../core/label-style'
-import { Layer } from '../../core/layers'
-import { Point } from '../../core/point'
-import { Rect } from '../../core/rect'
-import { Scene } from '../../core/scene'
+import { TextStyle } from '../../../core/label-style'
+import { Layer } from '../../../core/layers'
+import { Point } from '../../../core/point'
+import { Rect } from '../../../core/rect'
+import { Scene } from '../../../core/scene'
 import { Block } from '../elements/block'
 
 export default function (s: Scene, block: Block) {

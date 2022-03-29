@@ -34,7 +34,7 @@ export class EventHandler {
     this.render.clear()
 
     if (event instanceof MouseEvent) {
-      const point = { x: event.offsetX, y: event.offsetY }
+      const point = new Point(event.offsetX, event.offsetY)
       for (const delegate of this.delegates) {
         if (delegate.eventType !== eventType) {
           continue

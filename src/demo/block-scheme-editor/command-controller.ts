@@ -5,6 +5,7 @@ import { SelectBlockCommand } from './commander/select-block-command'
 import { UnselectBlockCommand } from './commander/unselect-block-command'
 import { Block, CreateBlockOption } from './elements/block'
 import { Editor } from './editor'
+import { Point } from '../../core/point'
 
 export class CommandController {
   private executer: CommandExecuter
@@ -29,7 +30,7 @@ export class CommandController {
   }
 
   moveBlock (block: Block, x: number, y: number) {
-    this.executer.addCommand(new MoveBlockCommand(block, { x, y }))
+    this.executer.addCommand(new MoveBlockCommand(block, new Point(x, y)))
   }
 
   undo () {
