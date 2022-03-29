@@ -112,8 +112,8 @@ export default class Shape implements Orderable {
     return this
   }
 
-  lineR (point: Point): this | Shape {
-    this.mutablePath.moveToR(point.x, point.y)
+  lineToR (point: Point): this | Shape {
+    this.mutablePath.lineToR(point.x, point.y)
     return this
   }
 

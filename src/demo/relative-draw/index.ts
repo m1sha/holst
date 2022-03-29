@@ -9,7 +9,7 @@ export function createRelativeDrawExample (canvas: HTMLCanvasElement) {
 
   layer.createShape({ strokeStyle: 'red' })
     .moveToR(new Point(10, 10))
-    .lineR(new Point(10, 10))
+    .lineToR(new Point(10, 10))
 
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
   renderer.render(scene)
