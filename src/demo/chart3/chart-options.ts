@@ -1,8 +1,8 @@
 import { ChartBase } from './chart-base'
 import { Colors } from './colors'
-import { Padding } from '../core/padding'
-import { Point } from '../core/point'
-import { Size } from '../core/size'
+import { Padding } from '../../core/padding'
+import { Point } from '../../core/point'
+import { Size } from '../../core/size'
 
 export interface Tooltip {
   onShow?: (e: unknown, i: unknown) => void

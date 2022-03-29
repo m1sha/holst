@@ -1,4 +1,4 @@
-import { getRatio } from '../chart3/utils'
+import { getRatio } from '../demo/chart3/utils'
 import { Constraints } from './constraints'
 import { Image, Images } from './image'
 import { Text, TextBlock } from './label'

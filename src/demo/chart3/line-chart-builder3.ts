@@ -3,15 +3,15 @@ import { ChartOptions } from './chart-options'
 import { LineChartBuilder } from './line-chart-builder'
 import { toDisplayText } from './utils'
 // import { AnimationController } from '../core/animation'
-import { Constraints } from '../core/constraints'
-import { Layer } from '../core/layers'
-import { Padding } from '../core/padding'
-import { Point } from '../core/point'
-import { padding } from '../core/utils'
-import { Viewport } from '../core/viewport'
-import { createTooltipWindow } from '../tooltip'
+import { Constraints } from '../../core/constraints'
+import { Layer } from '../../core/layers'
+import { Padding } from '../../core/padding'
+import { Point } from '../../core/point'
+import { padding } from '../../core/utils'
+import { Viewport } from '../../core/viewport'
+import { createTooltipWindow } from '../../tooltip'
 import styles from './styles'
-import { Rect } from '../core/rect'
+import { Rect } from '../../core/rect'
 
 export class LineChartBuilder3 extends LineChartBuilder {
   private readonly constraints: Constraints
@@ -73,8 +73,8 @@ export class LineChartBuilder3 extends LineChartBuilder {
     const topY = (absMaxY + offsetY) * ratio.y
 
     const axises = layer.createShape(styles.axises)
-    axises.lineH({ x: 0, y: 0 }, layer.size.width)
-    axises.lineV({ x: 0, y: 0 }, topY)
+    axises.lineH(new Point({ x: 0, y: 0 }), layer.size.width)
+    axises.lineV(new Point({ x: 0, y: 0 }), topY)
 
     const segmentHeight = absMaxY / ySegmentCount + 1
     const segments = layer.createShape(styles.segments)
@@ -235,7 +235,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
   }
 
   private createLayer () {
-    const layer = this.chart.createLayer('bottom-left')
+    const layer = this.chart.createLayer()
     layer.constraints = this.constraints
     this.setPadding(layer)
     return layer

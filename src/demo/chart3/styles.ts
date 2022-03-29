@@ -1,5 +1,5 @@
-import { TextStyle } from '../core/label-style'
-import { ShapeStyle } from '../core/shape-style'
+import { TextStyle } from '../../core/label-style'
+import { ShapeStyle } from '../../core/shape-style'
 export default class {
   static graphLine: ShapeStyle = {
     strokeStyle: '#028f5f',

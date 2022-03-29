@@ -1,6 +1,6 @@
 import { ChartBuilder } from './chart-builder'
 import { ChartOptions } from './chart-options'
-import { EventHandler, EventInfo } from '../core/event-handler'
+import { EventHandler, EventInfo } from '../../core/event-handler'
 
 export class LineChartBuilder extends ChartBuilder {
   protected eventHandler: EventHandler

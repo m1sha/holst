@@ -1,24 +1,24 @@
 import colors from './colors'
-import { Layer } from '../core/layers'
-import { Padding } from '../core/padding'
-import { Point } from '../core/point'
-import { Rect } from '../core/rect'
-import Shape from '../core/shape'
+import { Layer } from '../../core/layers'
+import { Padding } from '../../core/padding'
+import { Point } from '../../core/point'
+import { Rect } from '../../core/rect'
+import Shape from '../../core/shape'
 import sizes from './sizes'
-import { Viewport } from '../core/viewport'
-import { Size } from '../core/size'
-import { MutablePath2D } from '../core/path2d/mutable-path2d'
+import { Viewport } from '../../core/viewport'
+import { Size } from '../../core/size'
+import { MutablePath2D } from '../../core/path2d/mutable-path2d'
 
 const createGrid = (layer: Layer, options: { viewport: Viewport, seed: { width: number, height: number } }): Shape => {
   const shape = new Shape(new MutablePath2D(), 0)
   const { viewport, seed } = options
   for (let i = viewport.top; i < viewport.height; i += seed.height) {
-    shape.lineH({ x: viewport.x, y: viewport.top + i }, viewport.width)
+    shape.lineH(new Point({ x: viewport.x, y: viewport.top + i }), viewport.width)
   }
 
   const dx = viewport.width / seed.width
   for (let i = 0; i < dx; i++) {
-    shape.lineV({ x: viewport.right - (i * seed.width), y: viewport.y }, viewport.height)
+    shape.lineV(new Point({ x: viewport.right - (i * seed.width), y: viewport.y }), viewport.height)
   }
 
   shape.style.strokeStyle = colors.gridLineColor
@@ -34,8 +34,8 @@ const createBackground = (layer: Layer, color: string, rect: Rect): Shape => {
 
 const createAxis = (layer: Layer, viewport: Viewport): Shape => {
   const shape = new Shape(new MutablePath2D(), 0)
-  shape.lineV({ x: viewport.left, y: viewport.top }, viewport.height)
-  shape.lineH({ x: viewport.left, y: viewport.bottom }, viewport.width)
+  shape.lineV(new Point({ x: viewport.left, y: viewport.top }), viewport.height)
+  shape.lineH(new Point({ x: viewport.left, y: viewport.bottom }), viewport.width)
   shape.style.strokeStyle = colors.lineColor
   return shape
 }
@@ -65,9 +65,9 @@ const createCorner = (layer: Layer, point: Point, size: Size): void => {
   corner.style.lineWidth = 2
   corner
     .moveTo(point)
-    .lineTo({ x: point.x, y: size.height })
+    .lineTo(new Point({ x: point.x, y: size.height }))
     .moveTo(point)
-    .lineTo({ x: size.width, y: point.y })
+    .lineTo(new Point({ x: size.width, y: point.y }))
 }
 
 export { createGrid, createBackground, createAxis, createThresholds, createCorner }

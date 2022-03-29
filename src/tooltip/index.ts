@@ -1,9 +1,9 @@
-import colors from '../chart3/colors'
+import colors from '../demo/chart3/colors'
 import { TextStyle } from '../core/label-style'
 import { Layer } from '../core/layers'
 import { Point } from '../core/point'
 import { Viewport } from '../core/viewport'
-import { TooltipStyle } from '../chart3/chart-options'
+import { TooltipStyle } from '../demo/chart3/chart-options'
 import { Rect } from '../core/rect'
 
 const createTooltipWindow = (layer: Layer, point: Point, viewport: Viewport, strings: string[], tooltipStyle: TooltipStyle): void => {
@@ -24,7 +24,7 @@ const createTooltipWindow = (layer: Layer, point: Point, viewport: Viewport, str
   let y = point.y + paddingTop
   const x = point.x + paddingLeft - shiftLeft
   for (const str of strings) {
-    y = createMultiText(layer, str, { x, y }, lineHeight, style)
+    y = createMultiText(layer, str, new Point(x, y), lineHeight, style)
   }
 }
 
@@ -38,7 +38,7 @@ const createMultiText = (layer: Layer, text: string, point: Point, lineHeight: n
   let y = 0
   for (const line of lines) {
     if (!line) continue
-    createLine(layer, line, { x: point.x, y: point.y + y }, style)
+    createLine(layer, line, new Point(point.x, point.y + y), style)
     y += lineHeight
   }
   return point.y + y

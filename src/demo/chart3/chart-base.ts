@@ -1,6 +1,6 @@
-import { Padding } from '../core/padding'
-import { Point } from '../core/point'
-import { Scene } from '../core/scene'
+import { Padding } from '../../core/padding'
+import { Point } from '../../core/point'
+import { Scene } from '../../core/scene'
 import { Legend } from './chart-options'
 
 export class ChartBase extends Scene {
@@ -29,16 +29,16 @@ export class ChartBase extends Scene {
     const maxHeight = this.maxHeight
     const minHeight = this.minHeight
     const minWidth = this.minWidth
-    return {
+    return new Point({
       x: (width - (padding.right + padding.left)) / (maxWidth - minWidth),
       y: (height - (padding.top + padding.bottom)) / (maxHeight - minHeight)
-    }
+    })
   }
 
   getPoint (valueX: number, valueY: number): Point {
-    return {
+    return new Point({
       x: (valueX * this.ratio.x) + this.padding.left,
       y: this.size.height - ((valueY * this.ratio.y) + this.padding.bottom)
-    }
+    })
   }
 }

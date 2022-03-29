@@ -1,6 +1,6 @@
-import { Constraints } from '../core/constraints'
-import { Point } from '../core/point'
-import { Rect } from '../core/rect'
+import { Constraints } from '../../core/constraints'
+import { Point } from '../../core/point'
+import { Rect } from '../../core/rect'
 
 const getMax = (items: [], field: string): number => {
   let result = Number.NEGATIVE_INFINITY

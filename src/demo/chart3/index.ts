@@ -1,6 +1,6 @@
 import { ChartOptions } from './chart-options'
 import { getMax, getMin } from './utils'
-import { roundInt } from '../tools/round-int'
+import { roundInt } from '../../tools/round-int'
 import { LineChartBuilder3 } from './line-chart-builder3'
 
 export function createChart (canvas: HTMLCanvasElement, data: [], options: ChartOptions) {
