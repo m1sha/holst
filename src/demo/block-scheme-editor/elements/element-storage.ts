@@ -1,11 +1,11 @@
-import { Point } from '../../core/point'
-import { Scene } from '../../core/scene'
+import { Point } from '../../../core/point'
+import { Scene } from '../../../core/scene'
 import { Block } from './block'
 import drawBlock from '../handlers/draw-block-action'
 import drawSelectRegion from '../handlers/draw-select-region'
-import { Rect } from '../../core/rect'
+import { Rect } from '../../../core/rect'
 import { GarbageCollector } from '../garbage-collector'
-import { Renderer2D } from '../../core/renderer2D'
+import { Renderer2D } from '../../../core/renderer2D'
 
 export class ElementStorage {
   private scene: Scene

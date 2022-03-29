@@ -1,6 +1,6 @@
-import { EventHandler, EventInfo } from '../core/event-handler'
-import { Point } from '../core/point'
-import { Rect } from '../core/rect'
+import { EventHandler, EventInfo } from '../../core/event-handler'
+import { Point } from '../../core/point'
+import { Rect } from '../../core/rect'
 import { Editor } from './editor'
 import { cursor } from './utils/cursor'
 

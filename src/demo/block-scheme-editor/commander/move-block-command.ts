@@ -1,4 +1,4 @@
-import { Point } from '../../core/point'
+import { Point } from '../../../core/point'
 import { Block } from '../elements/block'
 import { Command } from './command'
 

@@ -1,4 +1,4 @@
-import { Point } from '../../core/point'
+import { Point } from '../../../core/point'
 
 export class Block {
   type: string
