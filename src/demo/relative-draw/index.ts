@@ -1,5 +1,4 @@
-import { Point, Renderer2D, Scene } from '../..'
-import { Rect } from '../../core/rect'
+import { Point, Rect, Renderer2D, Scene } from '@/.'
 
 export function createRelativeDrawExample (canvas: HTMLCanvasElement) {
   const scene = new Scene(canvas)

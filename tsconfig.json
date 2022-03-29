@@ -3,11 +3,25 @@
         "strict": true,
         "target": "es5",
         "declaration": false,
-        "rootDir": ".",
         "stripInternal": true, 
         "sourceMap": true ,
         "importHelpers":true,
-        "forceConsistentCasingInFileNames":true
+        "forceConsistentCasingInFileNames":true,
+        "baseUrl": "./",
+        "paths": {
+            "@/*": [
+              "./*",
+              "src/*"
+            ]
+        },
     },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.d.ts",
+        "src/**/*.vue",
+        "tests/**/*.ts",
+        "tests/**/*.tsx"
+      ],
     "exclude": ["node_modules"]
 }

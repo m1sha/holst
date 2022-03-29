@@ -10,7 +10,11 @@ const config = {
     filename: '[name].js'
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      '@': path.resolve(__dirname, 'src')
+    },
+    modules: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'node_modules')]
   },
   module: {
     rules: [
