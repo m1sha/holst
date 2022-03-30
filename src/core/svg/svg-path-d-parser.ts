@@ -7,7 +7,7 @@ export function parseSvgPathD (d: string): SvgPathDElement[] {
     let res = ''
     while (true) {
       const chr = d.charAt(i)
-      if (!/[0-9-., ]/.test(chr)) break
+      if (!/[0-9-.,e ]/.test(chr)) break
       res += chr
       i++
       if (i >= d.length) break
@@ -52,7 +52,7 @@ export function parseSvgPathD (d: string): SvgPathDElement[] {
         continue
     }
 
-    throw new Error(`Invalid char ${chr} at ${i} position`)
+    throw new Error(`Invalid char ${chr} at ${i} position. ${d}`)
   }
 
   return result
