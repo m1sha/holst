@@ -56,34 +56,6 @@ export class MutablePath2D implements Path2DBase {
     this.stack.push({ type: 'ClosePath' })
   }
 
-  moveToR (x: number, y: number): void {
-    this.stack.push({ type: 'MoveToR', x, y })
-  }
-
-  arcR (radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void {
-    this.stack.push({ type: 'ArcR', radius, startAngle, endAngle, counterclockwise })
-  }
-
-  ellipseR (radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void {
-    this.stack.push({ type: 'EllipseR', radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise })
-  }
-
-  lineToR (x: number, y: number): void {
-    this.stack.push({ type: 'LineToR', x, y })
-  }
-
-  lineHR (w: number): void {
-    this.stack.push({ type: 'LineHR', w })
-  }
-
-  lineVR (h: number): void {
-    this.stack.push({ type: 'LineVR', h })
-  }
-
-  rectR (w: number, h: number): void {
-    this.stack.push({ type: 'RectR', w, h })
-  }
-
   createPath2D (): Path2D {
     return createPath2D(this.stack, this.transform)
   }

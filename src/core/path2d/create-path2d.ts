@@ -1,13 +1,6 @@
 import { Matrix2D } from '../matrix'
 import { Point } from '../point'
-import { MoveToR, Path2DElement } from './types/path2d-element'
-const getLastElement = <T extends Path2DElement>(stack: Path2DElement[], type: string): T | null => {
-  const l = stack.length
-  for (let i = l - 1; i >= 0; i--) {
-    if (stack[i].type === type) return stack[i] as T
-  }
-  return null
-}
+import { Path2DElement } from './types/path2d-element'
 const handlers: Record<string, (path: Path2D, element: Path2DElement, transform: Matrix2D, stack: Path2DElement[]) => void> = {}
 handlers.Arc = (path, element, transform) => {
   if (element.type !== 'Arc') return
@@ -67,19 +60,6 @@ handlers.Rect = (path, element, transform) => {
   const { w, h } = element
   const { x, y } = transform.applyMatrix(new Point(element))
   path.rect(x, y, w, h)
-}
-
-handlers.MoveToR = () => {}
-
-handlers.LineToR = (path, element, transform, stack) => {
-  if (element.type !== 'LineToR') return
-  const moveTo = getLastElement<MoveToR>(stack, 'MoveToR')
-  if (!moveTo) throw new Error('MoveToR is not found on the stack')
-  const p0 = transform.applyMatrix(new Point(moveTo))
-  path.moveTo(p0.x, p0.y)
-
-  const p = transform.applyMatrix(new Point(element.x + moveTo.x, element.y + moveTo.y))
-  path.lineTo(p.x, p.y)
 }
 
 export function createPath2D (stack: Path2DElement[], transform: Matrix2D): Path2D {

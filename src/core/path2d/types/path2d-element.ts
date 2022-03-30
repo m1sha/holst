@@ -42,55 +42,13 @@ export interface ClosePath {
   type: 'ClosePath'
 }
 
-export interface ArcR {
-  type: 'ArcR'
-  radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean
-}
-
-export interface EllipseR {
-  type: 'EllipseR'
-  radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, counterclockwise?: boolean
-}
-
-export interface MoveToR {
-  type: 'MoveToR',
-  x: number, y: number
-}
-
-export interface LineToR {
-  type: 'LineToR',
-  x: number, y: number
-}
-
-export interface LineHR {
-  type: 'LineHR',
-  w: number
-}
-
-export interface LineVR {
-  type: 'LineVR',
-  h: number
-}
-
-export interface RectR {
-  type: 'RectR',
-  w: number, h: number
-}
-
 export type Path2DElement =
   | Arc
   | ArcTo
   | BezierCurveTo
   | Ellipse
   | LineTo
-  | LineHR
-  | LineVR
   | MoveTo
   | QuadraticCurveTo
   | Rect
   | ClosePath
-  | MoveToR
-  | ArcR
-  | EllipseR
-  | LineToR
-  | RectR

@@ -4,16 +4,17 @@ import { Path2DBase } from './path2d/path2d-base'
 import { Point } from './point'
 import { Rect } from './rect'
 import { ShapeStyle } from './shape-style'
-import { Size } from './size'
 import { MutablePath2D } from './path2d/mutable-path2d'
 import { Matrix2D } from './matrix'
 import Context2DFactory from './canvas-rendering-context-2d-factory'
 import { IsPointInPolygon4 } from './utils'
 import { deepCopyFast } from '../tools/deep-copy'
+import { RelativeMutablePath2D } from './path2d/relative-mutable-path2d'
 
 export default class Shape implements Orderable {
   private p: Path2DBase | null = null
   private readonly mutablePath: MutablePath2D
+  readonly relative: RelativeMutablePath2D
   width: number = 0
   height: number = 0
   style: ShapeStyle
@@ -24,6 +25,7 @@ export default class Shape implements Orderable {
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
     this.mutablePath = path
+    this.relative = new RelativeMutablePath2D(this.mutablePath)
     this.order = order
     this.style = style || {}
     this.name = 'shape'
@@ -94,31 +96,6 @@ export default class Shape implements Orderable {
 
   closePath (): this | Shape {
     this.mutablePath.closePath()
-    return this
-  }
-
-  moveToR (point: Point): this | Shape {
-    this.mutablePath.moveToR(point.x, point.y)
-    return this
-  }
-
-  arcR (radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
-    this.mutablePath.arcR(radius, startAngle, endAngle, anticlockwise)
-    return this
-  }
-
-  ellipseR (radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
-    this.mutablePath.ellipseR(radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
-    return this
-  }
-
-  lineToR (point: Point): this | Shape {
-    this.mutablePath.lineToR(point.x, point.y)
-    return this
-  }
-
-  rectR (size: Size): this | Shape {
-    this.mutablePath.rectR(size.width, size.height)
     return this
   }
 
