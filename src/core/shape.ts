@@ -7,7 +7,7 @@ import { ShapeStyle } from './shape-style'
 import { MutablePath2D } from './path2d/mutable-path2d'
 import { Matrix2D } from './matrix'
 import Context2DFactory from './canvas-rendering-context-2d-factory'
-import { IsPointInPolygon4 } from './utils'
+import { calcBounds, IsPointInPolygon4 } from './utils'
 import { deepCopyFast } from '../tools/deep-copy'
 import { RelativeMutablePath2D } from './path2d/relative-mutable-path2d'
 
@@ -136,14 +136,8 @@ export default class Shape implements Orderable {
   }
 
   get bounds (): Rect {
-    const point = this.mutablePath.toPoints()
-    const xList = point.map(p => p.x)
-    const yList = point.map(p => p.y)
-    const x = Math.min.apply(null, xList)
-    const y = Math.min.apply(null, yList)
-    const x1 = Math.max.apply(null, xList)
-    const y1 = Math.max.apply(null, yList)
-    return new Rect(x, y, x1 - x, y1 - y)
+    const points = this.mutablePath.toPoints()
+    return calcBounds(points)
   }
 
   toPath2D (): Path2DBase {

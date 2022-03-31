@@ -1,4 +1,5 @@
 import { Point } from './point'
+import { Rect } from './rect'
 import { Size } from './size'
 
 const size = (width: number, height: number): Size => {
@@ -26,4 +27,14 @@ const IsPointInPolygon4 = (polygon: Point[], point: Point) => {
   return result
 }
 
-export { size, toAbsolute, IsPointInPolygon4 }
+const calcBounds = (points: Point[]): Rect => {
+  const xList = points.map(p => p.x)
+  const yList = points.map(p => p.y)
+  const x = Math.min.apply(null, xList)
+  const y = Math.min.apply(null, yList)
+  const x1 = Math.max.apply(null, xList)
+  const y1 = Math.max.apply(null, yList)
+  return new Rect(x, y, x1 - x, y1 - y)
+}
+
+export { size, toAbsolute, IsPointInPolygon4, calcBounds }

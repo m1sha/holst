@@ -8,6 +8,7 @@ import { ShapeStyle } from './shape-style'
 import { TextMeasurer } from './text-measurer'
 import { MutablePath2D } from './path2d/mutable-path2d'
 import { StyleManager } from './style-manager'
+import { calcBounds } from './utils'
 
 export class Layer {
   private styleManager: StyleManager
@@ -24,8 +25,9 @@ export class Layer {
   }
 
   get bounds (): Readonly<Rect> {
-    // TODO calcBound(this.shapes.map(p => p.bounds))
-    return new Rect(0, 0, 0, 0) // new Rect(this.location.x, this.location.y, this.size.width, this.size.height)
+    const points: Point[] = []
+    for (const rect of this.shapes.map(p => p.bounds)) points.push(...rect.points)
+    return calcBounds(points)
   }
 
   createShape (style: ShapeStyle | string | null = null, path?: MutablePath2D): Shape {
