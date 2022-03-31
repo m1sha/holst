@@ -1,6 +1,6 @@
 import { ChartBase } from './chart-base'
 import { Colors } from './colors'
-import { Padding } from '../../core/padding'
+// import { Padding } from '../../core/padding'
 import { Point } from '../../core/point'
 import { Size } from '../../core/size'
 
@@ -28,12 +28,12 @@ export interface ChartStyle {
   axisValueFontSize?: number,
   axisTitleFontSize?: number,
   chartTitleFontSize?: number,
-  padding?: Padding,
+  // padding?: Padding,
   graphLineWidth?: number
 }
 
 export interface TooltipStyle {
-  padding?: Padding,
+  // padding?: Padding,
   lineHeight?: number,
   size?: Size
 }

@@ -1,7 +1,7 @@
 import { ChartBase } from './chart-base'
 import { ChartOptions } from './chart-options'
 // import { getMax, roundInt } from './utils'
-import { Viewport } from '../../core/viewport'
+// import { Viewport } from '../../core/viewport'
 import { Renderer2D } from '../../core/renderer2D'
 
 export class ChartBuilder {
@@ -9,7 +9,7 @@ export class ChartBuilder {
     protected readonly chart: ChartBase
     protected readonly data: []
     protected readonly options: ChartOptions
-    protected readonly viewport: Viewport
+    // protected readonly viewport: Viewport
 
     constructor (canvas: HTMLCanvasElement, data: [], options: ChartOptions) {
       this.data = data
@@ -24,9 +24,9 @@ export class ChartBuilder {
       this.chart.maxHeight = maxHeight
       this.chart.minWidth = minWidth
       this.chart.minHeight = minHeight
-      const paddingLeft = this.chart.createLayer().measureText(this.chart.maxHeight.toString(), {}).width + 35
-      this.chart.padding = this.options?.chartStyle?.padding || { top: 25, left: paddingLeft, bottom: 70, right: 50 }
-      this.viewport = new Viewport(this.chart.size, this.chart.padding)
+      // const paddingLeft = this.chart.createLayer().measureText(this.chart.maxHeight.toString(), {}).width + 35
+      // this.chart.padding = this.options?.chartStyle?.padding || { top: 25, left: paddingLeft, bottom: 70, right: 50 }
+      // this.viewport = new Viewport(this.chart.size, this.chart.padding)
     }
 
     build () {

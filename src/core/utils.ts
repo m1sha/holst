@@ -1,13 +1,8 @@
-import { Padding } from './padding'
 import { Point } from './point'
 import { Size } from './size'
 
 const size = (width: number, height: number): Size => {
   return { width, height }
-}
-
-const padding = (top: number, left: number, bottom: number, right: number): Padding => {
-  return { top, left, bottom, right }
 }
 
 const toAbsolute = (point: Point, location: Point) : Point => {
@@ -31,4 +26,4 @@ const IsPointInPolygon4 = (polygon: Point[], point: Point) => {
   return result
 }
 
-export { size, padding, toAbsolute, IsPointInPolygon4 }
+export { size, toAbsolute, IsPointInPolygon4 }
