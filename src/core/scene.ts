@@ -1,40 +1,34 @@
 import { Layer } from './layers'
-import { Point } from './point'
-import { Size } from './size'
 import { StyleManager } from './style-manager'
 
 export class Scene {
-    readonly size: Size
-    private layers: Layer []
+    private _layers: Layer []
     readonly actionLayer: Layer
-    readonly center: Point
     readonly styleManager: StyleManager
     private orderCounter: number = 0
-    constructor (size: Size) {
-      this.size = { width: size.width, height: size.height }
-      this.center = new Point({ x: this.size.width / 2, y: this.size.height / 2 })
-      this.layers = []
+    constructor () {
+      this._layers = []
       this.styleManager = new StyleManager()
-      this.actionLayer = new Layer(99999, this.styleManager)
+      this.actionLayer = new Layer(0, this.styleManager)
     }
 
-    createLayer (): Layer {
+    createLayer (name?: string): Layer {
       const result = new Layer(++this.orderCounter, this.styleManager)
-      this.layers.push(result)
+      this._layers.push(result)
       return result
     }
 
     clearAllLayers () {
       this.clearActiveLayer()
-      for (const layer of [...this.layers]) layer.clear()
-      this.layers = []
+      for (const layer of [...this._layers]) layer.clear()
+      this._layers = []
     }
 
     clearActiveLayer () {
       this.actionLayer.clear()
     }
 
-    get allLayers (): Readonly<Layer>[] {
-      return this.layers
+    get layers (): Readonly<Layer>[] {
+      return this._layers
     }
 }

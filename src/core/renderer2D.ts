@@ -18,7 +18,7 @@ export class Renderer2D {
   }
 
   render (scene: Scene): void {
-    const layers = sort<Layer>(scene.allLayers)
+    const layers = sort<Layer>(scene.layers)
     for (const layer of [...layers, scene.actionLayer]) this.drawLayer(layer)
   }
 
@@ -39,9 +39,9 @@ export class Renderer2D {
     }
   }
 
-  private drawLayer ({ allShapes, textBlocks, images, mask }: Readonly<Layer>) {
+  private drawLayer ({ shapes, textBlocks, images, mask }: Readonly<Layer>) {
     const list = sort([
-      ...allShapes,
+      ...shapes,
       ...textBlocks,
       ...images
     ])

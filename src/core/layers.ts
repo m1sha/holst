@@ -12,15 +12,17 @@ import { calcBounds } from './utils'
 import Orderable from './orderable'
 
 export class Layer implements Orderable {
+  private orderCounter: number = 0
   private styleManager: StyleManager
-  private shapes: Shape[] = []
+  private _shapes: Shape[] = []
   textBlocks: TextBlock[] = []
   images: Images = []
   mask: Shape | null
   order: number
-  private orderCounter: number = 0
+  name: string
 
-  constructor (order: number, styleManager: StyleManager) {
+  constructor (order: number, styleManager: StyleManager, name?: string) {
+    this.name = name || 'Layer' + order
     this.order = order
     this.mask = null
     this.styleManager = styleManager
@@ -29,7 +31,7 @@ export class Layer implements Orderable {
 
   get bounds (): Readonly<Rect> {
     const points: Point[] = []
-    for (const rect of this.shapes.map(p => p.bounds)) points.push(...rect.points)
+    for (const rect of this._shapes.map(p => p.bounds)) points.push(...rect.points)
     return calcBounds(points)
   }
 
@@ -37,7 +39,7 @@ export class Layer implements Orderable {
     const stl = (typeof style === 'string') ? this.styleManager.shapes(style) : style
     if (!path) path = new MutablePath2D()
     const result = new Shape(path, ++this.orderCounter, stl)
-    this.shapes.push(result)
+    this._shapes.push(result)
     return result
   }
 
@@ -51,7 +53,7 @@ export class Layer implements Orderable {
 
   addShape (shape: Shape): void {
     if (!shape.order) shape.order = ++this.orderCounter
-    this.shapes.push(shape)
+    this._shapes.push(shape)
   }
 
   createImage (img: Image) {
@@ -61,7 +63,7 @@ export class Layer implements Orderable {
   clear () {
     this.orderCounter = 0
     this.textBlocks = []
-    this.shapes = []
+    this._shapes = []
     this.images = []
   }
 
@@ -70,7 +72,7 @@ export class Layer implements Orderable {
   createMask (defaultRect?: boolean): Shape {
     this.mask = this.createShape()
     if (defaultRect || defaultRect === undefined) {
-      // this.mask.rect(new Rect(0, 0, this.size.width, this.size.height))
+      this.mask.rect(this.bounds)
     }
     return this.mask
   }
@@ -79,7 +81,7 @@ export class Layer implements Orderable {
     this.mask = null
   }
 
-  get allShapes (): Shape[] {
-    return this.shapes
+  get shapes (): Shape[] {
+    return this._shapes
   }
 }
