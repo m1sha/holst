@@ -31,7 +31,7 @@ const createTooltipWindow = (layer: Layer, point: Point, viewport: Viewport, str
 const createMultiText = (layer: Layer, text: string, point: Point, lineHeight: number, style: TextStyle) => {
   if (!text) return point.y
   if (text.indexOf('\n') < 0) {
-    layer.createText({ value: text, x: _ => point.x, y: _ => point.y, style })
+    // layer.createText({ value: text, x: _ => point.x, y: _ => point.y, style })
     return point.y + lineHeight
   }
   const lines = text.split('\n')
@@ -45,7 +45,7 @@ const createMultiText = (layer: Layer, text: string, point: Point, lineHeight: n
 }
 
 const createLine = (layer: Layer, text: string, point: Point, style: TextStyle) => {
-  layer.createText({ value: text, x: _ => point.x, y: _ => point.y, style })
+  // layer.createText({ value: text, x: _ => point.x, y: _ => point.y, style })
 }
 
 const getHeight = (lineHeight: number, strings: string[]) => {

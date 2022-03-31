@@ -6,7 +6,7 @@ import { Layer } from './layers'
 import { Scene } from './scene'
 import Shape from './shape'
 // import array from '../tools/array'
-import { toAbsolute } from './utils'
+// import { toAbsolute } from './utils'
 import { deepCopyFast } from '../tools/deep-copy'
 import { Color } from './color'
 
@@ -127,7 +127,7 @@ export class Renderer2D implements Renderer2DBase {
       if (item instanceof TextBlock) {
         // TODO Text relative coords to abs transform need convert to matrix
         const newItem = deepCopyFast(item)
-        newItem.target = toAbsolute(newItem.target, layer.location, layer.originSize)
+        // newItem.target = toAbsolute(newItem.target, layer.location)
         this.drawTextBlock(newItem, layer.mask)
       }
     }

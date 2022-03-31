@@ -15,11 +15,11 @@ export class Scene {
       this.center = new Point({ x: this.size.width / 2, y: this.size.height / 2 })
       this.layers = []
       this.styleManager = new StyleManager()
-      this.actionLayer = new Layer(this.size, this.styleManager)
+      this.actionLayer = new Layer(this.styleManager)
     }
 
     createLayer (): Layer {
-      const result = new Layer(this.size, this.styleManager)
+      const result = new Layer(this.styleManager)
       this.layers.push(result)
       return result
     }

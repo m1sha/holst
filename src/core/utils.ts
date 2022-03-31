@@ -10,7 +10,7 @@ const padding = (top: number, left: number, bottom: number, right: number): Padd
   return { top, left, bottom, right }
 }
 
-const toAbsolute = (point: Point, location: Point, originSize: Size) : Point => {
+const toAbsolute = (point: Point, location: Point) : Point => {
   return new Point({
     x: location.x + point.x,
     y: point.y + location.y
