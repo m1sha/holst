@@ -18,7 +18,8 @@ export class Renderer2D {
   }
 
   render (scene: Scene): void {
-    for (const layer of [...scene.allLayers, scene.actionLayer]) this.drawLayer(layer)
+    const layers = sort<Layer>(scene.allLayers)
+    for (const layer of [...layers, scene.actionLayer]) this.drawLayer(layer)
   }
 
   clear (): void {
@@ -30,24 +31,26 @@ export class Renderer2D {
     return new Rect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
   }
 
-  drawImage (image: HTMLCanvasElement | HTMLImageElement | SVGImageElement | HTMLVideoElement | ImageBitmap, sx: number, sy: number, sWidth: number, sHeight: number, dx: number, dy: number, dWidth: number, dHeight: number): void {
-    this.ctx.drawImage(image, sx, sy)
+  addEventListener (a: (eventType: EventType, event: Event | MouseEvent | KeyboardEvent) => void, ...events: EventType[]) {
+    for (let i = 0; i < events.length; i++) {
+      const event = events[i]
+      const canvas = this.ctx.canvas as unknown as Record<string, unknown>
+      canvas['on' + event] = (e: Event) => a(event, e)
+    }
   }
 
-  private drawTextBlock (block: TextBlock, mask?: Shape | null): void {
-    this.ctx.save()
-    this.assignMask(mask)
-    this.assignTextStyle(block.style)
-    if (!block.multiline) {
-      this.ctx.fillText(block.text, block.target.x, block.target.y)
-    } else {
-      let y = block.target.y
-      for (const line of block.lines) {
-        this.ctx.fillText(line, block.target.x, y)
-        y += block.lineHeight
-      }
+  private drawLayer ({ allShapes, textBlocks, images, mask }: Readonly<Layer>) {
+    const list = sort([
+      ...allShapes,
+      ...textBlocks,
+      ...images
+    ])
+
+    for (const item of list) {
+      if (item instanceof Shape) this.drawShape(item, mask)
+      if (item instanceof TextBlock) this.drawTextBlock(item, mask)
+      if (item instanceof Image) this.drawImage(item)
     }
-    this.ctx.restore()
   }
 
   private drawShape (shape: Shape, mask?: Shape | null) {
@@ -71,12 +74,24 @@ export class Renderer2D {
     this.ctx.restore()
   }
 
-  on (a: (eventType: EventType, event: Event | MouseEvent | KeyboardEvent) => void, ...events: EventType[]) {
-    for (let i = 0; i < events.length; i++) {
-      const event = events[i]
-      const canvas = this.ctx.canvas as unknown as Record<string, unknown>
-      canvas['on' + event] = (e: Event) => a(event, e)
+  private drawTextBlock (block: TextBlock, mask?: Shape | null): void {
+    this.ctx.save()
+    this.assignMask(mask)
+    this.assignTextStyle(block.style)
+    if (!block.multiline) {
+      this.ctx.fillText(block.text, block.target.x, block.target.y)
+    } else {
+      let y = block.target.y
+      for (const line of block.lines) {
+        this.ctx.fillText(line, block.target.x, y)
+        y += block.lineHeight
+      }
     }
+    this.ctx.restore()
+  }
+
+  private drawImage ({ src, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight }: Image): void {
+    this.ctx.drawImage(src, sx, sy, sWidth || 0, sHeight || 0, dx || 0, dy || 0, dWidth || 0, dHeight || 0)
   }
 
   private assignTextStyle (style: TextStyle) {
@@ -92,16 +107,5 @@ export class Renderer2D {
   private assignMask (mask?: Shape | null) {
     if (!mask) return
     this.ctx.clip(mask.toPath2D())
-  }
-
-  private drawLayer (layer: Readonly<Layer>) {
-    const renderList = sort([...layer.allShapes, ...layer.textBlocks, ...layer.images])// .sort(array.asc('order'))
-    for (const item of renderList) {
-      if (item instanceof Shape) this.drawShape(item, layer.mask)
-      if (item instanceof TextBlock) this.drawTextBlock(item, layer.mask)
-      if (item instanceof Image) {
-        this.ctx.drawImage(item.src, item.sx, item.sy, item.sWidth || 0, item.sHeight || 0, item.dx || 0, item.dy || 0, item.dWidth || 0, item.dHeight || 0)
-      }
-    }
   }
 }
