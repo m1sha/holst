@@ -9,17 +9,17 @@ export class Scene {
     readonly actionLayer: Layer
     readonly center: Point
     readonly styleManager: StyleManager
-
+    private orderCounter: number = 0
     constructor (size: Size) {
       this.size = { width: size.width, height: size.height }
       this.center = new Point({ x: this.size.width / 2, y: this.size.height / 2 })
       this.layers = []
       this.styleManager = new StyleManager()
-      this.actionLayer = new Layer(this.styleManager)
+      this.actionLayer = new Layer(99999, this.styleManager)
     }
 
     createLayer (): Layer {
-      const result = new Layer(this.styleManager)
+      const result = new Layer(++this.orderCounter, this.styleManager)
       this.layers.push(result)
       return result
     }

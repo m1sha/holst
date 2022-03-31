@@ -20,8 +20,6 @@ export default class Shape implements Orderable {
   style: ShapeStyle
   name: string
   order: number
-  after?: Orderable
-  before?: Orderable
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
     this.mutablePath = path

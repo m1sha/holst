@@ -6,7 +6,7 @@ import { LineToCommand, MoveToCommand, TestCommandDispatcher } from './test-draw
 
 test('Shape global coordinates changed if layer location changed', () => {
   const commands = new TestCommandDispatcher()
-  const layer = new Layer(new StyleManager())
+  const layer = new Layer(0, new StyleManager())
   // layer.location.x = 50
   const shape = layer.createShape()
   shape.lineV(new Point(1, 1), 50)

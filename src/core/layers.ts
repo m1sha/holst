@@ -9,16 +9,19 @@ import { TextMeasurer } from './text-measurer'
 import { MutablePath2D } from './path2d/mutable-path2d'
 import { StyleManager } from './style-manager'
 import { calcBounds } from './utils'
+import Orderable from './orderable'
 
-export class Layer {
+export class Layer implements Orderable {
   private styleManager: StyleManager
   private shapes: Shape[] = []
   textBlocks: TextBlock[] = []
   images: Images = []
   mask: Shape | null
+  order: number
   private orderCounter: number = 0
 
-  constructor (styleManager: StyleManager) {
+  constructor (order: number, styleManager: StyleManager) {
+    this.order = order
     this.mask = null
     this.styleManager = styleManager
     this.clear()

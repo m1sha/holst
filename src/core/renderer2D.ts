@@ -5,10 +5,9 @@ import { TextStyle } from './label-style'
 import { Layer } from './layers'
 import { Scene } from './scene'
 import Shape from './shape'
-// import array from '../tools/array'
-// import { toAbsolute } from './utils'
-import { deepCopyFast } from '../tools/deep-copy'
 import { Color } from './color'
+import { Image } from './image'
+import { sort } from './sorter'
 
 export class Renderer2D implements Renderer2DBase {
   readonly ctx: CanvasRenderingContext2D
@@ -117,33 +116,13 @@ export class Renderer2D implements Renderer2DBase {
   }
 
   private drawLayer (layer: Readonly<Layer>) {
-    for (const image of layer.images) {
-      this.ctx.drawImage(image.src, image.sx, image.sy, image.sWidth || 0, image.sHeight || 0, image.dx || 0, image.dy || 0, image.dWidth || 0, image.dHeight || 0)
-    }
-
-    const renderList = [...layer.allShapes, ...layer.textBlocks]// .sort(array.asc('order'))
+    const renderList = sort([...layer.allShapes, ...layer.textBlocks, ...layer.images])// .sort(array.asc('order'))
     for (const item of renderList) {
       if (item instanceof Shape) this.drawShape(item, layer.mask)
-      if (item instanceof TextBlock) {
-        // TODO Text relative coords to abs transform need convert to matrix
-        const newItem = deepCopyFast(item)
-        // newItem.target = toAbsolute(newItem.target, layer.location)
-        this.drawTextBlock(newItem, layer.mask)
+      if (item instanceof TextBlock) this.drawTextBlock(item, layer.mask)
+      if (item instanceof Image) {
+        this.ctx.drawImage(item.src, item.sx, item.sy, item.sWidth || 0, item.sHeight || 0, item.dx || 0, item.dy || 0, item.dWidth || 0, item.dHeight || 0)
       }
     }
-
-    this.drawOldTextLabels(layer)
-  }
-
-  private drawOldTextLabels (layer: Readonly<Layer>) {
-    // for (const label of layer.labels) {
-    // const l = {
-    //   value: label.value,
-    //   x: (w: number) => toAbsolute({ x: label.x(w), y: 0 }, layer.orientation, layer.location, layer.originSize).x,
-    //   y: (w: number) => toAbsolute({ x: 0, y: label.y(w) }, layer.orientation, layer.location, layer.originSize).y,
-    //   style: label.style
-    // }
-    // this.drawText(l, layer.mask)
-    // }
   }
 }
