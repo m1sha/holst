@@ -1,6 +1,5 @@
-import Renderer2DBase from './renderer2d-base'
 import { EventType } from './event-type'
-import { Text, TextBlock } from './label'
+import { TextBlock } from './label'
 import { TextStyle } from './label-style'
 import { Layer } from './layers'
 import { Scene } from './scene'
@@ -8,8 +7,9 @@ import Shape from './shape'
 import { Color } from './color'
 import { Image } from './image'
 import { sort } from './sorter'
+import { Rect } from './rect'
 
-export class Renderer2D implements Renderer2DBase {
+export class Renderer2D {
   readonly ctx: CanvasRenderingContext2D
 
   constructor (ctx: CanvasRenderingContext2D) {
@@ -22,28 +22,19 @@ export class Renderer2D implements Renderer2DBase {
   }
 
   clear (): void {
-    this.ctx.clearRect(0, 0, this.width, this.height)
+    const { width, height } = this.viewport
+    this.ctx.clearRect(0, 0, width, height)
+  }
+
+  get viewport (): Rect {
+    return new Rect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
   }
 
   drawImage (image: HTMLCanvasElement | HTMLImageElement | SVGImageElement | HTMLVideoElement | ImageBitmap, sx: number, sy: number, sWidth: number, sHeight: number, dx: number, dy: number, dWidth: number, dHeight: number): void {
     this.ctx.drawImage(image, sx, sy)
   }
 
-  get width () { return this.ctx.canvas.width }
-  get height () { return this.ctx.canvas.height }
-
-  drawText (label: Text, mask?: Shape | null) {
-    this.ctx.save()
-    this.assignMask(mask)
-    this.assignTextStyle(label.style)
-    const width = this.measureText(label.value, label.style).width
-    const x = label.x(width)
-    const y = label.y(width)
-    this.ctx.fillText(label.value, x, y)
-    this.ctx.restore()
-  }
-
-  drawTextBlock (block: TextBlock, mask?: Shape | null): void {
+  private drawTextBlock (block: TextBlock, mask?: Shape | null): void {
     this.ctx.save()
     this.assignMask(mask)
     this.assignTextStyle(block.style)
@@ -59,7 +50,7 @@ export class Renderer2D implements Renderer2DBase {
     this.ctx.restore()
   }
 
-  drawShape (shape: Shape, mask?: Shape | null) {
+  private drawShape (shape: Shape, mask?: Shape | null) {
     this.ctx.save()
     this.assignMask(mask)
     const { style } = shape
@@ -78,18 +69,6 @@ export class Renderer2D implements Renderer2DBase {
       this.ctx.fill(path)
     }
     this.ctx.restore()
-  }
-
-  measureText (text: string, style: TextStyle) {
-    this.ctx.save()
-    this.assignTextStyle(style)
-    const result = this.ctx.measureText(text)
-    this.ctx.restore()
-    return result
-  }
-
-  createPath (): Path2D {
-    return new Path2D()
   }
 
   on (a: (eventType: EventType, event: Event | MouseEvent | KeyboardEvent) => void, ...events: EventType[]) {
