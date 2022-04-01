@@ -4,18 +4,18 @@ import { Scene } from '../../core/scene'
 import { Legend } from './chart-options'
 
 export class ChartBase extends Scene {
-  maxHeight: number
-  maxWidth: number
+  // maxHeight: number
+  // maxWidth: number
   minHeight: number
   minWidth: number
   // padding: Padding
   legend: Legend
 
   constructor (canvas: HTMLCanvasElement) {
-    super(canvas)
+    super()
     // this.padding = { top: 8, left: 8, bottom: 8, right: 8 }
-    this.maxHeight = this.size.height
-    this.maxWidth = this.size.width
+    // this.maxHeight = this.size.height
+    // this.maxWidth = this.size.width
     this.minHeight = 0
     this.minWidth = 0
     this.legend = {}

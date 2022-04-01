@@ -29,9 +29,9 @@ export class ElementStorage {
   }
 
   findHoverBlock (point: Point): Block | null {
-    const layers = this.scene.allLayers
+    const layers = this.scene.layers
     for (const layer of layers) {
-      for (const shape of layer.allShapes) {
+      for (const shape of layer.shapes) {
         const block = this.blocks.filter(p => p._uid === parseInt(shape.name))[0]
         if (!block) continue
         const yes = this.renderer.ctx.isPointInPath(shape.toPath2D(), point.x, point.y)

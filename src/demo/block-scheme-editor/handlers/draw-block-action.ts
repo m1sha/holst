@@ -37,6 +37,6 @@ const helpers = {
       .rect(new Rect(x - margin, y - margin, width + (margin * 2), height + (margin * 2)))
   },
   getTextWidth (text: string, layer: Layer): number {
-    return layer.measureText(text, this.textStyle).width
+    return 0 // layer.measureText(text, this.textStyle).width
   }
 }

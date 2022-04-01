@@ -18,12 +18,12 @@ export class ChartBuilder {
       const ctx = canvas.getContext('2d')
       if (!ctx) throw new Error('e')
       this.render = new Renderer2D(ctx)
-      const { maxWidth, maxHeight, minWidth, minHeight } = this.calculateBoundary()
+      // const { maxWidth, maxHeight, minWidth, minHeight } = this.calculateBoundary()
       this.chart.legend = options.legend || {}
-      this.chart.maxWidth = maxWidth
-      this.chart.maxHeight = maxHeight
-      this.chart.minWidth = minWidth
-      this.chart.minHeight = minHeight
+      // this.chart.maxWidth = maxWidth
+      // this.chart.maxHeight = maxHeight
+      // this.chart.minWidth = minWidth
+      // this.chart.minHeight = minHeight
       // const paddingLeft = this.chart.createLayer().measureText(this.chart.maxHeight.toString(), {}).width + 35
       // this.chart.padding = this.options?.chartStyle?.padding || { top: 25, left: paddingLeft, bottom: 70, right: 50 }
       // this.viewport = new Viewport(this.chart.size, this.chart.padding)

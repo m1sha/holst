@@ -12,7 +12,7 @@ export class Editor {
   evenHandler: EventHandler
 
   constructor (canvas: HTMLCanvasElement) {
-    this.scene = new Scene(canvas)
+    this.scene = new Scene()
     const ctx = canvas.getContext('2d')
     if (!ctx) throw new Error('')
     this.renderer = new Renderer2D(ctx)
