@@ -1,4 +1,4 @@
-import { Image, Images } from './image'
+import { Image } from './image'
 import { TextBlock } from './label'
 import { TextStyle } from './label-style'
 import { Point } from './point'
@@ -10,13 +10,12 @@ import { MutablePath2D } from './path2d/mutable-path2d'
 import { StyleManager } from './style-manager'
 import { calcBounds } from './utils'
 import Orderable from './orderable'
+import { Arrange } from './arrange'
 
 export class Layer implements Orderable {
-  private orderCounter: number = 0
+  private objects: Orderable[] = []
   private styleManager: StyleManager
-  private _shapes: Shape[] = []
-  textBlocks: TextBlock[] = []
-  images: Images = []
+  private arrange: Arrange
   mask: Shape | null
   order: number
   name: string
@@ -26,48 +25,45 @@ export class Layer implements Orderable {
     this.order = order
     this.mask = null
     this.styleManager = styleManager
+    this.arrange = new Arrange([])
     this.clear()
   }
 
   get bounds (): Readonly<Rect> {
     const points: Point[] = []
-    for (const rect of this._shapes.map(p => p.bounds)) points.push(...rect.points)
+    for (const rect of this.shapes.map(p => p.bounds)) points.push(...rect.points)
     return calcBounds(points)
   }
 
   createShape (style: ShapeStyle | string | null = null, path?: MutablePath2D): Shape {
     const stl = (typeof style === 'string') ? this.styleManager.shapes(style) : style
     if (!path) path = new MutablePath2D()
-    const result = new Shape(path, ++this.orderCounter, stl)
-    this._shapes.push(result)
+    const result = new Shape(path, this.arrange.order, stl)
+    this.objects.push(result)
     return result
   }
 
   createTextBlock (text: string, style: TextStyle | string, target?: Point): TextBlock {
     const stl = (typeof style === 'string') ? this.styleManager.texts(style) : style
-    const result = new TextBlock(text, stl, ++this.orderCounter, (text, style) => this.measureText(text, stl))
+    const result = new TextBlock(text, stl, this.arrange.order, (text, style) => TextMeasurer.measureText(text, style))
     if (target) result.target = target
-    this.textBlocks.push(result)
+    this.objects.push(result)
     return result
   }
 
   addShape (shape: Shape): void {
-    if (!shape.order) shape.order = ++this.orderCounter
-    this._shapes.push(shape)
+    if (!shape.order) shape.order = this.arrange.order
+    this.objects.push(shape)
   }
 
   createImage (img: Image) {
-    this.images.push(img)
+    this.objects.push(img)
   }
 
   clear () {
-    this.orderCounter = 0
-    this.textBlocks = []
-    this._shapes = []
-    this.images = []
+    this.objects = []
+    this.arrange = new Arrange(this.objects)
   }
-
-  measureText (text: string, style: TextStyle) { return TextMeasurer.measureText(text, style) }
 
   createMask (defaultRect?: boolean): Shape {
     this.mask = this.createShape()
@@ -81,7 +77,35 @@ export class Layer implements Orderable {
     this.mask = null
   }
 
+  sendToBack (item: Shape | TextBlock | Image) {
+    this.arrange.sendToBack(item)
+  }
+
+  sendToBackward (item: Shape | TextBlock | Image) {
+    this.arrange.sendToBackward(item)
+  }
+
+  bringToFront (item: Shape | TextBlock | Image) {
+    this.arrange.bringToFront(item)
+  }
+
+  bringToForward (item: Shape | TextBlock | Image) {
+    this.arrange.bringToForward(item)
+  }
+
   get shapes (): Shape[] {
-    return this._shapes
+    return this.objects.filter(p => p instanceof Shape) as Shape[]
+  }
+
+  get textBlocks (): TextBlock[] {
+    return this.objects.filter(p => p instanceof TextBlock) as TextBlock[]
+  }
+
+  get images (): Image[] {
+    return this.objects.filter(p => p instanceof Image) as Image[]
+  }
+
+  get entities (): Readonly<Orderable[]> {
+    return this.objects
   }
 }

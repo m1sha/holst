@@ -8,6 +8,7 @@ import { Color } from './color'
 import { Image } from './image'
 import { sort } from './sorter'
 import { Rect } from './rect'
+import Orderable from './orderable'
 
 export class Renderer2D {
   readonly ctx: CanvasRenderingContext2D
@@ -39,12 +40,8 @@ export class Renderer2D {
     }
   }
 
-  private drawLayer ({ shapes, textBlocks, images, mask }: Readonly<Layer>) {
-    const list = sort([
-      ...shapes,
-      ...textBlocks,
-      ...images
-    ])
+  private drawLayer ({ entities, mask }: Readonly<Layer>) {
+    const list = sort(entities as Orderable[])
 
     for (const item of list) {
       if (item instanceof Shape) this.drawShape(item, mask)

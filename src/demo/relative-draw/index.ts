@@ -1,7 +1,7 @@
 import { Point, Rect, Renderer2D, Scene } from '@/.'
 
 export function createRelativeDrawExample (canvas: HTMLCanvasElement) {
-  const scene = new Scene(canvas)
+  const scene = new Scene()
   const layer = scene.createLayer()
 
   layer.createShape({ fillStyle: '#eee' })
