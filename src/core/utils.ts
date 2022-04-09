@@ -28,6 +28,7 @@ const IsPointInPolygon4 = (polygon: Point[], point: Point) => {
 }
 
 const calcBounds = (points: Point[]): Rect => {
+  if (points.length === 0) return new Rect(0, 0, 0, 0)
   const xList = points.map(p => p.x)
   const yList = points.map(p => p.y)
   const x = Math.min.apply(null, xList)
