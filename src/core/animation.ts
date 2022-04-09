@@ -10,7 +10,8 @@ export interface FrameInfo {
   timeStamp: number,
   startTime: number,
   сountdown: number,
-  percent: number
+  percent: number,
+  map: (min: number, max: number) => number
 }
 
 class Task {
@@ -57,7 +58,10 @@ class Task {
       startTime: time,
       сountdown: timeLeft,
       percent,
-      timeStamp
+      timeStamp,
+      map: (min: number, max: number): number => {
+        return ((max - min) / 100 * percent) + min
+      }
     })
   }
 
