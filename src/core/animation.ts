@@ -6,12 +6,15 @@ import { Scene } from './scene'
 
 const millis = () => new Date().getTime()
 
+export type Between = { then: (delegate: (value: number) => void) => void }
+
 export interface FrameInfo {
   timeStamp: number,
   startTime: number,
   сountdown: number,
   percent: number,
   map: (min: number, max: number) => number
+  between: (min: number, max: number) => Between
 }
 
 class Task {
@@ -61,6 +64,13 @@ class Task {
       timeStamp,
       map: (min: number, max: number): number => {
         return ((max - min) / 100 * percent) + min
+      },
+      between: (min: number, max: number): Between => {
+        return {
+          then: (r) => {
+            if (percent >= min && percent <= max) r(percent)
+          }
+        }
       }
     })
   }
