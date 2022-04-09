@@ -51,11 +51,11 @@ class Task {
   }
 
   execute (time: number, timeStamp: number) {
-    const сountdown = this.сountdown + this.timeout + this.duration - time
-    const percent = (100 / this.duration) * (this.duration - сountdown)
+    const timeLeft = this.сountdown + this.timeout + this.duration - time
+    const percent = (100 / this.duration) * (this.duration - timeLeft)
     this.delegate({
       startTime: time,
-      сountdown,
+      сountdown: timeLeft,
       percent,
       timeStamp
     })
@@ -100,7 +100,7 @@ export class AnimationTask {
   }
 }
 
-export class AnimationController {
+export class AnimationQueue {
   private renderer: Renderer2D
   private scene: Scene
   private timerId!: number
@@ -123,7 +123,7 @@ export class AnimationController {
     this.animationFrameProvider.cancelAnimationFrame(this.timerId)
   }
 
-  addTask (name: string, delegate: (f: FrameInfo) => void, timeout: number, duration: number, infinity: boolean = true): AnimationTask {
+  createTask (name: string, delegate: (f: FrameInfo) => void, timeout: number, duration: number, infinity: boolean = true): AnimationTask {
     const origin = this.tasks.filter(p => p.name === name)[0]
     if (origin) return new AnimationTask(origin)
     const task = new Task(name, delegate, timeout, duration, infinity)

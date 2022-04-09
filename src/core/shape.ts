@@ -148,7 +148,7 @@ export default class Shape implements Orderable {
     return this.mutablePath.copy()
   }
 
-  transformFrom (shape: Shape): void {
+  setTransformFrom (shape: Shape): void {
     this.importTransformation(shape.exportTransformation())
   }
 

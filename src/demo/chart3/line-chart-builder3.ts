@@ -2,7 +2,7 @@
 import { ChartOptions } from './chart-options'
 import { LineChartBuilder } from './line-chart-builder'
 // import { toDisplayText } from './utils'
-// import { AnimationController } from '../core/animation'
+// import { AnimationQueue } from '../core/animation'
 // import { Constraints } from '../../core/constraints'
 import { Layer } from '../../core/layers'
 // import { Padding } from '../../core/padding'
@@ -48,7 +48,7 @@ export class LineChartBuilder3 extends LineChartBuilder {
   addGraphLayer (): this | LineChartBuilder3 {
     // const { ratio, absMinY, offsetY } = this
     // const layer = this.createLayer()
-    // const controller = new AnimationController(this.chart, this.render)
+    // const controller = new AnimationQueue(this.chart, this.render)
     // controller.onFrameChange(num => {
     //   layer.clear()
     //   const graph = layer.createShape(styles.graphLine)

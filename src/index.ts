@@ -6,13 +6,13 @@ import { Renderer2D } from './core/renderer2D'
 import { Scene } from './core/scene'
 import Shape from './core/shape'
 import { SvgPathD } from './core/svg/svg-path-d'
-import { AnimationController, AnimationTask } from './core/animation'
+import { AnimationQueue, AnimationTask } from './core/animation'
 import { Color, HSV } from './core/color'
 import { EventHandler } from './core/event-handler'
 import { ConstraintGrid } from './core/constraint-grid'
 
 export {
-  AnimationController,
+  AnimationQueue,
   AnimationTask,
   ConstraintGrid,
   Color,
