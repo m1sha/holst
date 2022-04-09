@@ -1,15 +1,16 @@
 {
     "compilerOptions": {
         "strict": true,
-        "target": "es5",
+        "target": "ES2022",
         "declaration": false,
         "stripInternal": true, 
         "sourceMap": true ,
         "importHelpers":true,
         "forceConsistentCasingInFileNames":true,
-        "baseUrl": "./",
+        "baseUrl": "src",
+        "moduleResolution": "node",
         "paths": {
-            "@/*": [
+            "@": [
               "./*",
               "src/*"
             ]
@@ -21,7 +22,8 @@
         "src/**/*.d.ts",
         "src/**/*.vue",
         "tests/**/*.ts",
-        "tests/**/*.tsx"
+        "tests/**/*.tsx",
+        "index.ts"
       ],
     "exclude": ["node_modules"]
 }
