@@ -14,7 +14,6 @@ export class RelativeMutablePath2D {
   moveTo (point: Point): this | RelativeMutablePath2D {
     this.position.x = point.x
     this.position.y = point.y
-    this.path.moveTo(point.x, point.y)
     return this
   }
 
@@ -29,6 +28,7 @@ export class RelativeMutablePath2D {
   }
 
   lineTo (point: Point): this | RelativeMutablePath2D {
+    this.path.moveTo(this.position.x, this.position.y)
     this.path.lineTo(this.position.x + point.x, this.position.y + point.y)
     this.position.x += point.x
     this.position.y += point.y
