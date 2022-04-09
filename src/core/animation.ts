@@ -125,7 +125,11 @@ export class AnimationQueue {
 
   createTask (name: string, delegate: (f: FrameInfo) => void, timeout: number, duration: number, infinity: boolean = true): AnimationTask {
     const origin = this.tasks.filter(p => p.name === name)[0]
-    if (origin) return new AnimationTask(origin)
+    if (origin) {
+      if (origin.isCanceled) this.removeTask(origin.name)
+      else return new AnimationTask(origin)
+    }
+
     const task = new Task(name, delegate, timeout, duration, infinity)
     this.tasks.push(task)
     return new AnimationTask(task)
