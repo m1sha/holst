@@ -20,7 +20,7 @@ export interface FrameInfo {
 class Task {
   readonly id: string
   readonly name: string
-  private delegate: (f: FrameInfo) => void
+  delegate: null | ((f: FrameInfo) => void)
   private timeout: number
   private duration: number
   readonly infinity: boolean
@@ -29,10 +29,10 @@ class Task {
   isDone: boolean
   isStarted: boolean
 
-  constructor (name: string, delegate: (f: FrameInfo) => void, timeout: number, duration: number, infinity: boolean) {
+  constructor (name: string, timeout: number, duration: number, infinity: boolean) {
     this.name = name
     this.id = uid()
-    this.delegate = delegate
+    this.delegate = null
     this.timeout = timeout
     this.duration = duration
     this.infinity = infinity
@@ -57,6 +57,7 @@ class Task {
   execute (time: number, timeStamp: number) {
     const timeLeft = this.сountdown + this.timeout + this.duration - time
     const percent = (100 / this.duration) * (this.duration - timeLeft)
+    if (!this.delegate) throw new Error(`An action at the task ${this.name} is not defined`)
     this.delegate({
       startTime: time,
       сountdown: timeLeft,
@@ -109,6 +110,14 @@ export class AnimationTask {
     return this.task.isCanceled
   }
 
+  get action (): null | ((f: FrameInfo) => void) {
+    return this.task.delegate
+  }
+
+  set action (delegate: null | ((f: FrameInfo) => void)) {
+    this.task.delegate = delegate
+  }
+
   cancel () {
     this.task.isCanceled = true
   }
@@ -137,14 +146,14 @@ export class AnimationQueue {
     this.animationFrameProvider.cancelAnimationFrame(this.timerId)
   }
 
-  createTask (name: string, delegate: (f: FrameInfo) => void, timeout: number, duration: number, infinity: boolean = true): AnimationTask {
+  createTask (name: string, timeout: number, duration: number, infinity: boolean = true): AnimationTask {
     const origin = this.tasks.filter(p => p.name === name)[0]
     if (origin) {
       if (origin.isCanceled) this.removeTask(origin.name)
       else return new AnimationTask(origin)
     }
 
-    const task = new Task(name, delegate, timeout, duration, infinity)
+    const task = new Task(name, timeout, duration, infinity)
     this.tasks.push(task)
     return new AnimationTask(task)
   }
