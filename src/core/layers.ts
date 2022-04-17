@@ -1,4 +1,4 @@
-import { Image } from './image'
+import { Bitmap } from './bitmap'
 import { TextBlock } from './label'
 import { TextStyle } from './label-style'
 import { Point } from './point'
@@ -56,7 +56,7 @@ export class Layer implements Orderable {
     this.objects.push(shape)
   }
 
-  createImage (img: Image) {
+  createImage (img: Bitmap) {
     this.objects.push(img)
   }
 
@@ -77,19 +77,19 @@ export class Layer implements Orderable {
     this.mask = null
   }
 
-  sendToBack (item: Shape | TextBlock | Image) {
+  sendToBack (item: Shape | TextBlock | Bitmap) {
     this.arrange.sendToBack(item)
   }
 
-  sendToBackward (item: Shape | TextBlock | Image) {
+  sendToBackward (item: Shape | TextBlock | Bitmap) {
     this.arrange.sendToBackward(item)
   }
 
-  bringToFront (item: Shape | TextBlock | Image) {
+  bringToFront (item: Shape | TextBlock | Bitmap) {
     this.arrange.bringToFront(item)
   }
 
-  bringToForward (item: Shape | TextBlock | Image) {
+  bringToForward (item: Shape | TextBlock | Bitmap) {
     this.arrange.bringToForward(item)
   }
 
@@ -101,8 +101,8 @@ export class Layer implements Orderable {
     return this.objects.filter(p => p instanceof TextBlock) as TextBlock[]
   }
 
-  get images (): Image[] {
-    return this.objects.filter(p => p instanceof Image) as Image[]
+  get images (): Bitmap[] {
+    return this.objects.filter(p => p instanceof Bitmap) as Bitmap[]
   }
 
   get entities (): Readonly<Orderable[]> {

@@ -5,7 +5,7 @@ import { Layer } from './layers'
 import { Scene } from './scene'
 import Shape from './shape'
 import { Color } from './color'
-import { Image } from './image'
+import { Bitmap } from './bitmap'
 import { sort } from './sorter'
 import { Rect } from './rect'
 import Orderable from './orderable'
@@ -46,7 +46,7 @@ export class Renderer2D {
     for (const item of list) {
       if (item instanceof Shape) this.drawShape(item, mask)
       if (item instanceof TextBlock) this.drawTextBlock(item, mask)
-      if (item instanceof Image) this.drawImage(item)
+      if (item instanceof Bitmap) this.drawImage(item)
     }
   }
 
@@ -87,7 +87,7 @@ export class Renderer2D {
     this.ctx.restore()
   }
 
-  private drawImage ({ src, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight }: Image): void {
+  private drawImage ({ src, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight }: Bitmap): void {
     this.ctx.drawImage(src, sx, sy, sWidth || 0, sHeight || 0, dx || 0, dy || 0, dWidth || 0, dHeight || 0)
   }
 

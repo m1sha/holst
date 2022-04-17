@@ -1,7 +1,7 @@
 import Orderable from './orderable'
 
 export type AnyImageType = HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap
-export class Image implements Orderable {
+export class Bitmap implements Orderable {
   src: AnyImageType
   sx: number
   sy: number
@@ -24,5 +24,12 @@ export class Image implements Orderable {
     this.dWidth = dWidth
     this.dHeight = dHeight
   }
+
+  static createImage (url: string, callback?: (ev: Event) => void) {
+    const img = new Image()
+    img.src = url
+    if (callback) img.onload = ev => callback(ev)
+    return new Bitmap(img, 0, 0)
+  }
 }
-export type Images = Image[]
+export type Images = Bitmap[]
