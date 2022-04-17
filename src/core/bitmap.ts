@@ -25,10 +25,11 @@ export class Bitmap implements Orderable {
     this.dHeight = dHeight
   }
 
-  static createImage (url: string, callback?: (ev: Event) => void) {
+  static createImage (url: string, callback?: (ev: Event) => void, onerror?: (ev: string | Event) => void) {
     const img = new Image()
     img.src = url
     if (callback) img.onload = ev => callback(ev)
+    if (onerror) img.onerror = ev => onerror(ev)
     return new Bitmap(img, 0, 0)
   }
 }
