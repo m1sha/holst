@@ -1,3 +1,4 @@
+import { ResourceLoader, ResourceLoaderCallBackFactory } from '../src/tools/resource-loader'
 function delay (timeout: number = 0, callback: () => void): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     const timeoutId = setTimeout(() => {
@@ -25,61 +26,36 @@ class NewFoo {
   }
 }
 
-class Loader {
-  #images: Record<string, NewFoo> = {}
-  #loadedList: Record<number, boolean> = {}
-  #resolve: null | (() => null) = null
+class Loader extends ResourceLoader<NewFoo> {
+  #timeout: number = 0
 
-  add (name: string, timeout: number) {
-    const counter = this.count + 1
-    this.#loadedList[counter] = false
-    this.#images[name] = NewFoo.createFoo(name, () => {
-      this.#loadedList[counter] = true
-      this.checkFinish()
-    }, timeout)
+  addTestValue (s: string, t: number) {
+    this.#timeout = t
+    this.add(s, '')
   }
 
-  busy (): Promise<void> {
-    return new Promise((resolve) => {
-      this.#resolve = (resolve as unknown) as (() => null)
-      this.checkFinish()
-    })
-  }
-
-  checkFinish () {
-    if (this.allLoaded() && this.#resolve) this.#resolve()
-  }
-
-  get count () {
-    return Object.keys(this.#images).length
-  }
-
-  loadedCount (): number {
-    return Object.values(this.#loadedList).filter(p => p).length
-  }
-
-  allLoaded () {
-    return !Object.values(this.#loadedList).some(p => !p)
+  factory (): ResourceLoaderCallBackFactory<NewFoo> {
+    return (url, callback) => NewFoo.createFoo(url, callback, this.#timeout)
   }
 }
 
 test('loader', async () => {
   const loader = new Loader()
-  loader.add('a', 100)
-  loader.add('b', 500)
-  loader.add('c', 300)
-  loader.add('d', 50)
-  loader.add('e', 150)
+  loader.addTestValue('a', 100)
+  loader.addTestValue('b', 500)
+  loader.addTestValue('c', 300)
+  loader.addTestValue('d', 50)
+  loader.addTestValue('e', 150)
 
-  await loader.busy()
+  await loader.busy
 
-  expect(loader.loadedCount()).toBe(5)
+  expect(loader.loadedCount).toBe(5)
 })
 
 test('loader count 0', async () => {
   const loader = new Loader()
 
-  await loader.busy()
+  await loader.busy
 
-  expect(loader.loadedCount()).toBe(0)
+  expect(loader.loadedCount).toBe(0)
 })
