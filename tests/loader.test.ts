@@ -49,7 +49,7 @@ test('loader', async () => {
 
   await loader.busy
 
-  expect(loader.loadedCount).toBe(5)
+  expect(loader.loadedCount).toBe(loader.count)
 })
 
 test('loader count 0', async () => {

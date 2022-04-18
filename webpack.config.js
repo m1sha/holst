@@ -31,6 +31,7 @@ if (process.env.libraryTarget === 'umd') {
   // config.entry['linear-chart3'] = './src/chart3/index.ts'
   // config.entry['editor.bundle'] = './src/block-scheme-editor/index.ts'
   config.entry['demo.bundle'] = './src/demo/relative-draw/index.ts'
+  config.entry['sprites.bundle'] = './src/demo/sprites/index.ts'
   config.output.library = 'demo'
 }
 

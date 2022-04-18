@@ -16,10 +16,6 @@ export abstract class ResourceLoader<T> {
       this.#loadedList[counter] = true
       this.#checkFinish()
     }, e => this.#reject && this.#reject(e))
-    // this.#items[name] = Bitmap.createImage(url, () => {
-    //   this.#loadedList[counter] = true
-    //   this.#checkFinish()
-    // }, e => this.#reject && this.#reject(e))
   }
 
   abstract factory(): ResourceLoaderCallBackFactory<T>
