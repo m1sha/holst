@@ -1,5 +1,7 @@
 # 2D Graphic library
 
+[Demo](./index.html)
+
 * Remake in EventHandler
 
 ```ts
