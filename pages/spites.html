@@ -6,11 +6,11 @@
   <title>Document</title>
 </head>
 <body>
-  <canvas width="800" height="800"></canvas>
-  <script src="./dist/demo.bundle.js"></script>
+  <canvas id="canvas"></canvas>
+  <script src="../dist/sprites.bundle.js"></script>
   <script>
-    var canvas = document.querySelector('canvas')
-    demo.createRelativeDrawExample(canvas)
+    var c = document.getElementById('canvas')
+    demo.createSpriteDemo(c)
   </script>
 </body>
 </html>
