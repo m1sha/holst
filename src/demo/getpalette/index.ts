@@ -1,6 +1,6 @@
 import { Color } from 'index'
 
-export function getPalette (img: HTMLImageElement, canvas: HTMLCanvasElement) {
+export function getPalette (img: HTMLImageElement, canvas: HTMLCanvasElement, discrete: number) {
   const ctx = canvas.getContext('2d')
   if (!ctx) return
   canvas.width = img.naturalWidth
@@ -10,9 +10,10 @@ export function getPalette (img: HTMLImageElement, canvas: HTMLCanvasElement) {
   console.log('drawImage got')
   console.log('getImageData')
   const imageData = ctx.getImageData(0, 0, img.naturalWidth, img.naturalHeight)
+  const imageData2 = ctx.createImageData(img.naturalWidth, img.naturalHeight)
   console.log('getImageData got')
 
-  const discrete = 60
+  // const discrete = 240
   const list: Color[] = []
   const hash: Pixel[] = []
   const length = imageData.data.length
@@ -25,7 +26,14 @@ export function getPalette (img: HTMLImageElement, canvas: HTMLCanvasElement) {
     const hr = Math.floor(r / discrete)
     const hg = Math.floor(g / discrete)
     const hb = Math.floor(b / discrete)
-    if (hash.filter(p => p.equals(hr, hg, hb, a))[0]) {
+
+    const index = hash.findIndex(p => p.equals(hr, hg, hb, a))
+
+    imageData2.data[i] = list[index] ? list[index].r : r
+    imageData2.data[i + 1] = list[index] ? list[index].g : g
+    imageData2.data[i + 2] = list[index] ? list[index].b : b
+    imageData2.data[i + 3] = a
+    if (index > -1) {
       continue
     }
 
@@ -33,7 +41,17 @@ export function getPalette (img: HTMLImageElement, canvas: HTMLCanvasElement) {
     list.push(new Color(r, g, b, 1))
   }
 
-  return list.sort((a, b) => rgbToInt(a) - rgbToInt(b))
+  const canvas2 = document.createElement('canvas')
+  canvas2.width = canvas.width
+  canvas2.height = canvas.height
+  canvas2
+    .getContext('2d')?.putImageData(imageData2, 0, 0)
+
+  const image = canvas2.toDataURL()
+  return {
+    list: list.sort((a, b) => rgbToInt(a) - rgbToInt(b)),
+    image
+  }
 }
 
 const rgbToInt = ({ r, g, b }: Color) : number => {

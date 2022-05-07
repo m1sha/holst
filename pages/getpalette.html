@@ -13,6 +13,10 @@
       <h1>Get Palette</h1>
     </div>
     <div class="row m-3">
+      <label for="customRange" class="form-label">Discrete</label>
+      <input type="range" min="1" max="254" value="60" class="form-range" id="customRange">
+    </div>
+    <div class="row m-3">
       <button id="chooseFileBtn" class="btn btn-success">Choose file</button>
       <input id="file" type="file" placeholder="Choose file" />
     </div>
@@ -24,8 +28,14 @@
     
     <div class="row m-3" id="content">
       <div class="col-4">
-        <p class="label">Source image</p>
-        <img id="img" alt="palette" class="source-img" />
+        <div class="row">
+          <p class="label">Source image</p>
+          <img id="img" alt="palette" class="source-img" />
+        </div>
+        <div class="row">
+          <p class="label">Distribute image</p>
+          <img id="img2" alt="palette" class="source-img" />
+        </div>
       </div>
       <div class="col-8">
         <p class="label">Palette</p>
@@ -42,10 +52,12 @@
       chooseFileBtn = document.getElementById('chooseFileBtn'),
       fileInput = document.getElementById('file'),
       imageView = document.getElementById('img'),
+      imageView2 = document.getElementById('img2'),
       canvas = document.getElementById('canvas'),
       table = document.getElementById('table'),
       spinner = document.getElementById('spinner'),
-      content = document.getElementById('content')
+      content = document.getElementById('content'),
+      customRange = document.getElementById('customRange')
       
     imageView.style.opacity = '0'
     spinner.style.opacity = '0'
@@ -63,8 +75,9 @@
         imageView.style.opacity = '1'
         imageView.src = reader.result
         imageView.onload = function () {
-          var result = demo.getPalette(imageView, canvas)
-          drawPalette(result)
+          var result = demo.getPalette(imageView, canvas, customRange.value)
+          imageView2.src = result.image
+          drawPalette(result.list)
         }
       }
     }
