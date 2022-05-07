@@ -32,10 +32,15 @@ input[type='file'] {
   display: none;
 }
 
+table.palette {
+  width: 100%;
+}
+
 table.palette tr td {
   border: 8px solid white;
   border-radius: 80px;
   padding: 8px;
+  text-align: center;
 }
 
 .spinner-center {
