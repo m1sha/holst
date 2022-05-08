@@ -87,6 +87,13 @@ export class Color {
     this._a = value
   }
 
+  get value () {
+    let rgb = this.r
+    rgb = (rgb << 8) + this.g
+    rgb = (rgb << 8) + this.b
+    return rgb
+  }
+
   toString () {
     let r = this.r.toString(16)
     r = r.length === 1 ? '0' + r : r
