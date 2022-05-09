@@ -98,6 +98,12 @@ export class Color {
     return new Color(255 - this.r, 255 - this.g, 255 - this.b, this.a)
   }
 
+  getContrastRatio (color: Color, foreground?: boolean): number {
+    const l1 = this.getContrast(this)
+    const l2 = this.getContrast(color)
+    return foreground ? (l2 + 0.05) / (l1 + 0.05) : (l1 + 0.05) / (l2 + 0.05)
+  }
+
   toString () {
     let r = this.r.toString(16)
     r = r.length === 1 ? '0' + r : r
@@ -111,6 +117,13 @@ export class Color {
   toHSV () {
     const { h, s, v } = utils.rgb2hsv(this.r, this.g, this.b)
     return new HSV(Math.floor(Math.round(h)), Math.floor(s * 100), Math.floor(v * 100))
+  }
+
+  private getContrast (color: Color) {
+    const { r, g, b } = color
+    const f = (c: number): number => c < 11 ? c / 255 / 12.92 : Math.pow(((c / 255 + 0.055) / 1.055), 2.4)
+    const l = 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
+    return l
   }
 
   static readonly black = new Color('#000000')
