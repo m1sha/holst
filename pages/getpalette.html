@@ -12,22 +12,24 @@
     <div class="row m-3">
       <h1>Get Palette</h1>
     </div>
+   
     <div class="row m-3">
-      <label for="customRange" class="form-label">Discrete</label>
-      <input type="range" min="1" max="254" value="60" class="form-range" id="customRange">
-    </div>
-    <div class="row m-3">
-      <button id="chooseFileBtn" class="btn btn-success">Choose file</button>
-      <input id="file" type="file" placeholder="Choose file" />
+      <div class="col-12">
+        <button id="chooseFileBtn" class="btn btn-success">Choose file</button>
+        <input id="file" type="file" placeholder="Choose file" />
+      </div>
     </div>
     <div class="row m-8 spinner-center" id="spinner">
       <div class="spinner-grow text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
-    
+    <div class="row m-3" id="customRangePanel">
+      <label for="customRange" class="form-label">Value</label>
+      <input type="range" min="1" max="254" value="60" class="form-range" id="customRange">
+    </div>
     <div class="row m-3" id="content">
-      <div class="col-4">
+      <div class="col-xl-4">
         <div class="row">
           <p class="label">Source image</p>
           <img id="img" alt="palette" class="source-img" />
@@ -37,8 +39,8 @@
           <img id="img2" alt="palette" class="source-img" />
         </div>
       </div>
-      <div class="col-8">
-        <p class="label">Palette</p>
+      <div class="col-xl-8">
+        <p class="label">Palette (<span id="colorCounter"></span>)</p>
         <table id="table" class="palette">
 
         </table>
@@ -57,11 +59,14 @@
       table = document.getElementById('table'),
       spinner = document.getElementById('spinner'),
       content = document.getElementById('content'),
-      customRange = document.getElementById('customRange')
+      customRange = document.getElementById('customRange'),
+      customRangePanel = document.getElementById('customRangePanel'),
+      colorCounter = document.getElementById('colorCounter')
       
     imageView.style.opacity = '0'
     spinner.style.opacity = '0'
     content.style.opacity = '0'
+    customRangePanel.style.opacity = '0'
     //progressBarLine.style.width = '0%'
     chooseFileBtn.onclick = function () { fileInput.click() }
 
@@ -80,6 +85,12 @@
           drawPalette(result.list)
         }
       }
+    }
+
+    customRange.onchange = function () { 
+      var result = demo.getPalette(imageView, canvas, customRange.value)
+      imageView2.src = result.image
+      drawPalette(result.list)
     }
 
     function drawPalette(data) {
@@ -105,8 +116,10 @@
 
         tr.appendChild(td)
       }
+      colorCounter.textContent = data.length
       spinner.style.opacity = '0'
       content.style.opacity = '1'
+      customRangePanel.style.opacity = '1'
     }
   </script>
 </body>
