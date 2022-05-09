@@ -94,6 +94,10 @@ export class Color {
     return rgb
   }
 
+  get invert () {
+    return new Color(255 - this.r, 255 - this.g, 255 - this.b, this.a)
+  }
+
   toString () {
     let r = this.r.toString(16)
     r = r.length === 1 ? '0' + r : r
