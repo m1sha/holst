@@ -144,6 +144,10 @@ export class HSV {
     this.v = v
     this.a = a === undefined ? 1 : a
   }
+
+  toString () {
+    return `hsv(${this.h}, ${this.s}%, ${this.v}%)`
+  }
 }
 
 export class HSL {
