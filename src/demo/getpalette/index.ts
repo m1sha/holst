@@ -28,7 +28,7 @@ export function getPalette (img: HTMLImageElement, canvas: HTMLCanvasElement, di
 
     const index = hash.findIndex(p => p.equals(hr, hg, hb, a))
 
-    const newColor = list[index] ? list[index].invert : new Color(r, g, b, 1).invert
+    const newColor = list[index] ? list[index] : new Color(r, g, b, 1)
 
     imageData2.data[i] = newColor.r
     imageData2.data[i + 1] = newColor.g
@@ -83,6 +83,14 @@ const groupByHue = (list: Color[]) => {
     }
   }
   return result
+}
+
+export function whiteColor () {
+  return new Color('#ffffff')
+}
+
+export function blackColor () {
+  return new Color('#000000')
 }
 
 const groupBySaturation = (grouped: Record<number, Color[]>) => {

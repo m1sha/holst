@@ -99,6 +99,8 @@
       var tr = document.createElement('tr')
       table.appendChild(tr)
       var d = 8
+      var whiteColor = demo.whiteColor()
+      var blackColor = demo.blackColor()
       for (var i = 0; i < data.length; i++) {
         var color = data[i]
 
@@ -108,11 +110,11 @@
         }
 
         var td = document.createElement('td')
-        td.textContent = color.toString()
+        td.innerHTML = color.toString() + '<br />' + color.toHSV().toString()
         td.style.backgroundColor = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + color.a + ')'
 
         const isContrast = (color.r < 90 || color.g < 90 || color.b < 90) && (color.r < 200 && color.g < 200 && color.b < 200)
-        td.style.color = isContrast ? '#fff' : '#000'
+        td.style.color = color.getContrastRatio(whiteColor, true) > 5 ? '#fff' : '#000'
 
         tr.appendChild(td)
       }
