@@ -24,28 +24,32 @@
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
-    <div class="row m-3" id="customRangePanel">
-      <label for="customRange" class="form-label">Value</label>
-      <input type="range" min="1" max="254" value="60" class="form-range" id="customRange">
-    </div>
+    
     <div class="row m-3" id="content">
-      <div class="col-xl-4">
-        <div class="row">
+      <div class="row" id="customRangePanel">
+        <label for="customRange" class="form-label">Value</label>
+        <input type="range" min="1" max="254" value="60" class="form-range" id="customRange">
+      </div>
+      <div class="row">
+        <div class="col float-end">
           <p class="label">Source image</p>
           <img id="img" alt="palette" class="source-img" />
         </div>
-        <div class="row">
+        <div class="col">
           <p class="label">Distribute image</p>
           <img id="img2" alt="palette" class="source-img" />
         </div>
       </div>
-      <div class="col-xl-8">
-        <p class="label">Palette (<span id="colorCounter"></span>)</p>
-        <table id="table" class="palette">
+      <div class="row">
+        <div class="col-xl-12">
+          <p class="label">Palette (<span id="colorCounter"></span>)</p>
+          <div id="table" class="palette">
 
-        </table>
+          </div>
+        </div>
       </div>
     </div>
+   
     <canvas id="canvas" class="hide"></canvas>
   </div>
   <script src="../dist/getpalette.bundle.js"></script>
@@ -64,7 +68,7 @@
       colorCounter = document.getElementById('colorCounter')
       
     imageView.style.opacity = '0'
-    spinner.style.opacity = '0'
+    spinner.style.display = 'none'
     content.style.opacity = '0'
     customRangePanel.style.opacity = '0'
     //progressBarLine.style.width = '0%'
@@ -73,7 +77,7 @@
     fileInput.onchange = function () {
       if (!fileInput.files) return
       var reader = new FileReader()
-      spinner.style.opacity = '1'
+      spinner.style.display = 'flex'
       content.style.opacity = '0'
       reader.readAsDataURL(fileInput.files[0])
       reader.onload = function () {
@@ -96,30 +100,28 @@
     function drawPalette(data) {
       table.innerHTML = ''
       
-      var tr = document.createElement('tr')
-      table.appendChild(tr)
+     
       var d = 8
       var whiteColor = demo.whiteColor()
       var blackColor = demo.blackColor()
       for (var i = 0; i < data.length; i++) {
         var color = data[i]
 
-        if (i % d === 0) {
-          tr = document.createElement('tr')
-          table.appendChild(tr)
-        }
+      
 
-        var td = document.createElement('td')
-        td.innerHTML = color.toString() + '<br />' + color.toHSV().toString()
-        td.style.backgroundColor = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + color.a + ')'
+      
+        var div = document.createElement('div')
+        div.innerHTML = color.toString() // + '<br />' + color.toHSV().toString()
+        div.style.backgroundColor = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + color.a + ')'
 
         const isContrast = (color.r < 90 || color.g < 90 || color.b < 90) && (color.r < 200 && color.g < 200 && color.b < 200)
-        td.style.color = color.getContrastRatio(whiteColor, true) > 5 ? '#fff' : '#000'
+        div.style.color = color.getContrastRatio(whiteColor, true) > 5 ? '#fff' : '#000'
 
-        tr.appendChild(td)
+        table.appendChild(div)
+       
       }
       colorCounter.textContent = data.length
-      spinner.style.opacity = '0'
+      spinner.style.display = 'none'
       content.style.opacity = '1'
       customRangePanel.style.opacity = '1'
     }
