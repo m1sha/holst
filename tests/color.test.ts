@@ -46,3 +46,25 @@ test('color hsv to grb', () => {
   const color2 = new Color(103, 230, 187)
   expect(color2.toHSV()).toEqual(new HSV(160, 55, 90))
 })
+
+test('color from number to rgb', () => {
+  const colors = [
+    [103, 230, 187],
+    [128, 128, 64],
+    [0, 0, 0],
+    [255, 255, 255],
+    [255, 0, 255],
+    [0, 0, 255],
+    [255, 0, 0],
+    [0, 255, 0]
+  ]
+
+  for (const [r, g, b] of colors) {
+    const color = new Color(r, g, b)
+    const value = color.value
+    const color2 = new Color(value)
+    expect(color2.r).toEqual(color.r)
+    expect(color2.g).toEqual(color.g)
+    expect(color2.b).toEqual(color.b)
+  }
+})

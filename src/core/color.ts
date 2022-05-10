@@ -6,6 +6,7 @@ export class Color {
   private _a: number = 1
 
   constructor ()
+  constructor (v: number)
   constructor (r: number, g: number, b: number, a?: number)
   constructor (hex: string)
   constructor (hsv: HSV)
@@ -20,7 +21,15 @@ export class Color {
       return
     }
 
-    if (typeof args[0] === 'number' && typeof args[1] === 'number' && typeof args[2] === 'number') {
+    if (args.length === 1 && typeof args[0] === 'number') {
+      this.r = (args[0] >> 16) & 0xff
+      this.g = (args[0] >> 8) & 0xff
+      this.b = args[0] & 0xff
+      this.a = 1
+      return
+    }
+
+    if (args.length === 3 && typeof args[0] === 'number' && typeof args[1] === 'number' && typeof args[2] === 'number') {
       this.r = args[0]
       this.g = args[1]
       this.b = args[2]

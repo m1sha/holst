@@ -15,6 +15,7 @@ export function getPalette (img: HTMLImageElement, canvas: HTMLCanvasElement, di
   const hash: Pixel[] = []
   const reader = new BitmapReader(srcImageData)
   const writer = new BitmapWriter(distImageData)
+  const counter: Record<number, number> = {}
   reader.read((rgba, i) => {
     const { r, g, b, a } = rgba
     const hr = Math.floor(r / discrete)
@@ -22,8 +23,11 @@ export function getPalette (img: HTMLImageElement, canvas: HTMLCanvasElement, di
     const hb = Math.floor(b / discrete)
 
     const index = hash.findIndex(p => p.equals(hr, hg, hb, a))
+    const color = new Color(r, g, b, 1)
+    const cc = color.value
+    counter[cc] = counter[cc] ? counter[cc]++ : 1
 
-    const newColor = list[index] ? list[index] : new Color(r, g, b, 1)
+    const newColor = list[index] ? list[index] : color
     writer.write({ r: newColor.r, g: newColor.g, b: newColor.b, a }, i)
     if (index > -1) {
       return
@@ -33,6 +37,10 @@ export function getPalette (img: HTMLImageElement, canvas: HTMLCanvasElement, di
     list.push(new Color(r, g, b, 1))
   })
 
+  const ff = Object.entries(counter).sort((a, b) => b[1] - a[1]).map(p => p[0])
+  const hh: number[] = []
+  for (let ii = 0; ii < 256; ii++) hh[ii] = Number(ff[ii])
+
   const canvas2 = document.createElement('canvas')
   canvas2.width = canvas.width
   canvas2.height = canvas.height
@@ -41,7 +49,7 @@ export function getPalette (img: HTMLImageElement, canvas: HTMLCanvasElement, di
 
   const image = canvas2.toDataURL()
   return {
-    list: list.sort((a, b) => a.toHSV().v - b.toHSV().v),
+    list: list.filter(p => hh.indexOf(p.value) > -1).sort((a, b) => a.toHSV().v - b.toHSV().v),
     image
   }
 }
