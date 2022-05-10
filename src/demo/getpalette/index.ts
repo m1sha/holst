@@ -15,17 +15,17 @@ export function getPalette (img: HTMLImageElement, canvas: HTMLCanvasElement, di
   const hash: Pixel[] = []
   const reader = new BitmapReader(srcImageData)
   const writer = new BitmapWriter(distImageData)
-  const counter: Record<number, number> = {}
+  // const counter: Record<number, number> = {}
   reader.read((rgba, i) => {
     const { r, g, b, a } = rgba
-    const hr = Math.floor(r / discrete)
-    const hg = Math.floor(g / discrete)
-    const hb = Math.floor(b / discrete)
+    // const hr = Math.floor(r / discrete)
+    // const hg = Math.floor(g / discrete)
+    // const hb = Math.floor(b / discrete)
 
-    const index = hash.findIndex(p => p.equals(hr, hg, hb, a))
+    const index = hash.findIndex(p => new Color(p.r, p.g, p.b, p.a).alike(rgba, discrete - 1))
     const color = new Color(r, g, b, 1)
-    const cc = color.value
-    counter[cc] = counter[cc] ? counter[cc]++ : 1
+    // const cc = color.value
+    // counter[cc] = counter[cc] ? ++counter[cc] : 1
 
     const newColor = list[index] ? list[index] : color
     writer.write({ r: newColor.r, g: newColor.g, b: newColor.b, a }, i)
@@ -33,13 +33,13 @@ export function getPalette (img: HTMLImageElement, canvas: HTMLCanvasElement, di
       return
     }
 
-    hash.push(new Pixel(hr, hg, hb, 0))
+    hash.push(new Pixel(r, g, b, 0))
     list.push(new Color(r, g, b, 1))
   })
 
-  const ff = Object.entries(counter).sort((a, b) => b[1] - a[1]).map(p => p[0])
-  const hh: number[] = []
-  for (let ii = 0; ii < 256; ii++) hh[ii] = Number(ff[ii])
+  // const ff = Object.entries(counter).sort((a, b) => b[1] - a[1]).map(p => p[0])
+  // const hh: number[] = []
+  // for (let ii = 0; ii < 256; ii++) hh[ii] = Number(ff[ii])
 
   const canvas2 = document.createElement('canvas')
   canvas2.width = canvas.width
@@ -49,7 +49,7 @@ export function getPalette (img: HTMLImageElement, canvas: HTMLCanvasElement, di
 
   const image = canvas2.toDataURL()
   return {
-    list: list.filter(p => hh.indexOf(p.value) > -1).sort((a, b) => a.toHSV().v - b.toHSV().v),
+    list: list.sort((a, b) => a.toHSV().h - b.toHSV().h),
     image
   }
 }
