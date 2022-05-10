@@ -10,10 +10,14 @@ import { AnimationQueue, AnimationTask } from './core/animation'
 import { Color, HSV } from './core/color'
 import { EventHandler } from './core/event-handler'
 import { ConstraintGrid } from './core/constraint-grid'
+import { BitmapReader } from './core/bitmap-reader'
+import { BitmapWriter } from './core/bitmap-writer'
 
 export {
   AnimationQueue,
   AnimationTask,
+  BitmapReader,
+  BitmapWriter,
   ConstraintGrid,
   Color,
   HSV,
