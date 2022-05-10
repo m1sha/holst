@@ -29,7 +29,7 @@ export class Color {
       return
     }
 
-    if (args.length === 3 && typeof args[0] === 'number' && typeof args[1] === 'number' && typeof args[2] === 'number') {
+    if (typeof args[0] === 'number' && typeof args[1] === 'number' && typeof args[2] === 'number') {
       this.r = args[0]
       this.g = args[1]
       this.b = args[2]
