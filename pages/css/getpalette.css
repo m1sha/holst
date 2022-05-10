@@ -43,6 +43,10 @@ p.label {
   border-bottom: 2px solid #333;
 }
 
+.parameter-value {
+  font-weight: 500;
+}
+
 @media  (max-width: 400px) {
   .palette {
     justify-content: space-evenly;

@@ -3,19 +3,27 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
   <link rel="stylesheet" href="css/getpalette.css">
   <title>Get palette</title>
 </head>
 <body>
   <div class="container">
     <div class="row m-3">
-      <h1>Get Palette</h1>
+      <h1>
+        <img src="img/logo.png" alt="" style="margin-top: -4px; display: inline-block;" />
+        <div style="display: inline-block;">Get Palette</div>
+      </h1>
     </div>
    
     <div class="row m-3">
       <div class="col-12">
-        <button id="chooseFileBtn" class="btn btn-success">Choose file</button>
+        <button id="chooseFileBtn" class="btn btn-outline-dark">
+          <i class="fa fa-upload"></i>
+          Choose file
+        </button>
         <input id="file" type="file" placeholder="Choose file" />
       </div>
     </div>
@@ -26,19 +34,21 @@
     </div>
     
     <div class="row m-3" id="content">
-      <div class="row" id="customRangePanel">
-        <label for="customRange" class="form-label">Value</label>
-        <input type="range" min="1" max="254" value="60" class="form-range" id="customRange">
-      </div>
       <div class="row">
-        <div class="col float-end">
-          <p class="label">Source image</p>
-          <img id="img" alt="palette" class="source-img" />
+        <div class="col">
+          <p class="label" style="text-align: right;">Source</p>
+          <div style="display: flex; width: 100%; justify-content: end;">
+            <img id="img" alt="palette" class="source-img" />
+          </div>
         </div>
         <div class="col">
-          <p class="label">Distribute image</p>
+          <p class="label">Distribute</p>
           <img id="img2" alt="palette" class="source-img" />
         </div>
+      </div>
+      <div class="row mb-2">
+        <label for="customRange" class="form-label">Value: <span id="value" class="parameter-value"></span></label>
+        <input type="range" min="1" max="254" value="60" class="form-range" id="customRange">
       </div>
       <div class="row">
         <div class="col-xl-12">
@@ -53,78 +63,7 @@
     <canvas id="canvas" class="hide"></canvas>
   </div>
   <script src="../dist/getpalette.bundle.js"></script>
-  <script type="text/javascript">
-    var 
-      chooseFileBtn = document.getElementById('chooseFileBtn'),
-      fileInput = document.getElementById('file'),
-      imageView = document.getElementById('img'),
-      imageView2 = document.getElementById('img2'),
-      canvas = document.getElementById('canvas'),
-      table = document.getElementById('table'),
-      spinner = document.getElementById('spinner'),
-      content = document.getElementById('content'),
-      customRange = document.getElementById('customRange'),
-      customRangePanel = document.getElementById('customRangePanel'),
-      colorCounter = document.getElementById('colorCounter')
-      
-    imageView.style.opacity = '0'
-    spinner.style.display = 'none'
-    content.style.opacity = '0'
-    customRangePanel.style.opacity = '0'
-    //progressBarLine.style.width = '0%'
-    chooseFileBtn.onclick = function () { fileInput.click() }
-
-    fileInput.onchange = function () {
-      if (!fileInput.files) return
-      var reader = new FileReader()
-      spinner.style.display = 'flex'
-      content.style.opacity = '0'
-      reader.readAsDataURL(fileInput.files[0])
-      reader.onload = function () {
-        imageView.style.opacity = '1'
-        imageView.src = reader.result
-        imageView.onload = function () {
-          var result = demo.getPalette(imageView, canvas, customRange.value)
-          imageView2.src = result.image
-          drawPalette(result.list)
-        }
-      }
-    }
-
-    customRange.onchange = function () { 
-      var result = demo.getPalette(imageView, canvas, customRange.value)
-      imageView2.src = result.image
-      drawPalette(result.list)
-    }
-
-    function drawPalette(data) {
-      table.innerHTML = ''
-      
-     
-      var d = 8
-      var whiteColor = demo.whiteColor()
-      var blackColor = demo.blackColor()
-      for (var i = 0; i < data.length; i++) {
-        var color = data[i]
-
-      
-
-      
-        var div = document.createElement('div')
-        div.innerHTML = color.toString() // + '<br />' + color.toHSV().toString()
-        div.style.backgroundColor = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + color.a + ')'
-
-        const isContrast = (color.r < 90 || color.g < 90 || color.b < 90) && (color.r < 200 && color.g < 200 && color.b < 200)
-        div.style.color = color.getContrastRatio(whiteColor, true) > 5 ? '#fff' : '#000'
-
-        table.appendChild(div)
-       
-      }
-      colorCounter.textContent = data.length
-      spinner.style.display = 'none'
-      content.style.opacity = '1'
-      customRangePanel.style.opacity = '1'
-    }
-  </script>
+  <script src="js/getpalette.js"></script>
+  
 </body>
 </html>
