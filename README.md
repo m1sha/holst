@@ -1,13 +1,11 @@
-# 2D Graphic library
+# TS-Graphic is 2D Graphic library
 
-[Demo](./index.html)
+## Demo project list
 
-* Remake in EventHandler
-
-```ts
-constructor (scene: Scene, render: Renderer2D) {
-    ...
-    render.on((et, e) => this.invoke(et, e as MouseEvent), 'mousemove', 'mouseleave', 'click', 'mouseup', 'mousedown', 'mouseleave')
-}
-```
+* getpalette - get the palette of colors by a picture
+* sprites - shows sprites animation
+* relative-draw - test for draw in the relative coordinate
+* colors - test for how works colors
+* block-scheme-editor - block scheme editor
+* chart3
   
