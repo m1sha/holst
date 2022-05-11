@@ -33,6 +33,7 @@ if (process.env.libraryTarget === 'umd') {
   config.entry['demo.bundle'] = './src/demo/relative-draw/index.ts'
   config.entry['sprites.bundle'] = './src/demo/sprites/index.ts'
   config.entry['getpalette.bundle'] = './src/demo/getpalette/index.ts'
+  config.entry['colors.bundle'] = './src/demo/colors/index.ts'
   config.output.library = 'demo'
 }
 
