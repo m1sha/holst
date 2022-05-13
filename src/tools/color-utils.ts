@@ -161,5 +161,20 @@ export default {
       return { r, g, b }
     }
     throw new Error('hex length is invalid')
+  },
+
+  fromString (value: string): rgb {
+    if (value.charAt(0) === '#') return this.hex2rgb(value)
+    if (value.startsWith('hsv(')) {
+      const { h, s, v } = parseHsvString(value)
+      return this.hsv2rgb(h, s, v)
+    }
+    throw new Error()
   }
+}
+
+function parseHsvString (value: string): hsv {
+  const t = value.substring(4, value.length - 1)
+  const [h, s, v] = t.split(',').map(p => parseInt(p.trim()))
+  return { h, s, v }
 }

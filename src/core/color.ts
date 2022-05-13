@@ -16,7 +16,7 @@ export class Color {
   constructor (...args: Array<any>) {
     if (!args || !args.length) return
     if (typeof args[0] === 'string') {
-      const { r, g, b } = utils.hex2rgb(args[0])
+      const { r, g, b } = utils.fromString(args[0])
       this.r = r
       this.g = g
       this.b = b
