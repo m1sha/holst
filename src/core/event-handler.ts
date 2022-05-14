@@ -18,6 +18,7 @@ export class EventHandler {
   private readonly scene: Scene
   private readonly render: Renderer2D
   private readonly delegates: { eventType: EventType, callback: (e: EventInfo) => void }[]
+  onRendering: (() => void) | null = null
   constructor (scene: Scene, render: Renderer2D) {
     this.scene = scene
     this.render = render
@@ -43,6 +44,8 @@ export class EventHandler {
         delegate.callback({ eventType, event, point })
       }
     }
+
+    if (this.onRendering) this.onRendering()
 
     this.render.render(this.scene)
   }
