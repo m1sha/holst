@@ -1,7 +1,7 @@
 Task list
 ✔ Move to all .html files to page directory @done(22-05-07 17:59)
-☐ Recover test
+☐ Recover test @started(22-05-15 22:03)
 ☐ Arrange (Implement)
-☐ Viewport scroll & scale (global matrix transform) @started(22-05-15 21:59)
+☐ Viewport scroll & scale (global matrix transform)
 ☐ Create canvas dynamically
 ☐ Add event listeners to shapes, labels and etc.
