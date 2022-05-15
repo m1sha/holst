@@ -56,12 +56,12 @@ export class MutablePath2D implements Path2DBase {
     this.stack.push({ type: 'ClosePath' })
   }
 
-  createPath2D (): Path2D {
-    return createPath2D(this.stack, this.transform)
+  createPath2D (globalTransform?: Matrix2D): Path2D {
+    return createPath2D(this.stack, this.transform, globalTransform)
   }
 
-  toPoints (): Point[] {
-    return createPoints(this.stack, this.transform)
+  toPoints (globalTransform?: Matrix2D): Point[] {
+    return createPoints(this.stack, this.transform, globalTransform)
   }
 
   copy () {

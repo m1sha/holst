@@ -1,10 +1,17 @@
 import { Matrix2D } from '../matrix'
 import { Point } from '../point'
 import { Path2DElement } from './types/path2d-element'
-type HandlerDelegate = (arr: Point[], element: Path2DElement, transform: Matrix2D, stack: Path2DElement[], index: number) => void
+type HandlerInputType = {
+  element: Path2DElement,
+  transform: Matrix2D,
+  stack: Path2DElement[],
+  index: number,
+  globalTransform?: Matrix2D
+}
+type HandlerDelegate = (arr: Point[], input: HandlerInputType) => void
 const handlers: Record<string, HandlerDelegate> = {}
 
-handlers.Arc = (arr, element, transform) => {
+handlers.Arc = (arr, { element, transform }) => {
   if (element.type !== 'Arc') return
   const p = transform.applyMatrix(new Point(element))
   arr.push(p)
@@ -14,7 +21,7 @@ handlers.Arc = (arr, element, transform) => {
   arr.push(new Point(p.x, p.y + -element.radius))
 }
 
-handlers.ArcTo = (arr, element, transform) => {
+handlers.ArcTo = (arr, { element, transform }) => {
   if (element.type !== 'ArcTo') return
   const p1 = transform.applyMatrix(new Point(element.x1, element.y1))
   const p2 = transform.applyMatrix(new Point(element.x2, element.y2))
@@ -26,7 +33,7 @@ handlers.ArcTo = (arr, element, transform) => {
   arr.push(new Point(p1.x, p1.y + -element.radius))
 }
 
-handlers.BezierCurveTo = (arr, element, transform) => {
+handlers.BezierCurveTo = (arr, { element, transform }) => {
   if (element.type !== 'BezierCurveTo') return
   const p = transform.applyMatrix(new Point(element))
   arr.push(p)
@@ -34,7 +41,7 @@ handlers.BezierCurveTo = (arr, element, transform) => {
 
 handlers.ClosePath = () => {}
 
-handlers.Ellipse = (arr, element, transform) => {
+handlers.Ellipse = (arr, { element, transform }) => {
   if (element.type !== 'Ellipse') return
   const p = transform.applyMatrix(new Point(element))
   arr.push(p)
@@ -44,19 +51,19 @@ handlers.Ellipse = (arr, element, transform) => {
   arr.push(new Point(p.x, -element.radiusY))
 }
 
-handlers.LineTo = (arr, element, transform) => {
+handlers.LineTo = (arr, { element, transform }) => {
   if (element.type !== 'LineTo') return
   const p = transform.applyMatrix(new Point(element))
   arr.push(p)
 }
 
-handlers.MoveTo = (arr, element, transform) => {
+handlers.MoveTo = (arr, { element, transform }) => {
   if (element.type !== 'MoveTo') return
   const p = transform.applyMatrix(new Point(element))
   arr.push(p)
 }
 
-handlers.QuadraticCurveTo = (arr, element, transform) => {
+handlers.QuadraticCurveTo = (arr, { element, transform }) => {
   if (element.type !== 'QuadraticCurveTo') return
   const p = transform.applyMatrix(new Point(element))
   arr.push(p)
@@ -64,16 +71,16 @@ handlers.QuadraticCurveTo = (arr, element, transform) => {
   arr.push(new Point(p.y, element.cpy))
 }
 
-handlers.Rect = (arr, element, transform) => {
+handlers.Rect = (arr, { element, transform }) => {
   if (element.type !== 'Rect') return
   const p = transform.applyMatrix(new Point(element))
   arr.push(p)
   arr.push(new Point(p.x + element.w, p.y + element.h))
 }
 
-export function createPoints (stack: Path2DElement[], transform: Matrix2D): Point[] {
+export function createPoints (stack: Path2DElement[], transform: Matrix2D, globalTransform?: Matrix2D): Point[] {
   const result: Point[] = []
   let i = 0
-  for (const element of stack) handlers[element.type](result, element, transform, stack, i++)
+  for (const element of stack) handlers[element.type](result, { element, transform, stack, index: i++, globalTransform })
   return result
 }
