@@ -8,6 +8,7 @@
         "importHelpers":true,
         "forceConsistentCasingInFileNames":true,
         "baseUrl": "src",
+        "module": "esnext",
         "moduleResolution": "node",
         "paths": {
             "@": [
