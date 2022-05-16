@@ -1,7 +1,13 @@
 import { Point } from './point'
 import { Size } from './size'
 
-export class Rect implements Size {
+export interface IRect {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+export class Rect implements IRect, Size {
   x: number
   y: number
   width: number

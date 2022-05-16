@@ -140,9 +140,9 @@ export default class Shape implements Orderable {
     return calcBounds(points)
   }
 
-  toPath2D (): Path2DBase {
+  toPath2D (globalTransform?: Matrix2D): Path2DBase {
     if (this.p) return this.p
-    this.p = this.mutablePath.createPath2D()
+    this.p = this.mutablePath.createPath2D(globalTransform)
     return this.p
   }
 

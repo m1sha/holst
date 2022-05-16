@@ -7,16 +7,18 @@ import Shape from './shape'
 import { Color } from './color'
 import { Bitmap } from './bitmap'
 import { sort } from './sorter'
-import { Rect } from './rect'
+import { Viewport } from './viewport'
 import Orderable from './orderable'
 
 export class Renderer2D {
   readonly ctx: CanvasRenderingContext2D
+  readonly viewport: Viewport
   scale: number = 1
 
   constructor (ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
     this.ctx.imageSmoothingEnabled = true
+    this.viewport = new Viewport(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
   }
 
   render (scene: Scene): void {
@@ -27,10 +29,6 @@ export class Renderer2D {
   clear (): void {
     const { width, height } = this.viewport
     this.ctx.clearRect(0, 0, width, height)
-  }
-
-  get viewport (): Rect {
-    return new Rect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
   }
 
   addEventListener (a: (eventType: EventType, event: Event | MouseEvent | KeyboardEvent) => void, ...events: EventType[]) {
@@ -55,7 +53,7 @@ export class Renderer2D {
     this.ctx.save()
     this.assignMask(mask)
     const { style } = shape
-    const path = shape.toPath2D()
+    const path = shape.toPath2D(this.viewport.transform)
     if (style.strokeStyle) {
       this.ctx.strokeStyle = style.strokeStyle instanceof Color ? style.strokeStyle.toString() : style.strokeStyle
       this.ctx.lineWidth = style.lineWidth || 1
