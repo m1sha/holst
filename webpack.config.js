@@ -35,6 +35,7 @@ if (process.env.libraryTarget === 'umd') {
   config.entry['getpalette.bundle'] = './src/demo/getpalette/index.ts'
   config.entry['colors.bundle'] = './src/demo/colors/index.ts'
   config.entry['paint.bundle'] = './src/demo/paint/index.ts'
+  config.entry['viewport.bundle'] = './src/demo/viewport/index.ts'
   config.output.library = 'demo'
 }
 
