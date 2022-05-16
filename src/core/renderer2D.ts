@@ -13,7 +13,6 @@ import Orderable from './orderable'
 export class Renderer2D {
   readonly ctx: CanvasRenderingContext2D
   readonly viewport: Viewport
-  scale: number = 1
 
   constructor (ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
