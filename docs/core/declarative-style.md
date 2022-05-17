@@ -19,7 +19,7 @@ styles
 
 layer scroll
 
-shape arrow-left -> scroll @scroll-button (x, y)
+shape arrow-left (x, y) -> scroll :scroll-button
 	move-to x= { x     } y= { y + 2 }
 	line-to x= { x + 5 } y= { y - 5 }
 	line-to x= { x - 5 } y= { y - 5 }
