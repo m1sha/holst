@@ -34,6 +34,22 @@ export default class Shape implements Orderable {
     return this
   }
 
+  roundRect (rect: IRect, radius: number | { tl: number; tr: number; bl: number; br: number }): this | Shape {
+    const { x, y, width, height } = rect
+    const r = typeof radius === 'number' ? { tl: radius, tr: radius, bl: radius, br: radius } : radius
+    this.moveTo({ x: x + r.tl, y }) // radius.tl
+    this.lineTo({ x: x + width - r.tr, y }) // radius.tr
+    this.quadraticCurveTo({ x: x + width, y }, { x: x + width, y: y + r.tr }) // radius.tr
+    this.lineTo({ x: x + width, y: y + height - r.br }) // radius.br
+    this.quadraticCurveTo({ x: x + width, y: y + height }, { x: x + width - r.br, y: y + height }) // radius.br
+    this.lineTo({ x: x + r.bl, y: y + height }) // radius.bl
+    this.quadraticCurveTo({ x, y: y + height }, { x, y: y + height - r.bl }) // radius.bl
+    this.lineTo({ x, y: y + r.tl }) // radius.tl
+    this.quadraticCurveTo({ x, y }, { x: x + r.tl, y }) //  radius.tl
+    this.closePath()
+    return this
+  }
+
   moveTo (point: IPoint): this | Shape {
     this.mutablePath.moveTo(point.x, point.y)
     return this
@@ -63,6 +79,11 @@ export default class Shape implements Orderable {
   ellipse (point: IPoint, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
     this.mutablePath.moveTo(point.x + radiusX, point.y + radiusY)
     this.mutablePath.ellipse(point.x, point.y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
+    return this
+  }
+
+  quadraticCurveTo (cp: IPoint, p: IPoint): this | Shape {
+    this.mutablePath.quadraticCurveTo(cp.x, cp.y, p.x, p.y)
     return this
   }
 
