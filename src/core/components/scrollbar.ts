@@ -59,7 +59,7 @@ export class ScrollBar {
     const { height } = this.viewport
     scrollLayer
       .createShape({ fillStyle: thumbBackgroundColor, strokeStyle: thumbBorderColor })
-      .rect(new Rect(thumbSize, height - thumbSize, value, thumbSize))
+      .roundRect(new Rect(thumbSize, height - thumbSize, value, thumbSize), 8)
   }
 
   createVScrollThumb (scrollLayer: Layer, value: number) {
@@ -67,17 +67,17 @@ export class ScrollBar {
     const { width } = this.viewport
     scrollLayer
       .createShape({ fillStyle: thumbBackgroundColor, strokeStyle: thumbBorderColor })
-      .rect(new Rect(width - thumbSize, thumbSize, thumbSize, value))
+      .roundRect(new Rect(width - thumbSize, thumbSize, thumbSize, value), 8)
   }
 }
 
 function defaultScrollBarStyle (): ScrollBarStyle {
   return {
-    trackSize: 8,
-    trackBackgroundColor: '#333',
-    trackBorderColor: '#222',
-    thumbSize: 8,
-    thumbBackgroundColor: '#bbb',
-    thumbBorderColor: '#aaa'
+    trackSize: 18,
+    trackBackgroundColor: '#f4f4f4',
+    trackBorderColor: '#e0e0e0',
+    thumbSize: 18,
+    thumbBackgroundColor: '#c9c9c9',
+    thumbBorderColor: '#f2f1f1'
   }
 }
