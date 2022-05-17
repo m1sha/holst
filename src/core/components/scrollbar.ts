@@ -47,22 +47,25 @@ export class ScrollBar {
       .createShape({ fillStyle: buttonBackgroundColor, strokeStyle: buttonBorderColor })
       .rect(new Rect(0, height - trackSize, trackSize, trackSize))
 
+    let x = trackSize / 2
+    const y = height - trackSize / 2
     scrollLayer // arrow left
       .createShape({ fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor })
-      .moveTo({ x: (trackSize / 2) - 2, y: height - trackSize / 2 })
-      .lineTo({ x: (trackSize / 2) + 5, y: height - (trackSize / 2) - 5 })
-      .lineTo({ x: (trackSize / 2) + 5, y: height - (trackSize / 2) + 5 })
+      .moveTo({ x: x - 2, y: y })
+      .lineTo({ x: x + 5, y: y - 5 })
+      .lineTo({ x: x + 5, y: y + 5 })
       .closePath()
 
     scrollLayer // Button right
       .createShape({ fillStyle: buttonBackgroundColor, strokeStyle: buttonBorderColor })
       .rect(new Rect(width - trackSize - trackSize - 2, height - trackSize, trackSize, trackSize))
 
+    x = width - trackSize - trackSize / 2
     scrollLayer // arrow right
       .createShape({ fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor })
-      .moveTo({ x: width - trackSize - (trackSize / 2) + 2, y: height - trackSize / 2 })
-      .lineTo({ x: width - trackSize - (trackSize / 2) - 5, y: height - (trackSize / 2) - 5 })
-      .lineTo({ x: width - trackSize - (trackSize / 2) - 5, y: height - (trackSize / 2) + 5 })
+      .moveTo({ x: x + 2, y: y })
+      .lineTo({ x: x - 5, y: y - 5 })
+      .lineTo({ x: x - 5, y: y + 5 })
       .closePath()
 
     this.createHScrollThumb(scrollLayer, 60)
@@ -79,22 +82,25 @@ export class ScrollBar {
       .createShape({ fillStyle: buttonBackgroundColor, strokeStyle: buttonBorderColor })
       .rect(new Rect(width - trackSize, 0, trackSize, trackSize))
 
+    const x = (width - trackSize) + trackSize / 2
+    let y = trackSize / 2
     scrollLayer // arrow up
       .createShape({ fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor })
-      .moveTo({ x: (width - trackSize) + (trackSize / 2), y: trackSize / 2 - 2 })
-      .lineTo({ x: (width - trackSize) + (trackSize / 2) + 5, y: (trackSize / 2) + 5 })
-      .lineTo({ x: (width - trackSize) + (trackSize / 2) - 5, y: (trackSize / 2) + 5 })
+      .moveTo({ x: x, y: y - 2 })
+      .lineTo({ x: x + 5, y: y + 5 })
+      .lineTo({ x: x - 5, y: y + 5 })
       .closePath()
 
     scrollLayer // Button down
       .createShape({ fillStyle: buttonBackgroundColor, strokeStyle: buttonBorderColor })
       .rect(new Rect(width - trackSize, height - trackSize - trackSize - 2, trackSize, trackSize))
 
+    y = height - trackSize - trackSize / 2
     scrollLayer // arrow down
       .createShape({ fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor })
-      .moveTo({ x: (width - trackSize) + (trackSize / 2), y: height - trackSize - (trackSize / 2) + 2 })
-      .lineTo({ x: (width - trackSize) + (trackSize / 2) + 5, y: height - trackSize - (trackSize / 2) - 5 })
-      .lineTo({ x: (width - trackSize) + (trackSize / 2) - 5, y: height - trackSize - (trackSize / 2) - 5 })
+      .moveTo({ x: x, y: y + 2 })
+      .lineTo({ x: x + 5, y: y - 5 })
+      .lineTo({ x: x - 5, y: y - 5 })
       .closePath()
 
     this.createVScrollThumb(scrollLayer, 60)
