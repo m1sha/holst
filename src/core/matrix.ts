@@ -1,4 +1,4 @@
-import { Point } from './point'
+import { Point, IPoint } from './point'
 
 export class Matrix2D {
   private matrix: DOMMatrix
@@ -57,7 +57,7 @@ export class Matrix2D {
     this.matrix = new DOMMatrix([a || 0, b || 0, c || 0, d || 0, e || 0, f || 0])
   }
 
-  scale (point: Point): Matrix2D {
+  scale (point: IPoint): Matrix2D {
     this.matrix = this.matrix.multiply(DOMMatrix.fromMatrix({ a: point.x, d: point.y }))
     return this
   }
@@ -74,7 +74,7 @@ export class Matrix2D {
     return this
   }
 
-  applyMatrix (p: Point): Point {
+  applyMatrix (p: IPoint): Point {
     return new Point(this.matrix.transformPoint(p))
   }
 

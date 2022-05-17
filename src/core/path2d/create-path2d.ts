@@ -65,10 +65,16 @@ handlers.QuadraticCurveTo = ({ path, element, transform }) => {
   path.quadraticCurveTo(cpx, cpy, x, y)
 }
 
-handlers.Rect = ({ path, element, transform }) => {
+handlers.Rect = ({ path, element, transform, globalTransform }) => {
   if (element.type !== 'Rect') return
-  const { w, h } = element
-  const { x, y } = transform.applyMatrix(new Point(element))
+  let { w, h } = element
+  let { x, y } = transform.applyMatrix(new Point(element))
+  if (globalTransform) {
+    x = (x - globalTransform.f) * globalTransform.a
+    y = (y - globalTransform.e) * globalTransform.a
+    w *= globalTransform.a
+    h *= globalTransform.d
+  }
   path.rect(x, y, w, h)
 }
 

@@ -1,8 +1,8 @@
 import { LineOptions } from './line-options'
 import Orderable from './orderable'
 import { Path2DBase } from './path2d/path2d-base'
-import { Point } from './point'
-import { Rect } from './rect'
+import { Point, IPoint } from './point'
+import { Rect, IRect } from './rect'
 import { ShapeStyle } from './shape-style'
 import { MutablePath2D } from './path2d/mutable-path2d'
 import { Matrix2D } from './matrix'
@@ -29,44 +29,44 @@ export default class Shape implements Orderable {
     this.name = 'shape'
   }
 
-  rect (rect: Rect): this | Shape {
+  rect (rect: IRect): this | Shape {
     this.mutablePath.rect(rect.x, rect.y, rect.width, rect.height)
     return this
   }
 
-  moveTo (point: Point): this | Shape {
+  moveTo (point: IPoint): this | Shape {
     this.mutablePath.moveTo(point.x, point.y)
     return this
   }
 
-  lineTo (point: Point): this | Shape {
+  lineTo (point: IPoint): this | Shape {
     this.mutablePath.lineTo(point.x, point.y)
     return this
   }
 
-  lineH (point: Point, width: number): this | Shape {
+  lineH (point: IPoint, width: number): this | Shape {
     this.moveTo(point).lineTo(new Point(point.x + width, point.y))
     return this
   }
 
-  lineV (point: Point, height: number): this | Shape {
+  lineV (point: IPoint, height: number): this | Shape {
     this.moveTo(point).lineTo(new Point(point.x, point.y + height))
     return this
   }
 
-  arc (point: Point, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
+  arc (point: IPoint, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
     this.mutablePath.moveTo(point.x + radius, point.y + radius)
     this.mutablePath.arc(point.x, point.y, radius, startAngle, endAngle, anticlockwise)
     return this
   }
 
-  ellipse (point: Point, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
+  ellipse (point: IPoint, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
     this.mutablePath.moveTo(point.x + radiusX, point.y + radiusY)
     this.mutablePath.ellipse(point.x, point.y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
     return this
   }
 
-  polyline (points: Point[]): this | Shape {
+  polyline (points: IPoint[]): this | Shape {
     for (const point of points) {
       this.lineTo(point)
       this.moveTo(point)
@@ -74,7 +74,7 @@ export default class Shape implements Orderable {
     return this
   }
 
-  line (pointStart: Point, pointEnd: Point, options?: LineOptions): this | Shape {
+  line (pointStart: IPoint, pointEnd: IPoint, options?: LineOptions): this | Shape {
     this.moveTo(pointStart)
     this.lineTo(pointEnd)
 
@@ -104,7 +104,7 @@ export default class Shape implements Orderable {
     return this
   }
 
-  move (point: Point): this | Shape {
+  move (point: IPoint): this | Shape {
     // const matrix = Matrix2D.identity
     // matrix.e = point.x
     // matrix.f = point.y
@@ -114,7 +114,7 @@ export default class Shape implements Orderable {
     return this
   }
 
-  scale (point: Point): this | Shape {
+  scale (point: IPoint): this | Shape {
     const matrix = Matrix2D.identity.scale(point)
     this.mutablePath.transform.mul(matrix)
     return this
@@ -131,7 +131,7 @@ export default class Shape implements Orderable {
     return IsPointInPolygon4(this.mutablePath.toPoints(), p)
   }
 
-  inStroke (p: Point): boolean {
+  inStroke (p: IPoint): boolean {
     return Context2DFactory.default.ctx.isPointInStroke(this.toPath2D(), p.x, p.y)
   }
 
