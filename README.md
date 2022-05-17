@@ -8,4 +8,9 @@
 * colors - test for how works colors
 * block-scheme-editor - block scheme editor
 * chart3
+* paint
+* viewport
   
+[Task list](tasks.todo)
+
+[Declarative Style (Draft)](/docs/core/declarative-style.md)
