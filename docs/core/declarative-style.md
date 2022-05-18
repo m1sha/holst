@@ -21,8 +21,8 @@ Format Vector Graphic markup Language (*.vgl files)
 import scroll-button
 layer scroll
 
-$ n = 5
-$ m = 2
+var n = 5
+var m = 2
 
 shape arrow-left (x, y) -> scroll :scroll-button 
 	move-to     x, y + m
@@ -47,6 +47,39 @@ shape arrow-down (x, y) -> scroll :scroll-button
 	line-to x + n, y - n
 	line-to x - n, y - n
 	close
+```
+
+or minimalistic
+
+```
+! scroll-button
+* scroll
+
+$ n = 5, m = 2
+
++ arrow-left (x, y) -> scroll :scroll-button 
+	M  x, y + m
+	LT x + n, y - n
+	LT x - n, y - n
+	z
+
++ arrow-right (x, y) -> scroll :scroll-button 
+	M  x + m, y
+	LT x - n, y - n 
+	LT x - n, y + n
+	z
+
++ arrow-up (x, y) -> scroll :scroll-button 
+	M  x, y - m
+	LT x + n, y + n
+	LT x - n, y + n
+	z
+
++ arrow-down (x, y) -> scroll :scroll-button 
+	M  x, y + m
+	LT x + n, y - n
+	LT x - n, y - n
+	z
 ```
 
 or in XML 
