@@ -20,11 +20,30 @@ Format Vector Graphic markup Language (*.vgl files)
 ```
 import scroll-button
 layer scroll
+
 shape arrow-left (x, y) -> scroll :scroll-button 
 	move-to     x, y + 2
 	line-to x + 5, y - 5
 	line-to x - 5, y - 5
 	close
+
+shape arrow-right (x, y) -> scroll :scroll-button 
+	move-to x + 2, y
+	line-to x - 5, y - 5 
+	line-to x - 5, y + 5
+	close
+
+shape arrow-up (x, y) -> scroll :scroll-button 
+	move-to     x, y - 2
+	line-to x + 5, y + 5
+	line-to x - 5, y + 5
+	close
+
+shape arrow-down (x, y) -> scroll :scroll-button 
+  move-to 		x, y + 2
+  line-to x + 5, y - 5
+  line-to x - 5, y - 5
+  close
 ```
 
 or in XML 
