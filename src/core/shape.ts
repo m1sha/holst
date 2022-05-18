@@ -194,11 +194,13 @@ export default class Shape implements Interactive, Orderable {
     this.mutablePath.transform = transform.copy()
   }
 
-  on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): void {
+  on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): this | Shape {
     this.eventHandler.add(this, type, listener)
+    return this
   }
 
-  off<K extends keyof EventType> (type: K): void {
+  off<K extends keyof EventType> (type: K): this | Shape {
     this.eventHandler.remove(this, type)
+    return this
   }
 }
