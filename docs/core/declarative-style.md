@@ -24,25 +24,25 @@ layer scroll
 var n = 5
 var m = 2
 
-shape arrow-left (x, y) -> scroll :scroll-button 
+shape arrow-left:scroll-button (x, y) -> scroll 
 	move-to     x, y + m
 	line-to x + n, y - n
 	line-to x - n, y - n
 	close
 
-shape arrow-right (x, y) -> scroll :scroll-button 
+shape arrow-right:scroll-button (x, y) -> scroll 
 	move-to x + m, y
 	line-to x - n, y - n 
 	line-to x - n, y + n
 	close
 
-shape arrow-up (x, y) -> scroll :scroll-button 
+shape arrow-up:scroll-button  (x, y) -> scroll
 	move-to     x, y - m
 	line-to x + n, y + n
 	line-to x - n, y + n
 	close
 
-shape arrow-down (x, y) -> scroll :scroll-button 
+shape arrow-down:scroll-button  (x, y) -> scroll
 	move-to     x, y + m
 	line-to x + n, y - n
 	line-to x - n, y - n
@@ -53,29 +53,29 @@ or minimalistic
 
 ```
 ! scroll-button
-* scroll
+# scroll
 
 $ n = 5, m = 2
 
-+ arrow-left (x, y) -> scroll :scroll-button 
++ arrow-left:scroll-button (x, y) -> scroll
 	M  x, y + m
 	LT x + n, y - n
 	LT x - n, y - n
 	z
 
-+ arrow-right (x, y) -> scroll :scroll-button 
++ arrow-right:scroll-button (x, y) -> scroll
 	M  x + m, y
 	LT x - n, y - n 
 	LT x - n, y + n
 	z
 
-+ arrow-up (x, y) -> scroll :scroll-button 
++ arrow-up:scroll-button (x, y) -> scroll
 	M  x, y - m
 	LT x + n, y + n
 	LT x - n, y + n
 	z
 
-+ arrow-down (x, y) -> scroll :scroll-button 
++ arrow-down:scroll-button (x, y) -> scroll 
 	M  x, y + m
 	LT x + n, y - n
 	LT x - n, y - n
