@@ -22,6 +22,7 @@ function createScene (): Scene {
     .rect(new Rect(10, 10, 150, 150))
   layer0.createShape({ fillStyle: '#ff00ff' })
     .rect(new Rect(600, 10, 150, 150))
+    .on('click', () => alert('Rect'))
   layer0.createShape({ fillStyle: '#510051', strokeStyle: '#3f3f53', lineWidth: 12 })
     .arc({ x: 500, y: 310 }, 50, Math.PI, Math.PI * 2)
   layer0.createShape({ fillStyle: '#113051', strokeStyle: '#3f3ff3', lineWidth: 4 })
@@ -29,7 +30,6 @@ function createScene (): Scene {
     .lineTo({ x: 100, y: 500 })
     .lineTo({ x: 50, y: 400 })
     .closePath()
-    .on('click', () => alert(''))
 
   return scene
 }

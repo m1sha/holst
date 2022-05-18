@@ -75,6 +75,8 @@ handlers.Rect = (arr, { element, transform }) => {
   if (element.type !== 'Rect') return
   const p = transform.applyMatrix(new Point(element))
   arr.push(p)
+  arr.push(new Point(p.x + element.w, p.y))
+  arr.push(new Point(p.x, p.y + element.h))
   arr.push(new Point(p.x + element.w, p.y + element.h))
 }
 

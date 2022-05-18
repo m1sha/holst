@@ -1,27 +1,28 @@
+import { Point } from './point'
 import { removeItem } from '../tools/array'
-import { EventType } from './interactive'
+import { EventType, Interactive } from './interactive'
 
 export interface IEventHandler {
   type: 'bag' | 'common'
-  add<K extends keyof EventType>(id: string, type: K, listener: (ev: EventType[K]) => void): void
-  remove<K extends keyof EventType>(id: string, type: K): void
+  add<K extends keyof EventType>(interactive: Interactive, type: K, listener: (ev: EventType[K]) => void): void
+  remove<K extends keyof EventType>(interactive: Interactive, type: K): void
 }
 
-type F<K extends keyof EventType> = { id: string; listener: (ev: EventType[K]) => void }
+type F<K extends keyof EventType> = { interactive: Interactive; listener: (ev: EventType[K]) => void }
 type ListenerType = F<keyof EventType>
 
 export class EventHandlerBag implements IEventHandler {
   type: 'bag' | 'common' = 'bag'
   /** @internal */ handlers: Record<string, ListenerType[]> = {}
 
-  add<K extends keyof EventType> (id: string, type: K, listener: (ev: EventType[K]) => void): void {
+  add<K extends keyof EventType> (interactive: Interactive, type: K, listener: (ev: EventType[K]) => void): void {
     if (!this.handlers[type]) this.handlers[type] = []
-    const s = { id, listener } as ListenerType
+    const s = { interactive, listener } as ListenerType
     this.handlers[type].push(s)
   }
 
-  remove<K extends keyof EventType> (id: string, type: K): void {
-    removeItem(this.handlers[type], p => p.id === id)
+  remove<K extends keyof EventType> (interactive: Interactive, type: K): void {
+    removeItem(this.handlers[type], p => p.interactive.id === interactive.id)
   }
 }
 
@@ -36,14 +37,14 @@ export class EventHandler implements IEventHandler {
     this.init()
   }
 
-  add<K extends keyof EventType> (id: string, type: K, listener: (ev: EventType[K]) => void): void {
+  add<K extends keyof EventType> (interactive: Interactive, type: K, listener: (ev: EventType[K]) => void): void {
     if (!this.handlers[type]) this.handlers[type] = []
-    const s = { id, listener } as ListenerType
+    const s = { interactive, listener } as ListenerType
     this.handlers[type].push(s)
   }
 
-  remove<K extends keyof EventType> (id: string, type: K): void {
-    removeItem(this.handlers[type], p => p.id === id)
+  remove<K extends keyof EventType> (interactive: Interactive, type: K): void {
+    removeItem(this.handlers[type], p => p.interactive.id === interactive.id)
   }
 
   fromBag (eventHandler: IEventHandler) {
@@ -56,14 +57,16 @@ export class EventHandler implements IEventHandler {
       }
       const origin = this.handlers[key]
       for (const i of incomingList) {
-        if (origin.findIndex(p => p.id === i.id) > -1) continue
+        if (origin.findIndex(p => p.interactive.id === i.interactive.id) > -1) continue
         origin.push(i)
       }
     }
   }
 
   private init () {
-    this.element.onclick = e => this.handlers.click.forEach(p => p.listener(e))
+    this.element.onclick = e => this.handlers.click.forEach(p => {
+      if (p.interactive.inPath(new Point(e.clientX, e.clientY))) p.listener(e)
+    })
     this.element.onblur = e => this.handlers.blur.forEach(p => p.listener(e))
   }
 }

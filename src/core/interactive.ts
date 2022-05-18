@@ -1,3 +1,5 @@
+import { Point } from './point'
+
 export interface EventType {
   'click': MouseEvent
   'hover': Event
@@ -7,4 +9,6 @@ export interface EventType {
 export interface Interactive {
   on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): void
   off<K extends keyof EventType> (type: K): void
+  inPath (p: Point): boolean
+  id: string
 }

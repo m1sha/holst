@@ -15,7 +15,7 @@ import { EventHandlerBag, IEventHandler } from './event-handler2'
 import { uid } from '../tools/uid'
 
 export default class Shape implements Interactive, Orderable {
-  private id: string
+  readonly id: string
   private p: Path2DBase | null = null
   private readonly mutablePath: MutablePath2D
   readonly relative: RelativeMutablePath2D
@@ -195,10 +195,10 @@ export default class Shape implements Interactive, Orderable {
   }
 
   on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): void {
-    this.eventHandler.add(this.id, type, listener)
+    this.eventHandler.add(this, type, listener)
   }
 
   off<K extends keyof EventType> (type: K): void {
-    this.eventHandler.remove(this.id, type)
+    this.eventHandler.remove(this, type)
   }
 }
