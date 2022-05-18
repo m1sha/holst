@@ -52,7 +52,10 @@ export class Renderer2D {
   }
 
   private drawShape (shape: Shape, mask?: Shape | null) {
-    if (!shape.eventHandler) shape.eventHandler = this.eventHandler
+    if (shape.eventHandler.type === 'bag') {
+      this.eventHandler.fromBag(shape.eventHandler)
+      shape.eventHandler = this.eventHandler
+    }
     this.ctx.save()
     this.assignMask(mask)
     const { style } = shape

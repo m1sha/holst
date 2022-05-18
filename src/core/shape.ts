@@ -11,7 +11,7 @@ import { calcBounds, IsPointInPolygon4 } from './utils'
 import { deepCopyFast } from '../tools/deep-copy'
 import { RelativeMutablePath2D } from './path2d/relative-mutable-path2d'
 import { EventType, Interactive } from './interactive'
-import { IEventHandler } from './event-handler2'
+import { EventHandlerBag, IEventHandler } from './event-handler2'
 import { uid } from '../tools/uid'
 
 export default class Shape implements Interactive, Orderable {
@@ -24,7 +24,7 @@ export default class Shape implements Interactive, Orderable {
   style: ShapeStyle
   name: string
   order: number
-  /** @internal */ eventHandler: IEventHandler | null = null
+  /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
     this.id = uid()
@@ -195,12 +195,10 @@ export default class Shape implements Interactive, Orderable {
   }
 
   on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): void {
-    if (!this.eventHandler) throw new Error("eventHandler isn't define")
     this.eventHandler.add(this.id, type, listener)
   }
 
   off<K extends keyof EventType> (type: K): void {
-    if (!this.eventHandler) throw new Error("eventHandler isn't define")
     this.eventHandler.remove(this.id, type)
   }
 }

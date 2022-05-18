@@ -29,6 +29,7 @@ function createScene (): Scene {
     .lineTo({ x: 100, y: 500 })
     .lineTo({ x: 50, y: 400 })
     .closePath()
+    .on('click', () => alert(''))
 
   return scene
 }
