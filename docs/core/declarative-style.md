@@ -40,10 +40,10 @@ shape arrow-up (x, y) -> scroll :scroll-button
 	close
 
 shape arrow-down (x, y) -> scroll :scroll-button 
-  move-to 		x, y + 2
-  line-to x + 5, y - 5
-  line-to x - 5, y - 5
-  close
+	move-to     x, y + 2
+	line-to x + 5, y - 5
+	line-to x - 5, y - 5
+	close
 ```
 
 or in XML 
