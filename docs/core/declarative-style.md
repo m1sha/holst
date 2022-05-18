@@ -2,18 +2,18 @@
 
 Format Vector Graphic Styles (*.vgs files)
 ```
-.scroll-button:default
-	fill       = #f5f5f5
-	stroke     = #f5f5f5
+.scroll-button
+	fill         = #f5f5f5
+	stroke       = #f5f5f5
 
-.scroll-button:hover
-	fill       = #a5a5a5
-	stroke     = #a5a5a5
+	&:hover
+		fill       = #a5a5a5
+		stroke     = #a5a5a5
 
-.scroll-button:focus
-	fill       = #eee
-	stroke     = #00e1
-	line-width = 2
+	&:focus
+		fill       = #eee
+		stroke     = #00e1
+		line-width = 2
 ```
 
 Format Vector Graphic markup Language (*.vgl files)
@@ -29,6 +29,9 @@ shape arrow-left:scroll-button (x, y) -> scroll
 	line-to x + n, y - n
 	line-to x - n, y - n
 	close
+	@hover = { style = :hover }
+	@blur  = { style = : }
+	@click = { style = :focus }
 
 shape arrow-right:scroll-button (x, y) -> scroll 
 	move-to x + m, y
@@ -62,6 +65,9 @@ $ n = 5, m = 2
 	LT x + n, y - n
 	LT x - n, y - n
 	z
+	@hover = { : = :hover }
+	@blur  = { : = : }
+	@click = { : = :focus }
 
 + arrow-right:scroll-button (x, y) -> scroll
 	M  x + m, y
