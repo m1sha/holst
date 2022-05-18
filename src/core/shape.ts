@@ -10,8 +10,12 @@ import Context2DFactory from './canvas-rendering-context-2d-factory'
 import { calcBounds, IsPointInPolygon4 } from './utils'
 import { deepCopyFast } from '../tools/deep-copy'
 import { RelativeMutablePath2D } from './path2d/relative-mutable-path2d'
+import { EventType, Interactive } from './interactive'
+import { IEventHandler } from './event-handler2'
+import { uid } from '../tools/uid'
 
-export default class Shape implements Orderable {
+export default class Shape implements Interactive, Orderable {
+  private id: string
   private p: Path2DBase | null = null
   private readonly mutablePath: MutablePath2D
   readonly relative: RelativeMutablePath2D
@@ -20,8 +24,10 @@ export default class Shape implements Orderable {
   style: ShapeStyle
   name: string
   order: number
+  /** @internal */ eventHandler: IEventHandler | null = null
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
+    this.id = uid()
     this.mutablePath = path
     this.relative = new RelativeMutablePath2D(this.mutablePath)
     this.order = order
@@ -186,5 +192,15 @@ export default class Shape implements Orderable {
   private importTransformation (transform: Matrix2D): void {
     if (!transform) throw new Error('matrix is undefined')
     this.mutablePath.transform = transform.copy()
+  }
+
+  on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): void {
+    if (!this.eventHandler) throw new Error("eventHandler isn't define")
+    this.eventHandler.add(this.id, type, listener)
+  }
+
+  off<K extends keyof EventType> (type: K): void {
+    if (!this.eventHandler) throw new Error("eventHandler isn't define")
+    this.eventHandler.remove(this.id, type)
   }
 }

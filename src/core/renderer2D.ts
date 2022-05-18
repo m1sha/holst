@@ -9,15 +9,18 @@ import { Bitmap } from './bitmap'
 import { sort } from './sorter'
 import { Viewport } from './viewport'
 import Orderable from './orderable'
+import { EventHandler } from './event-handler2'
 
 export class Renderer2D {
   readonly ctx: CanvasRenderingContext2D
   readonly viewport: Viewport
+  private eventHandler: EventHandler
 
   constructor (ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
     this.ctx.imageSmoothingEnabled = true
     this.viewport = new Viewport(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
+    this.eventHandler = new EventHandler(this.ctx.canvas)
   }
 
   render (scene: Scene): void {
@@ -49,6 +52,7 @@ export class Renderer2D {
   }
 
   private drawShape (shape: Shape, mask?: Shape | null) {
+    if (!shape.eventHandler) shape.eventHandler = this.eventHandler
     this.ctx.save()
     this.assignMask(mask)
     const { style } = shape
