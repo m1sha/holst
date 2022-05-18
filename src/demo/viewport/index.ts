@@ -1,11 +1,11 @@
 import { Scene, Renderer2D, Rect } from 'index'
-import { ScrollBar } from '../../core/components/scrollbar'
+import { ScrollBox } from '../../core/components/scroll-box'
 export function createViewportDemo (canvas: HTMLCanvasElement) {
   const scene = createScene()
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
 
-  const scrollbar = new ScrollBar(scene, renderer.viewport)
-  scrollbar.create()
+  const scrollBox = new ScrollBox(scene, renderer.viewport)
+  scrollBox.create()
 
   renderer.viewport.x = 0
   renderer.viewport.scale = 1

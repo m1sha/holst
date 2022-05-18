@@ -1,6 +1,6 @@
-import { IPoint } from '../point'
+import { IPoint } from '../../point'
 import { Layer } from 'index'
-import { ShapeStyle } from '../shape-style'
+import { ShapeStyle } from '../../shape-style'
 
 const arrowLeft = (layer: Layer, { x, y }: IPoint, style: ShapeStyle) => layer // arrow left
   .createShape(style)
