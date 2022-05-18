@@ -7,9 +7,9 @@ export abstract class ScrollBar {
   position: number
   limit: number
 
-  constructor () {
-    this.position = 0
-    this.limit = 0
+  constructor (position: number, limit: number) {
+    this.position = position ?? 0
+    this.limit = limit ?? 0
   }
 
   abstract create (Layer: Layer, { width, height }: Size, style: ScrollBarStyle): void
@@ -40,14 +40,14 @@ export class HScrollBar extends ScrollBar {
     x = width - trackSize - trackSize / 2
     arrowRight(layer, { x, y }, arrowStyle)
 
-    this.createHScrollThumb(layer, 60, height, style)
+    this.createHScrollThumb(layer, this.limit, height, style)
   }
 
   createHScrollThumb (scrollLayer: Layer, value: number, height: number, style: ScrollBarStyle) {
     const { thumbSize, thumbBackgroundColor, thumbBorderColor } = style
     scrollLayer
       .createShape({ fillStyle: thumbBackgroundColor, strokeStyle: thumbBorderColor })
-      .roundRect(new Rect(thumbSize, height - thumbSize, value, thumbSize), 8)
+      .roundRect(new Rect(thumbSize + this.position, height - thumbSize, value, thumbSize), 8)
   }
 }
 
@@ -74,13 +74,13 @@ export class VScrollBar extends ScrollBar {
     y = height - trackSize - trackSize / 2
     arrowDown(layer, { x, y }, arrowStyle)
 
-    this.createVScrollThumb(layer, 60, width, style)
+    this.createVScrollThumb(layer, this.limit, width, style)
   }
 
   createVScrollThumb (scrollLayer: Layer, value: number, width: number, style: ScrollBarStyle) {
     const { thumbSize, thumbBackgroundColor, thumbBorderColor } = style
     scrollLayer
       .createShape({ fillStyle: thumbBackgroundColor, strokeStyle: thumbBorderColor })
-      .roundRect(new Rect(width - thumbSize, thumbSize, thumbSize, value), 8)
+      .roundRect(new Rect(width - thumbSize, thumbSize + this.position, thumbSize, value), 8)
   }
 }
