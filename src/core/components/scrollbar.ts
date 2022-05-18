@@ -2,6 +2,7 @@ import { Viewport } from '../viewport'
 import { Scene } from '../scene'
 import { Rect } from '../rect'
 import { Layer } from '../layers'
+import { arrowLeft, arrowRight, arrowUp, arrowDown } from './scrollbar-helpers'
 
 interface ScrollBarStyle {
   trackSize: number
@@ -49,24 +50,16 @@ export class ScrollBar {
 
     let x = trackSize / 2
     const y = height - trackSize / 2
-    scrollLayer // arrow left
-      .createShape({ fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor })
-      .moveTo({ x: x - 2, y: y })
-      .lineTo({ x: x + 5, y: y - 5 })
-      .lineTo({ x: x + 5, y: y + 5 })
-      .closePath()
+    const arrowStyle = { fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor }
+
+    arrowLeft(scrollLayer, { x, y }, arrowStyle)
 
     scrollLayer // Button right
       .createShape({ fillStyle: buttonBackgroundColor, strokeStyle: buttonBorderColor })
       .rect(new Rect(width - trackSize - trackSize - 2, height - trackSize, trackSize, trackSize))
 
     x = width - trackSize - trackSize / 2
-    scrollLayer // arrow right
-      .createShape({ fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor })
-      .moveTo({ x: x + 2, y: y })
-      .lineTo({ x: x - 5, y: y - 5 })
-      .lineTo({ x: x - 5, y: y + 5 })
-      .closePath()
+    arrowRight(scrollLayer, { x, y }, arrowStyle)
 
     this.createHScrollThumb(scrollLayer, 60)
   }
@@ -84,24 +77,15 @@ export class ScrollBar {
 
     const x = (width - trackSize) + trackSize / 2
     let y = trackSize / 2
-    scrollLayer // arrow up
-      .createShape({ fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor })
-      .moveTo({ x: x, y: y - 2 })
-      .lineTo({ x: x + 5, y: y + 5 })
-      .lineTo({ x: x - 5, y: y + 5 })
-      .closePath()
+    const arrowStyle = { fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor }
+    arrowUp(scrollLayer, { x, y }, arrowStyle)
 
     scrollLayer // Button down
       .createShape({ fillStyle: buttonBackgroundColor, strokeStyle: buttonBorderColor })
       .rect(new Rect(width - trackSize, height - trackSize - trackSize - 2, trackSize, trackSize))
 
     y = height - trackSize - trackSize / 2
-    scrollLayer // arrow down
-      .createShape({ fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor })
-      .moveTo({ x: x, y: y + 2 })
-      .lineTo({ x: x + 5, y: y - 5 })
-      .lineTo({ x: x - 5, y: y - 5 })
-      .closePath()
+    arrowDown(scrollLayer, { x, y }, arrowStyle)
 
     this.createVScrollThumb(scrollLayer, 60)
   }
