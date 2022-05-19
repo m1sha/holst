@@ -65,21 +65,21 @@ export class EventHandler implements IEventHandler {
 
   private init () {
     this.element.onclick = e => this.handlers.click?.forEach(p => {
-      const inPath = p.interactive.inPath(new Point(e.clientX, e.clientY))
+      const inPath = p.interactive.inPath(new Point(e.offsetX, e.offsetY))
       if (inPath) p.listener(e)
     })
 
     const hovered: Record<string, boolean> = {}
     this.element.onmousemove = e => {
       this.handlers.blur?.forEach(p => {
-        const inPath = p.interactive.inPath(new Point(e.clientX, e.clientY))
+        const inPath = p.interactive.inPath(new Point(e.offsetX, e.offsetY))
         if (inPath) return
         if (!hovered[p.interactive.id]) return
         delete hovered[p.interactive.id]
         p.listener(e)
       })
       this.handlers.hover?.forEach(p => {
-        const inPath = p.interactive.inPath(new Point(e.clientX, e.clientY))
+        const inPath = p.interactive.inPath(new Point(e.offsetX, e.offsetY))
         if (!inPath) return
         if (hovered[p.interactive.id]) return
         hovered[p.interactive.id] = true
