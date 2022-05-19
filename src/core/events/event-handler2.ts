@@ -1,6 +1,6 @@
-import { Point } from '../point'
 import { removeItem } from '../../tools/array'
 import { EventType, Interactive } from './interactive'
+import { HandlerResolver } from './handler-resolver'
 
 export interface IEventHandler {
   type: 'bag' | 'common'
@@ -9,11 +9,11 @@ export interface IEventHandler {
 }
 
 type F<K extends keyof EventType> = { interactive: Interactive; listener: (ev: EventType[K]) => void }
-type ListenerType = F<keyof EventType>
-
+export type ListenerType = F<keyof EventType>
+export type EventHandlers = Record<string, ListenerType[]>
 export class EventHandlerBag implements IEventHandler {
   type: 'bag' | 'common' = 'bag'
-  /** @internal */ handlers: Record<string, ListenerType[]> = {}
+  /** @internal */ handlers: EventHandlers = {}
 
   add<K extends keyof EventType> (interactive: Interactive, type: K, listener: (ev: EventType[K]) => void): void {
     if (!this.handlers[type]) this.handlers[type] = []
@@ -28,7 +28,7 @@ export class EventHandlerBag implements IEventHandler {
 
 export class EventHandler implements IEventHandler {
   type: 'bag' | 'common' = 'common'
-  private handlers: Record<string, ListenerType[]>
+  private handlers: EventHandlers
   private element: HTMLCanvasElement
 
   constructor (canvas: HTMLCanvasElement) {
@@ -64,41 +64,16 @@ export class EventHandler implements IEventHandler {
   }
 
   private init () {
-    this.element.onmouseleave = e => {
-      this.handlers.blur?.forEach(p => {
-        if (!hovered[p.interactive.id]) return
-        delete hovered[p.interactive.id]
-        p.listener(new InteractiveEvent(e, p.interactive, this.element))
-      })
-    }
-    this.element.onclick = e => this.handlers.click?.forEach(p => {
-      const inPath = p.interactive.inPath(new Point(e.offsetX, e.offsetY))
-      if (inPath) {
-        p.listener(new InteractiveEvent(e, p.interactive, this.element))
-      }
-    })
-
-    const hovered: Record<string, boolean> = {}
-    this.element.onmousemove = e => {
-      this.handlers.blur?.forEach(p => {
-        const inPath = p.interactive.inPath(new Point(e.offsetX, e.offsetY))
-        if (inPath) return
-        if (!hovered[p.interactive.id]) return
-        delete hovered[p.interactive.id]
-        p.listener(new InteractiveEvent(e, p.interactive, this.element))
-      })
-      this.handlers.hover?.forEach(p => {
-        const inPath = p.interactive.inPath(new Point(e.offsetX, e.offsetY))
-        if (!inPath) return
-        if (hovered[p.interactive.id]) return
-        hovered[p.interactive.id] = true
-        p.listener(new InteractiveEvent(e, p.interactive, this.element))
-      })
-    }
+    const resolver = new HandlerResolver(this.handlers, this.element)
+    this.element.onmouseleave = e => resolver.onmouseleave(e)
+    this.element.onclick = e => resolver.onclick(e)
+    this.element.onmousemove = e => resolver.onmousemove(e)
+    this.element.onmouseup = e => resolver.onmouseup(e)
+    this.element.onmousedown = e => resolver.onmousedown(e)
   }
 }
 
-class InteractiveEvent<TEvent> {
+export class InteractiveEvent<TEvent> {
   private canvas: HTMLCanvasElement
   event: TEvent
   target: Interactive
