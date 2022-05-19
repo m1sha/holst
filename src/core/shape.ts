@@ -7,7 +7,7 @@ import { ShapeStyle } from './shape-style'
 import { MutablePath2D } from './path2d/mutable-path2d'
 import { Matrix2D } from './matrix'
 import Context2DFactory from './canvas-rendering-context-2d-factory'
-import { calcBounds, IsPointInPolygon4 } from './utils'
+import { calcBounds /*, IsPointInPolygon4 */ } from './utils'
 import { deepCopyFast } from '../tools/deep-copy'
 import { RelativeMutablePath2D } from './path2d/relative-mutable-path2d'
 import { EventType, Interactive } from './interactive'
@@ -155,7 +155,7 @@ export default class Shape implements Interactive, Orderable {
   }
 
   inPath (p: Point): boolean {
-    return IsPointInPolygon4(this.mutablePath.toPoints(), p)
+    return Context2DFactory.default.ctx.isPointInPath(this.toPath2D(), p.x, p.y) // IsPointInPolygon4(this.mutablePath.toPoints(), p)
   }
 
   inStroke (p: IPoint): boolean {

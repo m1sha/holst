@@ -8,3 +8,4 @@ Task list
 ☐ Deprecate EventHandler v1
 ☐ Create canvas dynamically
 ☐ Add event listeners to shapes, labels and etc.
+☐ Remake isPointInPath (IsPointInPolygon4)
