@@ -21,7 +21,7 @@ export class ScrollBox {
   }
 
   create () {
-    const layer = this.scene.createLayer('scroll')
+    const layer = this.scene.createLayer('scroll-box', true)
     this.hScrollBar.create(layer, this.viewport, this.style)
     this.vScrollBar.create(layer, this.viewport, this.style)
     this.createBlock(layer)
