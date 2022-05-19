@@ -46,12 +46,18 @@ export class HScrollBar extends ScrollBar {
   }
 
   createHScrollThumb (scrollLayer: Layer, value: number, height: number, style: ScrollBarStyle) {
-    const { thumbSize, thumbBackgroundColor, thumbBorderColor } = style
+    const { thumbSize, thumbBackgroundColor, thumbBackgroundColorHover, thumbBorderColor } = style
     const thumbButton = scrollLayer
       .createShape({ fillStyle: thumbBackgroundColor, strokeStyle: thumbBorderColor })
       .roundRect(new Rect(thumbSize + this.position, height - thumbSize, value, thumbSize), 8)
-    thumbButton.on('hover', () => { thumbButton.style.fillStyle = '#3f3f3f' })
-    thumbButton.on('blur', () => (thumbButton.style.fillStyle = thumbBackgroundColor))
+    thumbButton.on('hover', e => {
+      thumbButton.style.fillStyle = thumbBackgroundColorHover
+      e.cursor = 'default'
+    })
+    thumbButton.on('blur', e => {
+      thumbButton.style.fillStyle = thumbBackgroundColor
+      e.cursor = 'default'
+    })
   }
 }
 
@@ -82,9 +88,18 @@ export class VScrollBar extends ScrollBar {
   }
 
   createVScrollThumb (scrollLayer: Layer, value: number, width: number, style: ScrollBarStyle) {
-    const { thumbSize, thumbBackgroundColor, thumbBorderColor } = style
-    scrollLayer
+    const { thumbSize, thumbBackgroundColor, thumbBackgroundColorHover, thumbBorderColor } = style
+    const thumbButton = scrollLayer
       .createShape({ fillStyle: thumbBackgroundColor, strokeStyle: thumbBorderColor })
       .roundRect(new Rect(width - thumbSize, thumbSize + this.position, thumbSize, value), 8)
+
+    thumbButton.on('hover', e => {
+      thumbButton.style.fillStyle = thumbBackgroundColorHover
+      e.cursor = 'default'
+    })
+    thumbButton.on('blur', e => {
+      thumbButton.style.fillStyle = thumbBackgroundColor
+      e.cursor = 'default'
+    })
   }
 }

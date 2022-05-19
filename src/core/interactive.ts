@@ -1,9 +1,18 @@
 import { Point } from './point'
 
+export interface InteractiveEvent<TEvent> {
+  event: TEvent
+  cursor: string
+  target: any
+}
+
 export interface EventType {
-  'click': MouseEvent
-  'hover': MouseEvent
-  'blur': MouseEvent
+  'click': InteractiveEvent<MouseEvent>
+  'dblclick': InteractiveEvent<MouseEvent>
+  'hover': InteractiveEvent<MouseEvent>
+  'blur': InteractiveEvent<MouseEvent>
+  'mousedown': InteractiveEvent<MouseEvent>
+  'mouseup': InteractiveEvent<MouseEvent>
 }
 
 export interface Interactive {
