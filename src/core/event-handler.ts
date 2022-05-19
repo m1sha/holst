@@ -14,6 +14,9 @@ export interface EventInfo {
   point?: Point
 }
 
+/**
+ * @deprecated The class EventHandler should not be used
+ */
 export class EventHandler {
   private readonly scene: Scene
   private readonly render: Renderer2D
