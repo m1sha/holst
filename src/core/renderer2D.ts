@@ -10,20 +10,24 @@ import { sort } from './sorter'
 import { Viewport } from './viewport'
 import Orderable from './orderable'
 import { EventHandler } from './event-handler2'
+import { AnimationHandler } from './animation-handler'
 
 export class Renderer2D {
   readonly ctx: CanvasRenderingContext2D
   readonly viewport: Viewport
   private eventHandler: EventHandler
+  private animationHandler: AnimationHandler
 
   constructor (ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
     this.ctx.imageSmoothingEnabled = true
     this.viewport = new Viewport(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
     this.eventHandler = new EventHandler(this.ctx.canvas)
+    this.animationHandler = new AnimationHandler(this)
   }
 
   render (scene: Scene): void {
+    if (!this.animationHandler.isStarted) this.animationHandler.start(scene)
     const layers = sort<Layer>(scene.layers)
     for (const layer of [...layers, scene.actionLayer]) this.drawLayer(layer)
   }
