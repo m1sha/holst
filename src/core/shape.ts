@@ -19,12 +19,11 @@ export default class Shape implements Interactive, Orderable {
   private p: Path2DBase | null = null
   private readonly mutablePath: MutablePath2D
   readonly relative: RelativeMutablePath2D
-  width: number = 0
-  height: number = 0
   style: ShapeStyle
   name: string
   order: number
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
+  frozen: boolean = false
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
     this.id = uid()
@@ -169,7 +168,7 @@ export default class Shape implements Interactive, Orderable {
 
   toPath2D (globalTransform?: Matrix2D): Path2DBase {
     if (this.p) return this.p
-    this.p = this.mutablePath.createPath2D(globalTransform)
+    this.p = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : globalTransform)
     return this.p
   }
 

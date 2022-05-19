@@ -19,6 +19,7 @@ export class Layer implements Orderable {
   mask: Shape | null
   order: number
   name: string
+  frozen: boolean = false
 
   constructor (order: number, styleManager: StyleManager, name?: string) {
     this.name = name || 'Layer' + order
@@ -40,6 +41,7 @@ export class Layer implements Orderable {
     if (!path) path = new MutablePath2D()
     const result = new Shape(path, this.arrange.order, stl)
     this.objects.push(result)
+    result.frozen = this.frozen
     return result
   }
 
@@ -53,6 +55,7 @@ export class Layer implements Orderable {
 
   addShape (shape: Shape): void {
     if (!shape.order) shape.order = this.arrange.order
+    shape.frozen = this.frozen
     this.objects.push(shape)
   }
 

@@ -14,9 +14,10 @@ export class Scene {
       this.actionLayer = new Layer(0, this.styleManager)
     }
 
-    createLayer (name?: string): Layer {
+    createLayer (name?: string, frozen?: boolean): Layer {
       const result = new Layer(this.arrange.order, this.styleManager, name)
       this._layers.push(result)
+      if (frozen) result.frozen = true
       return result
     }
 

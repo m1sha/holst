@@ -15,7 +15,7 @@ export function createViewportDemo (canvas: HTMLCanvasElement) {
 
 function createScene (): Scene {
   const scene = new Scene()
-  const layer0 = scene.createLayer()
+  const layer0 = scene.createLayer('scroll-box', true)
 
   layer0
     .createShape({ strokeStyle: '#333' })

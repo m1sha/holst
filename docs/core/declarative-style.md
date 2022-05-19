@@ -19,7 +19,7 @@ Format Vector Graphic Styles (*.vgs files)
 Format Vector Graphic markup Language (*.vgl files)
 ```
 import scroll-button
-layer scroll
+layer scroll-box frozen
 
 var n = 5
 var m = 2
@@ -56,7 +56,7 @@ or minimalistic
 
 ```
 ! scroll-button
-# scroll
+# scroll *
 
 $ n = 5, m = 2
 
