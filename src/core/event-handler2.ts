@@ -64,9 +64,20 @@ export class EventHandler implements IEventHandler {
   }
 
   private init () {
+    this.element.onmouseleave = () => {
+      console.log('onblur')
+      this.handlers.blur?.forEach(p => {
+        if (!hovered[p.interactive.id]) return
+        delete hovered[p.interactive.id]
+        const e = (null as unknown) as MouseEvent
+        p.listener(new InteractiveEvent(e, p.interactive, this.element))
+      })
+    }
     this.element.onclick = e => this.handlers.click?.forEach(p => {
       const inPath = p.interactive.inPath(new Point(e.offsetX, e.offsetY))
-      if (inPath) p.listener(e)
+      if (inPath) {
+        p.listener(new InteractiveEvent(e, p.interactive, this.element))
+      }
     })
 
     const hovered: Record<string, boolean> = {}
@@ -76,15 +87,35 @@ export class EventHandler implements IEventHandler {
         if (inPath) return
         if (!hovered[p.interactive.id]) return
         delete hovered[p.interactive.id]
-        p.listener(e)
+        p.listener(new InteractiveEvent(e, p.interactive, this.element))
       })
       this.handlers.hover?.forEach(p => {
         const inPath = p.interactive.inPath(new Point(e.offsetX, e.offsetY))
         if (!inPath) return
         if (hovered[p.interactive.id]) return
         hovered[p.interactive.id] = true
-        p.listener(e)
+        p.listener(new InteractiveEvent(e, p.interactive, this.element))
       })
     }
+  }
+}
+
+class InteractiveEvent<TEvent> {
+  private canvas: HTMLCanvasElement
+  event: TEvent
+  target: Interactive
+
+  constructor (event: TEvent, target: Interactive, canvas: HTMLCanvasElement) {
+    this.event = event
+    this.target = target
+    this.canvas = canvas
+  }
+
+  get cursor (): string {
+    return this.canvas.style.cursor
+  }
+
+  set cursor (value: string) {
+    this.canvas.style.cursor = value
   }
 }
