@@ -65,7 +65,6 @@ export class EventHandler implements IEventHandler {
 
   private init () {
     this.element.onmouseleave = () => {
-      console.log('onblur')
       this.handlers.blur?.forEach(p => {
         if (!hovered[p.interactive.id]) return
         delete hovered[p.interactive.id]

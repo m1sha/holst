@@ -5,8 +5,9 @@ Task list
 ✔ Add event listeners to shapes, labels and etc. @done(22-05-19 18:34)
 ☐ Viewport scroll & scale (global matrix transform)
   ✔ UI @done(22-05-19 18:36)
-  ☐ Event listners
+  ✔ Event listners @done(22-05-19 23:08)
   ☐ Behavior
+☐ Separate by functions the EventHandler handlers
 ☐ Recover test @started(22-05-15 22:03)
 ☐ Arrange (Implement)
 ☐ Create canvas dynamically
