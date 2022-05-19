@@ -1,5 +1,5 @@
-import { Point } from './point'
-import { removeItem } from '../tools/array'
+import { Point } from '../point'
+import { removeItem } from '../../tools/array'
 import { EventType, Interactive } from './interactive'
 
 export interface IEventHandler {

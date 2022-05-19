@@ -9,7 +9,7 @@ import { Bitmap } from './bitmap'
 import { sort } from './sorter'
 import { Viewport } from './viewport'
 import Orderable from './orderable'
-import { EventHandler } from './event-handler2'
+import { EventHandler } from './events/event-handler2'
 import { AnimationHandler } from './animation-handler'
 
 export class Renderer2D {

@@ -10,8 +10,8 @@ import Context2DFactory from './canvas-rendering-context-2d-factory'
 import { calcBounds /*, IsPointInPolygon4 */ } from './utils'
 import { deepCopyFast } from '../tools/deep-copy'
 import { RelativeMutablePath2D } from './path2d/relative-mutable-path2d'
-import { EventType, Interactive } from './interactive'
-import { EventHandlerBag, IEventHandler } from './event-handler2'
+import { EventType, Interactive } from './events/interactive'
+import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { uid } from '../tools/uid'
 
 export default class Shape implements Interactive, Orderable {
