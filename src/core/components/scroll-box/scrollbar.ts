@@ -33,7 +33,7 @@ export class HScrollBar extends ScrollBar {
 
     createArrowLeft(layer, { x, y }, arrowStyle)
     leftButton.on('hover', () => (leftButton.style.fillStyle = '#3f3f3f'))
-    leftButton.on('blur', () => (leftButton.style.fillStyle = trackBackgroundColor))
+    leftButton.on('leave', () => (leftButton.style.fillStyle = trackBackgroundColor))
 
     layer // Button right
       .createShape({ fillStyle: buttonBackgroundColor, strokeStyle: buttonBorderColor })
@@ -54,7 +54,7 @@ export class HScrollBar extends ScrollBar {
       thumbButton.style.fillStyle = thumbBackgroundColorHover
       e.cursor = 'default'
     })
-    thumbButton.on('blur', e => {
+    thumbButton.on('leave', e => {
       thumbButton.style.fillStyle = thumbBackgroundColor
       e.cursor = 'default'
     })
@@ -97,7 +97,7 @@ export class VScrollBar extends ScrollBar {
       thumbButton.style.fillStyle = thumbBackgroundColorHover
       e.cursor = 'default'
     })
-    thumbButton.on('blur', e => {
+    thumbButton.on('leave', e => {
       thumbButton.style.fillStyle = thumbBackgroundColor
       e.cursor = 'default'
     })

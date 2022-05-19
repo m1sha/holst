@@ -24,7 +24,7 @@ function createScene (): Scene {
   s.rect(new Rect(600, 10, 150, 150))
     .on('click', () => alert('Rect'))
     .on('hover', e => (s.style.fillStyle = '#1ff01f'))
-    .on('blur', e => (s.style.fillStyle = '#ff00ff'))
+    .on('leave', e => (s.style.fillStyle = '#ff00ff'))
   layer0.createShape({ fillStyle: '#510051', strokeStyle: '#3f3f53', lineWidth: 12 })
     .arc({ x: 500, y: 310 }, 50, Math.PI, Math.PI * 2)
   layer0.createShape({ fillStyle: '#113051', strokeStyle: '#3f3ff3', lineWidth: 4 })

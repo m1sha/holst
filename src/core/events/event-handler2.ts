@@ -64,11 +64,10 @@ export class EventHandler implements IEventHandler {
   }
 
   private init () {
-    this.element.onmouseleave = () => {
+    this.element.onmouseleave = e => {
       this.handlers.blur?.forEach(p => {
         if (!hovered[p.interactive.id]) return
         delete hovered[p.interactive.id]
-        const e = (null as unknown) as MouseEvent
         p.listener(new InteractiveEvent(e, p.interactive, this.element))
       })
     }

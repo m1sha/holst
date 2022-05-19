@@ -10,7 +10,7 @@ export interface EventType {
   'click': InteractiveEvent<MouseEvent>
   'dblclick': InteractiveEvent<MouseEvent>
   'hover': InteractiveEvent<MouseEvent>
-  'blur': InteractiveEvent<MouseEvent>
+  'leave': InteractiveEvent<MouseEvent>
   'mousedown': InteractiveEvent<MouseEvent>
   'mouseup': InteractiveEvent<MouseEvent>
 }
