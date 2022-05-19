@@ -3,11 +3,13 @@ Task list
 ✔ Layers or shape that would be frozen for global matrix transform @done(22-05-19 18:20)
 ✔ Deprecate EventHandler v1 @done(22-05-19 18:33)
 ✔ Add event listeners to shapes, labels and etc. @done(22-05-19 18:34)
+✔ Separate by functions the EventHandler handlers @done(22-05-20 00:42)
 ☐ Viewport scroll & scale (global matrix transform)
   ✔ UI @done(22-05-19 18:36)
   ✔ Event listners @done(22-05-19 23:08)
+  ☐ Impl base tracking
   ☐ Behavior
-☐ Separate by functions the EventHandler handlers
+☐ Impl all handlers in handler resolver
 ☐ Recover test @started(22-05-15 22:03)
 ☐ Arrange (Implement)
 ☐ Create canvas dynamically
