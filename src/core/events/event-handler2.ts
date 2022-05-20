@@ -65,11 +65,17 @@ export class EventHandler implements IEventHandler {
 
   private init () {
     const resolver = new HandlerResolver(this.handlers, this.element)
-    this.element.onmouseleave = e => resolver.onmouseleave(e)
     this.element.onclick = e => resolver.onclick(e)
+    this.element.ondblclick = e => resolver.ondblclick(e)
     this.element.onmousemove = e => resolver.onmousemove(e)
     this.element.onmouseup = e => resolver.onmouseup(e)
     this.element.onmousedown = e => resolver.onmousedown(e)
+    this.element.onmouseleave = e => resolver.onmouseleave(e)
+    this.element.onkeyup = e => resolver.onkeyup(e)
+    this.element.onkeydown = e => resolver.onkeydown(e)
+    this.element.onwheel = e => resolver.onwheel(e)
+    this.element.onfocus = e => resolver.onfocus(e)
+    this.element.onblur = e => resolver.onblur(e)
   }
 }
 

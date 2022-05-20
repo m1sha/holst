@@ -11,8 +11,14 @@ export interface EventType {
   'dblclick': InteractiveEvent<MouseEvent>
   'hover': InteractiveEvent<MouseEvent>
   'leave': InteractiveEvent<MouseEvent>
+  'mousemove': InteractiveEvent<MouseEvent>
   'mousedown': InteractiveEvent<MouseEvent>
   'mouseup': InteractiveEvent<MouseEvent>
+  'keyup': InteractiveEvent<KeyboardEvent>
+  'keydown': InteractiveEvent<KeyboardEvent>
+  'wheel': InteractiveEvent<WheelEvent>
+  'focus': InteractiveEvent<FocusEvent>
+  'blur': InteractiveEvent<FocusEvent>
 }
 
 export interface Interactive {
