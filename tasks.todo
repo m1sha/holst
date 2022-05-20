@@ -10,6 +10,7 @@ Task list
   ☐ Impl base tracking
   ☐ Behavior
 ☐ Impl all handlers in handler resolver
+☐ Cash mode for shape.toPath2D when idle scene
 ☐ Recover test @started(22-05-15 22:03)
 ☐ Arrange (Implement)
 ☐ Create canvas dynamically
