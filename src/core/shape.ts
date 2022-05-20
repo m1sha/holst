@@ -16,7 +16,7 @@ import { uid } from '../tools/uid'
 
 export default class Shape implements Interactive, Orderable {
   readonly id: string
-  private p: Path2DBase | null = null
+  // private p: Path2DBase | null = null //TODO Cash mode
   private readonly mutablePath: MutablePath2D
   readonly relative: RelativeMutablePath2D
   style: ShapeStyle
@@ -167,9 +167,7 @@ export default class Shape implements Interactive, Orderable {
   }
 
   toPath2D (globalTransform?: Matrix2D): Path2DBase {
-    if (this.p) return this.p
-    this.p = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : globalTransform)
-    return this.p
+    return this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : globalTransform)
   }
 
   copyPath () {
