@@ -76,13 +76,13 @@ export default class Shape implements Interactive, Orderable {
   }
 
   arc (point: IPoint, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
-    this.mutablePath.moveTo(point.x + radius, point.y + radius)
+    if (startAngle === 0) this.mutablePath.moveTo(point.x + radius, point.y + radius)
     this.mutablePath.arc(point.x, point.y, radius, startAngle, endAngle, anticlockwise)
     return this
   }
 
   ellipse (point: IPoint, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
-    this.mutablePath.moveTo(point.x + radiusX, point.y + radiusY)
+    if (startAngle === 0) this.mutablePath.moveTo(point.x + radiusX, point.y + radiusY)
     this.mutablePath.ellipse(point.x, point.y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
     return this
   }
