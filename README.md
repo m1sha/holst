@@ -10,6 +10,7 @@
 * chart3
 * paint
 * [viewport](./src/demo/viewport/README.md)
+* [movement](./src/demo/movement/README.md)
   
 [Task list](tasks.todo)
 
