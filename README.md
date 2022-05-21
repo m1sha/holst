@@ -2,14 +2,14 @@
 
 ## Demo project list
 
-* getpalette - get the palette of colors by a picture
+* [getpalette](./src/demo/getpalette/README.md) - get the palette of colors by a picture
 * sprites - shows sprites animation
 * relative-draw - test for draw in the relative coordinate
 * colors - test for how works colors
 * block-scheme-editor - block scheme editor
 * chart3
 * paint
-* viewport
+* [viewport](./src/demo/viewport/README.md)
   
 [Task list](tasks.todo)
 
