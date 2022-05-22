@@ -36,4 +36,8 @@ export class Point implements IPoint {
   static mul (point1: Point, point2: Point): Point {
     return new Point(point1.x * point2.x, point1.y * point2.y)
   }
+
+  static get zero (): Point {
+    return new Point(0, 0)
+  }
 }
