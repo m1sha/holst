@@ -41,23 +41,30 @@ function createScene (): Scene {
 }
 
 function setInteractive (shape: Shape) {
-  let point0 = new Point(0, 0)
-  let pointL = new Point(0, 0)
+  let start = Point.zero
+  let shift = Point.zero
   const style = shape.copyStyle()
   shape
-    .on('hover', () => (shape.style.fillStyle = '#1ff01f'))
-    .on('leave', () => (shape.style.fillStyle = style.fillStyle))
+    .on('hover', e => {
+      shape.style.fillStyle = '#cd853a'
+      e.cursor = 'move'
+    })
+    .on('leave', e => {
+      shape.style.fillStyle = style.fillStyle
+      e.cursor = 'default'
+    })
     .on('mousedown', e => {
-      point0 = new Point(e.event.offsetX, e.event.offsetY)
+      const { offsetX, offsetY } = e.event
+      start = new Point(offsetX, offsetY)
     })
     .on('mouseup', () => {
-      const { e, f } = shape.copyPath().transform
-      pointL = new Point(e, f)
+      shift = shape.shift
     })
     .on('mousemove', e => {
-      let point2 = new Point(e.event.offsetX, e.event.offsetY)
-      point2 = point2.dec(point0)
-      point2 = point2.add(pointL)
-      shape.move(point2)
+      const { offsetX, offsetY } = e.event
+      const point = new Point(offsetX, offsetY)
+        .dec(start)
+        .add(shift)
+      shape.move(point)
     })
 }
