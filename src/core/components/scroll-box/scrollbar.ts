@@ -4,20 +4,45 @@ import { Layer } from '../../layers'
 import { Rect } from '../../rect'
 import { Size } from '../../size'
 import { Point } from '../../point'
+import Shape from '../../shape'
 export abstract class ScrollBar {
   position: number
   limit: number
-  protected thumbPressed: boolean
-  protected firstClickPosition: Point
 
   constructor (position: number, limit: number) {
     this.position = position ?? 0
     this.limit = limit ?? 0
-    this.thumbPressed = false
-    this.firstClickPosition = new Point(0, 0)
   }
 
   abstract create (Layer: Layer, { width, height }: Size, style: ScrollBarStyle): void
+
+  protected setThumbButton (button: Shape, style: ScrollBarStyle, dir: 'x' | 'y') {
+    let start = Point.zero
+    let shift = Point.zero
+    const { thumbBackgroundColorHover } = style
+    const oldStyle = button.copyStyle()
+    button
+      .on('hover', () => {
+        button.style.fillStyle = thumbBackgroundColorHover
+      })
+      .on('leave', () => {
+        button.style.fillStyle = oldStyle.fillStyle
+      })
+      .on('mousedown', e => {
+        const { offsetX, offsetY } = e.event
+        start = new Point(offsetX, offsetY)
+      })
+      .on('mouseup', e => {
+        shift = button.shift
+      })
+      .on('mousemove', e => {
+        const { offsetX, offsetY } = e.event
+        const point = new Point(offsetX, offsetY)
+          .dec(start)
+          .add(shift)
+        button.move({ x: dir === 'x' ? point.x : 0, y: dir === 'y' ? point.y : 0 })
+      })
+  }
 }
 
 export class HScrollBar extends ScrollBar {
@@ -51,32 +76,11 @@ export class HScrollBar extends ScrollBar {
   }
 
   createHScrollThumb (scrollLayer: Layer, value: number, height: number, style: ScrollBarStyle) {
-    const { thumbSize, thumbBackgroundColor, thumbBackgroundColorHover, thumbBorderColor } = style
+    const { thumbSize, thumbBackgroundColor, thumbBorderColor } = style
     const thumbButton = scrollLayer
       .createShape({ fillStyle: thumbBackgroundColor, strokeStyle: thumbBorderColor })
       .roundRect(new Rect(thumbSize + this.position, height - thumbSize, value, thumbSize), 8)
-    thumbButton.on('hover', e => {
-      thumbButton.style.fillStyle = thumbBackgroundColorHover
-      e.cursor = 'default'
-    })
-    thumbButton.on('leave', e => {
-      thumbButton.style.fillStyle = thumbBackgroundColor
-      e.cursor = 'default'
-    })
-    thumbButton.on('mousedown', e => {
-      this.thumbPressed = true
-      this.firstClickPosition = new Point(e.event.offsetX, e.event.offsetY)
-    })
-    thumbButton.on('mouseup', e => {
-      this.thumbPressed = false
-    })
-    let old = 0
-    thumbButton.on('mousemove', e => {
-      if (!this.thumbPressed) return
-      const x = this.firstClickPosition.x - e.event.offsetX
-      old -= x
-      thumbButton.move({ x: old, y: 0 })
-    })
+    this.setThumbButton(thumbButton, style, 'x')
   }
 }
 
@@ -107,18 +111,11 @@ export class VScrollBar extends ScrollBar {
   }
 
   createVScrollThumb (scrollLayer: Layer, value: number, width: number, style: ScrollBarStyle) {
-    const { thumbSize, thumbBackgroundColor, thumbBackgroundColorHover, thumbBorderColor } = style
+    const { thumbSize, thumbBackgroundColor, thumbBorderColor } = style
     const thumbButton = scrollLayer
       .createShape({ fillStyle: thumbBackgroundColor, strokeStyle: thumbBorderColor })
       .roundRect(new Rect(width - thumbSize, thumbSize + this.position, thumbSize, value), 8)
 
-    thumbButton.on('hover', e => {
-      thumbButton.style.fillStyle = thumbBackgroundColorHover
-      e.cursor = 'default'
-    })
-    thumbButton.on('leave', e => {
-      thumbButton.style.fillStyle = thumbBackgroundColor
-      e.cursor = 'default'
-    })
+    this.setThumbButton(thumbButton, style, 'y')
   }
 }
