@@ -18,22 +18,47 @@ Format Vector Graphic Styles (*.vgs files)
 
 Format Vector Graphic markup Language (*.vgl files)
 ```
+component h-scroll-bar
+	:trackSize = ?
+	:width     = ?
+	:height    = ?
+	:limit     = ?
+
+	@track-bar-rect          = 0, height - trackSize, width - trackSize - 2, trackSize
+	@arrow-button-size       = trackSize, trackSize
+	@left-arrow-button-rect  = @track-bar-rect.xy, @arrow-button-size
+	@right-arrow-button-rect = @track-bar-rect.e - trackSize, @track-bar-rect.y, @arrow-button-size
+
+	new layer scroll-box frozen
+		add track-bar      @track-bar-rect
+		add arrow-button   @left-arrow-button-rect
+		add arrow-button   @right-arrow-button-rect
+		add arrow-left     @left-arrow-button-rect.c  + { -5, 0 }
+		add arrow-right    @right-arrow-button-rect.c + { -5, 0 }
+		add h-scroll-thumb limit, trackSize
+```
+
+```
 import scroll-button
 layer scroll-box frozen
 
 var n = 5
 var m = 2
 
-shape arrow-left:scroll-button (x, y) -> scroll 
+mixin arrow-button-mixin
+	@hover = { self.style = :hover }
+	@leave  = { self.style = : }
+	@click = { self.style = :focus }
+	@blur = { self.style = : }
+
+shape arrow-left:scroll-button (x, y) -> scroll
 	move-to     x, y + m
 	line-to x + n, y - n
 	line-to x - n, y - n
 	close
-	@hover = { style = :hover }
-	@blur  = { style = : }
-	@click = { style = :focus }
+	[arrow-button-mixin]
 
-shape arrow-right:scroll-button (x, y) -> scroll 
+shape arrow-right:scroll-button (x, y) -> scroll
 	move-to x + m, y
 	line-to x - n, y - n 
 	line-to x - n, y + n
