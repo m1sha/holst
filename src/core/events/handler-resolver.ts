@@ -1,15 +1,19 @@
 import { EventType } from './interactive'
 import { Point } from '../point'
 import { EventHandlers, InteractiveEvent, ListenerType } from './event-handler2'
+import { ActionSpecDic } from './action-spec-dic'
 
 export class HandlerResolver {
   private handlers: EventHandlers
   private element: HTMLCanvasElement
-  private hovered: Record<string, boolean> = {}
+  private hovered: ActionSpecDic
+  private pressed: ActionSpecDic
 
   constructor (handlers: EventHandlers, canvas: HTMLCanvasElement) {
     this.handlers = handlers
     this.element = canvas
+    this.hovered = new ActionSpecDic()
+    this.pressed = new ActionSpecDic()
   }
 
   onclick (e: MouseEvent) {
@@ -29,35 +33,42 @@ export class HandlerResolver {
   onmousemove (e: MouseEvent) {
     this.setHandler('leave', p => {
       if (this.hit(p, e)) return
-      if (!this.isHover(p)) return
-      this.clearHover(p)
+      const id = p.interactive.id
+      if (!this.hovered.has(id)) return
+      this.hovered.clear(id)
       p.listener(this.createEvent(e, p))
     })
 
     this.setHandler('hover', p => {
       if (!this.hit(p, e)) return
-      if (this.isHover(p)) return
-      this.setHover(p)
+      const id = p.interactive.id
+      if (this.hovered.has(id)) return
+      this.hovered.set(id)
       p.listener(this.createEvent(e, p))
     })
 
     this.setHandler('mousemove', p => {
-      if (!this.hit(p, e)) return
+      const id = p.interactive.id
+      const c = this.hit(p, e) && this.pressed.has(id)
+      if (!c) return
       p.listener(this.createEvent(e, p))
     })
   }
 
   onmouseleave (e: MouseEvent) {
     this.setHandler('leave', p => {
-      if (!this.isHover(p)) return
-      this.clearHover(p)
+      const id = p.interactive.id
+      if (!this.hovered.has(id)) return
+      this.hovered.clear(id)
       p.listener(this.createEvent(e, p))
     })
   }
 
   onmouseup (e: MouseEvent) {
     this.setHandler('mouseup', p => {
-      if (!this.hit(p, e)) return
+      const id = p.interactive.id
+      if (!this.pressed.has(id)) return
+      this.pressed.clear(id)
       p.listener(this.createEvent(e, p))
     })
   }
@@ -65,6 +76,9 @@ export class HandlerResolver {
   onmousedown (e: MouseEvent) {
     this.setHandler('mousedown', p => {
       if (!this.hit(p, e)) return
+      const id = p.interactive.id
+      if (this.pressed.has(id)) return
+      this.pressed.set(id)
       p.listener(this.createEvent(e, p))
     })
   }
@@ -107,17 +121,5 @@ export class HandlerResolver {
 
   private hit (p: ListenerType, e: MouseEvent) {
     return p.interactive.inPath(new Point(e.offsetX, e.offsetY))
-  }
-
-  private isHover (p: ListenerType) {
-    return this.hovered[p.interactive.id]
-  }
-
-  private setHover (p: ListenerType) {
-    this.hovered[p.interactive.id] = true
-  }
-
-  private clearHover (p: ListenerType) {
-    delete this.hovered[p.interactive.id]
   }
 }

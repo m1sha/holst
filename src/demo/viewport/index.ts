@@ -23,7 +23,7 @@ function createScene (): Scene {
 
   s0.move({ x: 100, y: 10 })
 
-  let state = 0
+  // let state = 0
   let point = new Point(0, 0)
   // let movePoint = new Point(0, 0)
   const s = layer0.createShape({ fillStyle: '#ff00ff' })
@@ -33,27 +33,28 @@ function createScene (): Scene {
     .on('hover', e => (s.style.fillStyle = '#1ff01f'))
     .on('leave', e => (s.style.fillStyle = '#ff00ff'))
     .on('mousedown', e => {
-      state = 1
+      // state = 1
       point = new Point(e.event.offsetX, e.event.offsetY)
-      console.log('mousedown. state: %d', state)
+      console.log('mousedown')
     })
     .on('mouseup', e => {
-      state = 0
+      // state = 0
       point = new Point(0, 0)
       // movePoint = new Point(e.event.offsetX, e.event.offsetY).dec(point)
       // s.move(movePoint)
-      console.log('mouseup. state: %d', state)
+      console.log('mouseup')
     })
     .on('mousemove', e => {
-      if (state === 1) {
-        console.log('mousemove. state: %d', state)
+      console.log('mousemove')
+      //if (state === 1) {
+        // console.log('mousemove. state: %d', state)
         if (point.x === 0 && point.y === 0) return
         // console.log('x: %d y: %d', e.event.offsetX, e.event.offsetY)
         let point2 = new Point(e.event.offsetX, e.event.offsetY)
         point2 = point2.dec(point)
         // const p3 = movePoint.add(point2)
         s.move(point2)
-      }
+      //}
     })
 
   layer0.createShape({ fillStyle: '#510051', strokeStyle: '#3f3f53', lineWidth: 12 })
