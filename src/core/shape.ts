@@ -3,23 +3,23 @@ import Orderable from './orderable'
 import { Path2DBase } from './path2d/path2d-base'
 import { Point, IPoint } from './point'
 import { Rect, IRect } from './rect'
-import { ShapeStyle } from './shape-style'
+import { ShapeStyle, ShapeStyleImpl } from './shape-style'
 import { MutablePath2D } from './path2d/mutable-path2d'
 import { Matrix2D } from './matrix'
 import Context2DFactory from './canvas-rendering-context-2d-factory'
 import { calcBounds /*, IsPointInPolygon4 */ } from './utils'
-import { deepCopyFast } from '../tools/deep-copy'
 import { RelativeMutablePath2D } from './path2d/relative-mutable-path2d'
 import { EventType, Interactive } from './events/interactive'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { uid } from '../tools/uid'
 
 export default class Shape implements Interactive, Orderable {
-  readonly id: string
-  // private p: Path2DBase | null = null //TODO Cash mode
+  #modified: boolean = true
+  #cache: Path2DBase | null = null
   private readonly mutablePath: MutablePath2D
+  readonly id: string
   readonly relative: RelativeMutablePath2D
-  style: ShapeStyle
+  style: ShapeStyleImpl
   name: string
   order: number
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
@@ -30,12 +30,13 @@ export default class Shape implements Interactive, Orderable {
     this.mutablePath = path
     this.relative = new RelativeMutablePath2D(this.mutablePath)
     this.order = order
-    this.style = style || {}
+    this.style = new ShapeStyleImpl(style || {}, () => (this.#modified = true))
     this.name = 'shape'
   }
 
   rect (rect: IRect): this | Shape {
     this.mutablePath.rect(rect.x, rect.y, rect.width, rect.height)
+    this.#modified = true
     return this
   }
 
@@ -52,43 +53,51 @@ export default class Shape implements Interactive, Orderable {
     this.lineTo({ x, y: y + r.tl }) // radius.tl
     this.quadraticCurveTo({ x, y }, { x: x + r.tl, y }) //  radius.tl
     this.closePath()
+    this.#modified = true
     return this
   }
 
   moveTo (point: IPoint): this | Shape {
     this.mutablePath.moveTo(point.x, point.y)
+    this.#modified = true
     return this
   }
 
   lineTo (point: IPoint): this | Shape {
     this.mutablePath.lineTo(point.x, point.y)
+    this.#modified = true
     return this
   }
 
   lineH (point: IPoint, width: number): this | Shape {
     this.moveTo(point).lineTo(new Point(point.x + width, point.y))
+    this.#modified = true
     return this
   }
 
   lineV (point: IPoint, height: number): this | Shape {
     this.moveTo(point).lineTo(new Point(point.x, point.y + height))
+    this.#modified = true
     return this
   }
 
   arc (point: IPoint, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
     if (startAngle === 0) this.mutablePath.moveTo(point.x + radius, point.y + radius)
     this.mutablePath.arc(point.x, point.y, radius, startAngle, endAngle, anticlockwise)
+    this.#modified = true
     return this
   }
 
   ellipse (point: IPoint, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
     if (startAngle === 0) this.mutablePath.moveTo(point.x + radiusX, point.y + radiusY)
     this.mutablePath.ellipse(point.x, point.y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
+    this.#modified = true
     return this
   }
 
   quadraticCurveTo (cp: IPoint, p: IPoint): this | Shape {
     this.mutablePath.quadraticCurveTo(cp.x, cp.y, p.x, p.y)
+    this.#modified = true
     return this
   }
 
@@ -97,13 +106,14 @@ export default class Shape implements Interactive, Orderable {
       this.lineTo(point)
       this.moveTo(point)
     }
+    this.#modified = true
     return this
   }
 
   line (pointStart: IPoint, pointEnd: IPoint, options?: LineOptions): this | Shape {
     this.moveTo(pointStart)
     this.lineTo(pointEnd)
-
+    this.#modified = true
     if (!options || !options.arrow) return this
     // const a = alfa(pointStart, pointEnd)
 
@@ -122,11 +132,13 @@ export default class Shape implements Interactive, Orderable {
 
   closePath (): this | Shape {
     this.mutablePath.closePath()
+    this.#modified = true
     return this
   }
 
   merge (shape: Shape): this | Shape {
     this.mutablePath.addPath(shape.toPath2D())
+    this.#modified = true
     return this
   }
 
@@ -137,6 +149,7 @@ export default class Shape implements Interactive, Orderable {
     this.mutablePath.transform.e = point.x
     this.mutablePath.transform.f = point.y
     // this.mutablePath.transform.mul(matrix)
+    this.#modified = true
     return this
   }
 
@@ -147,6 +160,7 @@ export default class Shape implements Interactive, Orderable {
   scale (point: IPoint): this | Shape {
     const matrix = Matrix2D.identity.scale(point)
     this.mutablePath.transform.mul(matrix)
+    this.#modified = true
     return this
   }
 
@@ -154,6 +168,7 @@ export default class Shape implements Interactive, Orderable {
     const matrix = Matrix2D.identity
     matrix.d = -1
     this.mutablePath.transform.mul(matrix)
+    this.#modified = true
     return this
   }
 
@@ -171,7 +186,12 @@ export default class Shape implements Interactive, Orderable {
   }
 
   toPath2D (globalTransform?: Matrix2D): Path2DBase {
-    return this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : globalTransform)
+    if (this.#modified) {
+      this.#cache = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : globalTransform)
+      this.#modified = false
+    }
+
+    return this.#cache!!
   }
 
   copyPath () {
@@ -183,7 +203,11 @@ export default class Shape implements Interactive, Orderable {
   }
 
   copyStyle (): ShapeStyle {
-    return deepCopyFast(this.style)
+    return this.style.clone()
+  }
+
+  get modified (): boolean {
+    return this.#modified
   }
 
   private exportTransformation (): Matrix2D {
@@ -193,6 +217,7 @@ export default class Shape implements Interactive, Orderable {
   private importTransformation (transform: Matrix2D): void {
     if (!transform) throw new Error('matrix is undefined')
     this.mutablePath.transform = transform.copy()
+    this.#modified = true
   }
 
   on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): this | Shape {
