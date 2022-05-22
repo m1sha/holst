@@ -4,14 +4,14 @@ Task list
 ✔ Deprecate EventHandler v1 @done(22-05-19 18:33)
 ✔ Add event listeners to shapes, labels and etc. @done(22-05-19 18:34)
 ✔ Separate by functions the EventHandler handlers @done(22-05-20 00:42)
+✔ Impl all handlers in handler resolver @done(22-05-22 21:32)
+✔ Cash mode for shape.toPath2D when idle scene @done(22-05-22 21:32)
 ☐ Viewport scroll & scale (global matrix transform)
   ✔ UI @done(22-05-19 18:36)
   ✔ Event listners @done(22-05-19 23:08)
   ☐ Impl base tracking
   ☐ Behavior
-☐ Impl all handlers in handler resolver
-☐ Cash mode for shape.toPath2D when idle scene
-☐ Recover test @started(22-05-15 22:03)
+☐ Recover test
 ☐ Arrange (Implement)
 ☐ Create canvas dynamically
 ☐ Comine AnimationHandler & AnimationQueue
