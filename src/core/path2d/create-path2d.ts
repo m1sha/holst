@@ -62,7 +62,8 @@ handlers.QuadraticCurveTo = ({ path, element, transform }) => {
   if (element.type !== 'QuadraticCurveTo') return
   const { cpx, cpy } = element
   const { x, y } = transform.applyMatrix(new Point(element))
-  path.quadraticCurveTo(cpx, cpy, x, y)
+  const cp = transform.applyMatrix(new Point(cpx, cpy))
+  path.quadraticCurveTo(cp.x, cp.y, x, y)
 }
 
 handlers.Rect = ({ path, element, transform, globalTransform }) => {
