@@ -24,23 +24,22 @@ component h-scroll-bar
 	:height    = ?
 	:limit     = ?
 
-	@track-bar-rect          = 0, height - trackSize, width - trackSize - 2, trackSize
-	@arrow-button-size       = trackSize, trackSize
-	@left-arrow-button-rect  = @track-bar-rect.xy, @arrow-button-size
-	@right-arrow-button-rect = @track-bar-rect.e - trackSize, @track-bar-rect.y, @arrow-button-size
+	@trackBarRect         = 0, height - trackSize, width - trackSize - 2, trackSize
+	@arrowButtonSize      = trackSize, trackSize
+	@leftArrowButtonRect  = @trackBarRect.xy, @arrowButtonSize
+	@rightArrowButtonRect = @trackBarRect.e - trackSize, @trackBarRect.y, @arrowButtonSize
 
 	new layer scroll-box frozen
-		add track-bar      @track-bar-rect
-		add arrow-button   @left-arrow-button-rect
-		add arrow-button   @right-arrow-button-rect
-		add arrow-left     @left-arrow-button-rect.c  + { -5, 0 }
-		add arrow-right    @right-arrow-button-rect.c + { -5, 0 }
+		add track-bar      @trackBarRect
+		add arrow-button   @leftArrowButtonRect
+		add arrow-button   @rightArrowButtonRect
+		add arrow-left     @leftArrowButtonRect.c  + [ -5, center ]
+		add arrow-right    @rightArrowButtonRect.c + [ -5, center ]
 		add h-scroll-thumb limit, trackSize
 ```
 
 ```
 import scroll-button
-layer scroll-box frozen
 
 var n = 5
 var m = 2
@@ -51,26 +50,26 @@ mixin arrow-button-mixin
 	@click = { self.style = :focus }
 	@blur = { self.style = : }
 
-shape arrow-left:scroll-button (x, y) -> scroll
+shape arrow-left:scroll-button (x, y)
 	move-to     x, y + m
 	line-to x + n, y - n
 	line-to x - n, y - n
 	close
 	[arrow-button-mixin]
 
-shape arrow-right:scroll-button (x, y) -> scroll
+shape arrow-right:scroll-button (x, y)
 	move-to x + m, y
-	line-to x - n, y - n 
+	line-to x - n, y - n
 	line-to x - n, y + n
 	close
 
-shape arrow-up:scroll-button  (x, y) -> scroll
+shape arrow-up:scroll-button  (x, y)
 	move-to     x, y - m
 	line-to x + n, y + n
 	line-to x - n, y + n
 	close
 
-shape arrow-down:scroll-button  (x, y) -> scroll
+shape arrow-down:scroll-button  (x, y)
 	move-to     x, y + m
 	line-to x + n, y - n
 	line-to x - n, y - n
