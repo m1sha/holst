@@ -23,38 +23,26 @@ function createScene (): Scene {
 
   s0.move({ x: 100, y: 10 })
 
-  // let state = 0
-  let point = new Point(0, 0)
-  // let movePoint = new Point(0, 0)
-  const s = layer0.createShape({ fillStyle: '#ff00ff' })
+  let point0 = new Point(0, 0)
+  let pointL = new Point(0, 0)
+  const fillRect = layer0.createShape({ fillStyle: '#ff00ff' })
     .rect(new Rect(600, 10, 150, 150))
-  s
-    // .on('click', () => alert('Rect'))
-    .on('hover', e => (s.style.fillStyle = '#1ff01f'))
-    .on('leave', e => (s.style.fillStyle = '#ff00ff'))
+
+  fillRect
+    .on('hover', () => (fillRect.style.fillStyle = '#1ff01f'))
+    .on('leave', () => (fillRect.style.fillStyle = '#ff00ff'))
     .on('mousedown', e => {
-      // state = 1
-      point = new Point(e.event.offsetX, e.event.offsetY)
-      console.log('mousedown')
+      point0 = new Point(e.event.offsetX, e.event.offsetY)
     })
-    .on('mouseup', e => {
-      // state = 0
-      point = new Point(0, 0)
-      // movePoint = new Point(e.event.offsetX, e.event.offsetY).dec(point)
-      // s.move(movePoint)
-      console.log('mouseup')
+    .on('mouseup', () => {
+      const { e, f } = fillRect.copyPath().transform
+      pointL = new Point(e, f)
     })
     .on('mousemove', e => {
-      console.log('mousemove')
-      //if (state === 1) {
-        // console.log('mousemove. state: %d', state)
-        if (point.x === 0 && point.y === 0) return
-        // console.log('x: %d y: %d', e.event.offsetX, e.event.offsetY)
-        let point2 = new Point(e.event.offsetX, e.event.offsetY)
-        point2 = point2.dec(point)
-        // const p3 = movePoint.add(point2)
-        s.move(point2)
-      //}
+      let point2 = new Point(e.event.offsetX, e.event.offsetY)
+      point2 = point2.dec(point0)
+      point2 = point2.add(pointL)
+      fillRect.move(point2)
     })
 
   layer0.createShape({ fillStyle: '#510051', strokeStyle: '#3f3f53', lineWidth: 12 })
