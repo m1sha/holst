@@ -140,6 +140,10 @@ export default class Shape implements Interactive, Orderable {
     return this
   }
 
+  get shift (): Point {
+    return new Point(this.mutablePath.transform.e, this.mutablePath.transform.f)
+  }
+
   scale (point: IPoint): this | Shape {
     const matrix = Matrix2D.identity.scale(point)
     this.mutablePath.transform.mul(matrix)
