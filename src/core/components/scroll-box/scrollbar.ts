@@ -1,7 +1,7 @@
 import { ScrollBarStyle } from './scrollbar-style'
 import { createArrowLeft, createArrowRight, createArrowUp, createArrowDown } from './scrollbar-helpers'
 import { Layer } from '../../layers'
-import { Rect } from '../../rect'
+import { Rect, IRect } from '../../rect'
 import { Size } from '../../size'
 import { Point } from '../../point'
 import Shape from '../../shape'
@@ -14,9 +14,30 @@ export abstract class ScrollBar {
     this.limit = limit ?? 0
   }
 
-  abstract create (Layer: Layer, { width, height }: Size, style: ScrollBarStyle): void
+  abstract create (layer: Layer, { width, height }: Size, style: ScrollBarStyle): void
 
-  protected setThumbButton (button: Shape, style: ScrollBarStyle, dir: 'x' | 'y') {
+  protected createTracker (rect: IRect, layer: Layer, style: ScrollBarStyle) {
+    const trackStyle = { fillStyle: style.trackBackgroundColor, strokeStyle: style.trackBorderColor }
+    layer
+      .createShape(trackStyle)
+      .rect(rect)
+  }
+
+  protected createArrowButton (rect: IRect, layer: Layer, style: ScrollBarStyle) {
+    const { buttonBackgroundColor, buttonBorderColor } = style
+    layer
+      .createShape({ fillStyle: buttonBackgroundColor, strokeStyle: buttonBorderColor })
+      .roundRect(rect, 4)
+  }
+
+  protected createThumbButton (rect: IRect, layer: Layer, style: ScrollBarStyle) {
+    const thumbStyle = { fillStyle: style.thumbBackgroundColor, strokeStyle: style.thumbBorderColor }
+    return layer
+      .createShape(thumbStyle)
+      .roundRect(rect, 8)
+  }
+
+  protected setThumbButtonHandlers (button: Shape, style: ScrollBarStyle, dir: 'x' | 'y') {
     let start = Point.zero
     let shift = Point.zero
     const { thumbBackgroundColorHover } = style
@@ -32,7 +53,7 @@ export abstract class ScrollBar {
         const { offsetX, offsetY } = e.event
         start = new Point(offsetX, offsetY)
       })
-      .on('mouseup', e => {
+      .on('mouseup', () => {
         shift = button.shift
       })
       .on('mousemove', e => {
@@ -47,27 +68,16 @@ export abstract class ScrollBar {
 
 export class HScrollBar extends ScrollBar {
   create (layer: Layer, { width, height }: Size, style: ScrollBarStyle) {
-    const { trackSize, trackBackgroundColor, trackBorderColor, buttonBackgroundColor, buttonBorderColor } = style
+    const { trackSize, buttonBorderColor } = style
 
-    layer
-      .createShape({ fillStyle: trackBackgroundColor, strokeStyle: trackBorderColor })
-      .rect(new Rect(0, height - trackSize, width - trackSize - 2, trackSize))
-
-    const leftButton = layer // Button left
-      .createShape({ fillStyle: buttonBackgroundColor, strokeStyle: buttonBorderColor })
-      .roundRect(new Rect(0, height - trackSize, trackSize, trackSize), 4)
+    this.createTracker(new Rect(0, height - trackSize, width - trackSize - 2, trackSize), layer, style)
+    this.createArrowButton(new Rect(0, height - trackSize, trackSize, trackSize), layer, style) // Button left
+    this.createArrowButton(new Rect(width - trackSize - trackSize - 2, height - trackSize, trackSize, trackSize), layer, style) // Button right
 
     let x = trackSize / 2
     const y = height - trackSize / 2
     const arrowStyle = { fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor }
-
     createArrowLeft(layer, { x, y }, arrowStyle)
-    leftButton.on('hover', () => (leftButton.style.fillStyle = '#3f3f3f'))
-    leftButton.on('leave', () => (leftButton.style.fillStyle = trackBackgroundColor))
-
-    layer // Button right
-      .createShape({ fillStyle: buttonBackgroundColor, strokeStyle: buttonBorderColor })
-      .rect(new Rect(width - trackSize - trackSize - 2, height - trackSize, trackSize, trackSize))
 
     x = width - trackSize - trackSize / 2
     createArrowRight(layer, { x, y }, arrowStyle)
@@ -76,33 +86,29 @@ export class HScrollBar extends ScrollBar {
   }
 
   createHScrollThumb (scrollLayer: Layer, value: number, height: number, style: ScrollBarStyle) {
-    const { thumbSize, thumbBackgroundColor, thumbBorderColor } = style
-    const thumbButton = scrollLayer
-      .createShape({ fillStyle: thumbBackgroundColor, strokeStyle: thumbBorderColor })
-      .roundRect(new Rect(thumbSize + this.position, height - thumbSize, value, thumbSize), 8)
-    this.setThumbButton(thumbButton, style, 'x')
+    const { thumbSize } = style
+    const thumbButton = this.createThumbButton(
+      new Rect(thumbSize + this.position, height - thumbSize, value, thumbSize),
+      scrollLayer,
+      style
+    )
+
+    this.setThumbButtonHandlers(thumbButton, style, 'x')
   }
 }
 
 export class VScrollBar extends ScrollBar {
   create (layer: Layer, { width, height }: Size, style: ScrollBarStyle) {
-    const { trackSize, trackBackgroundColor, trackBorderColor, buttonBackgroundColor, buttonBorderColor } = style
-    layer
-      .createShape({ fillStyle: trackBackgroundColor, strokeStyle: trackBorderColor })
-      .rect(new Rect(width - trackSize, 0, trackSize, height - trackSize - 2))
+    const { trackSize, buttonBorderColor } = style
 
-    layer // Button up
-      .createShape({ fillStyle: buttonBackgroundColor, strokeStyle: buttonBorderColor })
-      .rect(new Rect(width - trackSize, 0, trackSize, trackSize))
+    this.createTracker(new Rect(width - trackSize, 0, trackSize, height - trackSize - 2), layer, style)
+    this.createArrowButton(new Rect(width - trackSize, 0, trackSize, trackSize), layer, style) // Button up
+    this.createArrowButton(new Rect(width - trackSize, height - trackSize - trackSize - 2, trackSize, trackSize), layer, style) // Button down
 
     const x = (width - trackSize) + trackSize / 2
     let y = trackSize / 2
     const arrowStyle = { fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor }
     createArrowUp(layer, { x, y }, arrowStyle)
-
-    layer // Button down
-      .createShape({ fillStyle: buttonBackgroundColor, strokeStyle: buttonBorderColor })
-      .rect(new Rect(width - trackSize, height - trackSize - trackSize - 2, trackSize, trackSize))
 
     y = height - trackSize - trackSize / 2
     createArrowDown(layer, { x, y }, arrowStyle)
@@ -111,11 +117,13 @@ export class VScrollBar extends ScrollBar {
   }
 
   createVScrollThumb (scrollLayer: Layer, value: number, width: number, style: ScrollBarStyle) {
-    const { thumbSize, thumbBackgroundColor, thumbBorderColor } = style
-    const thumbButton = scrollLayer
-      .createShape({ fillStyle: thumbBackgroundColor, strokeStyle: thumbBorderColor })
-      .roundRect(new Rect(width - thumbSize, thumbSize + this.position, thumbSize, value), 8)
+    const { thumbSize } = style
+    const thumbButton = this.createThumbButton(
+      new Rect(width - thumbSize, thumbSize + this.position, thumbSize, value),
+      scrollLayer,
+      style
+    )
 
-    this.setThumbButton(thumbButton, style, 'y')
+    this.setThumbButtonHandlers(thumbButton, style, 'y')
   }
 }
