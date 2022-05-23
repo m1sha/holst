@@ -7,6 +7,10 @@ import { Point } from '../../point'
 import Shape from '../../shape'
 export abstract class ScrollBar {
   protected tracker: Shape | null = null
+  protected backButton: Shape | null = null
+  protected forwardButton: Shape | null = null
+  protected thumbButton: Shape | null = null
+  protected type?: 'h' | 'v'
   position: number
   limit: number
   style: ScrollBarStyle
@@ -17,9 +21,42 @@ export abstract class ScrollBar {
     this.style = style
   }
 
-  abstract create (layer: Layer, { width, height }: Size): void
+  create (layer: Layer, { width, height }: Size): void {
+    this.tracker = this.createTracker(this.getTrackerRect({ width, height }), layer)
+    this.backButton = this.createArrowButton(this.getBackButtonRect({ width, height }), layer) // Button left
+    this.forwardButton = this.createArrowButton(this.getForwardButtonRect({ width, height }), layer) // Button right
 
-  protected createTracker (rect: IRect, layer: Layer) {
+    const { buttonBorderColor } = this.style
+    const arrowStyle = { fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor }
+    const ps = this.getBackArrowPoint({ width, height })
+    const pe = this.getForwardArrowPoint({ width, height })
+
+    if (this.type === 'h') {
+      createArrowLeft(layer, ps, arrowStyle)
+      createArrowRight(layer, pe, arrowStyle)
+    }
+
+    if (this.type === 'v') {
+      createArrowUp(layer, ps, arrowStyle)
+      createArrowDown(layer, pe, arrowStyle)
+    }
+
+    this.thumbButton = this.createScrollThumb(layer, { width, height })
+    this.setThumbButtonHandlers(this.type!!)
+  }
+
+  abstract getTrackerRect({ width, height }: Size): Rect
+  abstract getBackButtonRect({ width, height }: Size): Rect
+  abstract getForwardButtonRect({ width, height }: Size): Rect
+  abstract getThumbButtonRect({ width, height }: Size): Rect
+  abstract getBackArrowPoint ({ width, height }: Size): Point
+  abstract getForwardArrowPoint ({ width, height }: Size): Point
+
+  private createScrollThumb (scrollLayer: Layer, { width, height }: Size) {
+    return this.createThumbButton(this.getThumbButtonRect({ width, height }), scrollLayer)
+  }
+
+  private createTracker (rect: IRect, layer: Layer) {
     const { trackBackgroundColor, trackBorderColor } = this.style
     const trackStyle = { fillStyle: trackBackgroundColor, strokeStyle: trackBorderColor }
     return layer
@@ -27,24 +64,25 @@ export abstract class ScrollBar {
       .rect(rect)
   }
 
-  protected createArrowButton (rect: IRect, layer: Layer) {
+  private createArrowButton (rect: IRect, layer: Layer) {
     const { buttonBackgroundColor, buttonBorderColor } = this.style
     return layer
       .createShape({ fillStyle: buttonBackgroundColor, strokeStyle: buttonBorderColor })
       .roundRect(rect, 4)
   }
 
-  protected createThumbButton (rect: IRect, layer: Layer) {
+  private createThumbButton (rect: IRect, layer: Layer) {
     const thumbStyle = { fillStyle: this.style.thumbBackgroundColor, strokeStyle: this.style.thumbBorderColor }
     return layer
       .createShape(thumbStyle)
       .roundRect(rect, 8)
   }
 
-  protected setThumbButtonHandlers (button: Shape, dir: 'x' | 'y') {
+  private setThumbButtonHandlers (dir: 'h' | 'v') {
     let start = Point.zero
     let shift = Point.zero
-    const { thumbBackgroundColorHover } = this.style
+    const { thumbBackgroundColorHover, trackSize } = this.style
+    const button = this.thumbButton!!
     const oldStyle = button.copyStyle()
     button
       .on('hover', () => {
@@ -68,73 +106,81 @@ export abstract class ScrollBar {
         const trackerBounds = this.tracker.bounds
         const bounds = button.bounds
         let canMove = true
-        if (dir === 'x') {
-          if (e.event.x > start.x && bounds.width + bounds.x > trackerBounds.width) canMove = false
-          if (e.event.x < start.x && bounds.x + 1 < trackerBounds.x) canMove = false
+        if (dir === 'h') {
+          if (e.event.x > start.x && bounds.width + bounds.x + trackSize + 2 > trackerBounds.width) canMove = false
+          if (e.event.x < start.x && bounds.x < trackerBounds.x + trackSize + 2) canMove = false
         }
         if (canMove) {
-          button.move({ x: dir === 'x' ? point.x : 0, y: dir === 'y' ? point.y : 0 })
+          button.move({ x: dir === 'h' ? point.x : 0, y: dir === 'v' ? point.y : 0 })
         }
       })
   }
 }
 
 export class HScrollBar extends ScrollBar {
-  create (layer: Layer, { width, height }: Size) {
-    const { trackSize, buttonBorderColor } = this.style
+  protected type: 'h' | 'v' | undefined = 'h'
 
-    this.tracker = this.createTracker(new Rect(0, height - trackSize, width - trackSize - 2, trackSize), layer)
-    this.createArrowButton(new Rect(0, height - trackSize, trackSize, trackSize), layer) // Button left
-    this.createArrowButton(new Rect(width - trackSize - trackSize - 2, height - trackSize, trackSize, trackSize), layer) // Button right
-
-    let x = trackSize / 2
-    const y = height - trackSize / 2
-    const arrowStyle = { fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor }
-    createArrowLeft(layer, { x, y }, arrowStyle)
-
-    x = width - trackSize - trackSize / 2
-    createArrowRight(layer, { x, y }, arrowStyle)
-
-    this.createHScrollThumb(layer, this.limit, height)
+  getTrackerRect ({ width, height }: Size): Rect {
+    const { trackSize } = this.style
+    return new Rect(0, height - trackSize, width - trackSize - 2, trackSize)
   }
 
-  createHScrollThumb (scrollLayer: Layer, value: number, height: number) {
-    const { thumbSize } = this.style
-    const thumbButton = this.createThumbButton(
-      new Rect(thumbSize + this.position, height - thumbSize, value, thumbSize),
-      scrollLayer
-    )
+  getBackButtonRect ({ height }: Size): Rect {
+    const { trackSize } = this.style
+    return new Rect(0, height - trackSize, trackSize, trackSize)
+  }
 
-    this.setThumbButtonHandlers(thumbButton, 'x')
+  getForwardButtonRect ({ width, height }: Size): Rect {
+    const { trackSize } = this.style
+    return new Rect(width - trackSize - trackSize - 2, height - trackSize, trackSize, trackSize)
+  }
+
+  getThumbButtonRect ({ height }: Size): Rect {
+    const { thumbSize } = this.style
+    return new Rect(thumbSize + this.position, height - thumbSize, this.limit, thumbSize)
+  }
+
+  getBackArrowPoint ({ height }: Size): Point {
+    const { trackSize } = this.style
+    return new Point(trackSize / 2, height - trackSize / 2)
+  }
+
+  getForwardArrowPoint ({ width, height }: Size): Point {
+    const { trackSize } = this.style
+    return new Point(width - trackSize - trackSize / 2, height - trackSize / 2)
   }
 }
 
 export class VScrollBar extends ScrollBar {
-  create (layer: Layer, { width, height }: Size) {
-    const { trackSize, buttonBorderColor } = this.style
+  protected type: 'h' | 'v' | undefined = 'v'
 
-    this.tracker = this.createTracker(new Rect(width - trackSize, 0, trackSize, height - trackSize - 2), layer)
-    this.createArrowButton(new Rect(width - trackSize, 0, trackSize, trackSize), layer) // Button up
-    this.createArrowButton(new Rect(width - trackSize, height - trackSize - trackSize - 2, trackSize, trackSize), layer) // Button down
-
-    const x = (width - trackSize) + trackSize / 2
-    let y = trackSize / 2
-    const arrowStyle = { fillStyle: buttonBorderColor, strokeStyle: buttonBorderColor }
-    createArrowUp(layer, { x, y }, arrowStyle)
-
-    y = height - trackSize - trackSize / 2
-    createArrowDown(layer, { x, y }, arrowStyle)
-
-    this.createVScrollThumb(layer, this.limit, width)
+  getTrackerRect ({ width, height }: Size): Rect {
+    const { trackSize } = this.style
+    return new Rect(width - trackSize, 0, trackSize, height - trackSize - 2)
   }
 
-  createVScrollThumb (scrollLayer: Layer, value: number, width: number) {
-    const { thumbSize } = this.style
-    const thumbButton = this.createThumbButton(
-      new Rect(width - thumbSize, thumbSize + this.position, thumbSize, value),
-      scrollLayer
-    )
+  getBackButtonRect ({ width }: Size): Rect {
+    const { trackSize } = this.style
+    return new Rect(width - trackSize, 0, trackSize, trackSize)
+  }
 
-    this.setThumbButtonHandlers(thumbButton, 'y')
+  getForwardButtonRect ({ width, height }: Size): Rect {
+    const { trackSize } = this.style
+    return new Rect(width - trackSize, height - trackSize - trackSize - 2, trackSize, trackSize)
+  }
+
+  getThumbButtonRect ({ width }: Size): Rect {
+    const { thumbSize } = this.style
+    return new Rect(width - thumbSize, thumbSize + this.position, thumbSize, this.limit)
+  }
+
+  getBackArrowPoint ({ width }: Size): Point {
+    const { trackSize } = this.style
+    return new Point((width - trackSize) + trackSize / 2, trackSize / 2)
+  }
+
+  getForwardArrowPoint ({ width, height }: Size): Point {
+    const { trackSize } = this.style
+    return new Point((width - trackSize) + trackSize / 2, height - trackSize - trackSize / 2)
   }
 }
