@@ -16,3 +16,4 @@ Task list
 ☐ Create canvas dynamically
 ☐ Comine AnimationHandler & AnimationQueue
 ☐ Remake isPointInPath (IsPointInPolygon4)
+☐ A case with a mousemove when the mouse butten clicked but the cursor out of a shape. Moving must continue (ScrollBar)
