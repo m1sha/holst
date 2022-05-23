@@ -2,6 +2,7 @@ import { EventType } from './interactive'
 import { Point } from '../point'
 import { EventHandlers, InteractiveEvent, ListenerType } from './event-handler2'
 import { ActionSpecDic } from './action-spec-dic'
+import { MouseEventDecorator, KeyboardEventDecorator } from './decorators'
 
 export class HandlerResolver {
   private handlers: EventHandlers
@@ -19,14 +20,16 @@ export class HandlerResolver {
   onclick (e: MouseEvent) {
     this.setHandler('click', p => {
       if (!this.hit(p, e)) return
-      p.listener(this.createEvent(e, p))
+      const decorator = new MouseEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
     })
   }
 
   ondblclick (e: MouseEvent): any {
     this.setHandler('dblclick', p => {
       if (!this.hit(p, e)) return
-      p.listener(this.createEvent(e, p))
+      const decorator = new MouseEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
     })
   }
 
@@ -36,7 +39,8 @@ export class HandlerResolver {
       const id = p.interactive.id
       if (!this.hovered.has(id)) return
       this.hovered.clear(id)
-      p.listener(this.createEvent(e, p))
+      const decorator = new MouseEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
     })
 
     this.setHandler('hover', p => {
@@ -44,14 +48,16 @@ export class HandlerResolver {
       const id = p.interactive.id
       if (this.hovered.has(id)) return
       this.hovered.set(id)
-      p.listener(this.createEvent(e, p))
+      const decorator = new MouseEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
     })
 
     this.setHandler('mousemove', p => {
       const id = p.interactive.id
       const c = this.hit(p, e)
       if (!c) return
-      p.listener(this.createEvent(e, p, this.pressed.has(id)))
+      const decorator = new MouseEventDecorator(e)
+      p.listener(this.createEvent(decorator, p, this.pressed.has(id)))
     })
   }
 
@@ -60,7 +66,8 @@ export class HandlerResolver {
       const id = p.interactive.id
       if (!this.hovered.has(id)) return
       this.hovered.clear(id)
-      p.listener(this.createEvent(e, p))
+      const decorator = new MouseEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
     })
   }
 
@@ -69,7 +76,8 @@ export class HandlerResolver {
       const id = p.interactive.id
       if (!this.pressed.has(id)) return
       this.pressed.clear(id)
-      p.listener(this.createEvent(e, p))
+      const decorator = new MouseEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
     })
   }
 
@@ -79,25 +87,29 @@ export class HandlerResolver {
       const id = p.interactive.id
       if (this.pressed.has(id)) return
       this.pressed.set(id)
-      p.listener(this.createEvent(e, p))
+      const decorator = new MouseEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
     })
   }
 
   onkeyup (e: KeyboardEvent) {
     this.setHandler('keyup', p => {
-      p.listener(this.createEvent(e, p))
+      const decorator = new KeyboardEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
     })
   }
 
   onkeydown (e: KeyboardEvent) {
     this.setHandler('keydown', p => {
-      p.listener(this.createEvent(e, p))
+      const decorator = new KeyboardEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
     })
   }
 
   onwheel (e: WheelEvent): any {
     this.setHandler('wheel', p => {
-      p.listener(this.createEvent(e, p))
+      const decorator = new MouseEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
     })
   }
 

@@ -1,3 +1,4 @@
+import { FocusEventDecorator, KeyboardEventDecorator, MouseEventDecorator } from './decorators'
 import { Point } from '../point'
 
 export interface InteractiveEvent<TEvent> {
@@ -8,18 +9,18 @@ export interface InteractiveEvent<TEvent> {
 }
 
 export interface EventType {
-  'click': InteractiveEvent<MouseEvent>
-  'dblclick': InteractiveEvent<MouseEvent>
-  'hover': InteractiveEvent<MouseEvent>
-  'leave': InteractiveEvent<MouseEvent>
-  'mousemove': InteractiveEvent<MouseEvent>
-  'mousedown': InteractiveEvent<MouseEvent>
-  'mouseup': InteractiveEvent<MouseEvent>
-  'keyup': InteractiveEvent<KeyboardEvent>
-  'keydown': InteractiveEvent<KeyboardEvent>
-  'wheel': InteractiveEvent<WheelEvent>
-  'focus': InteractiveEvent<FocusEvent>
-  'blur': InteractiveEvent<FocusEvent>
+  'click': InteractiveEvent<MouseEventDecorator>
+  'dblclick': InteractiveEvent<MouseEventDecorator>
+  'hover': InteractiveEvent<MouseEventDecorator>
+  'leave': InteractiveEvent<MouseEventDecorator>
+  'mousemove': InteractiveEvent<MouseEventDecorator>
+  'mousedown': InteractiveEvent<MouseEventDecorator>
+  'mouseup': InteractiveEvent<MouseEventDecorator>
+  'keyup': InteractiveEvent<KeyboardEventDecorator>
+  'keydown': InteractiveEvent<KeyboardEventDecorator>
+  'wheel': InteractiveEvent<MouseEventDecorator>
+  'focus': InteractiveEvent<FocusEventDecorator>
+  'blur': InteractiveEvent<FocusEventDecorator>
 }
 
 export interface Interactive {

@@ -50,16 +50,14 @@ export abstract class ScrollBar {
         button.style.fillStyle = oldStyle.fillStyle
       })
       .on('mousedown', e => {
-        const { offsetX, offsetY } = e.event
-        start = new Point(offsetX, offsetY)
+        start = new Point(e.event)
       })
       .on('mouseup', () => {
         shift = button.shift
       })
       .on('mousemove', e => {
         if (!e.pressed) return
-        const { offsetX, offsetY } = e.event
-        const point = new Point(offsetX, offsetY)
+        const point = new Point(e.event)
           .dec(start)
           .add(shift)
         button.move({ x: dir === 'x' ? point.x : 0, y: dir === 'y' ? point.y : 0 })
