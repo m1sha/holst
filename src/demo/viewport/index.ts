@@ -61,6 +61,7 @@ function setInteractive (shape: Shape) {
       shift = shape.shift
     })
     .on('mousemove', e => {
+      if (!e.pressed) return
       const { offsetX, offsetY } = e.event
       const point = new Point(offsetX, offsetY)
         .dec(start)

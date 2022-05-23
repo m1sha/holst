@@ -83,11 +83,13 @@ export class InteractiveEvent<TEvent> {
   private canvas: HTMLCanvasElement
   event: TEvent
   target: Interactive
+  readonly pressed: boolean
 
-  constructor (event: TEvent, target: Interactive, canvas: HTMLCanvasElement) {
+  constructor (event: TEvent, target: Interactive, canvas: HTMLCanvasElement, pressed?: boolean) {
     this.event = event
     this.target = target
     this.canvas = canvas
+    this.pressed = pressed ?? false
   }
 
   get cursor (): string {
