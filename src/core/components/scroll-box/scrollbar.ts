@@ -56,7 +56,7 @@ export abstract class ScrollBar {
         shift = button.shift
       })
       .on('mousemove', e => {
-        if (!e.pressed) return
+        if (!e.event.pressed) return
         const point = new Point(e.event)
           .dec(start)
           .add(shift)

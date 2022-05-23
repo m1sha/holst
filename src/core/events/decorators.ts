@@ -1,7 +1,11 @@
 export class MouseEventDecorator {
-  origin: MouseEvent
-  constructor (event: MouseEvent | WheelEvent) {
+  readonly origin: MouseEvent
+  readonly pressed: boolean
+  readonly hit: boolean
+  constructor (event: MouseEvent | WheelEvent, pressed: boolean = false, hit: boolean = false) {
     this.origin = event
+    this.pressed = pressed
+    this.hit = hit
   }
 
   get x (): number {

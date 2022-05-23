@@ -5,7 +5,6 @@ export interface InteractiveEvent<TEvent> {
   event: TEvent
   cursor: string
   target: any
-  pressed: boolean
 }
 
 export interface EventType {

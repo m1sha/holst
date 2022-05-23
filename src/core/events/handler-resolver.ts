@@ -54,10 +54,10 @@ export class HandlerResolver {
 
     this.setHandler('mousemove', p => {
       const id = p.interactive.id
-      const c = this.hit(p, e)
-      if (!c) return
-      const decorator = new MouseEventDecorator(e)
-      p.listener(this.createEvent(decorator, p, this.pressed.has(id)))
+      const hit = this.hit(p, e)
+      const pressed = this.pressed.has(id)
+      const decorator = new MouseEventDecorator(e, pressed, hit)
+      p.listener(this.createEvent(decorator, p))
     })
   }
 
@@ -127,8 +127,8 @@ export class HandlerResolver {
     h.forEach(p => callback(p))
   }
 
-  private createEvent<T> (e: T, p: ListenerType, pressed?: boolean) {
-    return new InteractiveEvent(e, p.interactive, this.element, pressed)
+  private createEvent<T> (e: T, p: ListenerType) {
+    return new InteractiveEvent(e, p.interactive, this.element)
   }
 
   private hit (p: ListenerType, e: MouseEvent) {
