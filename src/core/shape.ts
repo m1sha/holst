@@ -95,6 +95,10 @@ export default class Shape implements Interactive, Orderable {
     return this
   }
 
+  circle (point: IPoint, radius: number): this | Shape {
+    return this.ellipse(point, radius, radius, 0, 0, Math.PI * 2)
+  }
+
   quadraticCurveTo (cp: IPoint, p: IPoint): this | Shape {
     this.mutablePath.quadraticCurveTo(cp.x, cp.y, p.x, p.y)
     this.#modified = true
