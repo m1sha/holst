@@ -17,3 +17,6 @@ Task list
 ☐ Create canvas dynamically
 ☐ Comine AnimationHandler & AnimationQueue
 ☐ Remake isPointInPath (IsPointInPolygon4)
+☐ Cirlces, Elepsis and Arcs must be drawn using Bezier curves
+☐ Access to internal forms inside a shape (lines, rect and etc.)
+☐ Cashe for the shape bounds
