@@ -158,8 +158,10 @@ export default class Shape implements Interactive, Orderable {
   }
 
   scale (point: IPoint): this | Shape {
-    const matrix = Matrix2D.identity.scale(point)
-    this.mutablePath.transform.mul(matrix)
+    // const matrix = Matrix2D.identity.scale(point)
+    // this.mutablePath.transform.mul(matrix)
+    this.mutablePath.transform.a = point.x
+    this.mutablePath.transform.d = point.y
     this.#modified = true
     return this
   }

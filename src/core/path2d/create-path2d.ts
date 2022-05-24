@@ -16,7 +16,7 @@ handlers.Arc = ({ path, element, transform }) => {
   if (element.type !== 'Arc') return
   const { radius, startAngle, endAngle, counterclockwise } = element
   const { x, y } = transform.applyMatrix(new Point(element))
-  path.arc(x, y, radius, startAngle, endAngle, counterclockwise)
+  path.arc(x, y, radius * transform.a, startAngle, endAngle, counterclockwise)
 }
 
 handlers.ArcTo = ({ path, element, transform }) => {
@@ -24,7 +24,7 @@ handlers.ArcTo = ({ path, element, transform }) => {
   const { x1, x2, y1, y2, radius } = element
   const p1 = transform.applyMatrix(new Point(x1, y1))
   const p2 = transform.applyMatrix(new Point(x2, y2))
-  path.arcTo(p1.x, p1.y, p2.x, p2.y, radius)
+  path.arcTo(p1.x, p1.y, p2.x, p2.y, radius * transform.a)
 }
 
 handlers.BezierCurveTo = ({ path, element, transform }) => {
@@ -43,7 +43,7 @@ handlers.Ellipse = ({ path, element, transform }) => {
   if (element.type !== 'Ellipse') return
   const { radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise } = element
   const { x, y } = transform.applyMatrix(new Point(element))
-  path.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise)
+  path.ellipse(x, y, radiusX * transform.a, radiusY * transform.d, rotation, startAngle, endAngle, counterclockwise)
 }
 
 handlers.LineTo = ({ path, element, transform }) => {
@@ -70,6 +70,8 @@ handlers.Rect = ({ path, element, transform, globalTransform }) => {
   if (element.type !== 'Rect') return
   let { w, h } = element
   let { x, y } = transform.applyMatrix(new Point(element))
+  w *= transform.a
+  h *= transform.d
   if (globalTransform) {
     x = (x - globalTransform.f) * globalTransform.a
     y = (y - globalTransform.e) * globalTransform.a

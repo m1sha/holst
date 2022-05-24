@@ -27,9 +27,11 @@ export function createMovementDemo (canvas: HTMLCanvasElement) {
 function movement (shapes: Shape[]) {
   let x = 0
   let sign = 1
-  let vSign = 1
+  // let vSign = 1
   let a = 0
-  let v = 0
+  // let v = 0
+  let zoom = 1
+  let zSign = 1
   setInterval(() => {
     if (x > 680) {
       sign = -1
@@ -39,14 +41,22 @@ function movement (shapes: Shape[]) {
       sign = 1
       a = 0
     }
-    a += 0.1
-    x += (5 + a) * sign
+    // a += 0.01
+    x += (5) * sign
 
-    if (v > 10) vSign = -1
-    if (v < -20) vSign = 1
-    v += 1 * vSign
+    // if (v > 10) vSign = -1
+    // if (v < -20) vSign = 1
+    // v += 1 * vSign
+
+    if (zoom > 5) zSign = -1
+    if (zoom < 0.1) zSign = 1
+    // if (a > 0.2) a = 0.01
+    zoom += (0.01 + a) * zSign
+
     shapes.forEach(p => {
-      p.move({ x, y: v })
+      p
+        .scale({ x: zoom, y: 1 })
+        .move({ x, y: 0 })
     })
   }, 20)
 }
