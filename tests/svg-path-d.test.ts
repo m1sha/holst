@@ -1,3 +1,4 @@
+import './mock/mockDOMMatrix'
 import { Point } from '../src/core/point'
 import { SvgPathD } from '../src/core/svg/svg-path-d'
 import { MutablePath2D } from '../src/core/path2d/mutable-path2d'

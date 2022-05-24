@@ -1,3 +1,4 @@
+import './mock/mockDOMMatrix'
 import { MutablePath2D } from '../src/core/path2d/mutable-path2d'
 import { Path2DElement } from '../src/core/path2d/types/path2d-element'
 

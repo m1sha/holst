@@ -54,23 +54,24 @@ export class Matrix2D {
   constructor (m?: { a?: number; b?: number; c?: number; d?: number; e?: number; f?: number }) {
     if (!m) throw new Error()
     const { a, b, c, d, e, f } = m
-    this.matrix = new DOMMatrix([a || 0, b || 0, c || 0, d || 0, e || 0, f || 0])
+    MatrixFactory.checkInit()
+    this.matrix = MatrixFactory.create([a || 0, b || 0, c || 0, d || 0, e || 0, f || 0])
   }
 
   scale (point: IPoint): Matrix2D {
-    this.matrix = this.matrix.multiply(DOMMatrix.fromMatrix({ a: point.x, d: point.y }))
+    this.matrix = this.matrix.multiply(MatrixFactory.fromMatrix({ a: point.x, d: point.y }))
     return this
   }
 
   rotate (angle: number): Matrix2D {
     const sin = Math.sin(angle)
     const cos = Math.cos(angle)
-    this.matrix = this.matrix.multiply(DOMMatrix.fromMatrix({ a: cos, b: -sin, c: sin, d: cos }))
+    this.matrix = this.matrix.multiply(MatrixFactory.fromMatrix({ a: cos, b: -sin, c: sin, d: cos }))
     return this
   }
 
   mul (m: Matrix2D): Matrix2D {
-    this.matrix = this.matrix.multiply(DOMMatrix.fromMatrix(m))
+    this.matrix = this.matrix.multiply(MatrixFactory.fromMatrix(m))
     return this
   }
 
@@ -90,3 +91,27 @@ export class Matrix2D {
 export function matrix (a: number, b: number, c: number, d: number, e: number, f: number): Matrix2D {
   return new Matrix2D({ a, b, c, d, e, f })
 }
+
+const MatrixFactory = {
+  instance: null,
+  create: (arr: number[]): DOMMatrix => {
+    return new DOMMatrix(arr)
+  },
+  checkInit () {
+    if (!this.instance) {
+      eval('this.instance = DOMMatrix')
+    }
+  },
+  fromMatrix (m?: { a?: number; b?: number; c?: number; d?: number; e?: number; f?: number }): DOMMatrix {
+    return eval('this.instance.fromMatrix(m)') as DOMMatrix
+  }
+}
+
+const GlobalMatrixFactory = {
+  setInstance (u: any) {
+    MatrixFactory.instance = u
+    eval('MatrixFactory.create = arr => new u(arr)')
+  }
+}
+
+export { GlobalMatrixFactory }
