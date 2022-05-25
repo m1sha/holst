@@ -13,7 +13,7 @@ import { EventType, Interactive } from './events/interactive'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { uid } from '../tools/uid'
 import { Modifier } from './modifiers/modifier'
-import { Figure, createFigure } from './primitives/figure'
+import { Figure } from './primitives/figure'
 import { Corner4 } from './corner4'
 
 export default class Shape implements Interactive, Orderable {
@@ -28,7 +28,9 @@ export default class Shape implements Interactive, Orderable {
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
   frozen: boolean = false
   readonly modifiers: Modifier[] = []
-  figure: Figure = createFigure()
+  get figure (): Figure {
+    return this.mutablePath.export()
+  }
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
     this.id = uid()
@@ -192,12 +194,14 @@ export default class Shape implements Interactive, Orderable {
   }
 
   get bounds (): Rect {
+    this.applyModifiers()
     const points = this.mutablePath.toPoints()
     return calcBounds(points)
   }
 
   toPath2D (globalTransform?: Matrix2D): Path2DBase {
     if (this.#modified) {
+      this.applyModifiers()
       this.#cache = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : globalTransform)
       this.#modified = false
     }
@@ -235,6 +239,13 @@ export default class Shape implements Interactive, Orderable {
     if (!transform) throw new Error('matrix is undefined')
     this.mutablePath.transform = transform.copy()
     this.#modified = true
+  }
+
+  private applyModifiers () {
+    for (const modifier of this.modifiers) {
+      const f = modifier.execute()
+      this.mutablePath.import(f)
+    }
   }
 
   on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): this | Shape {
