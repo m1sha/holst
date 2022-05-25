@@ -29,14 +29,10 @@ export function createCurvesDemo (canvas: HTMLCanvasElement) {
   shape.quadraticCurveTo(cp4, left)
   shape.quadraticCurveTo(cp1, up)
 
-  const deformation = new Deformation(fig => {
+  shape.addModifier(new Deformation(fig => {
     fig.quadraticCurveTo[0].cp = new Point(cp2.x - 10, cp2.y)
-    // fig.quadraticCurveTo[0].p = new Point(10, 10)
-    // shape.move({ x: 0, y: 0 })
     shape3.circle(fig.quadraticCurveTo[0].cp, 6)
-  })
-
-  shape.addModifier(deformation)
+  }))
 
   shape2.circle(cp1, 3)
   shape2.circle(cp2, 3)
