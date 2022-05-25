@@ -20,5 +20,6 @@ Task list
 ☐ Cirlces, Elepsis and Arcs must be drawn using Bezier curves
 ☐ Shape modifiers. Access to internal forms inside a shape (lines, rect and etc.)
   ✔ Impl the base interaction contract @done(22-05-25 23:25)
-  ☐ Impl methods *createFigure* and *updateStack*
+  ✔ Impl methods *createFigure* and *updateStack* @done(22-05-26 01:11)
+  ☐ Impl for all primitives
 ☐ Cashe for the shape bounds
