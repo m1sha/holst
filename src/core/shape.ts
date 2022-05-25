@@ -12,6 +12,8 @@ import { RelativeMutablePath2D } from './path2d/relative-mutable-path2d'
 import { EventType, Interactive } from './events/interactive'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { uid } from '../tools/uid'
+import { Modifier } from './modifiers/modifier'
+import { Figure, createFigure } from './primitives/figure'
 
 export default class Shape implements Interactive, Orderable {
   #modified: boolean = true
@@ -24,6 +26,8 @@ export default class Shape implements Interactive, Orderable {
   order: number
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
   frozen: boolean = false
+  readonly modifiers: Modifier[] = []
+  figure: Figure = createFigure()
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
     this.id = uid()
@@ -214,6 +218,12 @@ export default class Shape implements Interactive, Orderable {
 
   get modified (): boolean {
     return this.#modified
+  }
+
+  addModifier (modifier: Modifier): void {
+    modifier.source = this
+    this.modifiers.push(modifier)
+    this.#modified = true
   }
 
   private exportTransformation (): Matrix2D {
