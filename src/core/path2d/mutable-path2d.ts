@@ -37,6 +37,10 @@ export class MutablePath2D implements Path2DBase {
     this.stack.push({ type: 'Ellipse', x, y, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise })
   }
 
+  circle (x: number, y: number, radius: number) {
+    this.ellipse(x, y, radius, radius, 0, 0, Math.PI * 2)
+  }
+
   lineTo (x: number, y: number): void {
     this.stack.push({ type: 'LineTo', x, y })
   }
@@ -51,6 +55,26 @@ export class MutablePath2D implements Path2DBase {
 
   rect (x: number, y: number, w: number, h: number): void {
     this.stack.push({ type: 'Rect', x, y, w, h })
+  }
+
+  roundRect (x: number, y: number, w: number, h: number, tl: number, tr: number, bl: number, br: number): void {
+    this.moveTo(x + tl, y) // radius.tl
+    this.lineTo(x + w - tr, y) // radius.tr
+    this.quadraticCurveTo(x + w, y, x + w, y + tr) // radius.tr
+    this.lineTo(x + w, y + h - br) // radius.br
+    this.quadraticCurveTo(x + w, y + h, x + w - br, y + h) // radius.br
+    this.lineTo(x + bl, y + h) // radius.bl
+    this.quadraticCurveTo(x, y + h, x, y + h - bl) // radius.bl
+    this.lineTo(x, y + tl) // radius.tl
+    this.quadraticCurveTo(x, y, x + tl, y) //  radius.tl
+    this.closePath()
+  }
+
+  polygon (points: {x: number; y: number}[]) {
+    for (const point of points) {
+      this.lineTo(point.x, point.y)
+      this.moveTo(point.x, point.y)
+    }
   }
 
   closePath (): void {

@@ -14,8 +14,9 @@ export class Deformation implements Modifier {
   execute (): Figure {
     if (this.source instanceof Shape) {
       if (!this.action) throw new Error('')
-      this.action(this.source.figure)
-      return this.source.figure
+      const f = this.source.figure
+      this.action(f)
+      return f
     }
     throw new Error('Method not implemented.')
   }

@@ -50,16 +50,7 @@ export default class Shape implements Interactive, Orderable {
   roundRect (rect: IRect, radius: number | Corner4): this | Shape {
     const { x, y, width, height } = rect
     const r = typeof radius === 'number' ? { tl: radius, tr: radius, bl: radius, br: radius } : radius
-    this.moveTo({ x: x + r.tl, y }) // radius.tl
-    this.lineTo({ x: x + width - r.tr, y }) // radius.tr
-    this.quadraticCurveTo({ x: x + width, y }, { x: x + width, y: y + r.tr }) // radius.tr
-    this.lineTo({ x: x + width, y: y + height - r.br }) // radius.br
-    this.quadraticCurveTo({ x: x + width, y: y + height }, { x: x + width - r.br, y: y + height }) // radius.br
-    this.lineTo({ x: x + r.bl, y: y + height }) // radius.bl
-    this.quadraticCurveTo({ x, y: y + height }, { x, y: y + height - r.bl }) // radius.bl
-    this.lineTo({ x, y: y + r.tl }) // radius.tl
-    this.quadraticCurveTo({ x, y }, { x: x + r.tl, y }) //  radius.tl
-    this.closePath()
+    this.mutablePath.roundRect(x, y, width, height, r.tl, r.tr, r.bl, r.br)
     this.#modified = true
     return this
   }
@@ -103,7 +94,10 @@ export default class Shape implements Interactive, Orderable {
   }
 
   circle (point: IPoint, radius: number): this | Shape {
-    return this.ellipse(point, radius, radius, 0, 0, Math.PI * 2)
+    this.mutablePath.moveTo(point.x + radius, point.y + radius)
+    this.mutablePath.circle(point.x, point.y, radius)
+    this.#modified = true
+    return this
   }
 
   quadraticCurveTo (cp: IPoint, p: IPoint): this | Shape {
@@ -113,10 +107,7 @@ export default class Shape implements Interactive, Orderable {
   }
 
   polyline (points: IPoint[]): this | Shape {
-    for (const point of points) {
-      this.lineTo(point)
-      this.moveTo(point)
-    }
+    this.mutablePath.polygon(points)
     this.#modified = true
     return this
   }

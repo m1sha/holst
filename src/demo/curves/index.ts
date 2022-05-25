@@ -9,7 +9,7 @@ export function createCurvesDemo (canvas: HTMLCanvasElement) {
   const shape3 = layer0.createShape({ strokeStyle: '#513131', fillStyle: '#700081' })
   const shape4 = layer0.createShape({ strokeStyle: '#d1d1d1' })
   shape.style.fillStyle = '#708a41'
-  let p1 = Point.zero
+  // let p1 = Point.zero
 
   const rect = new Rect(100, 100, 200, 200)
 
@@ -23,15 +23,17 @@ export function createCurvesDemo (canvas: HTMLCanvasElement) {
   const cp3 = { x: rect.absWidth - 8, y: rect.absHeight - 8 }
   const cp4 = { x: rect.x + 8, y: rect.absHeight - 8 }
 
-  shape
-    .moveTo(up)
-    .quadraticCurveTo(cp2, right)
-    .quadraticCurveTo(cp3, end)
-    .quadraticCurveTo(cp4, left)
-    .quadraticCurveTo(cp1, up)
+  shape.moveTo(up)
+  shape.quadraticCurveTo(cp2, right)
+  shape.quadraticCurveTo(cp3, end)
+  shape.quadraticCurveTo(cp4, left)
+  shape.quadraticCurveTo(cp1, up)
 
   const deformation = new Deformation(fig => {
-    fig.quadraticCurveTo[0].cp = p1
+    fig.quadraticCurveTo[0].cp = new Point(cp2.x - 10, cp2.y)
+    // fig.quadraticCurveTo[0].p = new Point(10, 10)
+    // shape.move({ x: 0, y: 0 })
+    shape3.circle(fig.quadraticCurveTo[0].cp, 6)
   })
 
   shape.addModifier(deformation)
@@ -41,9 +43,9 @@ export function createCurvesDemo (canvas: HTMLCanvasElement) {
   shape2.circle(cp3, 3)
   shape2.circle(cp4, 3)
 
-  shape2.on('click', e => {
-    p1 = new Point(e.event)
-  })
+  // shape2.on('click', e => {
+  //   p1 = new Point(e.event)
+  // })
 
   shape3.circle(up, 3)
   shape3.circle(right, 3)
