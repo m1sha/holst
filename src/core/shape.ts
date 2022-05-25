@@ -145,12 +145,8 @@ export default class Shape implements Interactive, Orderable {
   }
 
   move (point: IPoint): this | Shape {
-    // const matrix = Matrix2D.identity
-    // matrix.e = point.x
-    // matrix.f = point.y
     this.mutablePath.transform.e = point.x
     this.mutablePath.transform.f = point.y
-    // this.mutablePath.transform.mul(matrix)
     this.#modified = true
     return this
   }
@@ -160,8 +156,6 @@ export default class Shape implements Interactive, Orderable {
   }
 
   scale (point: IPoint): this | Shape {
-    // const matrix = Matrix2D.identity.scale(point)
-    // this.mutablePath.transform.mul(matrix)
     this.mutablePath.transform.a = point.x
     this.mutablePath.transform.d = point.y
     this.#modified = true
