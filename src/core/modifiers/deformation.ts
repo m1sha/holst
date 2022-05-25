@@ -3,8 +3,12 @@ import { Figure } from '../primitives/figure'
 import { Modifier } from './modifier'
 
 export class Deformation implements Modifier {
-  action: ((figure: Figure) => void) | null = null
+  constructor (action?: ((figure: Figure) => void), source?: any) {
+    if (action) this.action = action
+    if (source) this.source = source
+  }
 
+  action: ((figure: Figure) => void) | null = null
   source: any = null
 
   execute (): Figure {

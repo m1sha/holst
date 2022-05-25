@@ -30,10 +30,9 @@ export function createCurvesDemo (canvas: HTMLCanvasElement) {
     .quadraticCurveTo(cp4, left)
     .quadraticCurveTo(cp1, up)
 
-  const deformation = new Deformation()
-  deformation.action = p => {
-    p.quadraticCurveTo[0].cp = p1
-  }
+  const deformation = new Deformation(fig => {
+    fig.quadraticCurveTo[0].cp = p1
+  })
 
   shape.addModifier(deformation)
 
