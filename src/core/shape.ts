@@ -14,6 +14,7 @@ import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { uid } from '../tools/uid'
 import { Modifier } from './modifiers/modifier'
 import { Figure, createFigure } from './primitives/figure'
+import { Corner4 } from './corner4'
 
 export default class Shape implements Interactive, Orderable {
   #modified: boolean = true
@@ -44,7 +45,7 @@ export default class Shape implements Interactive, Orderable {
     return this
   }
 
-  roundRect (rect: IRect, radius: number | { tl: number; tr: number; bl: number; br: number }): this | Shape {
+  roundRect (rect: IRect, radius: number | Corner4): this | Shape {
     const { x, y, width, height } = rect
     const r = typeof radius === 'number' ? { tl: radius, tr: radius, bl: radius, br: radius } : radius
     this.moveTo({ x: x + r.tl, y }) // radius.tl
