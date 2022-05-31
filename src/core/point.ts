@@ -29,6 +29,12 @@ export class Point implements IPoint {
     return new Point(this.x - point.x, this.y - point.y)
   }
 
+  distance (point: IPoint): number {
+    const x = Math.pow(point.x - this.x, 2)
+    const y = Math.pow(point.y - this.y, 2)
+    return Math.sqrt(x + y)
+  }
+
   static sum (point1: Point, point2: Point): Point {
     return new Point(point1.x + point2.x, point1.y + point2.y)
   }
