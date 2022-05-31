@@ -38,6 +38,11 @@ export interface Rect {
   x: number, y: number, w: number, h: number
 }
 
+export interface RoundRect {
+  type: 'RoundRect',
+  x: number, y: number, w: number, h: number, tl: number, tr: number, bl: number, br: number
+}
+
 export interface ClosePath {
   type: 'ClosePath'
 }
@@ -51,4 +56,5 @@ export type Path2DElement =
   | MoveTo
   | QuadraticCurveTo
   | Rect
+  | RoundRect
   | ClosePath

@@ -59,16 +59,7 @@ export class MutablePath2D implements Path2DBase {
   }
 
   roundRect (x: number, y: number, w: number, h: number, tl: number, tr: number, bl: number, br: number): void {
-    this.moveTo(x + tl, y) // radius.tl
-    this.lineTo(x + w - tr, y) // radius.tr
-    this.quadraticCurveTo(x + w, y, x + w, y + tr) // radius.tr
-    this.lineTo(x + w, y + h - br) // radius.br
-    this.quadraticCurveTo(x + w, y + h, x + w - br, y + h) // radius.br
-    this.lineTo(x + bl, y + h) // radius.bl
-    this.quadraticCurveTo(x, y + h, x, y + h - bl) // radius.bl
-    this.lineTo(x, y + tl) // radius.tl
-    this.quadraticCurveTo(x, y, x + tl, y) //  radius.tl
-    this.closePath()
+    this.stack.push({ type: 'RoundRect', x, y, w, h, tl, tr, bl, br })
   }
 
   polygon (points: {x: number; y: number}[]) {

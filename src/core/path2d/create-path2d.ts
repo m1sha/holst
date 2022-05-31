@@ -17,6 +17,16 @@ const calcPoint = (p: IPoint, transform: Matrix2D, globalTransform?: Matrix2D): 
 
 const handlers: Record<string, (input: HandlerInputType) => void> = {}
 
+const packager = (path: Path2D, transform: Matrix2D, stack: Path2DElement[], globalTransform?: Matrix2D) => {
+  return (element: Path2DElement) => {
+    return { path, element, transform, stack, globalTransform }
+  }
+}
+
+const exec = (name: string, input: HandlerInputType) => {
+  handlers[name](input)
+}
+
 handlers.Arc = ({ path, element, transform, globalTransform }) => {
   if (element.type !== 'Arc') return
   const { radius, startAngle, endAngle, counterclockwise } = element
@@ -105,6 +115,22 @@ handlers.Rect = ({ path, element, transform, globalTransform }) => {
   path.lineTo(p1.x, p1.y)
   path.lineTo(p2.x, p2.y)
   path.lineTo(p3.x, p3.y)
+  path.closePath()
+}
+
+handlers.RoundRect = ({ path, element, transform, stack, globalTransform }) => {
+  if (element.type !== 'RoundRect') return
+  const { x, y, w, h, tl, tr, bl, br } = element
+  const pack = packager(path, transform, stack, globalTransform)
+  exec('MoveTo', pack({ type: 'MoveTo', x: x + tl, y }))
+  exec('LineTo', pack({ type: 'LineTo', x: x + w - tr, y }))
+  exec('QuadraticCurveTo', pack({ type: 'QuadraticCurveTo', cpx: x + w, cpy: y, x: x + w, y: y + tr }))
+  exec('LineTo', pack({ type: 'LineTo', x: x + w, y: y + h - br }))
+  exec('QuadraticCurveTo', pack({ type: 'QuadraticCurveTo', cpx: x + w, cpy: y + h, x: x + w - br, y: y + h }))
+  exec('LineTo', pack({ type: 'LineTo', x: x + bl, y: y + h }))
+  exec('QuadraticCurveTo', pack({ type: 'QuadraticCurveTo', cpx: x, cpy: y + h, x, y: y + h - bl }))
+  exec('LineTo', pack({ type: 'LineTo', x, y: y + tl }))
+  exec('QuadraticCurveTo', pack({ type: 'QuadraticCurveTo', cpx: x, cpy: y, x: x + tl, y }))
   path.closePath()
 }
 
