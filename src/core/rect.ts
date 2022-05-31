@@ -1,3 +1,4 @@
+import { Padding } from './padding'
 import { Point } from './point'
 import { Size } from './size'
 
@@ -44,5 +45,17 @@ export class Rect implements IRect, Size {
       new Point(this.absWidth, this.absHeight),
       new Point(this.x, this.absHeight)
     ]
+  }
+
+  outline ({ top, left, bottom, right }: Padding): Rect {
+    return new Rect(this.x + left, this.y + top, this.width - right, this.height - bottom)
+  }
+
+  toRhombus (): Point[] {
+    const up = { x: this.absCenter.x, y: this.y }
+    const right = { x: this.absWidth + 0, y: this.absCenter.y }
+    const bottom = { x: this.absCenter.x, y: this.absHeight + 0 }
+    const left = { x: this.x - 0, y: this.absCenter.y }
+    return [new Point(up), new Point(right), new Point(bottom), new Point(left)]
   }
 }
