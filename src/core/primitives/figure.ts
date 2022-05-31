@@ -1,27 +1,5 @@
 import { Path2DElement } from '../path2d/types/path2d-element'
-import { IPoint } from '../point'
-
-type Circle = {
-  type: 'Circle'
-  p: IPoint
-  r: number
-  index: number
-}
-
-type QuadraticCurveTo = {
-  type: 'QuadraticCurveTo'
-  cp: IPoint
-  p: IPoint
-  index: number
-}
-
-type Figures = QuadraticCurveTo | Circle
-
-export interface Figure {
-  map: Record<number, Figures>
-  circle: Circle[]
-  quadraticCurveTo: QuadraticCurveTo[]
-}
+import { Figure, QuadraticCurveTo } from './types/figures'
 
 export function createFigure (stack: Path2DElement[]): Figure {
   const result: Figure = {

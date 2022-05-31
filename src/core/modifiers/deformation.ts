@@ -1,5 +1,5 @@
 import Shape from '../shape'
-import { Figure } from '../primitives/figure'
+import { Figure } from '../primitives/types/figures'
 import { Modifier } from './modifier'
 
 export class Deformation implements Modifier {

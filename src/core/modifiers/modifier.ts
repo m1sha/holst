@@ -1,4 +1,4 @@
-import { Figure } from '../primitives/figure'
+import { Figure } from '../primitives/types/figures'
 
 export interface Modifier {
   source: any

@@ -13,7 +13,7 @@ import { EventType, Interactive } from './events/interactive'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { uid } from '../tools/uid'
 import { Modifier } from './modifiers/modifier'
-import { Figure } from './primitives/figure'
+import { Figure } from './primitives/types/figures'
 import { Corner4 } from './corner4'
 
 export default class Shape implements Interactive, Orderable {

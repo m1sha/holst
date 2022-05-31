@@ -4,7 +4,8 @@ import { Path2DBase } from './path2d-base'
 import { Point } from '../point'
 import { createPath2D } from './create-path2d'
 import { createPoints } from './create-points'
-import { createFigure, updateStack, Figure } from '../primitives/figure'
+import { createFigure, updateStack } from '../primitives/figure'
+import { Figure } from '../primitives/types/figures'
 
 export class MutablePath2D implements Path2DBase {
   private stack: Path2DElement[]

@@ -12,11 +12,7 @@ export function createCurvesDemo (canvas: HTMLCanvasElement) {
   // let p1 = Point.zero
 
   const rect = new Rect(100, 100, 200, 200)
-
-  const up = { x: rect.absCenter.x, y: rect.y }
-  const right = { x: rect.absWidth + 0, y: rect.absCenter.y }
-  const end = { x: rect.absCenter.x, y: rect.absHeight + 0 }
-  const left = { x: rect.x - 0, y: rect.absCenter.y }
+  const [up, right, bottom, left] = rect.toRhombus()
 
   const cp1 = { x: rect.x + 8, y: rect.y + 8 }
   const cp2 = { x: rect.absWidth - 8, y: rect.y + 8 }
@@ -25,13 +21,15 @@ export function createCurvesDemo (canvas: HTMLCanvasElement) {
 
   shape.moveTo(up)
   shape.quadraticCurveTo(cp2, right)
-  shape.quadraticCurveTo(cp3, end)
+  shape.quadraticCurveTo(cp3, bottom)
   shape.quadraticCurveTo(cp4, left)
   shape.quadraticCurveTo(cp1, up)
 
+  // shape.circle()
+
   shape.addModifier(new Deformation(fig => {
-    fig.quadraticCurveTo[0].cp = new Point(cp2.x - 10, cp2.y)
-    shape3.circle(fig.quadraticCurveTo[0].cp, 6)
+    fig.quadraticCurveTo[0].cp = new Point(cp2.x - 20, cp2.y)
+    shape3.circle(fig.quadraticCurveTo[0].cp, 3)
   }))
 
   shape2.circle(cp1, 3)
@@ -45,7 +43,7 @@ export function createCurvesDemo (canvas: HTMLCanvasElement) {
 
   shape3.circle(up, 3)
   shape3.circle(right, 3)
-  shape3.circle(end, 3)
+  shape3.circle(bottom, 3)
   shape3.circle(left, 3)
 
   shape4.rect(rect)
