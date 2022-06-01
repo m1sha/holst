@@ -21,11 +21,11 @@ export class Point implements IPoint {
     }
   }
 
-  add (point: Point) {
+  add (point: IPoint) {
     return new Point(this.x + point.x, this.y + point.y)
   }
 
-  dec (point: Point) {
+  dec (point: IPoint) {
     return new Point(this.x - point.x, this.y - point.y)
   }
 

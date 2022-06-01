@@ -15,6 +15,7 @@ import { uid } from '../tools/uid'
 import { Modifier } from './modifiers/modifier'
 import { Figure } from './primitives/types/figures'
 import { Corner4 } from './corner4'
+import { IVector } from './vector'
 
 export default class Shape implements Interactive, Orderable {
   #modified: boolean = true
@@ -129,6 +130,13 @@ export default class Shape implements Interactive, Orderable {
       this.moveTo(point)
       // arrow(this.transformationObject, point, a, options.arrow.startTip.length || 10, options.arrow.startTip.dir || -1)
     }
+    return this
+  }
+
+  arrow (vector: IVector, length: number, direction: '>' | '<'): this | Shape {
+    const { sp, ep } = vector
+    this.mutablePath.arrow(sp.x, sp.y, ep.x, ep.y, length, direction)
+    this.#modified = true
     return this
   }
 

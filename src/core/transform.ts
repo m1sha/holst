@@ -1,4 +1,5 @@
-import { Point } from './point'
+import { IVector } from './vector'
+import { Point, IPoint } from './point'
 
 const rotate = (point: Point, target: Point, angle: number): Point => {
   const result = new Point(point)
@@ -14,24 +15,30 @@ const rotate = (point: Point, target: Point, angle: number): Point => {
   return result
 }
 
-const alfa = (pointStart: Point, pointEnd: Point): number => {
-  const dx = pointEnd.x - pointStart.x
-  const dy = pointEnd.y - pointStart.y
-  return Math.atan2(dy, dx)
+const alfa = (vector: IVector): number => {
+  const { x, y } = new Point(vector.ep).dec(vector.sp)
+  return Math.atan2(y, x)
 }
 
 const gradToRad = (angle: number): number => {
   return angle * Math.PI / 180
 }
 
-// const arrow = (context, point: Point, angle: number, r: number, dir: number) => {
-//   const cos1 = dir * Math.cos(angle - Math.PI / 6)
-//   const sin1 = dir * Math.sin(angle - Math.PI / 6)
-//   context.lineTo(point.x - r * cos1, point.y - r * sin1)
-//   context.moveTo(point.x, point.y)
-//   const cos2 = dir * Math.cos(angle + Math.PI / 6)
-//   const sin2 = dir * Math.sin(angle + Math.PI / 6)
-//   context.lineTo(point.x - r * cos2, point.y - r * sin2)
-// }
+const arrow = (vector: IVector, r: number, dir: number): IPoint[] => {
+  const result = []
+  const angle = alfa(vector)
+  const point = dir < 0 ? vector.sp : vector.ep
+  const turn = Math.PI / 24
+  const cos1 = dir * Math.cos(angle - turn)
+  const sin1 = dir * Math.sin(angle - turn)
+  result.push({ x: point.x, y: point.y })
+  result.push({ x: point.x - r * cos1, y: point.y - r * sin1 })
+  result.push({ x: point.x, y: point.y })
 
-export { rotate, alfa }
+  const cos2 = dir * Math.cos(angle + turn)
+  const sin2 = dir * Math.sin(angle + turn)
+  result.push({ x: point.x - r * cos2, y: point.y - r * sin2 })
+  return result
+}
+
+export { rotate, arrow }

@@ -1,3 +1,4 @@
+import { arrow } from '../transform'
 import { Matrix2D } from '../matrix'
 import { IPoint, Point } from '../point'
 import { Path2DElement } from './types/path2d-element'
@@ -132,6 +133,18 @@ handlers.RoundRect = ({ path, element, transform, stack, globalTransform }) => {
   exec('LineTo', pack({ type: 'LineTo', x, y: y + tl }))
   exec('QuadraticCurveTo', pack({ type: 'QuadraticCurveTo', cpx: x, cpy: y, x: x + tl, y }))
   path.closePath()
+}
+
+handlers.Arrow = ({ path, element, transform, stack, globalTransform }) => {
+  if (element.type !== 'Arrow') return
+  const sp = { x: element.spx, y: element.spy }
+  const ep = { x: element.epx, y: element.epy }
+  const points = arrow({ sp, ep }, element.length, element.direction === '>' ? 1 : -1)
+  for (const point of points) {
+    const { x, y } = calcPoint(point, transform, globalTransform)
+    path.lineTo(x, y)
+    path.moveTo(x, y)
+  }
 }
 
 export function createPath2D (stack: Path2DElement[], transform: Matrix2D, globalTransform?: Matrix2D): Path2D {

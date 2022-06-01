@@ -43,6 +43,11 @@ export interface RoundRect {
   x: number, y: number, w: number, h: number, tl: number, tr: number, bl: number, br: number
 }
 
+export interface Arrow {
+  type: 'Arrow'
+  spx: number, spy: number, epx: number, epy: number, length: number, direction: '>' | '<'
+}
+
 export interface ClosePath {
   type: 'ClosePath'
 }
@@ -57,4 +62,5 @@ export type Path2DElement =
   | QuadraticCurveTo
   | Rect
   | RoundRect
+  | Arrow
   | ClosePath

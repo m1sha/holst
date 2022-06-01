@@ -69,6 +69,10 @@ export class MutablePath2D implements Path2DBase {
     }
   }
 
+  arrow (spx: number, spy: number, epx: number, epy: number, length: number, direction: '>' | '<') {
+    this.stack.push({ type: 'Arrow', spx, spy, epx, epy, length, direction })
+  }
+
   closePath (): void {
     this.stack.push({ type: 'ClosePath' })
   }
