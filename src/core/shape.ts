@@ -170,6 +170,13 @@ export default class Shape implements Interactive, Orderable {
     return this
   }
 
+  rotate (angle: number): this | Shape {
+    this.#modified = true
+    this.mutablePath.transform.b = Math.sin(angle)
+    this.mutablePath.transform.c = -Math.cos(angle)
+    return this
+  }
+
   flipY (): this | Shape {
     const matrix = Matrix2D.identity
     matrix.d = -1

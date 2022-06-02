@@ -1,7 +1,7 @@
 import { IVector } from './vector'
 import { Point, IPoint } from './point'
 
-const rotate = (point: Point, target: Point, angle: number): Point => {
+const rotate = (point: IPoint, target: Point, angle: number): Point => {
   const result = new Point(point)
   const rad = gradToRad(angle)
   const sin = Math.sin(rad)

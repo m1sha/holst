@@ -1,49 +1,73 @@
 import { Deformation } from '../../core/modifiers/deformation'
-import { Scene, Renderer2D, Rect, Point, Shape } from 'index'
+import { Scene, Renderer2D, Rect, Point, Shape, Layer } from 'index'
 import { IPoint } from '../../core/point'
+import { rotate } from '../../core/transform'
 
 export function createCurvesDemo (canvas: HTMLCanvasElement) {
   const scene = new Scene()
   const layer0 = scene.createLayer()
-  const circleShape = layer0.createShape({ strokeStyle: '#513131' })
-  circleShape.style.fillStyle = '#848985'
-
-  const shape2 = layer0.createShape({ strokeStyle: '#513131', fillStyle: '#708a41' })
-  const shape3 = layer0.createShape({ strokeStyle: '#513131', fillStyle: '#700081' })
-  const shape4 = layer0.createShape({ strokeStyle: '#d1d1d1' })
-  const arrowShape = layer0.createShape({ strokeStyle: '#a9266c', lineWidth: 2, lineCap: 'round' })
-
   const rect = new Rect(100, 100, 200, 200)
+
+  const rect2 = new Rect(400, 100, 300, 200)
+
+  createEllipseFromRect(rect, layer0)
+  createEllipseFromRect(rect2, layer0)
+  const renderer = new Renderer2D(canvas.getContext('2d')!!)
+  renderer.render(scene)
+}
+
+function createEllipseFromRect (rect: Rect, layer0: Layer) {
   const [up, right, bottom, left] = rect.toRhombus()
 
-  const cp1 = { x: rect.x + 8, y: rect.y + 8 }
+  const c = rect.absCenter
+
+  const cp1 = rotate(up, c, -45)
   const cp2 = { x: rect.absWidth - 8, y: rect.y + 8 }
   const cp3 = { x: rect.absWidth - 8, y: rect.absHeight - 8 }
   const cp4 = { x: rect.x + 8, y: rect.absHeight - 8 }
 
-  drawCircle(circleShape, [up, right, bottom, left, cp1, cp2, cp3, cp4])
+  const frame = layer0.createShape({ strokeStyle: '#a4a391' })
+  frame.rect(rect)
 
+  const circleShape = layer0.createShape({ strokeStyle: '#513131', fillStyle: '#f5f1e0' })
+  drawCircle(circleShape, [up, right, bottom, left, cp1, cp2, cp3, cp4])
+  const shape3 = layer0.createShape({ strokeStyle: '#513131', fillStyle: '#100081' })
   circleShape.addModifier(new Deformation(fig => {
     fig.quadraticCurveTo[0].cp = new Point(cp2.x - 95, cp2.y + 100)
     shape3.circle(fig.quadraticCurveTo[0].cp, 3)
   }))
 
-  shape2.circle(cp1, 3)
-  shape2.circle(cp2, 3)
-  shape2.circle(cp3, 3)
-  shape2.circle(cp4, 3)
+  const spPoints = layer0.createShape({ strokeStyle: '#513131', fillStyle: '#708a41' })
+  spPoints.circle(cp1, 3)
+  spPoints.circle(cp2, 3)
+  spPoints.circle(cp3, 3)
+  spPoints.circle(cp4, 3)
+  spPoints.circle(rect.absCenter, 4)
 
-  // shape2.on('click', e => {
-  //   p1 = new Point(e.event)
-  // })
+  const coord0 = layer0.createShape({ strokeStyle: '#6b7ea6' })
+  coord0
+    .moveTo(rect.absCenter)
+    .lineTo(up)
+    .moveTo(rect.absCenter)
+    .lineTo(right)
 
-  shape3.circle(up, 3)
-  shape3.circle(right, 3)
-  shape3.circle(bottom, 3)
-  shape3.circle(left, 3)
+  const coordR1 = layer0.createShape({ strokeStyle: '#117ea6' })
+  coordR1
+    .moveTo(rect.absCenter)
+    .lineTo(rotate(up, rect.absCenter, 45))
 
-  shape4.rect(rect)
+  const coordR2 = layer0.createShape({ strokeStyle: '#117e16' })
+  coordR2
+    .moveTo(rect.absCenter)
+    .lineTo(rotate(right, rect.absCenter, 45))
 
+  drawRhombus(layer0, [up, right, bottom, left])
+}
+
+function drawRhombus (layer0: Layer, points: IPoint[]) {
+  const [up, right, bottom, left] = points
+  const arrowShape = layer0.createShape({ strokeStyle: '#a9266c', lineWidth: 2, lineCap: 'round' })
+  const shape3 = layer0.createShape({ strokeStyle: '#513131', fillStyle: '#492e38' })
   arrowShape.moveTo(up)
   arrowShape.lineTo(right)
   arrowShape.arrow({ sp: up, ep: right }, 15, '>')
@@ -60,8 +84,10 @@ export function createCurvesDemo (canvas: HTMLCanvasElement) {
   arrowShape.lineTo(up)
   arrowShape.arrow({ sp: left, ep: up }, 15, '>')
 
-  const renderer = new Renderer2D(canvas.getContext('2d')!!)
-  renderer.render(scene)
+  shape3.circle(up, 3)
+  shape3.circle(right, 3)
+  shape3.circle(bottom, 3)
+  shape3.circle(left, 3)
 }
 
 function drawCircle (shape: Shape, arr: IPoint[]) {
