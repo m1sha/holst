@@ -1,5 +1,5 @@
 import { Padding } from './padding'
-import { Point } from './point'
+import { IPoint, Point } from './point'
 import { Size } from './size'
 
 export interface IRect {
@@ -57,5 +57,14 @@ export class Rect implements IRect, Size {
     const bottom = { x: this.absCenter.x, y: this.absHeight + 0 }
     const left = { x: this.x - 0, y: this.absCenter.y }
     return [new Point(up), new Point(right), new Point(bottom), new Point(left)]
+  }
+
+  intersectsPoint (point: IPoint): boolean {
+    return (point.x > this.x && point.x < this.absWidth) && (point.y > this.y && point.y < this.absHeight)
+  }
+
+  intersectsRect (rect: Rect): boolean {
+    return ((rect.x > this.x && rect.x < this.absWidth) && (rect.y > this.y && rect.y < this.absHeight)) ||
+      ((this.x > rect.x && this.x < rect.absWidth) && (this.y > rect.y && this.y < rect.absHeight))
   }
 }
