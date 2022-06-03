@@ -17,6 +17,7 @@ export class Renderer2D {
   readonly viewport: Viewport
   private eventHandler: EventHandler
   private animationHandler: AnimationHandler
+  onFrameChanged: (() => void) | null = null
 
   constructor (ctx: CanvasRenderingContext2D) {
     this.ctx = ctx

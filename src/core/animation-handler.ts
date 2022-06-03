@@ -42,6 +42,7 @@ export class AnimationHandler {
         throw new Error('scene is not defined')
       }
       this.renderer.clear()
+      if (this.renderer.onFrameChanged) this.renderer.onFrameChanged()
       this.renderer.render(this.scene)
     }
     requestAnimationFrame(r => this.handler(r))
