@@ -22,12 +22,12 @@ export function createCollisionsDemo (canvas: HTMLCanvasElement) {
 function initScene (scene: Scene, { width, height }: Size): Element[] {
   const result = []
   const layer = scene.createLayer('collisions')
-  const elementCount = 3
+  const elementCount = 10
   for (let i = 0; i < elementCount; i++) {
     // const frame = layer.createShape({ strokeStyle: getColor() })
-    const shape = layer.createShape({ strokeStyle: getColor(), fillStyle: getColor() })
-    const x = Math.floor(Math.random() * width - 150) + 100
-    const y = Math.floor(Math.random() * height - 150) + 100
+    const shape = layer.createShape({ fillStyle: getColor() })
+    const x = Math.floor(Math.random() * width - 100) + 150
+    const y = Math.floor(Math.random() * height - 100) + 150
     const r = Math.floor(Math.random() * 30) + 25
     shape.circle({ x, y }, r)
     const el: Element = {
