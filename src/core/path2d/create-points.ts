@@ -1,5 +1,5 @@
 import { Matrix2D } from '../matrix'
-import { Point } from '../point'
+import { Point, IPoint } from '../point'
 import { Path2DElement } from './types/path2d-element'
 type HandlerInputType = {
   element: Path2DElement,
@@ -8,8 +8,13 @@ type HandlerInputType = {
   index: number,
   globalTransform?: Matrix2D
 }
-type HandlerDelegate = (arr: Point[], input: HandlerInputType) => void
+type HandlerDelegate = (arr: IPoint[], input: HandlerInputType) => void
 const handlers: Record<string, HandlerDelegate> = {}
+
+const calcPoint = (p: IPoint, transform: Matrix2D, globalTransform?: Matrix2D): IPoint => {
+  const t2 = globalTransform ?? Matrix2D.identity
+  return t2.applyMatrix(transform.applyMatrix(p))
+}
 
 handlers.Arc = (arr, { element, transform }) => {
   if (element.type !== 'Arc') return
@@ -41,25 +46,27 @@ handlers.BezierCurveTo = (arr, { element, transform }) => {
 
 handlers.ClosePath = () => {}
 
-handlers.Ellipse = (arr, { element, transform }) => {
+handlers.Ellipse = (arr, { element, transform, globalTransform }) => {
   if (element.type !== 'Ellipse') return
-  const p = transform.applyMatrix(new Point(element))
-  arr.push(p)
-  arr.push(new Point(p.x, element.radiusX))
-  arr.push(new Point(p.x, -element.radiusX))
-  arr.push(new Point(p.y, element.radiusY))
-  arr.push(new Point(p.x, -element.radiusY))
+  const { x, y, radiusX, radiusY } = element
+  const p1 = calcPoint({ x: x - radiusX, y: y - radiusY }, transform, globalTransform)
+  const p2 = calcPoint({ x: x + radiusX, y: y - radiusY }, transform, globalTransform)
+  const p3 = calcPoint({ x: x + radiusX, y: y + radiusY }, transform, globalTransform)
+  const p4 = calcPoint({ x: x - radiusX, y: y + radiusY }, transform, globalTransform)
+  arr.push(p1, p2, p3, p4)
 }
 
-handlers.LineTo = (arr, { element, transform }) => {
+handlers.LineTo = (arr, { element, transform, globalTransform }) => {
   if (element.type !== 'LineTo') return
-  const p = transform.applyMatrix(new Point(element))
+  const { x, y } = element
+  const p = calcPoint({ x, y }, transform, globalTransform)
   arr.push(p)
 }
 
-handlers.MoveTo = (arr, { element, transform }) => {
+handlers.MoveTo = (arr, { element, transform, globalTransform }) => {
   if (element.type !== 'MoveTo') return
-  const p = transform.applyMatrix(new Point(element))
+  const { x, y } = element
+  const p = calcPoint({ x, y }, transform, globalTransform)
   arr.push(p)
 }
 
@@ -71,17 +78,28 @@ handlers.QuadraticCurveTo = (arr, { element, transform }) => {
   arr.push(new Point(p.y, element.cpy))
 }
 
-handlers.Rect = (arr, { element, transform }) => {
+handlers.Rect = (arr, { element, transform, globalTransform }) => {
   if (element.type !== 'Rect') return
-  const p = transform.applyMatrix(new Point(element))
-  arr.push(p)
-  arr.push(new Point(p.x + element.w, p.y))
-  arr.push(new Point(p.x, p.y + element.h))
-  arr.push(new Point(p.x + element.w, p.y + element.h))
+  const { x, y, w, h } = element
+  const p1 = calcPoint({ x, y }, transform, globalTransform)
+  const p2 = calcPoint({ x: x + w, y }, transform, globalTransform)
+  const p3 = calcPoint({ x: x + w, y: y + h }, transform, globalTransform)
+  const p4 = calcPoint({ x, y: y + h }, transform, globalTransform)
+  arr.push(p1, p2, p3, p4)
 }
 
-export function createPoints (stack: Path2DElement[], transform: Matrix2D, globalTransform?: Matrix2D): Point[] {
-  const result: Point[] = []
+handlers.Circle = (arr, { element, transform, globalTransform }) => {
+  if (element.type !== 'Circle') return
+  const { x, y, radius } = element
+  const p1 = calcPoint({ x: x - radius, y: y - radius }, transform, globalTransform)
+  const p2 = calcPoint({ x: x + radius, y: y - radius }, transform, globalTransform)
+  const p3 = calcPoint({ x: x + radius, y: y + radius }, transform, globalTransform)
+  const p4 = calcPoint({ x: x - radius, y: y + radius }, transform, globalTransform)
+  arr.push(p1, p2, p3, p4)
+}
+
+export function createPoints (stack: Path2DElement[], transform: Matrix2D, globalTransform?: Matrix2D): IPoint[] {
+  const result: IPoint[] = []
   let i = 0
   for (const element of stack) handlers[element.type](result, { element, transform, stack, index: i++, globalTransform })
   return result

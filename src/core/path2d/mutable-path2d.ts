@@ -1,7 +1,7 @@
 import { Path2DElement } from './types/path2d-element'
 import { Matrix2D } from '../matrix'
 import { Path2DBase } from './path2d-base'
-import { Point } from '../point'
+import { IPoint } from '../point'
 import { createPath2D } from './create-path2d'
 import { createPoints } from './create-points'
 // import { createFigure, updateStack } from '../primitives/figure'
@@ -84,7 +84,7 @@ export class MutablePath2D implements Path2DBase {
     return createPath2D(this.stack, this.transform, globalTransform)
   }
 
-  toPoints (globalTransform?: Matrix2D): Point[] {
+  toPoints (globalTransform?: Matrix2D): IPoint[] {
     return createPoints(this.stack, this.transform, globalTransform)
   }
 

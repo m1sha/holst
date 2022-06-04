@@ -1,3 +1,4 @@
+import { IPoint } from '../../src/core/point'
 import { GlobalMatrixFactory } from '../../src/core/matrix'
 
 class MockDOMMatrix {
@@ -156,7 +157,7 @@ class MockDOMMatrix {
   }
 
   transformPoint (point?: any): DOMPoint {
-    return new MockDOMPoint()
+    return new MockDOMPoint(point)
   }
 
   translate (tx?: number, ty?: number, tz?: number): MockDOMMatrix {
@@ -189,7 +190,22 @@ class MockDOMPoint {
   w: number = 0
   z: number = 0
 
-  matrixTransform () {
+  constructor (point?: any) {
+    if (point) {
+      const p = point as IPoint
+      this.x = p.x
+      this.y = p.y
+    }
+  }
+
+  matrixTransform (point?: any) {
+    if (point) {
+      const p = point as IPoint
+      const m = new MockDOMPoint()
+      m.x = p.x
+      m.y = p.y
+      return m
+    }
     return new MockDOMPoint()
   }
 
