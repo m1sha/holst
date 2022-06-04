@@ -11,7 +11,6 @@ import { RelativeMutablePath2D } from './path2d/relative-mutable-path2d'
 import { EventType, Interactive } from './events/interactive'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { uid } from '../tools/uid'
-import { Modifier } from './modifiers/modifier'
 import { Corner4 } from './corner4'
 import { IVector } from './vector'
 import { Figures } from './primitives/figures'
@@ -28,7 +27,6 @@ export default class Shape implements Interactive, Orderable {
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
   frozen: boolean = false
   readonly figures: Figures
-  readonly modifiers: Modifier[] = []
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
     this.id = uid()
@@ -242,12 +240,6 @@ export default class Shape implements Interactive, Orderable {
     return this.#modified
   }
 
-  addModifier (modifier: Modifier): void {
-    modifier.source = this
-    this.modifiers.push(modifier)
-    this.#modified = true
-  }
-
   private exportTransformation (): Matrix2D {
     return this.mutablePath.transform.copy()
   }
@@ -257,13 +249,6 @@ export default class Shape implements Interactive, Orderable {
     this.mutablePath.transform = transform.copy()
     this.#modified = true
   }
-
-  // private applyModifiers () {
-  //   for (const modifier of this.modifiers) {
-  //     const f = modifier.execute()
-  //     this.mutablePath.import(f)
-  //   }
-  // }
 
   on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): this | Shape {
     this.eventHandler.add(this, type, listener)

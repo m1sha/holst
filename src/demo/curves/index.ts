@@ -1,5 +1,5 @@
-import { Deformation } from '../../core/modifiers/deformation'
-import { Scene, Renderer2D, Rect, Point, Shape, Layer } from 'index'
+// import { Deformation } from '../../core/modifiers/deformation'
+import { Scene, Renderer2D, Rect, Shape, Layer } from 'index'
 import { IPoint } from '../../core/point'
 import { rotate } from '../../core/transform'
 
@@ -31,11 +31,11 @@ function createEllipseFromRect (rect: Rect, layer0: Layer) {
 
   const circleShape = layer0.createShape({ strokeStyle: '#513131', fillStyle: '#f5f1e0' })
   drawCircle(circleShape, [up, right, bottom, left, cp1, cp2, cp3, cp4])
-  const shape3 = layer0.createShape({ strokeStyle: '#513131', fillStyle: '#100081' })
-  circleShape.addModifier(new Deformation(fig => {
-    fig.quadraticCurveTo[0].cp = new Point(cp2.x - 95, cp2.y + 100)
-    shape3.circle(fig.quadraticCurveTo[0].cp, 3)
-  }))
+  /* const shape3 = */ layer0.createShape({ strokeStyle: '#513131', fillStyle: '#100081' })
+  // circleShape.addModifier(new Deformation(fig => {
+  //   fig.quadraticCurveTo[0].cp = new Point(cp2.x - 95, cp2.y + 100)
+  //   shape3.circle(fig.quadraticCurveTo[0].cp, 3)
+  // }))
 
   const spPoints = layer0.createShape({ strokeStyle: '#513131', fillStyle: '#708a41' })
   spPoints.circle(cp1, 3)
