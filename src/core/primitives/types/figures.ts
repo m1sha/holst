@@ -14,7 +14,19 @@ export type QuadraticCurveTo = {
   index: number
 }
 
-export type Figures = QuadraticCurveTo | Circle
+export type MoveTo = {
+  type: 'MoveTo'
+  p: IPoint
+  index: number
+}
+
+export type LineTo = {
+  type: 'LineTo'
+  p: IPoint
+  index: number
+}
+
+export type Figures = QuadraticCurveTo | Circle | LineTo | MoveTo
 
 export interface Figure {
   map: Record<number, Figures>

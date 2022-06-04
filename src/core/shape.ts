@@ -1,4 +1,3 @@
-import { LineOptions } from './line-options'
 import Orderable from './orderable'
 import { Path2DBase } from './path2d/path2d-base'
 import { Point, IPoint } from './point'
@@ -7,15 +6,15 @@ import { ShapeStyle, ShapeStyleImpl } from './shape-style'
 import { MutablePath2D } from './path2d/mutable-path2d'
 import { Matrix2D } from './matrix'
 import Context2DFactory from './canvas-rendering-context-2d-factory'
-import { calcBounds /*, IsPointInPolygon4 */ } from './utils'
+import { calcBounds } from './utils'
 import { RelativeMutablePath2D } from './path2d/relative-mutable-path2d'
 import { EventType, Interactive } from './events/interactive'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { uid } from '../tools/uid'
 import { Modifier } from './modifiers/modifier'
-import { Figure } from './primitives/types/figures'
 import { Corner4 } from './corner4'
 import { IVector } from './vector'
+import { Figures } from './primitives/figures'
 
 export default class Shape implements Interactive, Orderable {
   #modified: boolean = true
@@ -28,18 +27,25 @@ export default class Shape implements Interactive, Orderable {
   order: number
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
   frozen: boolean = false
+  readonly figures: Figures
   readonly modifiers: Modifier[] = []
-  get figure (): Figure {
-    return this.mutablePath.export()
-  }
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
     this.id = uid()
     this.mutablePath = path
+    this.figures = new Figures(this.mutablePath.recorder)
     this.relative = new RelativeMutablePath2D(this.mutablePath)
     this.order = order
     this.style = new ShapeStyleImpl(style || {}, () => (this.#modified = true))
     this.name = 'shape'
+  }
+
+  get circles () {
+    return this.figures.circles
+  }
+
+  get ellipses () {
+    return this.figures.ellipses
   }
 
   rect (rect: IRect): this | Shape {
@@ -113,23 +119,10 @@ export default class Shape implements Interactive, Orderable {
     return this
   }
 
-  line (pointStart: IPoint, pointEnd: IPoint, options?: LineOptions): this | Shape {
+  line (pointStart: IPoint, pointEnd: IPoint): this | Shape {
     this.moveTo(pointStart)
     this.lineTo(pointEnd)
     this.#modified = true
-    if (!options || !options.arrow) return this
-    // const a = alfa(pointStart, pointEnd)
-
-    if (options.arrow.endTip) {
-      // const point = this.getPoint(pointEnd)
-      // arrow(this.transformationObject, point, a, options.arrow.endTip.length || 10, options.arrow.endTip.dir || 1)
-    }
-
-    if (options.arrow.startTip) {
-      const point = pointStart
-      this.moveTo(point)
-      // arrow(this.transformationObject, point, a, options.arrow.startTip.length || 10, options.arrow.startTip.dir || -1)
-    }
     return this
   }
 
@@ -194,14 +187,14 @@ export default class Shape implements Interactive, Orderable {
   }
 
   get bounds (): Rect {
-    this.applyModifiers()
+    // this.applyModifiers()
     const points = this.mutablePath.toPoints()
     return calcBounds(points)
   }
 
   toPath2D (globalTransform?: Matrix2D): Path2DBase {
     if (this.#modified) {
-      this.applyModifiers()
+      // this.applyModifiers()
       this.#cache = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : globalTransform)
       this.#modified = false
     }
@@ -241,12 +234,12 @@ export default class Shape implements Interactive, Orderable {
     this.#modified = true
   }
 
-  private applyModifiers () {
-    for (const modifier of this.modifiers) {
-      const f = modifier.execute()
-      this.mutablePath.import(f)
-    }
-  }
+  // private applyModifiers () {
+  //   for (const modifier of this.modifiers) {
+  //     const f = modifier.execute()
+  //     this.mutablePath.import(f)
+  //   }
+  // }
 
   on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): this | Shape {
     this.eventHandler.add(this, type, listener)

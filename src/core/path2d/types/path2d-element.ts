@@ -3,6 +3,11 @@ export interface Arc {
   x: number, y: number, radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean
 }
 
+export interface Circle {
+  type: 'Circle'
+  x: number, y: number, radius: number
+}
+
 export interface ArcTo {
   type: 'ArcTo'
   x1: number, y1: number, x2: number, y2: number, radius: number
@@ -55,6 +60,7 @@ export interface ClosePath {
 export type Path2DElement =
   | Arc
   | ArcTo
+  | Circle
   | BezierCurveTo
   | Ellipse
   | LineTo

@@ -4,16 +4,19 @@ import { Path2DBase } from './path2d-base'
 import { Point } from '../point'
 import { createPath2D } from './create-path2d'
 import { createPoints } from './create-points'
-import { createFigure, updateStack } from '../primitives/figure'
-import { Figure } from '../primitives/types/figures'
+// import { createFigure, updateStack } from '../primitives/figure'
+// import { Figure } from '../primitives/types/figures'
+import { Path2DRecorder } from './path2d-recorder'
 
 export class MutablePath2D implements Path2DBase {
   private stack: Path2DElement[]
   transform: Matrix2D
+  readonly recorder: Path2DRecorder
 
   constructor (stack?: Path2DElement[], transform?: Matrix2D) {
     this.stack = stack || []
     this.transform = transform || Matrix2D.identity
+    this.recorder = new Path2DRecorder(this.stack)
   }
 
   addPath (path: Path2DBase, transform?: Matrix2D): void {
@@ -39,7 +42,7 @@ export class MutablePath2D implements Path2DBase {
   }
 
   circle (x: number, y: number, radius: number) {
-    this.ellipse(x, y, radius, radius, 0, 0, Math.PI * 2)
+    this.stack.push({ type: 'Circle', x, y, radius })
   }
 
   lineTo (x: number, y: number): void {
@@ -94,11 +97,11 @@ export class MutablePath2D implements Path2DBase {
     return result
   }
 
-  export (): Figure {
-    return createFigure(this.stack)
-  }
+  // export (): Figure {
+  //   return createFigure(this.stack)
+  // }
 
-  import (figure: Figure): void {
-    updateStack(this.stack, figure)
-  }
+  // import (figure: Figure): void {
+  //   updateStack(this.stack, figure)
+  // }
 }

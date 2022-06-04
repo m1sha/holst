@@ -1,4 +1,4 @@
-import Shape from '../shape'
+// import Shape from '../shape'
 import { Figure } from '../primitives/types/figures'
 import { Modifier } from './modifier'
 
@@ -12,12 +12,12 @@ export class Deformation implements Modifier {
   source: any = null
 
   execute (): Figure {
-    if (this.source instanceof Shape) {
-      if (!this.action) throw new Error('')
-      const f = this.source.figure
-      this.action(f)
-      return f
-    }
+    // if (this.source instanceof Shape) {
+    //   if (!this.action) throw new Error('')
+    //   const f = this.source.figure
+    //   this.action(f)
+    //   return f
+    // }
     throw new Error('Method not implemented.')
   }
 }

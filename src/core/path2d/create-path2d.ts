@@ -119,6 +119,13 @@ handlers.Rect = ({ path, element, transform, globalTransform }) => {
   path.closePath()
 }
 
+handlers.Circle = ({ path, element, transform, stack, globalTransform }) => {
+  if (element.type !== 'Circle') return
+  const { x, y, radius } = element
+  const pack = packager(path, transform, stack, globalTransform)
+  exec('Ellipse', pack({ type: 'Ellipse', x, y, radiusX: radius, radiusY: radius, rotation: 0, startAngle: 0, endAngle: Math.PI * 2 }))
+}
+
 handlers.RoundRect = ({ path, element, transform, stack, globalTransform }) => {
   if (element.type !== 'RoundRect') return
   const { x, y, w, h, tl, tr, bl, br } = element
