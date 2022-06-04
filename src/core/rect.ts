@@ -47,8 +47,24 @@ export class Rect implements IRect, Size {
     ]
   }
 
-  outline ({ top, left, bottom, right }: Padding): Rect {
-    return new Rect(this.x + left, this.y + top, this.width - right, this.height - bottom)
+  outline (padding: number): Rect
+  // eslint-disable-next-line no-dupe-class-members
+  outline (top: number, left: number, bottom: number, right: number): Rect
+  // eslint-disable-next-line no-dupe-class-members
+  outline ({ top, left, bottom, right }: Padding): Rect
+  // eslint-disable-next-line no-dupe-class-members
+  outline (...args: Array<any>): Rect {
+    if (args.length === 4 && !args.some(p => typeof p !== 'number')) {
+      const [top, left, bottom, right] = args
+      return new Rect(this.x + left, this.y + top, this.width - right - left, this.height - bottom - top)
+    } else
+    if (typeof args[0] === 'number') {
+      const padding = args[0]
+      return new Rect(this.x + padding, this.y + padding, this.width - padding - padding, this.height - padding - padding)
+    } else {
+      const { top, left, bottom, right } = args[0]
+      return new Rect(this.x + left, this.y + top, this.width - right - left, this.height - bottom - top)
+    }
   }
 
   toRhombus (): Point[] {
