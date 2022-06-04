@@ -48,6 +48,30 @@ export default class Shape implements Interactive, Orderable {
     return this.figures.ellipses
   }
 
+  get arcs () {
+    return this.figures.arcs
+  }
+
+  get arcTos () {
+    return this.figures.arcTos
+  }
+
+  get moveTos () {
+    return this.figures.moveTos
+  }
+
+  get lines () {
+    return this.figures.lineTos
+  }
+
+  get rects () {
+    return this.figures.rects
+  }
+
+  get roundRects () {
+    return this.figures.roundRects
+  }
+
   rect (rect: IRect): this | Shape {
     this.mutablePath.rect(rect.x, rect.y, rect.width, rect.height)
     this.#modified = true
