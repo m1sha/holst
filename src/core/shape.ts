@@ -31,7 +31,7 @@ export default class Shape implements Interactive, Orderable {
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
     this.id = uid()
     this.mutablePath = path
-    this.figures = new Figures(this.mutablePath.recorder)
+    this.figures = new Figures(this.mutablePath.recorder, { setModified: () => (this.#modified = true) })
     this.relative = new RelativeMutablePath2D(this.mutablePath)
     this.order = order
     this.style = new ShapeStyleImpl(style || {}, () => (this.#modified = true))
