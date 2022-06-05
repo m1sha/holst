@@ -23,7 +23,7 @@ export class Path2DRecorder {
   }
 
   update (index: number, el: Path2DElement): void {
-    this.stack[index] = el
+    this.stack[index] = { ...el }
   }
 
   get (index: number): Readonly<Path2DElement> {
