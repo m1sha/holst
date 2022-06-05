@@ -23,6 +23,10 @@ export class Path2DRecorder {
   }
 
   update (index: number, el: Path2DElement): void {
+    const type = this.stack[index].type
+    if (type !== el.type) {
+      throw new Error(`the types ${type} and ${el.type} of Path2D elements aren't equal`)
+    }
     this.stack[index] = { ...el }
   }
 
