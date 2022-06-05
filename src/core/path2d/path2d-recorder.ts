@@ -9,7 +9,25 @@ export class Path2DRecorder {
     this.stack = stack
   }
 
+  get list (): Readonly<Record<number, ElementType>> {
+    const result: Record<number, ElementType> = {}
+    for (let index = 0; index < this.stack.length; index++) {
+      const element = this.stack[index]
+      result[index] = element.type
+    }
+    return result
+  }
+
+  get count (): number {
+    return this.stack.length
+  }
+
   find (type: ElementType) {
-    return this.stack.filter(p => p.type === type)
+    const items = []
+    for (let index = 0; index < this.stack.length; index++) {
+      const element = this.stack[index]
+      if (element.type === type) items.push({ element, index })
+    }
+    return items
   }
 }

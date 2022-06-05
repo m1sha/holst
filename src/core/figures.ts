@@ -11,6 +11,14 @@ export class Figures {
     this.mutable = mutable
   }
 
+  get list () {
+    return this.recorder.list
+  }
+
+  get count () {
+    return this.recorder.count
+  }
+
   get moveTos () {
     return this.createDecorator('MoveTo')
   }
@@ -56,6 +64,6 @@ export class Figures {
   }
 
   private createDecorator <T extends Path2DElement['type']> (type: T) {
-    return this.recorder.find(type).map(p => createPath2ElementDecorator<T>(p, this.mutable))
+    return this.recorder.find(type).map(p => createPath2ElementDecorator<T>(p.element, p.index, this.mutable))
   }
 }

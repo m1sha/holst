@@ -5,7 +5,7 @@ test('Path2ElementDecorator', () => {
   let modified = false
   const rect: RoundRect = createTestRect()
 
-  const decorator = createPath2ElementDecorator<'RoundRect'>(rect, { setModified: () => (modified = true) })
+  const decorator = createPath2ElementDecorator<'RoundRect'>(rect, 0, { setModified: () => (modified = true) })
 
   expect(rect).toStrictEqual(decorator)
   expect(modified).toBeFalsy()
