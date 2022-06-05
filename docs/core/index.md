@@ -18,9 +18,9 @@
 
 ## Classes
 
-* [Scene](./scene)
-* [Layer](./layer)
-* [Shape](./shape)
-* [Renderer2D](./renderer2D)
+* [Scene](./scene.md)
+* [Layer](./layer.md)
+* [Shape](./shape.md)
+* [Renderer2D](./renderer2D.md)
 
 [README](../../README.md)
