@@ -1,6 +1,6 @@
 import './mock/mockDOMMatrix'
 import { MutablePath2D } from '../src/core/path2d/mutable-path2d'
-import { Path2DElement } from '../src/core/path2d/types/path2d-element'
+import { Path2DElement } from '../src/core/path2d/path2d-element'
 
 test('MutablePath2D ', () => {
   const stack: Path2DElement[] = []

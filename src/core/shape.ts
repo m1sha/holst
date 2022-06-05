@@ -13,7 +13,7 @@ import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { uid } from '../tools/uid'
 import { Corner4 } from './corner4'
 import { IVector } from './vector'
-import { Figures } from './primitives/figures'
+import { Figures } from './figures'
 
 export default class Shape implements Interactive, Orderable {
   #modified: boolean = true

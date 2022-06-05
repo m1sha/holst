@@ -1,11 +1,9 @@
-import { Path2DElement } from './types/path2d-element'
+import { Path2DElement } from './path2d-element'
 import { Matrix2D } from '../matrix'
 import { Path2DBase } from './path2d-base'
 import { IPoint } from '../point'
 import { createPath2D } from './create-path2d'
 import { createPoints } from './create-points'
-// import { createFigure, updateStack } from '../primitives/figure'
-// import { Figure } from '../primitives/types/figures'
 import { Path2DRecorder } from './path2d-recorder'
 
 export class MutablePath2D implements Path2DBase {

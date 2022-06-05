@@ -1,6 +1,6 @@
 import { Matrix2D } from '../matrix'
 import { Point, IPoint } from '../point'
-import { Path2DElement } from './types/path2d-element'
+import { Path2DElement } from './path2d-element'
 type HandlerInputType = {
   element: Path2DElement,
   transform: Matrix2D,

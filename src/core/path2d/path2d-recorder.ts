@@ -1,4 +1,4 @@
-import { Path2DElement } from './types/path2d-element'
+import { Path2DElement } from './path2d-element'
 
 type ElementType = Path2DElement['type']
 
