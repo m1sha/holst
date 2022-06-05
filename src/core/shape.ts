@@ -70,6 +70,18 @@ export default class Shape implements Interactive, Orderable {
     return this.figures.roundRects
   }
 
+  bezierCurveTos () {
+    return this.figures.bezierCurveTos
+  }
+
+  get quadraticCurveTos () {
+    return this.figures.quadraticCurveTos
+  }
+
+  get arrows () {
+    return this.figures.arrows
+  }
+
   rect (rect: IRect): this | Shape {
     this.mutablePath.rect(rect.x, rect.y, rect.width, rect.height)
     this.#modified = true
@@ -125,6 +137,12 @@ export default class Shape implements Interactive, Orderable {
   circle (point: IPoint, radius: number): this | Shape {
     this.mutablePath.moveTo(point.x + radius, point.y + radius)
     this.mutablePath.circle(point.x, point.y, radius)
+    this.#modified = true
+    return this
+  }
+
+  bezierCurveTo (cp1: IPoint, cp2: IPoint, p: IPoint): this | Shape {
+    this.mutablePath.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, p.x, p.y)
     this.#modified = true
     return this
   }
@@ -209,14 +227,12 @@ export default class Shape implements Interactive, Orderable {
   }
 
   get bounds (): Rect {
-    // this.applyModifiers()
     const points = this.mutablePath.toPoints()
     return calcBounds(points)
   }
 
   toPath2D (globalTransform?: Matrix2D): Path2DBase {
     if (this.#modified) {
-      // this.applyModifiers()
       this.#cache = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : globalTransform)
       this.#modified = false
     }

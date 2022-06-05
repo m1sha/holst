@@ -47,8 +47,8 @@ function update (elements: Element[], size: Size) {
   collisionsDetect(elements)
   for (const el of elements) {
     const c = el.shape.circles[0]
-    if (c.x + c.r > size.width || c.x - c.r < 0) el.velocity.x *= -1
-    if (c.y + c.r > size.height || c.y - c.r < 0) el.velocity.y *= -1
+    if (c.x + c.radius > size.width || c.x - c.radius < 0) el.velocity.x *= -1
+    if (c.y + c.radius > size.height || c.y - c.radius < 0) el.velocity.y *= -1
     el.shape.circles[0].x += el.velocity.x
     el.shape.circles[0].y += el.velocity.y
   }
@@ -62,11 +62,11 @@ function collisionsDetect (elements: Element[]) {
     for (const el2 of elements) {
       if (i === j) continue
       const c2 = el2.shape.circles[0]
-      if (c.x > c2.x - c2.r && c.x < c2.x + c2.r) {
+      if (c.x > c2.x - c2.radius && c.x < c2.x + c2.radius) {
         el.velocity.x *= -1
         // el2.velocity.x *= -1
       }
-      if (c.y > c2.y - c2.r && c.y < c2.y + c2.r) {
+      if (c.y > c2.y - c2.radius && c.y < c2.y + c2.radius) {
         el.velocity.y *= -1
         // el2.velocity.y *= -1
       }

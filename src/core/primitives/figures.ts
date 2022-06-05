@@ -1,17 +1,7 @@
-import { Arc, ArcTo, Circle, Ellipse, LineTo, MoveTo, Rect, RoundRect } from '../path2d/types/path2d-element'
-import {
-  ArcDecorator,
-  ArcToDecorator,
-  CircleDecorator,
-  EllipseDecorator,
-  LineToDecorator,
-  MoveToDecorator,
-  RectDecorator,
-  RoundRectDecorator
-} from '../path2d/decorators/path2d-decorators'
+import { Path2DElement } from '../path2d/types/path2d-element'
 import { Path2DRecorder } from '../path2d/path2d-recorder'
 import { Mutable } from '../mutable'
-
+import { createPath2ElementDecorator } from '../path2d/decorators/path2d-decorator'
 export class Figures {
   private recorder: Path2DRecorder
   private mutable: Mutable
@@ -22,34 +12,50 @@ export class Figures {
   }
 
   get moveTos () {
-    return this.recorder.find('MoveTo').map(p => new MoveToDecorator(p as MoveTo, this.mutable))
+    return this.createDecorator('MoveTo')
   }
 
   get circles () {
-    return this.recorder.find('Circle').map(p => new CircleDecorator(p as Circle, this.mutable))
+    return this.createDecorator('Circle')
   }
 
   get ellipses () {
-    return this.recorder.find('Ellipse').map(p => new EllipseDecorator(p as Ellipse, this.mutable))
+    return this.createDecorator('Ellipse')
   }
 
   get arcs () {
-    return this.recorder.find('Arc').map(p => new ArcDecorator(p as Arc, this.mutable))
+    return this.createDecorator('Arc')
   }
 
   get arcTos () {
-    return this.recorder.find('ArcTo').map(p => new ArcToDecorator(p as ArcTo, this.mutable))
+    return this.createDecorator('ArcTo')
   }
 
   get lineTos () {
-    return this.recorder.find('LineTo').map(p => new LineToDecorator(p as LineTo, this.mutable))
+    return this.createDecorator('LineTo')
   }
 
   get rects () {
-    return this.recorder.find('Rect').map(p => new RectDecorator(p as Rect, this.mutable))
+    return this.createDecorator('Rect')
   }
 
   get roundRects () {
-    return this.recorder.find('RoundRect').map(p => new RoundRectDecorator(p as RoundRect, this.mutable))
+    return this.createDecorator('RoundRect')
+  }
+
+  get bezierCurveTos () {
+    return this.createDecorator('BezierCurveTo')
+  }
+
+  get quadraticCurveTos () {
+    return this.createDecorator('QuadraticCurveTo')
+  }
+
+  get arrows () {
+    return this.createDecorator('Arrow')
+  }
+
+  private createDecorator <T extends Path2DElement['type']> (type: T) {
+    return this.recorder.find(type).map(p => createPath2ElementDecorator<T>(p, this.mutable))
   }
 }
