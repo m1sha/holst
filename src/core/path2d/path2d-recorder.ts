@@ -22,6 +22,14 @@ export class Path2DRecorder {
     return this.stack.length
   }
 
+  update (index: number, el: Path2DElement): void {
+    this.stack[index] = el
+  }
+
+  get (index: number): Readonly<Path2DElement> {
+    return this.stack[index]
+  }
+
   find (type: ElementType) {
     const items = []
     for (let index = 0; index < this.stack.length; index++) {
