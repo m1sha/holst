@@ -1,5 +1,5 @@
 import { RoundRect } from '../../src/core/path2d/types/path2d-element'
-import { createPath2ElementDecorator } from '../../src/core/path2d/decorators/path2d-decorator'
+import { createPath2ElementDecorator } from '../../src/core/path2d/path2d-decorator'
 
 test('Path2ElementDecorator', () => {
   let modified = false

@@ -1,7 +1,7 @@
 import { Path2DElement } from '../path2d/types/path2d-element'
 import { Path2DRecorder } from '../path2d/path2d-recorder'
 import { Mutable } from '../mutable'
-import { createPath2ElementDecorator } from '../path2d/decorators/path2d-decorator'
+import { createPath2ElementDecorator } from '../path2d/path2d-decorator'
 export class Figures {
   private recorder: Path2DRecorder
   private mutable: Mutable
