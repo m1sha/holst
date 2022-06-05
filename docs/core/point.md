@@ -1,10 +1,10 @@
 # Point
 
-```typescript
-interface Point {
-    x: number
-    y: number
-}
-```
-
 [Go to Home](./index)
+
+## Constructor
+
+```ts
+  new (point: { x: number; y: number })
+  new (x: number, y: number)
+```

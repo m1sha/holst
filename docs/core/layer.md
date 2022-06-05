@@ -1,11 +1,11 @@
 # Layer
 
-[Go to Home](./index)
+[Go to Home](./index.md)
 
 ## Constructor
 
 ```ts
-  constructor (order: number, styleManager: StyleManager, name?: string)
+  new (order: number, styleManager: StyleManager, name?: string)
 ```
 
 ## Properties
@@ -38,4 +38,4 @@ entities| Readonly<Orderable[]>|List of orderable entities in the layer|
 | bringToFront (item: Shape | TextBlock | Bitmap): void| Brings an item to front|
 | bringToForward (item: Shape | TextBlock | Bitmap): void| Brings an item to forward|
 
-[Go to Home](./index)
+[Go to Home](./index.md)

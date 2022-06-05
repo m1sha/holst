@@ -5,7 +5,7 @@
 ## Constructor
 
 ```ts
-  constructor ()
+  new ()
 ```
 
 ## Properties

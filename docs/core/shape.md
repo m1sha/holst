@@ -5,7 +5,7 @@
 ## Constructor
 
 ```ts
-constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null)
+new (path: MutablePath2D, order: number, style: ShapeStyle | null = null)
 ```
 
 ## Properties
