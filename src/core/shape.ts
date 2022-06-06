@@ -248,6 +248,13 @@ export default class Shape implements Interactive, Orderable {
     this.importTransformation(shape.exportTransformation())
   }
 
+  // Method for matrix test. Don't use directly
+  injectTransform (transform: Matrix2D) {
+    if (!transform) throw new Error('matrix is undefined')
+    this.mutablePath.transform = transform.copy()
+    this.#modified = true
+  }
+
   copyStyle (): ShapeStyle {
     return this.style.clone()
   }
