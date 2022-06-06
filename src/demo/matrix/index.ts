@@ -4,22 +4,37 @@ import { Scene, Renderer2D, Color, Rect } from 'index'
 
 export function createMatrixDemo (canvas: HTMLCanvasElement) {
   const scene = new Scene()
+  scene.styleManager.defineShapeStyle('base', { lineWidth: 8, lineJoin: 'miter' })
+  const blueRect = scene.styleManager.shapes('base').clone({ strokeStyle: Color.blue })
+  const redRect = scene.styleManager.shapes('base').clone({ strokeStyle: Color.red })
   const layer = scene.createLayer()
-  const shape0 = layer.createShape({ strokeStyle: Color.blue })
-  const shape = layer.createShape({ strokeStyle: Color.black })
-  shape0.rect(new Rect(100, 100, 80, 80))
-  shape.rect(new Rect(100, 100, 80, 80))
+  const shape0 = layer.createShape(blueRect)
+  const shape = layer.createShape(redRect)
+  const rect = new Rect(200, 200, 180, 80)
+  shape0.rect(rect)
+  shape.rect(rect)
   // shape.rotate(Math.PI / 2)
 
   // domMatrix = domMatrix.rotateAxisAngle(140, 140, 0, Math.PI / 2)
   let i = 0
-  const renderer = new Renderer2D(canvas.getContext('2d')!!)
+  let i2 = 0.1
+  let scale = 2
+  const renderer = new Renderer2D(canvas.getContext('2d', { colorSpace: 'display-p3' })!!)
   renderer.render(scene)
   renderer.onFrameChanged = () => {
     let domMatrix = new DOMMatrix()
-    domMatrix = domMatrix.translate(140, 140).multiply(domMatrix.rotate(i++)).translate(-140, -140)
-    const m = new Matrix2D(domMatrix)
+    const x = rect.x + rect.width / 2
+    const y = rect.x + rect.height / 2
+    domMatrix = domMatrix.translate(x, y).rotate(i++).translate(-x, -y)
+
+    scale += i2
+    let domMatrix2 = new DOMMatrix()
+    domMatrix2 = domMatrix.translate(x, y).scale(scale, scale).translate(-x, -y)
+
+    const m = new Matrix2D(domMatrix.multiply(domMatrix2))
     shape.injectTransform(m)
     if (i > 360) i = 0
+    if (scale > 2) i2 = -0.02
+    if (scale < 0.3) i2 = 0.02
   }
 }
