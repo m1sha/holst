@@ -1,5 +1,12 @@
 import { Point, IPoint } from './point'
 
+interface IDOMMatrix2D {
+  rotate (deg: number): void
+  scale (x: number, y: number): void
+  translate (x: number, y: number): void
+  multiply (m: DOMMatrix): DOMMatrix
+}
+
 export class Matrix2D {
   private matrix: DOMMatrix
 
@@ -58,15 +65,17 @@ export class Matrix2D {
     this.matrix = MatrixFactory.create([a || 0, b || 0, c || 0, d || 0, e || 0, f || 0])
   }
 
-  scale (point: IPoint): Matrix2D {
-    this.matrix = this.matrix.multiply(MatrixFactory.fromMatrix({ a: point.x, d: point.y }))
+  scale ({ x, y }: IPoint, scale: IPoint): Matrix2D {
+    let domMatrix3 = new DOMMatrix()
+    domMatrix3 = domMatrix3.translate(x, y).scale(scale.x, scale.y).translate(-x, -y)
+    this.matrix = this.matrix.multiply(domMatrix3)
     return this
   }
 
-  rotate (angle: number): Matrix2D {
-    const sin = Math.sin(angle)
-    const cos = Math.cos(angle)
-    this.matrix = this.matrix.multiply(MatrixFactory.fromMatrix({ a: cos, b: -sin, c: sin, d: cos }))
+  rotate ({ x, y }: IPoint, angle: number): Matrix2D {
+    let domMatrix3 = new DOMMatrix()
+    domMatrix3 = domMatrix3.translate(x, y).rotate(angle).translate(-x, -y)
+    this.matrix = this.matrix.multiply(domMatrix3)
     return this
   }
 
@@ -85,6 +94,10 @@ export class Matrix2D {
 
   static get identity (): Matrix2D {
     return matrix(1, 0, 0, 1, 0, 0)
+  }
+
+  private get instance () {
+    return (MatrixFactory.instance as unknown) as IDOMMatrix2D
   }
 }
 
