@@ -145,6 +145,8 @@ export class Color {
   }
 
   static readonly black = new Color('#000000')
+  static readonly lightGrey = new Color('#d8d8d8')
+  static readonly darkGrey = new Color('#484848')
   static readonly white = new Color('#ffffff')
   static readonly red = new Color('#ff0000')
   static readonly green = new Color('#00ff00')
