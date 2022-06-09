@@ -1,18 +1,29 @@
 import { Matrix2D } from '../../core/matrix'
-import { Scene, Renderer2D, Color, Rect } from 'index'
+import { Scene, Renderer2D, Color, Rect, Point } from 'index'
+import { Size } from '../../core/size'
 // import { Size } from '../../core/size'
 
 export function createMatrixDemo (canvas: HTMLCanvasElement) {
   const scene = new Scene()
+  const size: Size = canvas
+  const frame = new Rect(0, 0, size.width, size.height)
   scene.styleManager.defineShapeStyle('base', { lineWidth: 8, lineJoin: 'miter' })
-  const blueRect = scene.styleManager.shapes('base').clone({ strokeStyle: Color.blue })
-  const redRect = scene.styleManager.shapes('base').clone({ strokeStyle: Color.red })
+  const blueRect = scene.styleManager.shapes('base').clone({ strokeStyle: Color.lightGrey })
+  const redRect = scene.styleManager.shapes('base').clone({ strokeStyle: Color.darkGrey })
   const layer = scene.createLayer()
   const shape0 = layer.createShape(blueRect)
-  const shape = layer.createShape(redRect)
-  const rect = new Rect(200, 200, 180, 80)
+
+  const rect = new Rect(200, 200, 120, 80)
+  layer.createShape({ fillStyle: Color.red }).circle(frame.absCenter, 3)
   shape0.rect(rect)
-  shape.rect(rect)
+  const shapes = [
+    layer.createShape(redRect).roundRect(rect, 12),
+    layer.createShape(redRect).roundRect(rect, 12),
+    layer.createShape(redRect).roundRect(rect, 12),
+    layer.createShape(redRect).roundRect(rect, 12)
+  ]
+
+  const line = layer.createShape({ strokeStyle: Color.red }).moveTo(Point.zero).lineTo(Point.zero)
   // shape.rotate(Math.PI / 2)
 
   // domMatrix = domMatrix.rotateAxisAngle(140, 140, 0, Math.PI / 2)
@@ -22,17 +33,31 @@ export function createMatrixDemo (canvas: HTMLCanvasElement) {
   const renderer = new Renderer2D(canvas.getContext('2d', { colorSpace: 'display-p3' })!!)
   renderer.render(scene)
   renderer.onFrameChanged = () => {
-    let domMatrix = new DOMMatrix()
-    const x = rect.x + rect.width / 2
-    const y = rect.x + rect.height / 2
-    domMatrix = domMatrix.translate(x, y).rotate(i++).translate(-x, -y)
-
+    const count = shapes.length
+    const d = 360 / count
     scale += i2
-    let domMatrix2 = new DOMMatrix()
-    domMatrix2 = domMatrix.translate(x, y).scale(scale, scale).translate(-x, -y)
+    for (let j = 0; j < count; j++) {
+      const x = rect.x + rect.width / 2
+      const y = rect.x + rect.height / 2
+      const a = i + (d * j)
+      const rotByCenterFrame = Matrix2D.identity.rotate(frame.absCenter, a)
+      const newP = rotByCenterFrame.applyMatrix({ x, y })
+      const rotByCenterSelf = Matrix2D.identity.rotate(newP, a)
+      // const newP2 = rotByCenterSelf.applyMatrix(newP)
+      // const scaleByCenterSelf = Matrix2D.identity.scale(newP, { x: a, y: a})
 
-    const m = new Matrix2D(domMatrix.multiply(domMatrix2))
-    shape.injectTransform(m)
+      line.moveTos[0].x = frame.absCenter.x
+      line.moveTos[0].y = frame.absCenter.y
+      line.lineTos[0].x = newP.x
+      line.lineTos[0].y = newP.y
+
+      // let domMatrix3 = new DOMMatrix()
+      // domMatrix3 = domMatrix.translate(frame.absCenter.x, frame.absCenter.y).rotate(i++).translate(-frame.absCenter.x, -frame.absCenter.y)
+      const m = rotByCenterSelf.mul(rotByCenterFrame)
+      shapes[j].injectTransform(m)
+    }
+    i += 2
+
     if (i > 360) i = 0
     if (scale > 2) i2 = -0.02
     if (scale < 0.3) i2 = 0.02
