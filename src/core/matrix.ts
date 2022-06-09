@@ -65,17 +65,17 @@ export class Matrix2D {
     this.matrix = MatrixFactory.create([a || 0, b || 0, c || 0, d || 0, e || 0, f || 0])
   }
 
-  scale ({ x, y }: IPoint, scale: IPoint): Matrix2D {
-    let domMatrix3 = new DOMMatrix()
-    domMatrix3 = domMatrix3.translate(x, y).scale(scale.x, scale.y).translate(-x, -y)
-    this.matrix = this.matrix.multiply(domMatrix3)
+  scale (scale: IPoint, point?: IPoint): Matrix2D {
+    let m = new DOMMatrix()
+    m = point ? m.translate(point.x, point.y).scale(scale.x, scale.y).translate(-point.x, -point.y) : m.scale(scale.x, scale.y)
+    this.matrix = this.matrix.multiply(m)
     return this
   }
 
-  rotate ({ x, y }: IPoint, angle: number): Matrix2D {
-    let domMatrix3 = new DOMMatrix()
-    domMatrix3 = domMatrix3.translate(x, y).rotate(angle).translate(-x, -y)
-    this.matrix = this.matrix.multiply(domMatrix3)
+  rotate (angle: number, point?: IPoint): Matrix2D {
+    let m = new DOMMatrix()
+    m = point ? m.translate(point.x, point.y).rotate(angle).translate(-point.x, -point.y) : m.rotate(angle)
+    this.matrix = this.matrix.multiply(m)
     return this
   }
 
