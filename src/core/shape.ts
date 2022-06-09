@@ -58,6 +58,10 @@ export default class Shape implements Interactive, Orderable {
     return this.figures.moveTos
   }
 
+  get lineTos () {
+    return this.figures.lineTos
+  }
+
   get lines () {
     return this.figures.lineTos
   }
