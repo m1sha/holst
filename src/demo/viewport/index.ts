@@ -9,7 +9,7 @@ export function createViewportDemo (canvas: HTMLCanvasElement, controls: HTMLCan
   scrollBox.create()
 
   // renderer.viewport.x = 120
-  renderer.viewport.y = 120
+  // renderer.viewport.y = 120
   renderer.viewport.scale = 1
   setEvents(controls, renderer.viewport)
   renderer.render(scene)
