@@ -286,4 +286,9 @@ export default class Shape implements Interactive, Orderable {
     this.eventHandler.remove(this, type)
     return this
   }
+
+  /** @internal */
+  update (): void {
+    this.#modified = true
+  }
 }

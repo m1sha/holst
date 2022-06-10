@@ -3,19 +3,51 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
   <title>Viewport Move & Scale Demo</title>
   <style>
     .border {
       border: 1px solid #d4d4d4;
     }
+
+    .input-width {
+      width: 85px;
+    }
   </style>
 </head>
 <body>
-  <canvas id="canvas" width="800" height="600" class="border"></canvas>
+  <div class="row">
+    <div class="col-8 p-4">
+      <canvas id="canvas" width="800" height="600" class="border"></canvas>
+    </div>
+    <div class="col-4 p-4">
+      <div class="row">
+        <label for="zoom" class="form-label">Zoom</label>
+        <input id="zoom" type="number" class="form-control input-width" value="100" min="10" max="100" step="10">%
+      </div>
+      <div class="row mt-5">
+        <label>Pan</label>
+        <div class="col p-1">
+          <label for="panX" class="form-label">X</label>
+          <input id="panX" type="number" class="form-control input-width" value="0">
+        </div>
+        <div class="col p-1">
+          <label for="panY" class="form-label">Y</label>
+          <input id="panY" type="number" class="form-control input-width" value="0">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
   <script src="../../dist/viewport.bundle.js"></script>
   <script>
     var canvas = document.getElementById('canvas')
-    demo.createViewportDemo(canvas)
+    var zoom = document.getElementById('zoom')
+    var panX = document.getElementById('panX')
+    var panY = document.getElementById('panY')
+    demo.createViewportDemo(canvas, [zoom, panX, panY])
   </script>
 </body>
 </html>

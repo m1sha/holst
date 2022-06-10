@@ -1,15 +1,17 @@
+import { Viewport } from '../../core/viewport'
 import { Scene, Renderer2D, Rect, Point, Shape } from 'index'
 import { ScrollBox } from '../../core/components/scroll-box'
-export function createViewportDemo (canvas: HTMLCanvasElement) {
+export function createViewportDemo (canvas: HTMLCanvasElement, controls: HTMLCanvasElement[]) {
   const scene = createScene()
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
 
   const scrollBox = new ScrollBox(scene, renderer.viewport)
   scrollBox.create()
 
-  renderer.viewport.x = 0
+  // renderer.viewport.x = 120
+  renderer.viewport.y = 120
   renderer.viewport.scale = 1
-
+  setEvents(controls, renderer.viewport)
   renderer.render(scene)
 }
 
@@ -66,4 +68,17 @@ function setInteractive (shape: Shape) {
         .add(shift)
       shape.move(point)
     })
+}
+
+function setEvents (controls: HTMLCanvasElement[], viewport: Viewport) {
+  const [zoom, panX, panY] = controls
+  zoom.onchange = e => console.log(e)
+  panX.onchange = e => {
+    const val = +(e.target as HTMLInputElement).value
+    viewport.x = val
+  }
+  panY.onchange = e => {
+    const val = +(e.target as HTMLInputElement).value
+    viewport.y = val
+  }
 }

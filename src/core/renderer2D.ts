@@ -30,6 +30,10 @@ export class Renderer2D {
   render (scene: Scene): void {
     if (!this.animationHandler.isStarted) this.animationHandler.start(scene)
     const layers = sort<Layer>(scene.layers)
+    if (this.viewport.modified) {
+      layers.forEach(l => l.shapes.forEach(s => s.update()))
+      this.viewport.modified = false
+    }
     for (const layer of [...layers, scene.actionLayer]) this.drawLayer(layer)
   }
 
