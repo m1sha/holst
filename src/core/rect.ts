@@ -9,16 +9,28 @@ export interface IRect {
   height: number
 }
 export class Rect implements IRect, Size {
-  x: number
-  y: number
-  width: number
-  height: number
+  x: number = 0
+  y: number = 0
+  width: number = 0
+  height: number = 0
 
-  constructor (x: number, y: number, width: number, height: number) {
-    this.x = x
-    this.y = y
-    this.width = width
-    this.height = height
+  constructor (p: IPoint, size: Size)
+  constructor (x: number, y: number, width: number, height: number)
+  constructor (...args: any[]) {
+    if (args.length === 2) {
+      const [p, size] = args
+      this.x = p.x
+      this.y = p.y
+      this.width = size.width
+      this.height = size.height
+    }
+    if (args.length === 4) {
+      const [x, y, width, height] = args
+      this.x = x
+      this.y = y
+      this.width = width
+      this.height = height
+    }
   }
 
   get center () {
