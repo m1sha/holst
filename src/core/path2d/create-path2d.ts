@@ -107,7 +107,7 @@ handlers.QuadraticCurveTo = ({ path, element, transform, globalTransform }) => {
 
 handlers.Rect = ({ path, element, transform, globalTransform }) => {
   if (element.type !== 'Rect') return
-  const { x, y, w, h } = element
+  const { x, y, width: w, height: h } = element
   const p0 = calcPoint({ x, y }, transform, globalTransform)
   const p1 = calcPoint({ x: x + w, y }, transform, globalTransform)
   const p2 = calcPoint({ x: x + w, y: y + h }, transform, globalTransform)
@@ -128,7 +128,7 @@ handlers.Circle = ({ path, element, transform, stack, globalTransform }) => {
 
 handlers.RoundRect = ({ path, element, transform, stack, globalTransform }) => {
   if (element.type !== 'RoundRect') return
-  const { x, y, w, h, tl, tr, bl, br } = element
+  const { x, y, width: w, height: h, tl, tr, bl, br } = element
   const pack = packager(path, transform, stack, globalTransform)
   exec('MoveTo', pack({ type: 'MoveTo', x: x + tl, y }))
   exec('LineTo', pack({ type: 'LineTo', x: x + w - tr, y }))

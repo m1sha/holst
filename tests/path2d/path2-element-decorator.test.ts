@@ -18,5 +18,5 @@ test('Path2ElementDecorator', () => {
 })
 
 function createTestRect (): RoundRect {
-  return { type: 'RoundRect', x: 10, y: 10, w: 10, h: 10, tl: 2, tr: 2, bl: 2, br: 2 }
+  return { type: 'RoundRect', x: 10, y: 10, width: 10, height: 10, tl: 2, tr: 2, bl: 2, br: 2 }
 }

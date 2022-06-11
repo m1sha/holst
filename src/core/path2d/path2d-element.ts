@@ -40,12 +40,12 @@ export type QuadraticCurveTo = {
 
 export type Rect = {
   type: 'Rect',
-  x: number, y: number, w: number, h: number
+  x: number, y: number, width: number, height: number
 }
 
 export type RoundRect = {
   type: 'RoundRect',
-  x: number, y: number, w: number, h: number, tl: number, tr: number, bl: number, br: number
+  x: number, y: number, width: number, height: number, tl: number, tr: number, bl: number, br: number
 }
 
 export type Arrow = {

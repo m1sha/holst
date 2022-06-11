@@ -56,11 +56,11 @@ export class MutablePath2D implements Path2DBase {
   }
 
   rect (x: number, y: number, w: number, h: number): void {
-    this.stack.push({ type: 'Rect', x, y, w, h })
+    this.stack.push({ type: 'Rect', x, y, width: w, height: h })
   }
 
   roundRect (x: number, y: number, w: number, h: number, tl: number, tr: number, bl: number, br: number): void {
-    this.stack.push({ type: 'RoundRect', x, y, w, h, tl, tr, bl, br })
+    this.stack.push({ type: 'RoundRect', x, y, width: w, height: h, tl, tr, bl, br })
   }
 
   polygon (points: {x: number; y: number}[]) {

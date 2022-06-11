@@ -80,7 +80,7 @@ handlers.QuadraticCurveTo = (arr, { element, transform }) => {
 
 handlers.Rect = (arr, { element, transform, globalTransform }) => {
   if (element.type !== 'Rect') return
-  const { x, y, w, h } = element
+  const { x, y, width: w, height: h } = element
   const p1 = calcPoint({ x, y }, transform, globalTransform)
   const p2 = calcPoint({ x: x + w, y }, transform, globalTransform)
   const p3 = calcPoint({ x: x + w, y: y + h }, transform, globalTransform)

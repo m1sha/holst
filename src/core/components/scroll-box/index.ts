@@ -16,14 +16,18 @@ export class ScrollBox {
     this.scene = scene
     this.viewport = viewport
     this.style = defaultScrollBarStyle()
-    this.hScrollBar = new HScrollBar(90, 400, this.style)
-    this.vScrollBar = new VScrollBar(40, 490, this.style)
+    this.hScrollBar = new HScrollBar(90, 400, viewport, this.style)
+    this.hScrollBar.onBackButtonClick = () => this.viewport.x--
+    this.hScrollBar.onForwardButtonClick = () => this.viewport.x++
+    this.vScrollBar = new VScrollBar(40, 490, viewport, this.style)
+    this.vScrollBar.onBackButtonClick = () => this.viewport.y--
+    this.vScrollBar.onForwardButtonClick = () => this.viewport.y++
   }
 
   create () {
     const layer = this.scene.createLayer('scroll-box', true)
-    this.hScrollBar.create(layer, this.viewport)
-    this.vScrollBar.create(layer, this.viewport)
+    this.hScrollBar.create(layer)
+    this.vScrollBar.create(layer)
     this.createBlock(layer)
   }
 
