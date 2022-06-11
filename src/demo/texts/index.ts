@@ -6,7 +6,7 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
 
   const p = new Point(100, 100)
   layer0.createShape({ fillStyle: Color.red }).circle(p, 3)
-  const b = layer0.createTextBlock('Hello\nWorld', { fontSize: '48px' }, p).bounds
+  const b = layer0.createTextBlock('Hello\nWorld!!!\nSome Text Here', { fontSize: '48px' }, p).bounds
 
   layer0.createShape({ strokeStyle: Color.lightGrey }).rect(b)
 

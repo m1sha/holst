@@ -55,11 +55,17 @@ export class TextBlock implements Orderable {
   }
 
   get bounds (): IRect {
-    return new Rect(this.target, { width: this.getWidth(), height: this.getHeight() })
+    return new Rect(this.target, { width: this.getWidth(), height: this.lineHeight * this.lines.length })
   }
 
   private getWidth (text?: string): number {
-    return this.measure(text || this.text, this.style).width
+    const txt = text || this.text
+    if (txt.indexOf('\n') < 0) return this.measure(txt, this.style).width
+    const widths = []
+    for (const line of txt.split('\n')) {
+      widths.push(this.measure(line, this.style).width)
+    }
+    return Math.max.apply(null, widths)
   }
 
   private getHeight (text?: string) {

@@ -92,7 +92,7 @@ export class Renderer2D {
     if (!block.multiline) {
       this.ctx.fillText(block.text, block.target.x, block.target.y)
     } else {
-      let y = block.target.y
+      let y = block.target.y + block.lineHeight
       for (const line of block.lines) {
         this.ctx.fillText(line, block.target.x, y)
         y += block.lineHeight
