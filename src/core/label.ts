@@ -1,6 +1,7 @@
 import { TextStyle } from './label-style'
 import Orderable from './orderable'
 import { Point } from './point'
+import { IRect, Rect } from './rect'
 
 export interface Text {
   value: string,
@@ -51,6 +52,10 @@ export class TextBlock implements Orderable {
     const text = this.text
     if (!text) return []
     return text.indexOf('\n') > -1 ? text.split('\n') : [text]
+  }
+
+  get bounds (): IRect {
+    return new Rect(this.target, { width: this.getWidth(), height: this.getHeight() })
   }
 
   private getWidth (text?: string): number {
