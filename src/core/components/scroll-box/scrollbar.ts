@@ -1,6 +1,7 @@
 import { ScrollBarStyle } from './scrollbar-style'
 import { Layer } from '../../layers'
 import { Size } from '../../size'
+import { Rect } from '../../rect'
 import Shape from '../../shape'
 import { ScrollbarBehavior } from './scrollbar-behavior'
 import { ScrollBarDesign } from './scrollbar-design'
@@ -14,12 +15,12 @@ export abstract class ScrollBar {
   protected forwardButton: Shape | null = null
   protected thumbButton: Shape | null = null
   protected type?: 'h' | 'v'
-  behavior: ScrollbarBehavior | null = null
+  protected behavior: ScrollbarBehavior | null = null
+  protected boxSize: Size
   position: number
   maxValue: number
   step: number
   style: ScrollBarStyle
-  boxSize: Size
   onBackButtonClick: (() => void) | null = null
   onForwardButtonClick: (() => void) | null = null
 
@@ -31,18 +32,28 @@ export abstract class ScrollBar {
     this.boxSize = boxSize
   }
 
-  abstract getScrollBarDesign (layer: Layer): ScrollBarDesign
+  protected abstract getScrollBarDesign (layer: Layer): ScrollBarDesign
 
   create (layer: Layer): void {
     this.design = this.getScrollBarDesign(layer)
     this.tracker = this.design.createTracker()
     this.backButton = this.design.createBackArrowButton()
     this.forwardButton = this.design.createForwardArrowButton()
-    this.design.createArrows(this.type!!)
     this.thumbButton = this.design.createThumbButton()
-    this.behavior = new ScrollbarBehavior(this.type!!, [this.backButton, this.forwardButton, this.thumbButton, this.tracker], this.style, this.step)
+    this.design.createArrows(this.type!!)
+
+    const controls = [this.backButton, this.forwardButton, this.thumbButton, this.tracker]
+    this.behavior = new ScrollbarBehavior(this.type!!, controls, this.style, this.step)
     this.behavior.onBackButtonClick = () => this.onBackButtonClick && this.onBackButtonClick()
     this.behavior.onForwardButtonClick = () => this.onForwardButtonClick && this.onForwardButtonClick()
+  }
+
+  createBlock (layer: Layer) {
+    const { trackSize, trackBackgroundColor, trackBorderColor } = this.style
+    const { width, height } = this.boxSize
+    layer
+      .createShape({ fillStyle: trackBackgroundColor, strokeStyle: trackBorderColor })
+      .rect(new Rect(width - trackSize, height - trackSize, trackSize, trackSize))
   }
 }
 

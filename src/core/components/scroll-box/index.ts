@@ -1,8 +1,5 @@
 import { Viewport } from '../../viewport'
 import { Scene } from '../../scene'
-import { Rect } from '../../rect'
-import { Layer } from '../../layers'
-
 import { ScrollBarStyle, defaultScrollBarStyle } from './scrollbar-style'
 import { HScrollBar, VScrollBar } from './scrollbar'
 
@@ -28,19 +25,22 @@ export class ScrollBox {
     const layer = this.scene.createLayer('scroll-box', true)
     this.hScrollBar.create(layer)
     this.vScrollBar.create(layer)
-    this.createBlock(layer)
+    this.vScrollBar.createBlock(layer)
   }
 
-  move (x: number, y: number) {
-    this.hScrollBar.position = x
-    this.vScrollBar.position = y
+  get positionX (): number {
+    return this.hScrollBar.position
   }
 
-  private createBlock (layer: Layer) {
-    const { trackSize, trackBackgroundColor, trackBorderColor } = this.style
-    const { width, height } = this.viewport
-    layer
-      .createShape({ fillStyle: trackBackgroundColor, strokeStyle: trackBorderColor })
-      .rect(new Rect(width - trackSize, height - trackSize, trackSize, trackSize))
+  get maxX (): number {
+    return this.hScrollBar.maxValue
+  }
+
+  get positionY (): number {
+    return this.vScrollBar.position
+  }
+
+  get maxY (): number {
+    return this.vScrollBar.maxValue
   }
 }
