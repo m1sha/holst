@@ -16,12 +16,12 @@ export class ScrollBox {
     this.scene = scene
     this.viewport = viewport
     this.style = defaultScrollBarStyle()
-    this.hScrollBar = new HScrollBar(90, 400, viewport, this.style)
-    this.hScrollBar.onBackButtonClick = () => this.viewport.x--
-    this.hScrollBar.onForwardButtonClick = () => this.viewport.x++
-    this.vScrollBar = new VScrollBar(40, 490, viewport, this.style)
-    this.vScrollBar.onBackButtonClick = () => this.viewport.y--
-    this.vScrollBar.onForwardButtonClick = () => this.viewport.y++
+    this.hScrollBar = new HScrollBar(90, 400, 5, viewport, this.style)
+    this.hScrollBar.onBackButtonClick = () => (this.viewport.x -= this.hScrollBar.step)
+    this.hScrollBar.onForwardButtonClick = () => (this.viewport.x += this.hScrollBar.step)
+    this.vScrollBar = new VScrollBar(40, 490, 5, viewport, this.style)
+    this.vScrollBar.onBackButtonClick = () => (this.viewport.y -= this.vScrollBar.step)
+    this.vScrollBar.onForwardButtonClick = () => (this.viewport.y += this.vScrollBar.step)
   }
 
   create () {

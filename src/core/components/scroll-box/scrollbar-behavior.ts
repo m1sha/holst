@@ -11,11 +11,12 @@ export class ScrollbarBehavior {
   protected tracker: Shape
   thumbButtonRect: IRect
   style: ScrollBarStyle
+  step: number
 
   onBackButtonClick: (() => void) | null = null
   onForwardButtonClick: (() => void) | null = null
 
-  constructor (dir: 'h' | 'v', controls: Shape[], style: ScrollBarStyle) {
+  constructor (dir: 'h' | 'v', controls: Shape[], style: ScrollBarStyle, step: number) {
     this.dir = dir
     this.style = style
     const [backButton, forwardButton, thumbButton, tracker] = controls
@@ -23,6 +24,7 @@ export class ScrollbarBehavior {
     this.forwardButton = forwardButton
     this.thumbButton = thumbButton
     this.tracker = tracker
+    this.step = step
 
     this.thumbButtonRect = this.thumbButton.roundRects[0] as IRect
 
@@ -36,16 +38,16 @@ export class ScrollbarBehavior {
 
   private backButtonClick () {
     this.backButton.on('click', () => {
-      if (this.dir === 'h') this.thumbButtonRect.x--
-      else this.thumbButtonRect.y--
+      if (this.dir === 'h') this.thumbButtonRect.x -= this.step
+      else this.thumbButtonRect.y -= this.step
       if (this.onBackButtonClick) this.onBackButtonClick()
     })
   }
 
   private forwardButtonClick () {
     this.forwardButton.on('click', () => {
-      if (this.dir === 'h') this.thumbButtonRect.x++
-      else this.thumbButtonRect.y++
+      if (this.dir === 'h') this.thumbButtonRect.x += this.step
+      else this.thumbButtonRect.y += this.step
       if (this.onForwardButtonClick) this.onForwardButtonClick()
     })
   }

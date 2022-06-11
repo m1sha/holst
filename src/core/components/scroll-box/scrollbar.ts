@@ -17,14 +17,16 @@ export abstract class ScrollBar {
   behavior: ScrollbarBehavior | null = null
   position: number
   maxValue: number
+  step: number
   style: ScrollBarStyle
   boxSize: Size
   onBackButtonClick: (() => void) | null = null
   onForwardButtonClick: (() => void) | null = null
 
-  constructor (position: number, maxValue: number, boxSize: Size, style: ScrollBarStyle) {
+  constructor (position: number, maxValue: number, step: number, boxSize: Size, style: ScrollBarStyle) {
     this.position = position ?? 0
     this.maxValue = maxValue ?? 0
+    this.step = step
     this.style = style
     this.boxSize = boxSize
   }
@@ -38,7 +40,7 @@ export abstract class ScrollBar {
     this.forwardButton = this.design.createForwardArrowButton()
     this.design.createArrows(this.type!!)
     this.thumbButton = this.design.createThumbButton()
-    this.behavior = new ScrollbarBehavior(this.type!!, [this.backButton, this.forwardButton, this.thumbButton, this.tracker], this.style)
+    this.behavior = new ScrollbarBehavior(this.type!!, [this.backButton, this.forwardButton, this.thumbButton, this.tracker], this.style, this.step)
     this.behavior.onBackButtonClick = () => this.onBackButtonClick && this.onBackButtonClick()
     this.behavior.onForwardButtonClick = () => this.onForwardButtonClick && this.onForwardButtonClick()
   }
