@@ -12,7 +12,8 @@ Task list
   ✔ UI @done(22-05-19 18:36)
   ✔ Event listners @done(22-05-19 23:08)
   ✔ Impl base tracking @done(22-05-22 22:29)
-  ☐ Behavior
+  ✔ Behavior @done(22-06-11 23:09)
+  ☐ Join Viewport and Scrollbox
 ☐ Arrange (Implement)
 ☐ Create canvas dynamically
 ☐ Comine AnimationHandler & AnimationQueue

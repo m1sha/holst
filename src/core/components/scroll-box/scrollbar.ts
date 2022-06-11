@@ -18,18 +18,20 @@ export abstract class ScrollBar {
   protected behavior: ScrollbarBehavior | null = null
   protected boxSize: Size
   position: number
+  minValue: number
   maxValue: number
   step: number
   style: ScrollBarStyle
   onBackButtonClick: (() => void) | null = null
   onForwardButtonClick: (() => void) | null = null
 
-  constructor (position: number, maxValue: number, step: number, boxSize: Size, style: ScrollBarStyle) {
+  constructor (position: number, minValue: number, maxValue: number, step: number, boxSize: Size, style: ScrollBarStyle) {
     this.position = position ?? 0
     this.maxValue = maxValue ?? 0
     this.step = step
     this.style = style
     this.boxSize = boxSize
+    this.minValue = minValue
   }
 
   protected abstract getScrollBarDesign (layer: Layer): ScrollBarDesign
