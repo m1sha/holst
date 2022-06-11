@@ -2,6 +2,7 @@ import { TextStyle } from './label-style'
 import Orderable from './orderable'
 import { Point } from './point'
 import { IRect, Rect } from './rect'
+import { TextMeasurer } from './text-measurer'
 
 export interface Text {
   value: string,
@@ -19,11 +20,11 @@ export class TextBlock implements Orderable {
   before?: Orderable
   target: Point
 
-  constructor (text: string, style: TextStyle, order: number = 0, measure: (text: string, style: TextStyle) => any) {
+  constructor (text: string, style: TextStyle, order: number = 0, measure?: (text: string, style: TextStyle) => any) {
     this.text = text
     this.style = style
     this.order = order
-    this.measure = measure
+    this.measure = measure ?? ((text: string, style: TextStyle) => TextMeasurer.measureText(text, style))
     this.target = new Point(0, 0)
   }
 
@@ -56,6 +57,10 @@ export class TextBlock implements Orderable {
 
   get bounds (): IRect {
     return new Rect(this.target, { width: this.width, height: this.height })
+  }
+
+  setMeasurer (measure: (text: string, style: TextStyle) => any): void {
+    this.measure = measure
   }
 
   private getWidth (text?: string): number {

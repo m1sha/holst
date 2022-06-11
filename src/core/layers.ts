@@ -5,7 +5,6 @@ import { Point } from './point'
 import { Rect } from './rect'
 import Shape from './shape'
 import { ShapeStyle } from './shape-style'
-import { TextMeasurer } from './text-measurer'
 import { MutablePath2D } from './path2d/mutable-path2d'
 import { StyleManager } from './style-manager'
 import { calcBounds } from './utils'
@@ -47,7 +46,7 @@ export class Layer implements Orderable {
 
   createTextBlock (text: string, style: TextStyle | string, target?: Point): TextBlock {
     const stl = (typeof style === 'string') ? this.styleManager.texts(style) : style
-    const result = new TextBlock(text, stl, this.arrange.order, (text, style) => TextMeasurer.measureText(text, style))
+    const result = new TextBlock(text, stl, this.arrange.order)
     if (target) result.target = target
     this.objects.push(result)
     return result
@@ -57,6 +56,12 @@ export class Layer implements Orderable {
     if (!shape.order) shape.order = this.arrange.order
     shape.frozen = this.frozen
     this.objects.push(shape)
+  }
+
+  addTextBlock (textBlock: TextBlock): void {
+    if (!textBlock.order) textBlock.order = this.arrange.order
+    // textBlock.frozen = this.frozen
+    this.objects.push(textBlock)
   }
 
   createImage (img: Bitmap) {

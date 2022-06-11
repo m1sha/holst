@@ -12,6 +12,7 @@ import { EventHandler } from './core/event-handler'
 import { ConstraintGrid } from './core/constraint-grid'
 import { BitmapReader } from './core/bitmap-reader'
 import { BitmapWriter } from './core/bitmap-writer'
+import { TextBlock } from './core/label'
 
 export {
   AnimationQueue,
@@ -30,5 +31,6 @@ export {
   Renderer2D,
   Scene,
   Shape,
-  SvgPathD
+  SvgPathD,
+  TextBlock
 }

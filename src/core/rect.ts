@@ -14,9 +14,16 @@ export class Rect implements IRect, Size {
   width: number = 0
   height: number = 0
 
+  constructor (rect: IRect)
   constructor (p: IPoint, size: Size)
   constructor (x: number, y: number, width: number, height: number)
   constructor (...args: any[]) {
+    if (args.length === 1) {
+      this.x = args[0].x
+      this.y = args[0].y
+      this.width = args[0].width
+      this.height = args[0].height
+    }
     if (args.length === 2) {
       const [p, size] = args
       this.x = p.x
