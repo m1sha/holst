@@ -52,32 +52,22 @@ export class ScrollbarBehavior {
 
   private setThumbButtonHandlers () {
     let start = Point.zero
-    let shift = Point.zero
-    const { trackSize } = this.style
+    // const { trackSize } = this.style
     const button = this.thumbButton!!
     button
       .on('mousedown', e => {
         start = new Point(e.event)
       })
-      .on('mouseup', () => {
-        shift = button.shift
+      .on('mouseup', e => {
+        // start = new Point(e.event)
       })
       .on('mousemove', e => {
         if (!this.tracker) return
         if (!e.event.pressed) return
         const point = new Point(e.event)
-          .dec(start)
-          .add(shift)
-        const trackerBounds = this.tracker.bounds
-        const bounds = button.bounds
-        let canMove = true
-        if (this.dir === 'h') {
-          if (e.event.x > start.x && bounds.width + bounds.x + trackSize + 2 > trackerBounds.width) canMove = false
-          if (e.event.x < start.x && bounds.x < trackerBounds.x + trackSize + 2) canMove = false
-        }
-        if (canMove) {
-          button.move({ x: this.dir === 'h' ? point.x : 0, y: this.dir === 'v' ? point.y : 0 })
-        }
+          .distance(start)
+        if (this.dir === 'h') this.thumbButtonRect.x = point
+        if (this.dir === 'v') this.thumbButtonRect.y = point
       })
   }
 
