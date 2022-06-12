@@ -61,22 +61,23 @@ export class Renderer2D {
   }
 
   private drawShape (shape: Shape, mask?: Shape | null) {
-    this.setHandler(shape)
-    this.ctx.save()
-    this.assignMask(mask)
-    drawShape(this.ctx, shape, this.viewport.transform)
-    this.ctx.restore()
+    this.draw(() => drawShape(this.ctx, shape, this.viewport.transform), shape, mask)
   }
 
   private drawTextBlock (block: TextBlock, mask?: Shape | null): void {
-    this.ctx.save()
-    this.assignMask(mask)
-    drawTextBlock(this.ctx, block)
-    this.ctx.restore()
+    this.draw(() => drawTextBlock(this.ctx, block), block, mask)
   }
 
   private drawImage ({ src, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight }: Bitmap): void {
     this.ctx.drawImage(src, sx, sy, sWidth || 0, sHeight || 0, dx || 0, dy || 0, dWidth || 0, dHeight || 0)
+  }
+
+  private draw (action: () => void, obj: Shape | TextBlock, mask?: Shape | null) {
+    this.setHandler(obj)
+    this.ctx.save()
+    this.assignMask(mask)
+    action()
+    this.ctx.restore()
   }
 
   private assignMask (mask?: Shape | null) {
@@ -84,9 +85,9 @@ export class Renderer2D {
     this.ctx.clip(mask.toPath2D())
   }
 
-  private setHandler (shape: Shape) {
-    if (shape.eventHandler.type !== 'bag') return
-    this.eventHandler.fromBag(shape.eventHandler)
-    shape.eventHandler = this.eventHandler
+  private setHandler (obj: Shape | TextBlock) {
+    if (obj.eventHandler.type !== 'bag') return
+    this.eventHandler.fromBag(obj.eventHandler)
+    obj.eventHandler = this.eventHandler
   }
 }

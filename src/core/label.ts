@@ -1,9 +1,12 @@
 import { Matrix2D } from './matrix'
 import { TextStyle } from './label-style'
 import Orderable from './orderable'
+import { EventType, Interactive } from './events/interactive'
 import { Point } from './point'
 import { Rect } from './rect'
 import { TextMeasurer } from './text-measurer'
+import { uid } from '../tools/uid'
+import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 
 /** @deprecated */
 export interface Text {
@@ -18,9 +21,10 @@ export interface TextBlockLine {
   getWidth: () => number
 }
 
-export class TextBlock implements Orderable {
+export class TextBlock implements Interactive, Orderable {
   #transform: Matrix2D = Matrix2D.identity
   private measure: (text: string, textStyle: TextStyle) => any
+  readonly id: string
   text: string
   style: TextStyle
   order: number
@@ -29,8 +33,10 @@ export class TextBlock implements Orderable {
   target: Point
   alignment: 'left' | 'center' | 'right' | 'justify' = 'left'
   lineHeight: number = 0
+  /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
 
   constructor (text: string, style: TextStyle, order: number = 0, measure?: (text: string, style: TextStyle) => any) {
+    this.id = uid()
     this.text = text
     this.style = style
     this.order = order
@@ -94,5 +100,19 @@ export class TextBlock implements Orderable {
       return result.actualBoundingBoxAscent + result.actualBoundingBoxDescent
     }
     return this.getWidth('M')
+  }
+
+  inPath (p: Point): boolean {
+    return this.bounds.intersectsPoint(p)
+  }
+
+  on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): this | TextBlock {
+    this.eventHandler.add(this, type, listener)
+    return this
+  }
+
+  off<K extends keyof EventType> (type: K): this | TextBlock {
+    this.eventHandler.remove(this, type)
+    return this
   }
 }
