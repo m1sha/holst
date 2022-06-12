@@ -80,11 +80,14 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
 
   let i = 1
   let a = 0.02
+  let t = 0.5
   renderer.onFrameChanged = () => {
-    text.injectTransform(Matrix2D.identity.scale({ x: i, y: i }, bounds.absCenter))
+    text.injectTransform(Matrix2D.identity.scale({ x: i, y: i }, bounds.absCenter).rotate(t, bounds.absCenter))
     if (i < 0.8) a = 0.02
     if (i > 1.2) a = -0.02
 
     i += a
+    t += -0.5
+    if (t < -360) t = 0
   }
 }
