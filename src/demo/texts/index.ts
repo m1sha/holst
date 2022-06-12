@@ -6,6 +6,8 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
   const position = new Point(100, 100)
   const text = new TextBlock('Hello\nWorld!!!\nSome Text Here', { fontSize: '48px', color: Color.white })
   text.target = position
+  text.alignment = 'center'
+  text.lineHeight = 10
   const bounds = new Rect(text.bounds).outline(-16)
 
   layer0.createShape({ strokeStyle: Color.lightGrey, fillStyle: Color.darkGrey }).roundRect(bounds, 8)

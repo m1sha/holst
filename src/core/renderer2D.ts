@@ -92,10 +92,14 @@ export class Renderer2D {
     if (!block.multiline) {
       this.ctx.fillText(block.text, block.target.x, block.target.y)
     } else {
-      let y = block.target.y + block.lineHeight
+      let y = block.target.y + block.charHeight
       for (const line of block.lines) {
-        this.ctx.fillText(line, block.target.x, y)
-        y += block.lineHeight
+        let x = block.target.x
+        if (block.alignment === 'center') {
+          x += block.width / 2 - block.getWidth(line) / 2
+        }
+        this.ctx.fillText(line, x, y)
+        y += block.charHeight + block.lineHeight
       }
     }
     this.ctx.restore()

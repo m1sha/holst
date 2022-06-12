@@ -19,6 +19,8 @@ export class TextBlock implements Orderable {
   after?: Orderable
   before?: Orderable
   target: Point
+  alignment: 'left' | 'center' | 'right' | 'justify' = 'left'
+  lineHeight: number = 0
 
   constructor (text: string, style: TextStyle, order: number = 0, measure?: (text: string, style: TextStyle) => any) {
     this.text = text
@@ -41,11 +43,11 @@ export class TextBlock implements Orderable {
 
   get height (): number {
     const w = this.getHeight()
-    if (this.multiline) return this.lines.length * w
+    if (this.multiline) return this.lines.length * (w + this.lineHeight)
     return w
   }
 
-  get lineHeight (): number {
+  get charHeight (): number {
     return this.getHeight()
   }
 
@@ -63,7 +65,7 @@ export class TextBlock implements Orderable {
     this.measure = measure
   }
 
-  private getWidth (text?: string): number {
+  getWidth (text?: string): number {
     return this.measure(text || this.text, this.style).width
   }
 
