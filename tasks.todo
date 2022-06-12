@@ -13,6 +13,8 @@ Task list
   ✔ Event listners @done(22-05-19 23:08)
   ✔ Impl base tracking @done(22-05-22 22:29)
   ✔ Behavior @done(22-06-11 23:09)
+  ☐ Create limits for the thumb button between min and max value
+  ☐ Calculate scale and scene bounds for the thumb button length
   ☐ Join Viewport and Scrollbox
 ☐ Arrange (Implement)
 ☐ Create canvas dynamically
@@ -24,3 +26,6 @@ Task list
   ✘ Impl methods *createFigure* and *updateStack* @cancelled(22-06-11 23:00)
   ✘ Impl for all primitives @cancelled(22-06-11 23:00)
 ☐ Cashe for the shape bounds
+☐ TextBlock fix container size + clipping
+☐ TextBlock add prop frozen
+☐ Bug: When move a shape after viewport x or y changed, a shape shift doesn't know about viewport changed
