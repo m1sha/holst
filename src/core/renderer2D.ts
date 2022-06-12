@@ -1,16 +1,16 @@
 import { EventType } from './event-type'
 import { TextBlock } from './label'
-import { TextStyle } from './label-style'
 import { Layer } from './layers'
 import { Scene } from './scene'
 import Shape from './shape'
-import { Color } from './color'
 import { Bitmap } from './bitmap'
 import { sort } from './sorter'
 import { Viewport } from './viewport'
 import Orderable from './orderable'
 import { EventHandler } from './events/event-handler2'
 import { AnimationHandler } from './animation-handler'
+import { drawShape } from './drafters/draw-shape'
+import { drawTextBlock } from './drafters/draw-text-block'
 
 export class Renderer2D {
   readonly ctx: CanvasRenderingContext2D
@@ -61,47 +61,17 @@ export class Renderer2D {
   }
 
   private drawShape (shape: Shape, mask?: Shape | null) {
-    if (shape.eventHandler.type === 'bag') {
-      this.eventHandler.fromBag(shape.eventHandler)
-      shape.eventHandler = this.eventHandler
-    }
+    this.setHandler(shape)
     this.ctx.save()
     this.assignMask(mask)
-    const { style } = shape
-    const path = shape.toPath2D(this.viewport.transform)
-    if (style.strokeStyle) {
-      this.ctx.strokeStyle = style.strokeStyle instanceof Color ? style.strokeStyle.toString() : style.strokeStyle
-      this.ctx.lineWidth = style.lineWidth || 1
-      this.ctx.lineJoin = style.lineJoin || 'bevel'
-      this.ctx.lineDashOffset = style.lineDashOffset || 0
-      this.ctx.lineCap = style.lineCap || 'butt'
-      if (style.lineDash) this.ctx.setLineDash(style.lineDash)
-      this.ctx.stroke(path)
-    }
-    if (style.fillStyle) {
-      this.ctx.fillStyle = style.fillStyle instanceof Color ? this.ctx.fillStyle = style.fillStyle.toString() : style.fillStyle
-      this.ctx.fill(path)
-    }
+    drawShape(this.ctx, shape, this.viewport.transform)
     this.ctx.restore()
   }
 
   private drawTextBlock (block: TextBlock, mask?: Shape | null): void {
     this.ctx.save()
     this.assignMask(mask)
-    this.assignTextStyle(block.style)
-    if (!block.multiline) {
-      this.ctx.fillText(block.text, block.target.x, block.target.y)
-    } else {
-      let y = block.target.y + block.charHeight
-      for (const line of block.lines) {
-        let x = block.target.x
-        if (block.alignment === 'center') {
-          x += block.width / 2 - block.getWidth(line) / 2
-        }
-        this.ctx.fillText(line, x, y)
-        y += block.charHeight + block.lineHeight
-      }
-    }
+    drawTextBlock(this.ctx, block)
     this.ctx.restore()
   }
 
@@ -109,18 +79,14 @@ export class Renderer2D {
     this.ctx.drawImage(src, sx, sy, sWidth || 0, sHeight || 0, dx || 0, dy || 0, dWidth || 0, dHeight || 0)
   }
 
-  private assignTextStyle (style: TextStyle) {
-    style = style || {}
-    this.ctx.fillStyle = style.color instanceof Color ? style.color.toString() : style.color || '#000'
-    const fontName = style.fontName || 'serif'
-    const fontSize = style.fontSize || '10pt'
-    const bold = style.bold ? 'bold ' : ''
-    const italic = style.italic ? 'italic ' : ''
-    this.ctx.font = `${italic}${bold}${fontSize} ${fontName}`
-  }
-
   private assignMask (mask?: Shape | null) {
     if (!mask) return
     this.ctx.clip(mask.toPath2D())
+  }
+
+  private setHandler (shape: Shape) {
+    if (shape.eventHandler.type !== 'bag') return
+    this.eventHandler.fromBag(shape.eventHandler)
+    shape.eventHandler = this.eventHandler
   }
 }
