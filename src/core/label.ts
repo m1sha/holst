@@ -1,7 +1,7 @@
 import { TextStyle } from './label-style'
 import Orderable from './orderable'
 import { Point } from './point'
-import { IRect, Rect } from './rect'
+import { Rect } from './rect'
 import { TextMeasurer } from './text-measurer'
 
 export interface Text {
@@ -9,6 +9,11 @@ export interface Text {
   x: (textWidth: number) => number,
   y: (textWidth: number) => number,
   style: TextStyle
+}
+
+export interface TextBlockLine {
+  text: string
+  getWidth: () => number
 }
 
 export class TextBlock implements Orderable {
@@ -34,9 +39,7 @@ export class TextBlock implements Orderable {
 
   get width (): number {
     if (this.multiline) {
-      const widths: number[] = []
-      this.lines.forEach(p => widths.push(this.getWidth(p)))
-      return Math.max.apply(null, widths)
+      return Math.max.apply(null, this.lines.map(p => p.getWidth()))
     }
     return this.getWidth()
   }
@@ -51,13 +54,18 @@ export class TextBlock implements Orderable {
     return this.getHeight()
   }
 
-  get lines () {
+  get lines (): TextBlockLine[] {
     const text = this.text
     if (!text) return []
-    return text.indexOf('\n') > -1 ? text.split('\n') : [text]
+    return (text.indexOf('\n') > -1 ? text.split('\n') : [text]).map(p => {
+      return {
+        text: p,
+        getWidth: () => this.getWidth(p)
+      }
+    })
   }
 
-  get bounds (): IRect {
+  get bounds (): Rect {
     return new Rect(this.target, { width: this.width, height: this.height })
   }
 
@@ -65,7 +73,7 @@ export class TextBlock implements Orderable {
     this.measure = measure
   }
 
-  getWidth (text?: string): number {
+  private getWidth (text?: string): number {
     return this.measure(text || this.text, this.style).width
   }
 
