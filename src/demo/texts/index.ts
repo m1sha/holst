@@ -1,3 +1,4 @@
+import { Matrix2D } from '../../core/matrix'
 import { Scene, Renderer2D, Point, Color, TextBlock } from 'index'
 
 const bigText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
@@ -17,6 +18,7 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
   text.alignment = 'center'
   text.lineHeight = 10
   const bounds = text.bounds.outline(-16)
+  text.injectTransform(Matrix2D.identity.rotate(7, bounds.absCenter))
 
   const fontSize = '18px'
   const text2 = new TextBlock(bigText, { fontSize, color: Color.darkGrey })

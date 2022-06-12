@@ -4,6 +4,7 @@ import { TextStyle } from '../label-style'
 
 export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock) {
   assignTextStyle(ctx, block.style)
+  ctx.setTransform(block.transform)
   if (!block.multiline) {
     ctx.fillText(block.text, block.target.x, block.target.y)
   } else {

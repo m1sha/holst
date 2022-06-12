@@ -1,9 +1,11 @@
+import { Matrix2D } from './matrix'
 import { TextStyle } from './label-style'
 import Orderable from './orderable'
 import { Point } from './point'
 import { Rect } from './rect'
 import { TextMeasurer } from './text-measurer'
 
+/** @deprecated */
 export interface Text {
   value: string,
   x: (textWidth: number) => number,
@@ -17,6 +19,7 @@ export interface TextBlockLine {
 }
 
 export class TextBlock implements Orderable {
+  #transform: Matrix2D = Matrix2D.identity
   private measure: (text: string, textStyle: TextStyle) => any
   text: string
   style: TextStyle
@@ -67,6 +70,14 @@ export class TextBlock implements Orderable {
 
   get bounds (): Rect {
     return new Rect(this.target, { width: this.width, height: this.height })
+  }
+
+  get transform () {
+    return this.#transform
+  }
+
+  injectTransform (transform: Matrix2D) {
+    this.#transform = transform
   }
 
   setMeasurer (measure: (text: string, style: TextStyle) => any): void {
