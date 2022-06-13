@@ -53,11 +53,11 @@ export abstract class ScrollBar {
   }
 
   createBlock (layer: Layer) {
-    const { trackSize, trackBackgroundColor, trackBorderColor } = this.style
+    const { track } = this.style
     const { width, height } = this.boxSize
     layer
-      .createShape({ fillStyle: trackBackgroundColor, strokeStyle: trackBorderColor })
-      .rect(new Rect(width - trackSize, height - trackSize, trackSize, trackSize))
+      .createShape({ fillStyle: track.color, strokeStyle: track.border })
+      .rect(new Rect(width - track.width, height - track.width, track.width, track.width))
   }
 }
 

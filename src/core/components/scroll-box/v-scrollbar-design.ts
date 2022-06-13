@@ -5,43 +5,50 @@ import { Point } from '../../point'
 export class VScrollbarDesign extends ScrollBarDesign {
   getTrackerRect (): Rect {
     const { width, height } = this.boxSize
-    const { trackSize } = this.style
-    return new Rect(width - trackSize, 0, trackSize, height - trackSize - 2)
+    const { trackButton } = this.style
+    const trackWidth = trackButton.width
+    return new Rect(width - trackWidth - 1, 0, trackWidth, height - trackWidth - 2)
   }
 
   getBackButtonRect (): Rect {
     const { width } = this.boxSize
-    const { trackSize } = this.style
-    return new Rect(width - trackSize, this.splitSize, trackSize, trackSize)
+    const { trackButton } = this.style
+    const trackWidth = trackButton.width
+    return new Rect(width - trackWidth - 1, this.splitSize, trackWidth, trackWidth)
   }
 
   getForwardButtonRect (): Rect {
     const { width, height } = this.boxSize
-    const { trackSize } = this.style
-    return new Rect(width - trackSize, height - trackSize - trackSize - 2, trackSize, trackSize)
+    const { trackButton } = this.style
+    const trackWidth = trackButton.width
+    return new Rect(width - trackWidth - 1, height - trackWidth - trackWidth - 2, trackWidth, trackWidth)
   }
 
   getThumbButtonRect (): Rect {
     const { width } = this.boxSize
-    const { thumbSize } = this.style
-    return new Rect(width - thumbSize, thumbSize + this.splitSize + this.position, thumbSize, this.maxValue)
+    const { trackButton } = this.style
+    const trackWidth = trackButton.width
+    return new Rect(width - trackWidth - 1, trackWidth + this.splitSize + this.position, trackWidth, this.maxValue)
   }
 
   getThumbLimitRect (): Rect {
     const { width, height } = this.boxSize
-    const { thumbSize } = this.style
-    return new Rect(width - thumbSize, thumbSize + this.splitSize, thumbSize, height - thumbSize - 2 * this.splitSize - 2 * thumbSize)
+    const { trackButton } = this.style
+    const trackWidth = trackButton.width
+    return new Rect(width - trackWidth - 1, trackWidth + this.splitSize, trackWidth, height - trackWidth - 2 * this.splitSize - 2 * trackWidth)
   }
 
   getBackArrowPoint (): Point {
     const { width } = this.boxSize
-    const { trackSize } = this.style
-    return new Point((width - trackSize) + trackSize / 2, trackSize / 2)
+    const { trackButton } = this.style
+    const trackWidth = trackButton.width
+    return new Point((width - trackWidth) + trackWidth / 2, trackWidth / 2)
   }
 
   getForwardArrowPoint (): Point {
     const { width, height } = this.boxSize
-    const { trackSize } = this.style
-    return new Point((width - trackSize) + trackSize / 2, height - trackSize - trackSize / 2)
+    const { trackButton } = this.style
+    const trackWidth = trackButton.width
+    return new Point((width - trackWidth) + trackWidth / 2, height - trackWidth - trackWidth / 2)
   }
 }

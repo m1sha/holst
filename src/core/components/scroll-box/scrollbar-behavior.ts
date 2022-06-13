@@ -99,10 +99,10 @@ export class ScrollbarBehavior {
 
   private setHover (button: Shape) {
     const oldStyle = button.copyStyle()
-    const { thumbBackgroundColorHover } = this.style
+    const { thumbButton } = this.style
     button
       .on('hover', () => {
-        button.style.fillStyle = thumbBackgroundColorHover
+        button.style.fillStyle = thumbButton.hover
       })
       .on('leave', () => {
         button.style.fillStyle = oldStyle.fillStyle
