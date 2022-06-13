@@ -28,14 +28,16 @@ export class VScrollbarDesign extends ScrollBarDesign {
     const { width } = this.boxSize
     const { trackButton } = this.style
     const trackWidth = trackButton.width
-    return new Rect(width - trackWidth - 1, trackWidth + this.splitSize + this.position, trackWidth, this.maxValue)
+    const r = this.getThumbLimitRect()
+    const xx = r.height
+    return new Rect(width - trackWidth - 1, trackWidth + this.splitSize + 4 + this.position, trackWidth, xx)
   }
 
   getThumbLimitRect (): Rect {
     const { width, height } = this.boxSize
     const { trackButton } = this.style
     const trackWidth = trackButton.width
-    return new Rect(width - trackWidth - 1, trackWidth + this.splitSize, trackWidth, height - trackWidth - 2 * this.splitSize - 2 * trackWidth)
+    return new Rect(width - trackWidth - 1, trackWidth + this.splitSize, trackWidth, height - trackWidth - 2 * this.splitSize - 2 * trackWidth - 8)
   }
 
   getBackArrowPoint (): Point {

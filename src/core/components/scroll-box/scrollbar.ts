@@ -26,13 +26,13 @@ export abstract class ScrollBar {
   onBackButtonClick: (() => void) | null = null
   onForwardButtonClick: (() => void) | null = null
 
-  constructor (position: number, minValue: number, maxValue: number, step: number, boxSize: Size, style: ScrollBarStyle) {
-    this.position = position ?? 0
-    this.maxValue = maxValue ?? 0
-    this.step = step
+  constructor (boxSize: Size, style: ScrollBarStyle) {
+    this.minValue = 0
+    this.position = 0
+    this.maxValue = 100
+    this.step = 5
     this.style = style
     this.boxSize = boxSize
-    this.minValue = minValue
   }
 
   protected abstract getScrollBarDesign (layer: Layer): ScrollBarDesign
@@ -65,7 +65,7 @@ export class HScrollBar extends ScrollBar {
   protected type: 'h' | 'v' | undefined = 'h'
 
   getScrollBarDesign (layer: Layer): ScrollBarDesign {
-    return new HScrollbarDesign(this.position, this.maxValue, this.boxSize, this.splitSize, this.style, layer)
+    return new HScrollbarDesign(this.position, this.minValue, this.maxValue, this.boxSize, this.splitSize, this.style, layer)
   }
 }
 
@@ -73,6 +73,6 @@ export class VScrollBar extends ScrollBar {
   protected type: 'h' | 'v' | undefined = 'v'
 
   getScrollBarDesign (layer: Layer): ScrollBarDesign {
-    return new VScrollbarDesign(this.position, this.maxValue, this.boxSize, this.splitSize, this.style, layer)
+    return new VScrollbarDesign(this.position, this.minValue, this.maxValue, this.boxSize, this.splitSize, this.style, layer)
   }
 }

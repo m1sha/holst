@@ -28,16 +28,18 @@ export class HScrollbarDesign extends ScrollBarDesign {
     const { height } = this.boxSize
     const { trackButton } = this.style
     const trackWidth = trackButton.width
-    return new Rect(trackWidth + this.splitSize + this.position, height - trackWidth - 1, this.maxValue, trackWidth)
+    const r = this.getThumbLimitRect()
+    const xx = r.width // / (this.maxValue - this.minValue))
+    return new Rect(trackWidth + this.splitSize + 4 + this.position, height - trackWidth - 1, xx, trackWidth)
   }
 
   getThumbLimitRect (): Rect {
     const { trackButton } = this.style
     const { height, width } = this.boxSize
     const trackWidth = trackButton.width
-    const x = trackWidth + this.splitSize + 2
+    const x = trackWidth + this.splitSize + 4
     const y = height - trackWidth - 1
-    const w = width - trackWidth - 2 * this.splitSize - trackWidth
+    const w = width - trackWidth - 2 * this.splitSize - trackWidth - trackWidth - this.splitSize - 6
     const h = trackWidth
     return new Rect(x, y, w, h)
   }
