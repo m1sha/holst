@@ -1,3 +1,4 @@
+import './mock/mockDOMMatrix'
 import { TextBlock } from '../src/core/label'
 import { measure } from './mock'
 
