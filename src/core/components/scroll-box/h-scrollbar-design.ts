@@ -1,51 +1,58 @@
 import { ScrollBarDesign } from './scrollbar-design'
 import { Rect } from '../../rect'
 import { Point } from '../../point'
+import { Size } from '../../size'
 
 export class HScrollbarDesign extends ScrollBarDesign {
+  get y () {
+    const { height } = this.containerSize
+    const buttonSize = this.getButtonSize().height
+    return height - buttonSize - 1
+  }
+
+  get height () {
+    const buttonSize = this.getButtonSize().height
+    return buttonSize
+  }
+
   getTrackerRect (): Rect {
-    const { width, height } = this.boxSize
-    const { trackButton } = this.style
-    const trackWidth = trackButton.width
-    return new Rect(trackWidth + this.splitSize, height - trackWidth - 1, width - trackWidth - 2 - trackWidth - trackWidth - this.splitSize, trackWidth)
+    const { width } = this.containerSize
+    const buttonSize = this.getButtonSize().height
+    const x = buttonSize + this.splitSize
+    const w = width - buttonSize - 2 - buttonSize - buttonSize - this.splitSize
+    return new Rect(x, this.y, w, this.height)
   }
 
   getBackButtonRect (): Rect {
-    const { height } = this.boxSize
-    const { trackButton } = this.style
-    const trackWidth = trackButton.width
-    return new Rect(this.splitSize, height - trackWidth - 1, trackWidth, trackWidth)
+    const buttonSize = this.getButtonSize().height
+    return new Rect(this.splitSize, this.y, buttonSize, this.height)
   }
 
   getForwardButtonRect (): Rect {
-    const { width, height } = this.boxSize
-    const { trackButton } = this.style
-    const trackWidth = trackButton.width
-    return new Rect(width - trackWidth - trackWidth - 2, height - trackWidth - 1, trackWidth, trackWidth)
+    const { width } = this.containerSize
+    const buttonSize = this.getButtonSize().height
+    return new Rect(width - buttonSize - buttonSize - 2, this.y, buttonSize, this.height)
   }
 
   getThumbButtonRect (): Rect {
-    const { height } = this.boxSize
     const { trackButton } = this.style
     const trackWidth = trackButton.width
     const r = this.getThumbLimitRect()
-    const xx = r.width // / (this.maxValue - this.minValue))
-    return new Rect(trackWidth + this.splitSize + 4 + this.position, height - trackWidth - 1, xx, trackWidth)
+    const xx = r.width
+    return new Rect(trackWidth + this.splitSize + 4 + this.position, this.y, xx, this.height)
   }
 
   getThumbLimitRect (): Rect {
     const { trackButton } = this.style
-    const { height, width } = this.boxSize
+    const { width } = this.containerSize
     const trackWidth = trackButton.width
     const x = trackWidth + this.splitSize + 4
-    const y = height - trackWidth - 1
     const w = width - trackWidth - 2 * this.splitSize - trackWidth - trackWidth - this.splitSize - 6
-    const h = trackWidth
-    return new Rect(x, y, w, h)
+    return new Rect(x, this.y, w, this.height)
   }
 
   getBackArrowPoint (): Point {
-    const { height } = this.boxSize
+    const { height } = this.containerSize
     const { trackButton } = this.style
     const trackWidth = trackButton.width
     const x = trackWidth / 2
@@ -54,9 +61,14 @@ export class HScrollbarDesign extends ScrollBarDesign {
   }
 
   getForwardArrowPoint (): Point {
-    const { width, height } = this.boxSize
+    const { width, height } = this.containerSize
     const { trackButton } = this.style
     const trackWidth = trackButton.width
     return new Point(width - trackWidth - trackWidth / 2, height - trackWidth / 2)
+  }
+
+  private getButtonSize (): Size {
+    const { width } = this.style.trackButton
+    return { width, height: width }
   }
 }

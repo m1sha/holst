@@ -1,7 +1,8 @@
 import { Viewport } from '../../viewport'
 import { Scene } from '../../scene'
 import { ScrollBarStyle, defaultScrollBarStyle } from './scrollbar-style'
-import { HScrollBar, VScrollBar } from './scrollbar'
+import { VScrollBar } from './v-scrollbar'
+import { HScrollBar } from './h-scrollbar'
 
 export class ScrollBox {
   private viewport: Viewport

@@ -9,16 +9,16 @@ export abstract class ScrollBarDesign {
   position: number
   minValue: number
   maxValue: number
-  boxSize: Size
+  containerSize: Size
   style: ScrollBarStyle
   layer: Layer
   splitSize: number
 
-  constructor (position: number, minValue: number, maxValue: number, boxSize: Size, splitSize: number, style: ScrollBarStyle, layer: Layer) {
+  constructor (position: number, minValue: number, maxValue: number, containerSize: Size, splitSize: number, style: ScrollBarStyle, layer: Layer) {
     this.position = position
     this.maxValue = maxValue
     this.minValue = minValue
-    this.boxSize = boxSize
+    this.containerSize = containerSize
     this.style = style
     this.layer = layer
     this.splitSize = splitSize

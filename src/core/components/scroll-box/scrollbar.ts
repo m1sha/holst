@@ -5,8 +5,6 @@ import { Rect } from '../../rect'
 import Shape from '../../shape'
 import { ScrollbarBehavior } from './scrollbar-behavior'
 import { ScrollBarDesign } from './scrollbar-design'
-import { HScrollbarDesign } from './h-scrollbar-design'
-import { VScrollbarDesign } from './v-scrollbar-design'
 
 export abstract class ScrollBar {
   private design: ScrollBarDesign | null = null
@@ -58,21 +56,5 @@ export abstract class ScrollBar {
     layer
       .createShape({ fillStyle: track.color, strokeStyle: track.border })
       .rect(new Rect(width - track.width, height - track.width, track.width, track.width))
-  }
-}
-
-export class HScrollBar extends ScrollBar {
-  protected type: 'h' | 'v' | undefined = 'h'
-
-  getScrollBarDesign (layer: Layer): ScrollBarDesign {
-    return new HScrollbarDesign(this.position, this.minValue, this.maxValue, this.boxSize, this.splitSize, this.style, layer)
-  }
-}
-
-export class VScrollBar extends ScrollBar {
-  protected type: 'h' | 'v' | undefined = 'v'
-
-  getScrollBarDesign (layer: Layer): ScrollBarDesign {
-    return new VScrollbarDesign(this.position, this.minValue, this.maxValue, this.boxSize, this.splitSize, this.style, layer)
   }
 }
