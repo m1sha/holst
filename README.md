@@ -4,18 +4,23 @@
 <canvas id="canvas" width="300" height="300"></canvas>
 <script>
   const scene = new Scene()
-  scene
-    .createLayer()
-    .createShape({ strokeStyle: '#000' })
+  const layer = scene.createLayer()
+  const shape = layer.createShape({ fillStyle: Color.blue })
+  const oldStyle = shape.copyStyle()
+  shape
     .circle({ x: 150, y: 150 }, 50)
-    .on('hover', p => p.asShape().style.fillStyle = 'red' )
-    .on('leave', p => p.asShape().style.fillStyle = 'blue' )
+    .on('hover', () => shape.style.fillStyle = Color.red)
+    .on('leave', () => shape.style.fillStyle = oldStyle.fillStyle)
 
   const canvas = document.getElementById('canvas')
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
   renderer.render(scene)
 </script>
 ```
+
+<iframe src="https://getpalette.github.io/" width="800" height="160" align="left">
+</iframe>
+<br /><br /><br />
 
 ## Documentation
 
