@@ -18,10 +18,6 @@
 </script>
 ```
 
-<iframe src="https://getpalette.github.io/" width="800" height="160" align="left">
-</iframe>
-<br /><br /><br />
-
 ## Documentation
 
 [Get started](./docs/core/index.md)
