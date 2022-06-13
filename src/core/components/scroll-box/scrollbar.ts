@@ -44,9 +44,10 @@ export abstract class ScrollBar {
     this.forwardButton = this.design.createForwardArrowButton()
     this.thumbButton = this.design.createThumbButton()
     this.design.createArrows(this.type!!)
+    const limits = this.design.getThumbLimitRect()
 
     const controls = [this.backButton, this.forwardButton, this.thumbButton, this.tracker]
-    this.behavior = new ScrollbarBehavior(this.type!!, controls, this.style, this.step)
+    this.behavior = new ScrollbarBehavior(this.type!!, controls, this.style, this.step, limits)
     this.behavior.onBackButtonClick = () => this.onBackButtonClick && this.onBackButtonClick()
     this.behavior.onForwardButtonClick = () => this.onForwardButtonClick && this.onForwardButtonClick()
   }

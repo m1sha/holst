@@ -27,6 +27,12 @@ export class HScrollbarDesign extends ScrollBarDesign {
     return new Rect(thumbSize + this.splitSize + this.position, height - thumbSize, this.maxValue, thumbSize)
   }
 
+  getThumbLimitRect (): Rect {
+    const { thumbSize } = this.style
+    const { height, width } = this.boxSize
+    return new Rect(thumbSize + this.splitSize + 2, height - thumbSize, width - thumbSize - 2 * this.splitSize - thumbSize, thumbSize)
+  }
+
   getBackArrowPoint (): Point {
     const { height } = this.boxSize
     const { trackSize } = this.style

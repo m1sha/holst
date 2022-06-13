@@ -1,6 +1,6 @@
 import Shape from '../../shape'
 import { Point } from '../../point'
-import { IRect } from '../../rect'
+import { IRect, Rect } from '../../rect'
 import { ScrollBarStyle } from './scrollbar-style'
 
 export class ScrollbarBehavior {
@@ -12,11 +12,12 @@ export class ScrollbarBehavior {
   thumbButtonRect: IRect
   style: ScrollBarStyle
   step: number
+  limits: Rect
 
   onBackButtonClick: (() => void) | null = null
   onForwardButtonClick: (() => void) | null = null
 
-  constructor (dir: 'h' | 'v', controls: Shape[], style: ScrollBarStyle, step: number) {
+  constructor (dir: 'h' | 'v', controls: Shape[], style: ScrollBarStyle, step: number, limits: Rect) {
     this.dir = dir
     this.style = style
     const [backButton, forwardButton, thumbButton, tracker] = controls
@@ -25,6 +26,7 @@ export class ScrollbarBehavior {
     this.thumbButton = thumbButton
     this.tracker = tracker
     this.step = step
+    this.limits = limits
 
     this.thumbButtonRect = this.thumbButton.roundRects[0] as IRect
 
@@ -53,12 +55,12 @@ export class ScrollbarBehavior {
   }
 
   private setThumbButtonHandlers () {
-    let start = Point.zero
+    // let start = Point.zero
     // const { trackSize } = this.style
     const button = this.thumbButton!!
     button
       .on('mousedown', e => {
-        start = new Point(e.event)
+        // start = new Point(e.event)
       })
       .on('mouseup', e => {
         // start = new Point(e.event)
@@ -67,10 +69,32 @@ export class ScrollbarBehavior {
         if (!this.tracker) return
         if (!e.event.pressed) return
         const point = new Point(e.event)
-          .distance(start)
-        if (this.dir === 'h') this.thumbButtonRect.x = point
-        if (this.dir === 'v') this.thumbButtonRect.y = point
+        // .dec(start)
+        if (this.dir === 'h') {
+          const e1 = this.thumbButtonRect.x <= this.limits.x
+          const e2 = this.thumbButtonRect.x + this.thumbButtonRect.width >= this.limits.width
+          if (e1) {
+            if (this.thumbButtonRect.x > point.x) return
+          }
+          if (e2) {
+            if (this.thumbButtonRect.x < point.x) return
+          }
+
+          this.thumbButtonRect.x = point.x
+        }
+
+        if (this.dir === 'v') this.thumbButtonRect.y = point.y
       })
+
+    this.tracker.on('click', e => {
+      const point = new Point(e.event)
+      if (this.dir === 'h') {
+        const e1 = this.thumbButtonRect.x <= this.limits.x
+        const e2 = this.thumbButtonRect.x + this.thumbButtonRect.width >= this.limits.width
+        if (e1 || e2) return
+        this.thumbButtonRect.x = point.x
+      }
+    })
   }
 
   private setHover (button: Shape) {

@@ -26,6 +26,7 @@ export abstract class ScrollBarDesign {
   protected abstract getBackButtonRect(): Rect
   protected abstract getForwardButtonRect(): Rect
   protected abstract getThumbButtonRect(): Rect
+  abstract getThumbLimitRect(): Rect
   protected abstract getBackArrowPoint (): Point
   protected abstract getForwardArrowPoint (): Point
 
