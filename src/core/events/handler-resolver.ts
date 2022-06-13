@@ -69,6 +69,8 @@ export class HandlerResolver {
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
     })
+
+    this.pressed.clearAll()
   }
 
   onmouseup (e: MouseEvent) {

@@ -12,4 +12,8 @@ export class ActionSpecDic {
   clear (id: string) {
     delete this.items[id]
   }
+
+  clearAll () {
+    for (const id of Object.keys(this.items)) delete this.items[id]
+  }
 }
