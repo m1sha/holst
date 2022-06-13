@@ -12,7 +12,7 @@ export class VScrollbarDesign extends ScrollBarDesign {
   getBackButtonRect (): Rect {
     const { width } = this.boxSize
     const { trackSize } = this.style
-    return new Rect(width - trackSize, 0, trackSize, trackSize)
+    return new Rect(width - trackSize, this.splitSize, trackSize, trackSize)
   }
 
   getForwardButtonRect (): Rect {
@@ -24,7 +24,7 @@ export class VScrollbarDesign extends ScrollBarDesign {
   getThumbButtonRect (): Rect {
     const { width } = this.boxSize
     const { thumbSize } = this.style
-    return new Rect(width - thumbSize, thumbSize + this.position, thumbSize, this.maxValue)
+    return new Rect(width - thumbSize, thumbSize + this.splitSize + this.position, thumbSize, this.maxValue)
   }
 
   getBackArrowPoint (): Point {

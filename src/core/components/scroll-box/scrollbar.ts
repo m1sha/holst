@@ -17,6 +17,7 @@ export abstract class ScrollBar {
   protected type?: 'h' | 'v'
   protected behavior: ScrollbarBehavior | null = null
   protected boxSize: Size
+  protected splitSize: number = 2
   position: number
   minValue: number
   maxValue: number
@@ -63,7 +64,7 @@ export class HScrollBar extends ScrollBar {
   protected type: 'h' | 'v' | undefined = 'h'
 
   getScrollBarDesign (layer: Layer): ScrollBarDesign {
-    return new HScrollbarDesign(this.position, this.maxValue, this.boxSize, this.style, layer)
+    return new HScrollbarDesign(this.position, this.maxValue, this.boxSize, this.splitSize, this.style, layer)
   }
 }
 
@@ -71,6 +72,6 @@ export class VScrollBar extends ScrollBar {
   protected type: 'h' | 'v' | undefined = 'v'
 
   getScrollBarDesign (layer: Layer): ScrollBarDesign {
-    return new VScrollbarDesign(this.position, this.maxValue, this.boxSize, this.style, layer)
+    return new VScrollbarDesign(this.position, this.maxValue, this.boxSize, this.splitSize, this.style, layer)
   }
 }

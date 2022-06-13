@@ -11,13 +11,15 @@ export abstract class ScrollBarDesign {
   boxSize: Size
   style: ScrollBarStyle
   layer: Layer
+  splitSize: number
 
-  constructor (position: number, maxValue: number, boxSize: Size, style: ScrollBarStyle, layer: Layer) {
+  constructor (position: number, maxValue: number, boxSize: Size, splitSize: number, style: ScrollBarStyle, layer: Layer) {
     this.position = position
     this.maxValue = maxValue
     this.boxSize = boxSize
     this.style = style
     this.layer = layer
+    this.splitSize = splitSize
   }
 
   protected abstract getTrackerRect(): Rect

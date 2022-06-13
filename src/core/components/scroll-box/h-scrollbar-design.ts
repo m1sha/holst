@@ -12,7 +12,7 @@ export class HScrollbarDesign extends ScrollBarDesign {
   getBackButtonRect (): Rect {
     const { height } = this.boxSize
     const { trackSize } = this.style
-    return new Rect(0, height - trackSize, trackSize, trackSize)
+    return new Rect(this.splitSize, height - trackSize, trackSize, trackSize)
   }
 
   getForwardButtonRect (): Rect {
@@ -24,7 +24,7 @@ export class HScrollbarDesign extends ScrollBarDesign {
   getThumbButtonRect (): Rect {
     const { height } = this.boxSize
     const { thumbSize } = this.style
-    return new Rect(thumbSize + this.position, height - thumbSize, this.maxValue, thumbSize)
+    return new Rect(thumbSize + this.splitSize + this.position, height - thumbSize, this.maxValue, thumbSize)
   }
 
   getBackArrowPoint (): Point {
