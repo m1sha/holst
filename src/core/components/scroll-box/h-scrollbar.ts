@@ -7,6 +7,6 @@ export class HScrollBar extends ScrollBar {
   protected type: 'h' | 'v' | undefined = 'h'
 
   getScrollBarDesign (layer: Layer): ScrollBarDesign {
-    return new HScrollbarDesign(this.position, this.minValue, this.maxValue, this.boxSize, this.splitSize, this.style, layer)
+    return new HScrollbarDesign(this.position, this.minValue, this.maxValue, this.containerSize, this.splitSize, this.style, layer)
   }
 }

@@ -14,7 +14,7 @@ export abstract class ScrollBar {
   protected thumbButton: Shape | null = null
   protected type?: 'h' | 'v'
   protected behavior: ScrollbarBehavior | null = null
-  protected boxSize: Size
+  protected containerSize: Size
   protected splitSize: number = 2
   position: number
   minValue: number
@@ -24,37 +24,51 @@ export abstract class ScrollBar {
   onBackButtonClick: (() => void) | null = null
   onForwardButtonClick: (() => void) | null = null
 
-  constructor (boxSize: Size, style: ScrollBarStyle) {
+  constructor (containerSize: Size, style: ScrollBarStyle) {
     this.minValue = 0
     this.position = 0
     this.maxValue = 100
     this.step = 5
     this.style = style
-    this.boxSize = boxSize
+    this.containerSize = containerSize
   }
 
   protected abstract getScrollBarDesign (layer: Layer): ScrollBarDesign
 
   create (layer: Layer): void {
+    const controls = this.createControls(layer)
+    const limits = this.getLimits()
+
+    this.behavior = new ScrollbarBehavior(this.type!!, controls, this.style, this.step, limits)
+    this.setBehaviorEvents(this.behavior)
+  }
+
+  createBlock (layer: Layer) {
+    const { track } = this.style
+    const { width, height } = this.containerSize
+    layer
+      .createShape({ fillStyle: track.color, strokeStyle: track.border })
+      .rect(new Rect(width - track.width, height - track.width, track.width, track.width))
+  }
+
+  private setBehaviorEvents (behavior: ScrollbarBehavior) {
+    behavior.onBackButtonClick = () => this.onBackButtonClick && this.onBackButtonClick()
+    behavior.onForwardButtonClick = () => this.onForwardButtonClick && this.onForwardButtonClick()
+  }
+
+  private createControls (layer: Layer) {
     this.design = this.getScrollBarDesign(layer)
+
     this.tracker = this.design.createTracker()
     this.backButton = this.design.createBackArrowButton()
     this.forwardButton = this.design.createForwardArrowButton()
     this.thumbButton = this.design.createThumbButton()
     this.design.createArrows(this.type!!)
-    const limits = this.design.getThumbLimitRect()
-
-    const controls = [this.backButton, this.forwardButton, this.thumbButton, this.tracker]
-    this.behavior = new ScrollbarBehavior(this.type!!, controls, this.style, this.step, limits)
-    this.behavior.onBackButtonClick = () => this.onBackButtonClick && this.onBackButtonClick()
-    this.behavior.onForwardButtonClick = () => this.onForwardButtonClick && this.onForwardButtonClick()
+    return [this.backButton, this.forwardButton, this.thumbButton, this.tracker]
   }
 
-  createBlock (layer: Layer) {
-    const { track } = this.style
-    const { width, height } = this.boxSize
-    layer
-      .createShape({ fillStyle: track.color, strokeStyle: track.border })
-      .rect(new Rect(width - track.width, height - track.width, track.width, track.width))
+  private getLimits () {
+    if (!this.design) throw new Error('design is not defined')
+    return this.design.getThumbLimitRect()
   }
 }
