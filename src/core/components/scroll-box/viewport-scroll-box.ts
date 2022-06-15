@@ -1,13 +1,16 @@
 import { ScrollBox } from './scroll-box'
 import { Viewport } from '../../viewport'
 import { Scene } from '../../scene'
+import { Size } from '../../size'
 
 export class ViewportScrollBox extends ScrollBox {
   private viewport: Viewport
 
-  constructor (scene: Scene, viewport: Viewport) {
-    super(scene, viewport)
+  constructor (scene: Scene, containerSize: Size, viewport: Viewport) {
+    super(scene, containerSize)
     this.viewport = viewport
+    this.maxX = this.viewport.width
+    this.maxY = this.viewport.height
     this.onCreated = () => {
       this.horizontalBar.onBackButtonClick = () => (this.viewport.x -= this.horizontalBar.step)
       this.horizontalBar.onForwardButtonClick = () => (this.viewport.x += this.horizontalBar.step)

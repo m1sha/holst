@@ -5,7 +5,7 @@ export function createViewportDemo (canvas: HTMLCanvasElement, controls: HTMLCan
   const scene = createScene()
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
 
-  const scrollBox = new ViewportScrollBox(scene, renderer.viewport)
+  const scrollBox = new ViewportScrollBox(scene, canvas, renderer.viewport)
   scrollBox.create()
 
   // renderer.viewport.x = 120

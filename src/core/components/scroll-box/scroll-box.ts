@@ -40,6 +40,10 @@ export class ScrollBox {
     return this.horizontalBar.maxValue
   }
 
+  set maxX (value: number) {
+    this.horizontalBar.maxValue = value
+  }
+
   get positionY (): number {
     return this.verticalBar.value
   }
@@ -50,5 +54,9 @@ export class ScrollBox {
 
   get maxY (): number {
     return this.verticalBar.maxValue
+  }
+
+  set maxY (value: number) {
+    this.verticalBar.maxValue = value
   }
 }
