@@ -38,8 +38,8 @@ export class HScrollbarDesign extends ScrollBarDesign {
     const { trackButton } = this.style
     const trackWidth = trackButton.width
     const r = this.getThumbLimitRect()
-    const xx = r.width
-    return new Rect(trackWidth + this.splitSize + 4 + this.position, this.y, xx, this.height)
+    const thumbSize = (this.containerSize.width / (this.maxValue - this.minValue + this.containerSize.width)) * r.width
+    return new Rect(trackWidth + this.splitSize + 4 + this.value, this.y, thumbSize, this.height)
   }
 
   getThumbLimitRect (): Rect {

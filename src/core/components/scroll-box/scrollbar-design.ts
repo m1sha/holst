@@ -6,7 +6,7 @@ import { ScrollBarStyle } from './scrollbar-style'
 import { createArrowLeft, createArrowRight, createArrowUp, createArrowDown } from './scrollbar-helpers'
 
 export abstract class ScrollBarDesign {
-  position: number
+  value: number
   minValue: number
   maxValue: number
   containerSize: Size
@@ -14,8 +14,8 @@ export abstract class ScrollBarDesign {
   layer: Layer
   splitSize: number
 
-  constructor (position: number, minValue: number, maxValue: number, containerSize: Size, splitSize: number, style: ScrollBarStyle, layer: Layer) {
-    this.position = position
+  constructor (value: number, minValue: number, maxValue: number, containerSize: Size, splitSize: number, style: ScrollBarStyle, layer: Layer) {
+    this.value = value
     this.maxValue = maxValue
     this.minValue = minValue
     this.containerSize = containerSize

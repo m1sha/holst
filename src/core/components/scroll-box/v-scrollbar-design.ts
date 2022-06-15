@@ -44,8 +44,8 @@ export class VScrollbarDesign extends ScrollBarDesign {
     const { trackButton } = this.style
     const trackWidth = trackButton.width
     const r = this.getThumbLimitRect()
-    const xx = r.height
-    return new Rect(this.x, trackWidth + this.splitSize + 4 + this.position, this.width, xx)
+    const thumbSize = (this.containerSize.height / (this.maxValue - this.minValue + this.containerSize.height)) * r.height
+    return new Rect(this.x, trackWidth + this.splitSize + 4 + this.value, this.width, thumbSize)
   }
 
   getThumbLimitRect (): Rect {

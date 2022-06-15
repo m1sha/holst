@@ -16,7 +16,7 @@ export abstract class ScrollBar {
   protected behavior: ScrollbarBehavior | null = null
   protected containerSize: Size
   protected splitSize: number = 2
-  position: number
+  value: number
   minValue: number
   maxValue: number
   step: number
@@ -26,8 +26,8 @@ export abstract class ScrollBar {
 
   constructor (containerSize: Size, style: ScrollBarStyle) {
     this.minValue = 0
-    this.position = 0
-    this.maxValue = 100
+    this.value = 0
+    this.maxValue = 1
     this.step = 5
     this.style = style
     this.containerSize = containerSize

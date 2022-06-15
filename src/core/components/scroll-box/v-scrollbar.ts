@@ -7,6 +7,6 @@ export class VScrollBar extends ScrollBar {
   protected type: 'h' | 'v' | undefined = 'v'
 
   getScrollBarDesign (layer: Layer): ScrollBarDesign {
-    return new VScrollbarDesign(this.position, this.minValue, this.maxValue, this.containerSize, this.splitSize, this.style, layer)
+    return new VScrollbarDesign(this.value, this.minValue, this.maxValue, this.containerSize, this.splitSize, this.style, layer)
   }
 }
