@@ -18,5 +18,6 @@ export function cubic (p0: Point, p1: Point, p2: Point, p3: Point, t: number): P
   const e2 = p1.mul(ot2 * 3 * t)
   const e3 = p2.mul(ot * 3 * t2)
   const e4 = p3.mul(t3)
-  return e1.add(e2).add(e3).add(e4)
+  const r = e1.add(e2).add(e3).add(e4)
+  return r
 }

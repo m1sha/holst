@@ -1,4 +1,5 @@
 import { Scene, Renderer2D, Shape, Rect } from 'index'
+import { CubicBezier } from '../../core/motion/cubic-bezier'
 
 export function createMovementDemo (canvas: HTMLCanvasElement) {
   const scene = new Scene()
@@ -18,45 +19,35 @@ export function createMovementDemo (canvas: HTMLCanvasElement) {
   const shp4 = layer0.createShape({ fillStyle: '#d1c8b7' })
   shp4.ellipse({ x: 10 + 50, y: 450 + 50 }, 55, 24, 0, 0, Math.PI * 2)
 
+  const obj = {
+    t: 0,
+    sign: 1
+  }
+
+  const ms = [
+    CubicBezier.easeInOut,
+    CubicBezier.linear,
+    CubicBezier.easeIn,
+    CubicBezier.easeOut,
+    new CubicBezier(1, 0.3, 0.22, 1)
+  ]
+
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
   renderer.render(scene)
-
-  movement([shp0, shp1, shp2, shp3, shp4])
+  renderer.onFrameChanged = () => {
+    movement([shp0, shp1, shp2, shp3, shp4], ms, obj)
+  }
 }
 
-function movement (shapes: Shape[]) {
-  let x = 0
-  let sign = 1
-  // let vSign = 1
-  let a = 0
-  // let v = 0
-  let zoom = 1
-  let zSign = 1
-  setInterval(() => {
-    if (x > 680) {
-      sign = -1
-      a = 0
-    }
-    if (x < 10) {
-      sign = 1
-      a = 0
-    }
-    // a += 0.01
-    x += (5) * sign
+function movement (shapes: Shape[], ms: CubicBezier[], obj: { t: number, sign: number }) {
+  for (let i = 0; i < shapes.length; i++) {
+    const m = ms[i]
+    const shape = shapes[i]
+    const p = m.calc(obj.t)
+    shape.move({ x: p.x * 650, y: p.y })
+  }
 
-    // if (v > 10) vSign = -1
-    // if (v < -20) vSign = 1
-    // v += 1 * vSign
-
-    if (zoom > 5) zSign = -1
-    if (zoom < 0.1) zSign = 1
-    // if (a > 0.2) a = 0.01
-    zoom += (0.01 + a) * zSign
-
-    shapes.forEach(p => {
-      p
-        .scale({ x: zoom, y: 1 })
-        .move({ x, y: 0 })
-    })
-  }, 20)
+  obj.t += 0.01 * obj.sign
+  if (obj.t > 1) obj.sign *= -1
+  if (obj.t < 0) obj.sign *= -1
 }

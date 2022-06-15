@@ -50,4 +50,8 @@ export class Point implements IPoint {
   static get zero (): Point {
     return new Point(0, 0)
   }
+
+  toString () {
+    return `{ x: ${this.x}, y: ${this.y} }`
+  }
 }
