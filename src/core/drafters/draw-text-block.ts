@@ -5,15 +5,18 @@ import { TextStyle } from '../label-style'
 export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock) {
   assignTextStyle(ctx, block.style)
   ctx.setTransform(block.transform)
-  if (block.size) {
+  const cut = block.overflow === 'clip' || block.overflow === 'word-break + clip'
+  if (cut && block.size) {
     ctx.rect(block.target.x, block.target.y, block.size.width, block.size.height)
     ctx.clip()
   }
-  if (!block.multiline) {
+  if (!block.multiline && !block.size) {
     ctx.fillText(block.text, block.target.x, block.target.y)
   } else {
     let y = block.target.y + block.charHeight
-    for (const line of block.lines) {
+    const wrap = block.overflow === 'word-break' || block.overflow === 'word-break + clip'
+    const lines = wrap ? block.wrappedLines : block.lines
+    for (const line of lines) {
       const x = getAlignmentPosition(block, line)
       if (block.alignment === 'justify') makeLineJustify(ctx, block, line, x, y)
       else ctx.fillText(line.text, x, y)

@@ -2,13 +2,13 @@ import { Matrix2D } from '../../core/matrix'
 import { Scene, Renderer2D, Point, Color, TextBlock, Layer } from 'index'
 import { Size } from '../../core/size'
 
-const bigText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-nulla pariatur. Excepteur sint occaecat cupidatat non proidentsas,
-sunt in culpa qui officia deserunt mollit anim id est laborum`
+const bigText2 = `
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Excepteur sint occaecat cupidatat non proidentsas,
+sunt in culpa qui officia deserunt mollit anim id est laborum
+`
 
 export function createTextsDemo (canvas: HTMLCanvasElement) {
   const scene = new Scene()
@@ -17,12 +17,12 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
   const position = new Point(100, 150)
   const text = createTextBlockInCircle('Your\nAd\nCan be here', Color.white, position, layer)
 
-  createTextBlock(bigText, '18px', Color.darkGrey, new Point(400, 50), layer)
-  createTextBlock(bigText, '18px', Color.darkGrey, new Point(400, 250), layer).alignment = 'center'
-  createTextBlock(bigText, '18px', Color.darkGrey, new Point(400, 450), layer).alignment = 'right'
-  createTextBlock(bigText, '18px', Color.darkGrey, new Point(400, 650), layer).alignment = 'justify'
+  createTextBlock(bigText2, '18px', Color.darkGrey, new Point(400, 50), layer)
+  createTextBlock(bigText2, '18px', Color.darkGrey, new Point(400, 250), layer).alignment = 'center'
+  createTextBlock(bigText2, '18px', Color.darkGrey, new Point(400, 450), layer).alignment = 'right'
+  createTextBlock(bigText2, '18px', Color.darkGrey, new Point(400, 650), layer).alignment = 'justify'
 
-  createTextBlock(bigText, '18px', Color.darkGrey, new Point(40, 400), layer, { width: 200, height: 100 })
+  createTextBlock(bigText2, '18px', Color.darkGrey, new Point(40, 400), layer, { width: 300, height: 100 }, true)
 
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
   renderer.render(scene)
@@ -41,11 +41,12 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
   }
 }
 
-function createTextBlock (text: string, fontSize: string, color: Color, position: Point, layer: Layer, size?: Size) {
+function createTextBlock (text: string, fontSize: string, color: Color, position: Point, layer: Layer, size?: Size, wrap?: boolean) {
   const block = new TextBlock(text, { fontName: 'Roboto', fontSize, color })
   block.lineHeight = 2
   block.target = position
   block.size = size
+  if (wrap) block.overflow = 'word-break'
   const bounds = block.bounds.outline(-16)
   layer.createShape({ strokeStyle: Color.lightGrey, fillStyle: Color.lightGrey }).roundRect(bounds, 8)
   layer.addTextBlock(block)

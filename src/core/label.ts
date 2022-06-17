@@ -34,6 +34,7 @@ export class TextBlock implements Interactive, Orderable {
   target: Point
   alignment: 'left' | 'center' | 'right' | 'justify' = 'left'
   size?: Size
+  overflow: 'none' | 'word-break' | 'clip' | 'word-break + clip' = 'none'
   lineHeight: number = 0
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
 
@@ -76,6 +77,27 @@ export class TextBlock implements Interactive, Orderable {
     })
   }
 
+  get wrappedLines (): TextBlockLine[] {
+    if (!this.size) throw new Error('The property size must be defined.')
+    const lines = this.lines
+    if (!lines) return []
+    const maxWidth = this.size.width
+
+    const result = []
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i]
+      if (line.getWidth() <= maxWidth) {
+        result.push(line)
+        continue
+      }
+
+      const res = this.splitLine(line.text, maxWidth)
+      result.push(...res.lines.map(p => { return { text: p, getWidth: () => this.getWidth(p) } }))
+    }
+
+    return result
+  }
+
   get bounds (): Rect {
     return new Rect(this.target, this.size ? this.size : { width: this.width, height: this.height })
   }
@@ -93,7 +115,8 @@ export class TextBlock implements Interactive, Orderable {
   }
 
   private getWidth (text?: string): number {
-    return this.measure(text || this.text, this.style).width
+    const txt = typeof text === 'undefined' || text === undefined ? this.text : text
+    return this.measure(txt, this.style).width
   }
 
   private getHeight (text?: string) {
@@ -102,6 +125,42 @@ export class TextBlock implements Interactive, Orderable {
       return result.actualBoundingBoxAscent + result.actualBoundingBoxDescent
     }
     return this.getWidth('M')
+  }
+
+  private splitLine (text: string, maxWidth: number) {
+    const words = text.split(' ')
+    const lines = []
+    let width = 0
+    let sentence = ''
+
+    for (const word of words) {
+      const wordLen = this.getWidth(word + ' ')
+
+      if (width + wordLen > maxWidth) {
+        lines.push(sentence)
+        sentence = word + ' '
+        width = wordLen
+        continue
+      }
+
+      sentence += word + ' '
+      width += wordLen
+    }
+
+    if (sentence) lines.push(sentence)
+    return {
+      lines,
+      remainder: width
+    }
+  }
+
+  private findBreak (word: string, maxWidth: number, width : number) {
+    // const charWidths = new CharacterWidths(w => this.getWidth(w))
+
+    return {
+      lines: [],
+      remainder: 0
+    }
   }
 
   inPath (p: Point): boolean {
@@ -118,3 +177,19 @@ export class TextBlock implements Interactive, Orderable {
     return this
   }
 }
+
+// class CharacterWidths {
+//   private chars: Record<string, number> = {}
+//   private getWidth: (c: string) => number
+
+//   constructor (getWidth: (c: string) => number) {
+//     this.getWidth = getWidth
+//   }
+
+//   get (char: string) {
+//     let w = this.chars[char]
+//     if (w) return w
+//     w = this.chars[char] = this.getWidth(char)
+//     return w
+//   }
+// }
