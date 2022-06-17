@@ -2,13 +2,11 @@ import { Matrix2D } from '../../core/matrix'
 import { Scene, Renderer2D, Point, Color, TextBlock, Layer } from 'index'
 import { Size } from '../../core/size'
 
-const bigText2 = `
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+const bigText2 = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 Excepteur sint occaecat cupidatat non proidentsas,
-sunt in culpa qui officia deserunt mollit anim id est laborum
-`
+sunt in culpa qui officia deserunt mollit anim id est laborum`
 
 export function createTextsDemo (canvas: HTMLCanvasElement) {
   const scene = new Scene()
@@ -43,14 +41,14 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
 
 function createTextBlock (text: string, fontSize: string, color: Color, position: Point, layer: Layer, size?: Size, wrap?: boolean) {
   const block = new TextBlock(text, { fontName: 'Roboto', fontSize, color })
-  block.lineHeight = 2
+  block.lineHeight = 4
   block.target = position
   block.size = size
   if (wrap) block.overflow = 'word-break'
   const bounds = block.bounds.outline(-16)
   layer.createShape({ strokeStyle: Color.lightGrey, fillStyle: Color.lightGrey }).roundRect(bounds, 8)
   layer.addTextBlock(block)
-  layer.createShape({ fillStyle: Color.red }).circle(position, 3)
+  layer.createShape({ fillStyle: Color.blue }).circle(position, 2)
   setHover(block)
   return block
 }
@@ -63,7 +61,7 @@ function createTextBlockInCircle (text: string, color: Color, position: Point, l
   const bounds = block.bounds.outline(-32)
   layer.createShape({ fillStyle: Color.lightGrey }).circle(bounds.absCenter, bounds.width / 2)
   layer.addTextBlock(block)
-  layer.createShape({ fillStyle: Color.red }).circle(position, 3)
+  layer.createShape({ fillStyle: Color.darkGrey }).circle(position, 3)
   setHover(block)
   return block
 }
