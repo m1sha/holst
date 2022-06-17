@@ -7,6 +7,7 @@ import { Rect } from './rect'
 import { TextMeasurer } from './text-measurer'
 import { uid } from '../tools/uid'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
+import { Size } from './size'
 
 /** @deprecated */
 export interface Text {
@@ -32,6 +33,7 @@ export class TextBlock implements Interactive, Orderable {
   before?: Orderable
   target: Point
   alignment: 'left' | 'center' | 'right' | 'justify' = 'left'
+  size?: Size
   lineHeight: number = 0
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
 
@@ -75,7 +77,7 @@ export class TextBlock implements Interactive, Orderable {
   }
 
   get bounds (): Rect {
-    return new Rect(this.target, { width: this.width, height: this.height })
+    return new Rect(this.target, this.size ? this.size : { width: this.width, height: this.height })
   }
 
   get transform () {

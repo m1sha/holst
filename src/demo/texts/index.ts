@@ -1,5 +1,6 @@
 import { Matrix2D } from '../../core/matrix'
-import { Scene, Renderer2D, Point, Color, TextBlock } from 'index'
+import { Scene, Renderer2D, Point, Color, TextBlock, Layer } from 'index'
+import { Size } from '../../core/size'
 
 const bigText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -14,66 +15,14 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
   const layer = scene.createLayer()
 
   const position = new Point(100, 150)
-  const text = new TextBlock('Your\nAd\nCan be here', { fontSize: '28px', color: Color.white })
-  text.target = position
-  text.alignment = 'center'
-  text.lineHeight = 10
-  const bounds = text.bounds.outline(-16)
+  const text = createTextBlockInCircle('Your\nAd\nCan be here', Color.white, position, layer)
 
-  const fontSize = '18px'
-  const text2 = new TextBlock(bigText, { fontSize, color: Color.darkGrey })
-  const position2 = new Point(400, 50)
-  text2.lineHeight = 2
-  text2.target = position2
-  // text2.alignment = 'center'
+  createTextBlock(bigText, '18px', Color.darkGrey, new Point(400, 50), layer)
+  createTextBlock(bigText, '18px', Color.darkGrey, new Point(400, 250), layer).alignment = 'center'
+  createTextBlock(bigText, '18px', Color.darkGrey, new Point(400, 450), layer).alignment = 'right'
+  createTextBlock(bigText, '18px', Color.darkGrey, new Point(400, 650), layer).alignment = 'justify'
 
-  const text3 = new TextBlock(bigText, { fontSize, color: Color.darkGrey })
-  const position3 = new Point(400, 250)
-  text3.target = position3
-  text3.lineHeight = 2
-  text3.alignment = 'center'
-
-  const text4 = new TextBlock(bigText, { fontSize, color: Color.darkGrey })
-  const position4 = new Point(400, 450)
-  text4.target = position4
-  text4.lineHeight = 2
-  text4.alignment = 'right'
-
-  const text5 = new TextBlock(bigText, { fontSize, color: Color.darkGrey })
-  const position5 = new Point(400, 650)
-  text5.target = position5
-  text5.lineHeight = 2
-  text5.alignment = 'justify'
-
-  const pp = new Point(bounds).add(new Point(bounds.width / 2, bounds.height / 2))
-
-  layer.createShape({ fillStyle: Color.darkGrey }).circle(pp, bounds.width / 1.5)
-  layer.createShape({ strokeStyle: Color.lightGrey, fillStyle: Color.lightGrey }).roundRect(text2.bounds.outline(-16), 8)
-  layer.createShape({ strokeStyle: Color.lightGrey, fillStyle: Color.lightGrey }).roundRect(text3.bounds.outline(-16), 8)
-  layer.createShape({ strokeStyle: Color.lightGrey, fillStyle: Color.lightGrey }).roundRect(text4.bounds.outline(-16), 8)
-  layer.createShape({ strokeStyle: Color.lightGrey, fillStyle: Color.lightGrey }).roundRect(text5.bounds.outline(-16), 8)
-  layer.addTextBlock(text)
-  layer.createShape({ fillStyle: Color.red }).circle(position, 3)
-  layer.addTextBlock(text2)
-  layer.addTextBlock(text3)
-  layer.addTextBlock(text4)
-  layer.addTextBlock(text5)
-
-  text2
-    .on('hover', () => (text2.style.color = Color.red))
-    .on('leave', () => (text2.style.color = Color.darkGrey))
-
-  text3
-    .on('hover', () => (text3.style.color = Color.blue))
-    .on('leave', () => (text3.style.color = Color.darkGrey))
-
-  text4
-    .on('hover', () => (text4.style.color = Color.green))
-    .on('leave', () => (text4.style.color = Color.darkGrey))
-
-  text5
-    .on('hover', () => (text5.style.color = Color.white))
-    .on('leave', () => (text5.style.color = Color.darkGrey))
+  createTextBlock(bigText, '18px', Color.darkGrey, new Point(40, 400), layer, { width: 200, height: 100 })
 
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
   renderer.render(scene)
@@ -82,7 +31,7 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
   let a = 0.02
   let t = 0.5
   renderer.onFrameChanged = () => {
-    text.injectTransform(Matrix2D.identity.scale({ x: i, y: i }, bounds.absCenter).rotate(t, bounds.absCenter))
+    text.injectTransform(Matrix2D.identity.scale({ x: i, y: i }, text.bounds.absCenter).rotate(t, text.bounds.absCenter))
     if (i < 0.8) a = 0.02
     if (i > 1.2) a = -0.02
 
@@ -90,4 +39,37 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
     t += -0.5
     if (t < -360) t = 0
   }
+}
+
+function createTextBlock (text: string, fontSize: string, color: Color, position: Point, layer: Layer, size?: Size) {
+  const block = new TextBlock(text, { fontName: 'Roboto', fontSize, color })
+  block.lineHeight = 2
+  block.target = position
+  block.size = size
+  const bounds = block.bounds.outline(-16)
+  layer.createShape({ strokeStyle: Color.lightGrey, fillStyle: Color.lightGrey }).roundRect(bounds, 8)
+  layer.addTextBlock(block)
+  layer.createShape({ fillStyle: Color.red }).circle(position, 3)
+  setHover(block)
+  return block
+}
+
+function createTextBlockInCircle (text: string, color: Color, position: Point, layer: Layer) {
+  const block = new TextBlock(text, { fontSize: '28px', color })
+  block.lineHeight = 10
+  block.alignment = 'center'
+  block.target = position
+  const bounds = block.bounds.outline(-32)
+  layer.createShape({ fillStyle: Color.lightGrey }).circle(bounds.absCenter, bounds.width / 2)
+  layer.addTextBlock(block)
+  layer.createShape({ fillStyle: Color.red }).circle(position, 3)
+  setHover(block)
+  return block
+}
+
+function setHover (text: TextBlock) {
+  const color = text.style.color
+  text
+    .on('hover', () => (text.style.color = Color.red))
+    .on('leave', () => (text.style.color = color))
 }
