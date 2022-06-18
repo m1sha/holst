@@ -49,6 +49,7 @@ function setupCanvas (canvas: HTMLCanvasElement, layer: Layer) {
   //   console.log(e)
   // }
   canvas.ondrop = e => {
+    console.log(e)
     const d = e.dataTransfer!!.getData('text/plain')
     const p = new Point(e.offsetX, e.offsetY) // { x: e.offsetX, y: e.offsetY }
     layer.createTextBlock(d, { fontSize: '28px', color: '#005f71' }, p)

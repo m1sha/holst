@@ -117,6 +117,8 @@ export class HandlerResolver {
 
   ondragover (e: DragEvent): any {
     this.setHandler('dragover', p => {
+      e.preventDefault()
+      e.dataTransfer!!.dropEffect = 'move'
       if (!this.hit(p, e)) return
       const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
@@ -125,7 +127,6 @@ export class HandlerResolver {
 
   ondragleave (e: DragEvent): any {
     this.setHandler('dragleave', p => {
-      if (!this.hit(p, e)) return
       const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
     })

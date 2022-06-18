@@ -77,7 +77,7 @@ export class EventHandler implements IEventHandler {
     this.element.onfocus = e => resolver.onfocus(e)
     this.element.onblur = e => resolver.onblur(e)
     this.element.ondragover = e => resolver.ondragover(e)
-    this.element.ondragleave = e => resolver.ondragleave(e)
+    // this.element.ondragleave = e => resolver.ondragleave(e)
     this.element.ondrop = e => resolver.ondrop(e)
   }
 }
