@@ -30,3 +30,10 @@ export class FocusEventDecorator {
     this.origin = event
   }
 }
+
+export class DragEventDecorator {
+  origin: DragEvent
+  constructor (event: DragEvent) {
+    this.origin = event
+  }
+}

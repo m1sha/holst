@@ -1,7 +1,10 @@
 import { Cell } from './cell'
 
 export class Row {
+  cells: Cell[] = []
   createCell () {
-    return new Cell()
+    const cell = new Cell()
+    this.cells.push(cell)
+    return cell
   }
 }

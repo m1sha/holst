@@ -2,7 +2,7 @@ import { EventType } from './interactive'
 import { Point } from '../point'
 import { EventHandlers, InteractiveEvent, ListenerType } from './event-handler2'
 import { ActionSpecDic } from './action-spec-dic'
-import { MouseEventDecorator, KeyboardEventDecorator } from './decorators'
+import { MouseEventDecorator, KeyboardEventDecorator, DragEventDecorator } from './decorators'
 
 export class HandlerResolver {
   private handlers: EventHandlers
@@ -111,6 +111,30 @@ export class HandlerResolver {
   onwheel (e: WheelEvent): any {
     this.setHandler('wheel', p => {
       const decorator = new MouseEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
+    })
+  }
+
+  ondragover (e: DragEvent): any {
+    this.setHandler('dragover', p => {
+      if (!this.hit(p, e)) return
+      const decorator = new DragEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
+    })
+  }
+
+  ondragleave (e: DragEvent): any {
+    this.setHandler('dragleave', p => {
+      if (!this.hit(p, e)) return
+      const decorator = new DragEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
+    })
+  }
+
+  ondrop (e: DragEvent): any {
+    this.setHandler('drop', p => {
+      if (!this.hit(p, e)) return
+      const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
     })
   }

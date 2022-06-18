@@ -8,11 +8,16 @@
   <link rel="stylesheet" href="css/card-list.css">
   <style>
     canvas { border: 1px solid #515151;}
+    .canvas-wrapper  {
+      max-width: 100vw;
+      max-height: 95vh;
+      overflow: auto;
+    }
   </style>
   <title>Table Demo</title>
 </head>
 <body>
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
       <h3>Table</h3>
     </div>
@@ -22,7 +27,7 @@
       </div>
       <div class="col-10">
         <div class="canvas-wrapper">
-          <canvas id="canvas" width="1000" height="1000"></canvas>
+          <canvas id="canvas" width="2000" height="1000"></canvas>
         </div>
       </div>
     </div>

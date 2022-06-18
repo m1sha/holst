@@ -1,4 +1,4 @@
-import { FocusEventDecorator, KeyboardEventDecorator, MouseEventDecorator } from './decorators'
+import { FocusEventDecorator, KeyboardEventDecorator, MouseEventDecorator, DragEventDecorator } from './decorators'
 import { Point } from '../point'
 
 export interface InteractiveEvent<TEvent> {
@@ -20,6 +20,9 @@ export interface EventType {
   'wheel': InteractiveEvent<MouseEventDecorator>
   'focus': InteractiveEvent<FocusEventDecorator>
   'blur': InteractiveEvent<FocusEventDecorator>
+  'dragover': InteractiveEvent<DragEventDecorator>
+  'dragleave': InteractiveEvent<DragEventDecorator>
+  'drop': InteractiveEvent<DragEventDecorator>
 }
 
 export interface Interactive {
