@@ -14,20 +14,24 @@ export class TableBehavior {
       const style = shape.copyStyle()
       shape
         .on('dragover', () => {
-          shape.style.fillStyle = '#819911'
+          shape.style.fillStyle = '#219911'
         })
         .on('dragleave', () => {
           shape.style.fillStyle = style.fillStyle
         })
         .on('hover', e => {
-          if (this.draggable && this.draggable.isDragover) {
-            shape.style.fillStyle = '#819911'
-          }
+          // if (this.draggable && this.draggable.isDragover) {
+
+          // }
+          shape.style.fillStyle = '#819911'
         })
         .on('leave', e => {
           shape.style.fillStyle = style.fillStyle
         })
         .on('mousemove', e => {
+          // console.log(e)
+        })
+        .on('drop', e => {
           console.log(e)
         })
     }

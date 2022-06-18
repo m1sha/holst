@@ -51,6 +51,11 @@ export class Point implements IPoint {
     return new Point(0, 0)
   }
 
+  static is (point: unknown): boolean {
+    const p = point as IPoint
+    return p && typeof p.x !== 'undefined' && typeof p.y !== 'undefined'
+  }
+
   toString () {
     return `{ x: ${this.x}, y: ${this.y} }`
   }
