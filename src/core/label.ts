@@ -33,6 +33,7 @@ export class TextBlock implements Interactive, Orderable {
   before?: Orderable
   target: Point
   alignment: 'left' | 'center' | 'right' | 'justify' = 'left'
+  baseline: 'top' | 'hanging' | 'middle' | 'alphabetic' | 'ideographic' | 'bottom' = 'alphabetic'
   size?: Size
   overflow: 'none' | 'word-break' | 'clip' | 'word-break + clip' = 'none'
   lineHeight: number = 0

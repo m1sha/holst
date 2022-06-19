@@ -5,6 +5,7 @@ import { TextStyle } from '../label-style'
 export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock) {
   assignTextStyle(ctx, block.style)
   ctx.setTransform(block.transform)
+  ctx.textBaseline = block.baseline
   const cut = block.overflow === 'clip' || block.overflow === 'word-break + clip'
   if (cut && block.size) {
     ctx.rect(block.target.x, block.target.y, block.size.width, block.size.height)
