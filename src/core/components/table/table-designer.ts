@@ -1,6 +1,7 @@
 import { Scene } from '../../scene'
 import { ConstraintGrid } from '../../constraint-grid'
 import { Table } from './table'
+import { TableControl } from './table-control'
 
 export class TableDesigner {
   table: Table
@@ -19,16 +20,25 @@ export class TableDesigner {
       columns: [{ column: 0, width: 100 }, { column: 1, width: 200 }, { column: 2, width: 150 }]
     })
     const layer = this.scene.createLayer()
+    const controls: TableControl[] = []
     for (let rowIndex = 0; rowIndex < this.table.rows.length; rowIndex++) {
       const row = this.table.rows[rowIndex]
-      for (let cellIndex = 0; cellIndex < row.cells.length; cellIndex++) {
-        const cell = row.cells[cellIndex]
-        const constraints = grid.getCell(rowIndex, cellIndex)
-        layer.createShape({ strokeStyle: '#333' }).rect(constraints.rect)
+      for (let columnIndex = 0; columnIndex < row.cells.length; columnIndex++) {
+        const cell = row.cells[columnIndex]
+        const constraints = grid.getCell(rowIndex, columnIndex)
+        const cellShape = layer.createShape({ strokeStyle: '#333' }).rect(constraints.rect)
         // cell
         layer.createTextBlock(cell.content as string, { fontSize: '18px', color: '#000' }, constraints.center)
+
+        controls.push({
+          cellShape,
+          cell,
+          row,
+          columnIndex,
+          rowIndex
+        })
       }
     }
-    return { layer, grid }
+    return { controls, layer, grid }
   }
 }

@@ -1,18 +1,19 @@
+import { Rect } from '../../rect'
 import { IPoint } from '../../point'
-import { Layer } from '../../layers'
+import { TableControl } from './table-control'
 
 export class TableBehavior {
-  private layer: Layer
-  draggable?: { isDragover: boolean }
-  drop: ((s: string, p: IPoint) => void) | null = null
-  constructor (layer: Layer, draggable?: { isDragover: boolean }) {
-    this.layer = layer
-    this.draggable = draggable
+  private controls: TableControl[]
+  drop: ((s: string, p: IPoint, rect: Rect) => void) | null = null
+  constructor (controls: TableControl[], draggable?: { isDragover: boolean }) {
+    this.controls = controls
   }
 
   create () {
-    const shapes = this.layer.shapes
-    for (const shape of shapes) {
+    const controls = this.controls
+    for (const control of controls) {
+      if (control.columnIndex === 0) continue
+      const shape = control.cellShape
       const style = shape.copyStyle()
       shape
         .on('dragover', () => {
@@ -37,7 +38,7 @@ export class TableBehavior {
           console.log(e)
           const s = e.event.origin.dataTransfer!!.getData('text/plain')
           const p = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
-          if (this.drop) this.drop(s, p)
+          if (this.drop) this.drop(s, p, shape.bounds)
         })
     }
   }

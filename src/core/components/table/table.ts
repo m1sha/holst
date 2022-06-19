@@ -1,4 +1,4 @@
-import { IRect } from '../../rect'
+import { IRect, Rect } from '../../rect'
 import { Scene } from '../../scene'
 import { Row } from './row'
 import { TableDesigner } from './table-designer'
@@ -10,28 +10,25 @@ export class Table {
   private behavior: TableBehavior | null = null
   containerRect: IRect
   rows: Row[] = []
-  draggable?: { isDragover: boolean }
 
   constructor (scene: Scene, containerSize: IRect) {
     this.scene = scene
     this.containerRect = containerSize
   }
 
-  // drop: ((s: string) => void) | null = null
-
   get drop () {
     return this.behavior!!.drop
   }
 
-  set drop (a: (((s: string, P: IPoint) => void) | null)) {
+  set drop (a: (((s: string, P: IPoint, rect: Rect) => void) | null)) {
     this.behavior!!.drop = a
   }
 
   create () {
     const designer = new TableDesigner(this, this.scene)
-    const { layer } = designer.create()!!
+    const { controls } = designer.create()!!
 
-    this.behavior = new TableBehavior(layer, this.draggable)
+    this.behavior = new TableBehavior(controls)
     this.behavior.create()
   }
 

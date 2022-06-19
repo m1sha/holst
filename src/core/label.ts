@@ -115,6 +115,16 @@ export class TextBlock implements Interactive, Orderable {
     this.measure = measure
   }
 
+  copyStyle (): TextStyle {
+    return {
+      fontName: this.style.fontName,
+      fontSize: this.style.fontSize,
+      bold: this.style.bold,
+      italic: this.style.italic,
+      color: this.style.color
+    }
+  }
+
   private getWidth (text?: string): number {
     const txt = typeof text === 'undefined' || text === undefined ? this.text : text
     return this.measure(txt, this.style).width
