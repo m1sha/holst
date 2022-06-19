@@ -1,8 +1,10 @@
+import { IPoint } from '../../point'
 import { Layer } from '../../layers'
 
 export class TableBehavior {
   private layer: Layer
   draggable?: { isDragover: boolean }
+  drop: ((s: string, p: IPoint) => void) | null = null
   constructor (layer: Layer, draggable?: { isDragover: boolean }) {
     this.layer = layer
     this.draggable = draggable
@@ -33,6 +35,9 @@ export class TableBehavior {
         })
         .on('drop', e => {
           console.log(e)
+          const s = e.event.origin.dataTransfer!!.getData('text/plain')
+          const p = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
+          if (this.drop) this.drop(s, p)
         })
     }
   }

@@ -1,7 +1,7 @@
 import { Bitmap } from './bitmap'
 import { TextBlock } from './label'
 import { TextStyle } from './label-style'
-import { Point } from './point'
+import { Point, IPoint } from './point'
 import { Rect } from './rect'
 import Shape from './shape'
 import { ShapeStyle } from './shape-style'
@@ -44,7 +44,7 @@ export class Layer implements Orderable {
     return result
   }
 
-  createTextBlock (text: string, style: TextStyle | string, target?: Point): TextBlock {
+  createTextBlock (text: string, style: TextStyle | string, target?: IPoint): TextBlock {
     const stl = (typeof style === 'string') ? this.styleManager.texts(style) : style
     const result = new TextBlock(text, stl, this.arrange.order)
     if (target) result.target = target

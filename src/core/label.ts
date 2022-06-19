@@ -2,7 +2,7 @@ import { Matrix2D } from './matrix'
 import { TextStyle } from './label-style'
 import Orderable from './orderable'
 import { EventType, Interactive } from './events/interactive'
-import { Point } from './point'
+import { Point, IPoint } from './point'
 import { Rect } from './rect'
 import { TextMeasurer } from './text-measurer'
 import { uid } from '../tools/uid'
@@ -31,7 +31,7 @@ export class TextBlock implements Interactive, Orderable {
   order: number
   after?: Orderable
   before?: Orderable
-  target: Point
+  target: IPoint
   alignment: 'left' | 'center' | 'right' | 'justify' = 'left'
   baseline: 'top' | 'hanging' | 'middle' | 'alphabetic' | 'ideographic' | 'bottom' = 'alphabetic'
   size?: Size

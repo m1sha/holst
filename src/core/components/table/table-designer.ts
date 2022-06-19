@@ -12,7 +12,9 @@ export class TableDesigner {
   }
 
   create () {
-    const grid = new ConstraintGrid(this.table.containerRect, this.table.rows.length, 3, {
+    if (!this.table.rows) return
+    const columns = this.table.rows[0].cells.length
+    const grid = new ConstraintGrid(this.table.containerRect, this.table.rows.length, columns, {
       rows: [{ row: 0, height: 80 }, { row: 1, height: 180 }],
       columns: [{ column: 0, width: 100 }, { column: 1, width: 200 }, { column: 2, width: 150 }]
     })
