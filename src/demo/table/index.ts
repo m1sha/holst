@@ -19,7 +19,7 @@ export function createTableDemo (canvas: HTMLCanvasElement) {
     const textStyle = { fontSize: '24px', color: '#f1fff1' }
     const text = new TextBlock(data, textStyle)
     text.target = new Point(rect).add({ x: 20, y: 20 })
-    text.size = rect
+    text.size = rect.outline(20)
     text.alignment = 'center'
     text.overflow = 'word-break + clip'
     layer.addTextBlock(text)

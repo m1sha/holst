@@ -17,15 +17,23 @@ function createCardList () {
   }
 
   const equipmentCards = [{
-    header: 'Equipment 1',
+    header: 'Equipment 752006',
     content: '<b>Some info</b>'
   },
   {
-    header: 'Equipment 2',
+    header: 'Equipment 252006',
     content: '<b>Some info</b>'
   },
   {
-    header: 'Equipment 3',
+    header: 'Equipment 32112',
+    content: '<b>Some info</b>'
+  },
+  {
+    header: 'Equipment 56112',
+    content: '<b>Some info</b>'
+  },
+  {
+    header: 'Equipment 99814',
     content: '<b>Some info</b>'
   }]
 
