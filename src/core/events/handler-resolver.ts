@@ -9,12 +9,14 @@ export class HandlerResolver {
   private element: HTMLCanvasElement
   private hovered: ActionSpecDic
   private pressed: ActionSpecDic
+  private dragged: ActionSpecDic
 
   constructor (handlers: EventHandlers, canvas: HTMLCanvasElement) {
     this.handlers = handlers
     this.element = canvas
     this.hovered = new ActionSpecDic()
     this.pressed = new ActionSpecDic()
+    this.dragged = new ActionSpecDic()
   }
 
   onclick (e: MouseEvent) {
@@ -119,7 +121,20 @@ export class HandlerResolver {
     this.setHandler('dragover', p => {
       e.preventDefault()
       e.dataTransfer!!.dropEffect = 'move'
-      if (!this.hit(p, e)) return
+      if (!this.hit(p, e)) {
+        return
+      }
+      const id = p.interactive.id
+      this.dragged.set(id)
+      const decorator = new DragEventDecorator(e)
+      p.listener(this.createEvent(decorator, p))
+    })
+
+    this.setHandler('dragleave', p => {
+      if (this.hit(p, e)) return
+      const id = p.interactive.id
+      if (!this.dragged.has(id)) return
+      this.dragged.clear(id)
       const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
     })
@@ -127,6 +142,7 @@ export class HandlerResolver {
 
   ondragleave (e: DragEvent): any {
     this.setHandler('dragleave', p => {
+      this.dragged.clearAll()
       const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
     })
