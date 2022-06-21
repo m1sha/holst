@@ -102,4 +102,8 @@ export class Rect implements IRect, Size {
     return ((rect.x > this.x && rect.x < this.absWidth) && (rect.y > this.y && rect.y < this.absHeight)) ||
       ((this.x > rect.x && this.x < rect.absWidth) && (this.y > rect.y && this.y < rect.absHeight))
   }
+
+  clone () {
+    return new Rect(this)
+  }
 }
