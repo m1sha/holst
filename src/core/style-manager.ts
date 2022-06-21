@@ -14,6 +14,16 @@ export class StyleManager {
     this.styles[name] = style
   }
 
+  formTextStyle (name: string) {
+    const current = this.styles[name] as TextStyle
+    return {
+      defineTextStyle: (name: string, style: TextStyle) => {
+        const merge = Object.assign(style, current)
+        this.defineTextStyle(name, merge)
+      }
+    }
+  }
+
   shapes (name: string) {
     return new ShapeStyleDecorator(this.styles[name] as ShapeStyle)
   }

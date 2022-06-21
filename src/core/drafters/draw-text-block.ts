@@ -57,7 +57,7 @@ function assignTextStyle (ctx: CanvasRenderingContext2D, style: TextStyle) {
   ctx.fillStyle = style.color instanceof Color ? style.color.toString() : style.color || '#000'
   const fontName = style.fontName || 'serif'
   const fontSize = style.fontSize || '10pt'
-  const bold = style.bold ? 'bold ' : ''
-  const italic = style.italic ? 'italic ' : ''
-  ctx.font = `${italic}${bold}${fontSize} ${fontName}`
+  const bold = typeof style.bold === 'boolean' && style.bold ? 'bold ' : style.bold ? style.bold : 'normal'
+  const italic = style.italic ? 'italic ' : 'normal'
+  ctx.font = `${italic} ${bold} ${fontSize} ${fontName}`
 }
