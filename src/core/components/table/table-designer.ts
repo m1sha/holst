@@ -2,9 +2,10 @@ import { Table } from './table'
 import { TableControl } from './table-control'
 import { Color, Scene, ConstraintGrid, Layer, TextBlock, Rect, Shape, Drawable } from 'index'
 import { Cell } from './cell'
+import { Row } from './row'
 
 type CellDrawCallbackResult = { cellShape: Shape, content: Drawable[] }
-type CellDrawCallback = () => CellDrawCallbackResult
+type CellDrawCallback = (cell: Cell, columnIndex: number, row: Row, rowIndex: number, rect: Rect) => CellDrawCallbackResult
 export { CellDrawCallback, CellDrawCallbackResult }
 
 export class TableDesigner {
@@ -32,9 +33,14 @@ export class TableDesigner {
         const content: Drawable[] = []
         let cellShape
         if (this.onCellDraw) {
-          const result = this.onCellDraw()
+          const result = this.onCellDraw(cell, columnIndex, row, rowIndex, constraints.rect)
           cellShape = result.cellShape
           content.push(...result.content)
+          layer.addShape(cellShape)
+          for (const item of result.content) {
+            if (item.type === 'shape') layer.addShape(item as Shape)
+            if (item.type === 'text') layer.addTextBlock(item as TextBlock)
+          }
         } else {
           cellShape = layer.createShape({ strokeStyle: cell.hidden ? Color.white : '#B1B1B1' }).rect(constraints.rect)
           cell.bounds = constraints.rect

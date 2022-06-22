@@ -2,10 +2,12 @@ import { Rect } from '../../rect'
 import { IPoint } from '../../point'
 import { TableControl } from './table-control'
 
+export type CellDropEventCallBack = (data: unknown, point: IPoint, rect: Rect) => void
+
 export class TableBehavior {
   private controls: TableControl[]
-  drop: ((s: string, p: IPoint, rect: Rect) => void) | null = null
-  constructor (controls: TableControl[], draggable?: { isDragover: boolean }) {
+  drop: CellDropEventCallBack | null = null
+  constructor (controls: TableControl[]) {
     this.controls = controls
   }
 
@@ -23,9 +25,6 @@ export class TableBehavior {
           shape.style.fillStyle = style.fillStyle
         })
         .on('hover', e => {
-          // if (this.draggable && this.draggable.isDragover) {
-
-          // }
           shape.style.fillStyle = '#819911'
         })
         .on('leave', e => {
@@ -34,12 +33,12 @@ export class TableBehavior {
         .on('mousemove', e => {
           // console.log(e)
         })
-        .on('drop', e => {
-          console.log(e)
-          const s = e.event.origin.dataTransfer!!.getData('text/plain')
-          const p = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
-          if (this.drop) this.drop(s, p, shape.bounds)
-        })
+
+      shape.on('drop', e => {
+        const data = e.event.origin.dataTransfer!!.getData('text/plain')
+        const point = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
+        if (this.drop) this.drop(data, point, shape.bounds)
+      })
     }
   }
 }
