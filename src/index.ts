@@ -13,6 +13,10 @@ import { ConstraintGrid } from './core/constraint-grid'
 import { BitmapReader } from './core/bitmap-reader'
 import { BitmapWriter } from './core/bitmap-writer'
 import { TextBlock } from './core/label'
+import { StyleManager } from './core/style-manager'
+export * from './core/shape-style'
+export * from './core/label-style'
+export * from './core/drawable'
 
 export {
   AnimationQueue,
@@ -31,6 +35,7 @@ export {
   Renderer2D,
   Scene,
   Shape,
+  StyleManager,
   SvgPathD,
   TextBlock
 }

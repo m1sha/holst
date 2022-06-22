@@ -8,6 +8,7 @@ import { TextMeasurer } from './text-measurer'
 import { uid } from '../tools/uid'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { Size } from './size'
+import { Drawable, DrawableType } from './drawable'
 
 /** @deprecated */
 export interface Text {
@@ -22,10 +23,11 @@ export interface TextBlockLine {
   getWidth: () => number
 }
 
-export class TextBlock implements Interactive, Orderable {
+export class TextBlock implements Interactive, Orderable, Drawable {
   #transform: Matrix2D = Matrix2D.identity
   private measure: (text: string, textStyle: TextStyle) => any
   readonly id: string
+  type: DrawableType = 'text'
   text: string
   style: TextStyle
   order: number

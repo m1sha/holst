@@ -14,13 +14,15 @@ import { uid } from '../tools/uid'
 import { Corner4 } from './corner4'
 import { IVector } from './vector'
 import { Figures } from './figures'
+import { Drawable, DrawableType } from './drawable'
 
-export default class Shape implements Interactive, Orderable {
+export default class Shape implements Interactive, Orderable, Drawable {
   #modified: boolean = true
   #cache: Path2DBase | null = null
   private readonly mutablePath: MutablePath2D
   readonly id: string
   readonly relative: RelativeMutablePath2D
+  type: DrawableType = 'shape'
   style: ShapeStyleImpl
   name: string
   order: number
