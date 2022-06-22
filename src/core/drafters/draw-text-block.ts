@@ -26,25 +26,27 @@ export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock) 
   }
 }
 
-function getAlignmentPosition ({ target, alignment, width }: TextBlock, line: TextBlockLine) {
+function getAlignmentPosition ({ target, alignment, width, size }: TextBlock, line: TextBlockLine) {
   const x = target.x
+  const realWidth = size ? size.width : width
   switch (alignment) {
     case 'left': return x
-    case 'center': return x + width / 2 - line.getWidth() / 2
-    case 'right': return x + width - line.getWidth()
+    case 'center': return x + realWidth / 2 - line.getWidth() / 2
+    case 'right': return x + realWidth - line.getWidth()
     case 'justify': return x
   }
 }
 
-function makeLineJustify (ctx: CanvasRenderingContext2D, { width, style }: TextBlock, line: TextBlockLine, x: number, y: number) {
-  if (width === line.getWidth()) {
+function makeLineJustify (ctx: CanvasRenderingContext2D, { width, style, size }: TextBlock, line: TextBlockLine, x: number, y: number) {
+  const realWidth = size ? size.width : width
+  if (realWidth === line.getWidth()) {
     ctx.fillText(line.text, x, y)
     return
   }
 
   const textBlock = new TextBlock(line.text.replaceAll(' ', '\n'), style)
   const fullTextLen = textBlock.lines.reduce((a, b) => a + b.getWidth(), 0)
-  const dx = (width - fullTextLen) / textBlock.lines.length
+  const dx = (realWidth - fullTextLen) / textBlock.lines.length
   let sx = x
   for (const l of textBlock.lines) {
     ctx.fillText(l.text, sx, y)
