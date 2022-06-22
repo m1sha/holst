@@ -1,11 +1,16 @@
-import { Scene } from '../../scene'
-import { ConstraintGrid } from '../../constraint-grid'
 import { Table } from './table'
 import { TableControl } from './table-control'
+import { Color, Scene, ConstraintGrid, Layer, TextBlock, Rect, Shape, Drawable } from 'index'
+import { Cell } from './cell'
+
+type CellDrawCallbackResult = { cellShape: Shape, content: Drawable[] }
+type CellDrawCallback = () => CellDrawCallbackResult
+export { CellDrawCallback, CellDrawCallbackResult }
 
 export class TableDesigner {
   table: Table
   scene: Scene
+  onCellDraw: CellDrawCallback | null = null
 
   constructor (table: Table, scene: Scene) {
     this.table = table
@@ -15,10 +20,7 @@ export class TableDesigner {
   create () {
     if (!this.table.rows) return
     const columns = this.table.rows[0].cells.length
-    const grid = new ConstraintGrid(this.table.containerRect, this.table.rows.length, columns, {
-      rows: [{ row: 0, height: 80 }, { row: 1, height: 180 }],
-      columns: [{ column: 0, width: 100 }, { column: 1, width: 200 }, { column: 2, width: 150 }]
-    })
+    const grid = new ConstraintGrid(this.table.containerRect, this.table.rows.length, columns, this.getConstraint())
     const layer = this.scene.createLayer()
     const controls: TableControl[] = []
     for (let rowIndex = 0; rowIndex < this.table.rows.length; rowIndex++) {
@@ -26,12 +28,22 @@ export class TableDesigner {
       for (let columnIndex = 0; columnIndex < row.cells.length; columnIndex++) {
         const cell = row.cells[columnIndex]
         const constraints = grid.getCell(rowIndex, columnIndex)
-        const cellShape = layer.createShape({ strokeStyle: '#333' }).rect(constraints.rect)
-        // cell
-        layer.createTextBlock(cell.content as string, { fontSize: '18px', color: '#000' }, constraints.center)
+
+        const content: Drawable[] = []
+        let cellShape
+        if (this.onCellDraw) {
+          const result = this.onCellDraw()
+          cellShape = result.cellShape
+          content.push(...result.content)
+        } else {
+          cellShape = layer.createShape({ strokeStyle: cell.hidden ? Color.white : '#B1B1B1' }).rect(constraints.rect)
+          cell.bounds = constraints.rect
+          if (cell.content) content.push(this.createDefaultLabel(cell, constraints.rect, layer))
+        }
 
         controls.push({
           cellShape,
+          content,
           cell,
           row,
           columnIndex,
@@ -40,5 +52,37 @@ export class TableDesigner {
       }
     }
     return { controls, layer, grid }
+  }
+
+  getConstraint () {
+    const rows = []
+    for (let i = 0; i < this.table.rows.length; i++) {
+      const tRow = this.table.rows[i]
+      if (tRow.height === 0) continue
+      rows.push({ row: i, height: tRow.height })
+    }
+
+    const columns = []
+    for (let i = 0; i < this.table.rows[0].cells.length; i++) {
+      const tCol = this.table.rows[0].cells[i]
+      if (tCol.width === 0) continue
+      columns.push({ column: i, width: tCol.width })
+    }
+
+    return {
+      rows,
+      columns
+    }
+  }
+
+  private createDefaultLabel (cell: Cell, rect: Rect, layer: Layer) {
+    const textStyle = cell.textStyle ?? { fontSize: '18px', color: '#000' }
+    const textBlock = new TextBlock(cell.content as string, textStyle)
+    const r = rect.outline(8)
+    textBlock.target = r
+    textBlock.size = r
+    layer.addTextBlock(textBlock)
+
+    return textBlock
   }
 }

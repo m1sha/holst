@@ -1,7 +1,7 @@
 import { IRect, Rect } from '../../rect'
 import { Scene } from '../../scene'
 import { Row } from './row'
-import { TableDesigner } from './table-designer'
+import { CellDrawCallback, TableDesigner } from './table-designer'
 import { TableBehavior } from './table-behavior'
 import { IPoint } from '../../point'
 
@@ -10,6 +10,7 @@ export class Table {
   private behavior: TableBehavior | null = null
   containerRect: IRect
   rows: Row[] = []
+  onCellDraw: CellDrawCallback | null = null
 
   constructor (scene: Scene, containerSize: IRect) {
     this.scene = scene
@@ -26,6 +27,7 @@ export class Table {
 
   create () {
     const designer = new TableDesigner(this, this.scene)
+    if (this.onCellDraw) designer.onCellDraw = this.onCellDraw
     const { controls } = designer.create()!!
 
     this.behavior = new TableBehavior(controls)
