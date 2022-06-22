@@ -1,9 +1,8 @@
-import { IRect, Rect } from '../../rect'
+import { IRect } from '../../rect'
 import { Scene } from '../../scene'
 import { Row } from './row'
 import { CellDrawCallback, TableDesigner } from './table-designer'
-import { TableBehavior } from './table-behavior'
-import { IPoint } from '../../point'
+import { TableBehavior, CellDropEventCallBack } from './table-behavior'
 
 export class Table {
   private scene: Scene
@@ -21,7 +20,7 @@ export class Table {
     return this.behavior!!.drop
   }
 
-  set drop (a: (((s: string, P: IPoint, rect: Rect) => void) | null)) {
+  set drop (a: CellDropEventCallBack | null) {
     this.behavior!!.drop = a
   }
 
