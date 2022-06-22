@@ -59,5 +59,6 @@ function assignTextStyle (ctx: CanvasRenderingContext2D, style: TextStyle) {
   const fontSize = style.fontSize || '10pt'
   const bold = typeof style.bold === 'boolean' && style.bold ? 'bold ' : style.bold ? style.bold : 'normal'
   const italic = style.italic ? 'italic ' : 'normal'
-  ctx.font = `${italic} ${bold} ${fontSize} ${fontName}`
+  const fontVariant = style.fontVariant ?? 'normal'
+  ctx.font = `${italic} ${bold} ${fontVariant} ${fontSize} ${fontName}`
 }
