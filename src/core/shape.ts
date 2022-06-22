@@ -293,4 +293,8 @@ export default class Shape implements Interactive, Orderable, Drawable {
   update (): void {
     this.#modified = true
   }
+
+  static create (style: ShapeStyle | null = null) {
+    return new Shape(new MutablePath2D(), 0, style)
+  }
 }
