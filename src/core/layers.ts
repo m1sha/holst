@@ -10,6 +10,7 @@ import { StyleManager } from './style-manager'
 import { calcBounds } from './utils'
 import Orderable from './orderable'
 import { Arrange } from './arrange'
+import { Sprite } from './sprite'
 
 export class Layer implements Orderable {
   private objects: Orderable[] = []
@@ -66,6 +67,10 @@ export class Layer implements Orderable {
 
   createImage (raster: Raster) {
     this.objects.push(raster)
+  }
+
+  addSprite (sprite: Sprite) {
+    this.objects.push(sprite)
   }
 
   clear () {

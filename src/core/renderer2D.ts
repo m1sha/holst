@@ -11,6 +11,7 @@ import { EventHandler } from './events/event-handler2'
 import { AnimationHandler } from './animation-handler'
 import { drawShape } from './drafters/draw-shape'
 import { drawTextBlock } from './drafters/draw-text-block'
+import { Sprite } from './sprite'
 
 export class Renderer2D {
   readonly ctx: CanvasRenderingContext2D
@@ -57,6 +58,7 @@ export class Renderer2D {
       if (item instanceof Shape) this.drawShape(item, mask)
       if (item instanceof TextBlock) this.drawTextBlock(item, mask)
       if (item instanceof Raster) this.drawImage(item)
+      if (item instanceof Sprite) this.drawSprite(item)
     }
   }
 
@@ -79,6 +81,20 @@ export class Renderer2D {
       raster.distRect?.y || 0,
       raster.distRect?.width || 0,
       raster.distRect?.height || 0
+    )
+  }
+
+  private drawSprite (sprite: Sprite) {
+    this.ctx.drawImage(
+      sprite.raster.src,
+      sprite.framePosition.x,
+      sprite.framePosition.y,
+      sprite.tileSize.width || 0,
+      sprite.tileSize.height || 0,
+      sprite.position.x || 0,
+      sprite.position.y || 0,
+      sprite.tileSize.width || 0,
+      sprite.tileSize.height || 0
     )
   }
 
