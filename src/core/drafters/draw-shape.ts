@@ -1,10 +1,9 @@
 import Shape from '../shape'
 import { Color } from '../color'
-import { Matrix2D } from '../matrix'
 
-export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape, transform: Matrix2D) {
+export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape) {
   const { style } = shape
-  const path = shape.toPath2D(transform)
+  const path = shape.toPath2D()
   if (style.strokeStyle) {
     ctx.strokeStyle = style.strokeStyle instanceof Color ? style.strokeStyle.toString() : style.strokeStyle
     ctx.lineWidth = style.lineWidth || 1
