@@ -18,7 +18,7 @@ export class StyleManager {
     const current = this.styles[name] as TextStyle
     return {
       defineTextStyle: (name: string, style: TextStyle) => {
-        const merge = Object.assign(style, current)
+        const merge = mergeTextStyle(style, current)
         this.defineTextStyle(name, merge)
       }
     }
@@ -64,3 +64,15 @@ class ShapeStyleDecorator implements ShapeStyle {
 }
 
 const isUndefined = (t: unknown) => typeof t === 'undefined' || t === undefined
+
+function mergeTextStyle (style: TextStyle, current: TextStyle) {
+  const result = {
+    bold: !isUndefined(style.bold) ? style.bold : current.bold,
+    color: !isUndefined(style.color) ? style.color : current.color,
+    fontName: !isUndefined(style.fontName) ? style.fontName : current.fontName,
+    fontSize: !isUndefined(style.fontSize) ? style.fontSize : current.fontSize,
+    fontVariant: !isUndefined(style.fontVariant) ? style.fontVariant : current.fontVariant,
+    italic: !isUndefined(style.italic) ? style.italic : current.italic
+  } as TextStyle
+  return result
+}
