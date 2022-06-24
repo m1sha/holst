@@ -1,4 +1,4 @@
-import { Raster } from './bitmap'
+import { Raster } from './raster'
 import { TextBlock } from './label'
 import { TextStyle } from './label-style'
 import { Point, IPoint } from './point'

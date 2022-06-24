@@ -1,5 +1,5 @@
 import { Size } from './size'
-import { Raster } from './bitmap'
+import { Raster } from './raster'
 
 export class Sprite {
   raster: Raster

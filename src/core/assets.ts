@@ -1,4 +1,4 @@
-import { Raster } from './bitmap'
+import { Raster } from './raster'
 import { ResourceLoader, ResourceLoaderCallBackFactory } from '../tools/resource-loader'
 
 export class Assets extends ResourceLoader<Raster> {
