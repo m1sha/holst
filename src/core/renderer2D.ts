@@ -3,7 +3,7 @@ import { TextBlock } from './label'
 import { Layer } from './layers'
 import { Scene } from './scene'
 import Shape from './shape'
-import { Bitmap } from './bitmap'
+import { Raster } from './bitmap'
 import { sort } from './sorter'
 import { Viewport } from './viewport'
 import Orderable from './orderable'
@@ -56,7 +56,7 @@ export class Renderer2D {
     for (const item of list) {
       if (item instanceof Shape) this.drawShape(item, mask)
       if (item instanceof TextBlock) this.drawTextBlock(item, mask)
-      if (item instanceof Bitmap) this.drawImage(item)
+      if (item instanceof Raster) this.drawImage(item)
     }
   }
 
@@ -68,8 +68,18 @@ export class Renderer2D {
     this.draw(() => drawTextBlock(this.ctx, block), block, mask)
   }
 
-  private drawImage ({ src, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight }: Bitmap): void {
-    this.ctx.drawImage(src, sx, sy, sWidth || 0, sHeight || 0, dx || 0, dy || 0, dWidth || 0, dHeight || 0)
+  private drawImage (raster: Raster): void {
+    this.ctx.drawImage(
+      raster.src,
+      raster.srcRect.x,
+      raster.srcRect.y,
+      raster.srcRect.width || 0,
+      raster.srcRect.height || 0,
+      raster.distRect?.x || 0,
+      raster.distRect?.y || 0,
+      raster.distRect?.width || 0,
+      raster.distRect?.height || 0
+    )
   }
 
   private draw (action: () => void, obj: Shape | TextBlock, mask?: Shape | null) {

@@ -1,11 +1,11 @@
 import { Size } from './size'
-import { Bitmap } from './bitmap'
+import { Raster } from './bitmap'
 
 export class Sprite {
-  bitmap: Bitmap
+  raster: Raster
   tileSize: Size
-  constructor (bitmap: Bitmap, tileSize: Size) {
-    this.bitmap = bitmap
+  constructor (raster: Raster, tileSize: Size) {
+    this.raster = raster
     this.tileSize = tileSize
   }
 }

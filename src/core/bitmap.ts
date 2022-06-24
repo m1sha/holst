@@ -1,36 +1,32 @@
 import Orderable from './orderable'
+import { IRect, Rect } from './rect'
 
 export type AnyImageType = HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap
-export class Bitmap implements Orderable {
+export class Raster implements Orderable {
   src: AnyImageType
-  sx: number
-  sy: number
-  sWidth?: number
-  sHeight?: number
-  dx?: number
-  dy?: number
-  dWidth?: number
-  dHeight?: number
+  srcRect: IRect
+  distRect: IRect
   order: number = 0
 
-  constructor (src: AnyImageType, sx: number, sy: number, sWidth?: number, sHeight?: number, dx?: number, dy?: number, dWidth?: number, dHeight?: number) {
+  constructor (src: AnyImageType, srcRect: IRect, distRect: IRect) {
     this.src = src
-    this.sx = sx
-    this.sy = sy
-    this.sWidth = sWidth
-    this.sHeight = sHeight
-    this.dx = dx
-    this.dy = dy
-    this.dWidth = dWidth
-    this.dHeight = dHeight
+    this.srcRect = srcRect
+    this.distRect = distRect
   }
 
   static createImage (url: string, callback?: (ev: Event) => void, onerror?: (ev: string | Event) => void) {
     const img = new Image()
+    const srcRect = new Rect(0, 0, 0, 0)
     img.src = url
-    if (callback) img.onload = ev => callback(ev)
+    if (callback) {
+      img.onload = ev => {
+        srcRect.width = img.width
+        srcRect.height = img.height
+        callback(ev)
+      }
+    }
     if (onerror) img.onerror = ev => onerror(ev)
-    return new Bitmap(img, 0, 0)
+    return new Raster(img, srcRect, new Rect(0, 0, 0, 0))
   }
 }
-export type Images = Bitmap[]
+export type Images = Raster[]

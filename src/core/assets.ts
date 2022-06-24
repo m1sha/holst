@@ -1,8 +1,8 @@
-import { Bitmap } from './bitmap'
+import { Raster } from './bitmap'
 import { ResourceLoader, ResourceLoaderCallBackFactory } from '../tools/resource-loader'
 
-export class Assets extends ResourceLoader<Bitmap> {
-  factory (): ResourceLoaderCallBackFactory<Bitmap> {
-    return (url, callback, error) => Bitmap.createImage(url, callback, error)
+export class Assets extends ResourceLoader<Raster> {
+  factory (): ResourceLoaderCallBackFactory<Raster> {
+    return (url, callback, error) => Raster.createImage(url, callback, error)
   }
 }
