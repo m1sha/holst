@@ -63,7 +63,7 @@ export class Renderer2D {
   }
 
   private drawShape (shape: Shape, mask?: Shape | null) {
-    this.draw(() => drawShape(this.ctx, shape, this.viewport.transform), shape, mask)
+    this.draw(() => drawShape(this.ctx, shape), shape, mask)
   }
 
   private drawTextBlock (block: TextBlock, mask?: Shape | null): void {

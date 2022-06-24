@@ -27,6 +27,7 @@ export default class Shape implements Interactive, Orderable, Drawable {
   name: string
   order: number
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
+  /** @internal */ globalTransform: Matrix2D | null = null
   frozen: boolean = false
   readonly figures: Figures
 
@@ -237,9 +238,9 @@ export default class Shape implements Interactive, Orderable, Drawable {
     return calcBounds(points)
   }
 
-  toPath2D (globalTransform?: Matrix2D): Path2DBase {
+  toPath2D (): Path2DBase {
     if (this.#modified) {
-      this.#cache = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : globalTransform)
+      this.#cache = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : this.globalTransform ?? Matrix2D.identity)
       this.#modified = false
     }
 

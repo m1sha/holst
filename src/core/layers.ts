@@ -11,6 +11,7 @@ import { calcBounds } from './utils'
 import Orderable from './orderable'
 import { Arrange } from './arrange'
 import { Sprite } from './sprite'
+import { Matrix2D } from './matrix'
 
 export class Layer implements Orderable {
   private objects: Orderable[] = []
@@ -20,6 +21,7 @@ export class Layer implements Orderable {
   order: number
   name: string
   frozen: boolean = false
+  globalTransform: Matrix2D | null = null
 
   constructor (order: number, styleManager: StyleManager, name?: string) {
     this.name = name || 'Layer' + order
@@ -42,6 +44,7 @@ export class Layer implements Orderable {
     const result = new Shape(path, this.arrange.order, stl)
     this.objects.push(result)
     result.frozen = this.frozen
+    result.globalTransform = this.globalTransform
     return result
   }
 
@@ -56,6 +59,7 @@ export class Layer implements Orderable {
   addShape (shape: Shape): void {
     if (!shape.order) shape.order = this.arrange.order
     shape.frozen = this.frozen
+    shape.globalTransform = this.globalTransform
     this.objects.push(shape)
   }
 

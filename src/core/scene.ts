@@ -1,3 +1,4 @@
+import { Matrix2D } from './matrix'
 import { Arrange } from './arrange'
 import { Layer } from './layers'
 import { StyleManager } from './style-manager'
@@ -7,15 +8,18 @@ export class Scene {
     readonly actionLayer: Layer
     readonly styleManager: StyleManager
     private arrange: Arrange
+    private globalTransform: Matrix2D
     constructor () {
       this._layers = []
       this.arrange = new Arrange(this._layers)
       this.styleManager = new StyleManager()
       this.actionLayer = new Layer(0, this.styleManager)
+      this.globalTransform = Matrix2D.identity
     }
 
     createLayer (name?: string, frozen?: boolean): Layer {
       const result = new Layer(this.arrange.order, this.styleManager, name)
+      result.globalTransform = this.globalTransform
       this._layers.push(result)
       if (frozen) result.frozen = true
       return result
