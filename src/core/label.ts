@@ -189,6 +189,10 @@ export class TextBlock implements Interactive, Orderable, Drawable {
     this.eventHandler.remove(this, type)
     return this
   }
+
+  static create (text: string, style: TextStyle) {
+    return new TextBlock(text, style)
+  }
 }
 
 // class CharacterWidths {
