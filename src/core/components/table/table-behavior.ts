@@ -3,10 +3,14 @@ import { IPoint } from '../../point'
 import { TableControl } from './table-control'
 
 export type CellDropEventCallBack = (data: unknown, point: IPoint, rect: Rect) => void
+export type CellDragoverEventCallBack = (control: TableControl, point: IPoint) => void
+export type CellDragleaveEventCallBack = (control: TableControl, point: IPoint) => void
 
 export class TableBehavior {
   private controls: TableControl[]
-  drop: CellDropEventCallBack | null = null
+  onDrop: CellDropEventCallBack | null = null
+  onDragover: CellDragoverEventCallBack | null = null
+  onDragleave: CellDragleaveEventCallBack | null = null
   constructor (controls: TableControl[]) {
     this.controls = controls
   }
@@ -18,11 +22,13 @@ export class TableBehavior {
       const shape = control.cellShape
       const style = shape.copyStyle()
       shape
-        .on('dragover', () => {
-          shape.style.fillStyle = '#219911'
+        .on('dragover', e => {
+          const point = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
+          if (this.onDragover) this.onDragover(control, point)
         })
-        .on('dragleave', () => {
-          shape.style.fillStyle = style.fillStyle
+        .on('dragleave', e => {
+          const point = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
+          if (this.onDragleave) this.onDragleave(control, point)
         })
         .on('hover', e => {
           shape.style.fillStyle = '#819911'
@@ -37,7 +43,7 @@ export class TableBehavior {
       shape.on('drop', e => {
         const data = e.event.origin.dataTransfer!!.getData('text/plain')
         const point = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
-        if (this.drop) this.drop(data, point, shape.bounds)
+        if (this.onDrop) this.onDrop(data, point, shape.bounds)
       })
     }
   }
