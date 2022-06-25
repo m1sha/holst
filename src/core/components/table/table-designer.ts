@@ -41,6 +41,7 @@ export class TableDesigner {
             if (item.type === 'shape') layer.addShape(item as Shape)
             if (item.type === 'text') layer.addTextBlock(item as TextBlock)
           }
+          cell.bounds = constraints.rect
         } else {
           cellShape = layer.createShape({ strokeStyle: cell.hidden ? Color.white : '#B1B1B1' }).rect(constraints.rect)
           cell.bounds = constraints.rect
