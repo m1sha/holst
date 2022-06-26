@@ -17,6 +17,8 @@ import { StyleManager } from './core/style-manager'
 export * from './core/shape-style'
 export * from './core/label-style'
 export * from './core/drawable'
+export * from './core/point'
+export * from './core/rect'
 
 export {
   AnimationQueue,
