@@ -21,28 +21,50 @@ export class Point implements IPoint {
     }
   }
 
-  add (point: IPoint) {
-    return new Point(this.x + point.x, this.y + point.y)
+  add (v: number): Point
+  // eslint-disable-next-line no-dupe-class-members
+  add (x: number, y: number): Point
+  // eslint-disable-next-line no-dupe-class-members
+  add (point: IPoint): Point
+  // eslint-disable-next-line no-dupe-class-members
+  add (...args: Array<any>): Point {
+    return this.#overload(args, (x, y) => this.#add(x, y))
   }
 
-  dec (point: IPoint) {
-    return new Point(this.x - point.x, this.y - point.y)
+  dec (x: number, y: number): Point
+  // eslint-disable-next-line no-dupe-class-members
+  dec (point: IPoint): Point
+  // eslint-disable-next-line no-dupe-class-members
+  dec (...args: Array<any>): Point {
+    return this.#overload(args, (x, y) => this.#add(-x, -y))
   }
 
-  mul (v: number) {
-    return new Point(this.x * v, this.y * v)
+  mul (v: number): Point
+  // eslint-disable-next-line no-dupe-class-members
+  mul (x: number, y: number): Point
+  // eslint-disable-next-line no-dupe-class-members
+  mul (point: IPoint): Point
+  // eslint-disable-next-line no-dupe-class-members
+  mul (...args: Array<any>): Point {
+    return this.#overload(args, (x, y) => this.#mul(x, y))
   }
 
-  distance (point: IPoint): number {
-    const x = Math.pow(point.x - this.x, 2)
-    const y = Math.pow(point.y - this.y, 2)
-    return Math.sqrt(x + y)
+  distance (v: number): number
+  // eslint-disable-next-line no-dupe-class-members
+  distance (x: number, y: number): number
+  // eslint-disable-next-line no-dupe-class-members
+  distance (point: IPoint): number
+  // eslint-disable-next-line no-dupe-class-members
+  distance (...args: Array<any>): number {
+    return this.#overload(args, (x, y) => this.#distance(x, y))
   }
 
+  /** @deprecated */
   static sum (point1: Point, point2: Point): Point {
     return new Point(point1.x + point2.x, point1.y + point2.y)
   }
 
+  /** @deprecated */
   static mul (point1: Point, point2: Point): Point {
     return new Point(point1.x * point2.x, point1.y * point2.y)
   }
@@ -58,5 +80,38 @@ export class Point implements IPoint {
 
   toString () {
     return `{ x: ${this.x}, y: ${this.y} }`
+  }
+
+  #overload<T> (args: Array<any>, a: (x: number, y: number) => T) {
+    if (args.length === 1 && Point.is(args[0])) {
+      const { x, y } = args[0]
+      return a(x, y)
+    }
+
+    if (args.length === 1 && typeof args[0] === 'number') {
+      const v = args[0]
+      return a(v, v)
+    }
+
+    if (args.length === 2 && !args.some(p => typeof p !== 'number')) {
+      const [x, y] = args
+      return a(x, y)
+    }
+
+    throw new Error('The signature is not found for the method')
+  }
+
+  #add (x: number, y: number) {
+    return new Point(this.x + x, this.y + y)
+  }
+
+  #mul (x: number, y: number) {
+    return new Point(this.x * x, this.y * y)
+  }
+
+  #distance (x: number, y: number): number {
+    const dx = Math.pow(x - this.x, 2)
+    const dy = Math.pow(y - this.y, 2)
+    return Math.sqrt(dx + dy)
   }
 }
