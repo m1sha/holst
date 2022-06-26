@@ -18,7 +18,7 @@ export class TableBehavior {
   create () {
     const controls = this.controls
     for (const control of controls) {
-      if (control.columnIndex === 0 || control.rowIndex === 0) continue
+      if (control.columnIndex === 0) continue
       const shape = control.cellShape
       const style = shape.copyStyle()
       shape
