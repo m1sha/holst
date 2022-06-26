@@ -95,7 +95,15 @@ export class Rect implements IRect, Size {
   }
 
   intersectsPoint (point: IPoint): boolean {
-    return (point.x > this.x && point.x < this.absWidth) && (point.y > this.y && point.y < this.absHeight)
+    return this.intersectsHorizontal(point.x) && this.intersectsVertical(point.y)
+  }
+
+  intersectsHorizontal (x: number) {
+    return x >= this.x && x <= this.absWidth
+  }
+
+  intersectsVertical (y: number) {
+    return y >= this.y && y <= this.absHeight
   }
 
   intersectsRect (rect: Rect): boolean {

@@ -1,4 +1,4 @@
-import { Point } from '../src/core/point'
+import { Point } from '../../src/core/point'
 
 test('Point distance', () => {
   const d = new Point(10, 0).distance({ x: 100, y: 0 })
