@@ -1,4 +1,4 @@
-import { IPoint } from '../../src/core/point'
+import { IPoint, Point } from '../../src/core/point'
 import { GlobalMatrixFactory } from '../../src/core/matrix'
 
 class MockDOMMatrix {
@@ -16,11 +16,11 @@ class MockDOMMatrix {
     if (!init) return
     if (Array.isArray(init)) {
       this.m11 = this.a = init[0]
-      this.m12 = this.b = init[0]
-      this.m21 = this.c = init[0]
-      this.m22 = this.d = init[0]
-      this.m13 = this.e = init[0]
-      this.m23 = this.f = init[0]
+      this.m12 = this.b = init[1]
+      this.m21 = this.c = init[2]
+      this.m22 = this.d = init[3]
+      this.m13 = this.e = init[4]
+      this.m23 = this.f = init[5]
     }
   }
 
@@ -108,7 +108,16 @@ class MockDOMMatrix {
   }
 
   multiply (other?: any): DOMMatrix {
-    return new MockDOMMatrix([])
+    const { a, b, c, d, e, f } = this
+    const newMatrix = [
+      a * other.a + c * other.b,
+      b * other.a + d * other.b,
+      a * other.c + c * other.d,
+      b * other.c + d * other.d,
+      a * other.e + c * other.f + e,
+      b * other.e + d * other.f + f
+    ]
+    return new MockDOMMatrix(newMatrix)
   }
 
   rotate (rotX?: number, rotY?: number, rotZ?: number): DOMMatrix {
@@ -157,7 +166,10 @@ class MockDOMMatrix {
   }
 
   transformPoint (point?: any): DOMPoint {
-    return new MockDOMPoint(point)
+    const { a, b, c, d, e, f } = this
+    const { x, y } = point
+    const r = new Point(a * x + c * y + e, b * x + d * y + f)
+    return new MockDOMPoint(r)
   }
 
   translate (tx?: number, ty?: number, tz?: number): MockDOMMatrix {
