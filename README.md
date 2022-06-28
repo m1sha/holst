@@ -11,7 +11,7 @@
     .circle({ x: 150, y: 150 }, 50)
     .on('hover', e => {
       e.animate({ percent } => {
-        shape.style.fill = Color.fromLinearGradient(percent / 100, [Color.blue, Color.red])
+        shape.style.fill = Color.fromGradient(percent / 100, [Color.blue, Color.red])
       }, 200)
     })
     .on('leave', () => shape.style.fill = oldStyle.fill)
