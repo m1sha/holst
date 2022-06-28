@@ -9,7 +9,11 @@
   const oldStyle = shape.copyStyle()
   shape
     .circle({ x: 150, y: 150 }, 50)
-    .on('hover', () => shape.style.fill = Color.red)
+    .on('hover', e => {
+      e.animate({ percent } => {
+        shape.style.fill = Color.fromLinearGradient(percent / 100, [Color.blue, Color.red])
+      }, 200)
+    })
     .on('leave', () => shape.style.fill = oldStyle.fill)
 
   const canvas = document.getElementById('canvas')
