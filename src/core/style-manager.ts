@@ -54,7 +54,6 @@ class ShapeStyleDecorator implements ShapeStyle {
     if (style && !isUndefined(style.lineWidth)) this.lineWidth = style.lineWidth
     if (style && !isUndefined(style.miterLimit)) this.miterLimit = style.miterLimit
     if (style && !isUndefined(style.fill)) this.fill = style.fill
-    if (style && !isUndefined(style.stroke)) this.stroke = style.stroke
     return this
   }
 

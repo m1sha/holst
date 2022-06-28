@@ -5,12 +5,12 @@
 <script>
   const scene = new Scene()
   const layer = scene.createLayer()
-  const shape = layer.createShape({ fillStyle: Color.blue })
+  const shape = layer.createShape({ fill: Color.blue })
   const oldStyle = shape.copyStyle()
   shape
     .circle({ x: 150, y: 150 }, 50)
-    .on('hover', () => shape.style.fillStyle = Color.red)
-    .on('leave', () => shape.style.fillStyle = oldStyle.fillStyle)
+    .on('hover', () => shape.style.fill = Color.red)
+    .on('leave', () => shape.style.fill = oldStyle.fill)
 
   const canvas = document.getElementById('canvas')
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
