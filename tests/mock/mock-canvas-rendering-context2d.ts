@@ -96,7 +96,7 @@ class MockCanvasRenderingContext2D implements ICanvasRenderingContext2D {
   }
 
   createLinearGradient (x0: number, y0: number, x1: number, y1: number): CanvasGradient {
-    this.logger.add('createConicGradient')
+    this.logger.add('createLinearGradient')
     return new CanvasGradient()
   }
 
@@ -148,27 +148,27 @@ class MockCanvasRenderingContext2D implements ICanvasRenderingContext2D {
   }
 
   closePath (): void {
-    this.logger.add('bezierCurveTo')
+    this.logger.add('closePath')
   }
 
   ellipse (x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, counterclockwise?: boolean | undefined): void {
-    this.logger.add('bezierCurveTo')
+    this.logger.add('ellipse')
   }
 
   lineTo (x: number, y: number): void {
-    this.logger.add('bezierCurveTo')
+    this.logger.add('lineTo')
   }
 
   moveTo (x: number, y: number): void {
-    this.logger.add('bezierCurveTo')
+    this.logger.add('moveTo')
   }
 
   quadraticCurveTo (cpx: number, cpy: number, x: number, y: number): void {
-    this.logger.add('bezierCurveTo')
+    this.logger.add('quadraticCurveTo')
   }
 
   rect (x: number, y: number, w: number, h: number): void {
-    this.logger.add('bezierCurveTo')
+    this.logger.add(`rect { x: ${x}, y: ${y}, w: ${w}, h: ${h} }`)
   }
 
   lineCap: CanvasLineCap = 'butt'
@@ -178,7 +178,7 @@ class MockCanvasRenderingContext2D implements ICanvasRenderingContext2D {
   miterLimit: number = 1
 
   getLineDash (): number[] {
-    throw new Error('Method not implemented.')
+    return []
   }
 
   setLineDash(segments: number[]): void;
@@ -186,7 +186,7 @@ class MockCanvasRenderingContext2D implements ICanvasRenderingContext2D {
   setLineDash(segments: Iterable<number>): void;
   // eslint-disable-next-line no-dupe-class-members
   setLineDash (segments: unknown): void {
-    throw new Error('Method not implemented.')
+    this.logger.add('setLineDash')
   }
 
   clearRect (x: number, y: number, w: number, h: number): void {
@@ -207,15 +207,15 @@ class MockCanvasRenderingContext2D implements ICanvasRenderingContext2D {
   shadowOffsetY: number = 0
 
   restore (): void {
-    this.logger.add('bezierCurveTo')
+    this.logger.add('restore')
   }
 
   save (): void {
-    this.logger.add('bezierCurveTo')
+    this.logger.add('save')
   }
 
   fillText (text: string, x: number, y: number, maxWidth?: number | undefined): void {
-    throw new Error('Method not implemented.')
+    this.logger.add('fillText')
   }
 
   measureText (text: string): TextMetrics {
@@ -223,7 +223,7 @@ class MockCanvasRenderingContext2D implements ICanvasRenderingContext2D {
   }
 
   strokeText (text: string, x: number, y: number, maxWidth?: number | undefined): void {
-    throw new Error('Method not implemented.')
+    this.logger.add('strokeText')
   }
 
   direction: CanvasDirection = 'inherit'

@@ -79,7 +79,7 @@ export class MutablePath2D implements Path2DBase {
   }
 
   createPath2D (globalTransform?: Matrix2D): Path2D {
-    return createPath2D(this.stack, this.transform, globalTransform)
+    return GlobalPath2DFactory.create(this.stack, this.transform, globalTransform)
   }
 
   toPoints (globalTransform?: Matrix2D): IPoint[] {
@@ -94,12 +94,12 @@ export class MutablePath2D implements Path2DBase {
     result.transform = this.transform.copy()
     return result
   }
-
-  // export (): Figure {
-  //   return createFigure(this.stack)
-  // }
-
-  // import (figure: Figure): void {
-  //   updateStack(this.stack, figure)
-  // }
 }
+
+const GlobalPath2DFactory = {
+  create: (stack: Path2DElement[], transform: Matrix2D, globalTransform?: Matrix2D) => {
+    return createPath2D(stack, transform, globalTransform)
+  }
+}
+
+export { GlobalPath2DFactory }
