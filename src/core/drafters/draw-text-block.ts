@@ -1,10 +1,11 @@
 import { TextBlock, TextBlockLine } from '../label'
 import { Color } from '../color'
 import { TextStyle } from '../label-style'
+import { Matrix2D } from '../matrix'
 
 export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock) {
   assignTextStyle(ctx, block.style)
-  ctx.setTransform(block.transform)
+  ctx.setTransform(block.transform.mul(block.globalTransform ?? Matrix2D.identity))
   ctx.textBaseline = block.baseline
   const cut = block.overflow === 'clip' || block.overflow === 'word-break + clip'
   if (cut && block.size) {
