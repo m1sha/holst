@@ -1,3 +1,4 @@
+/* global FrameRequestCallback */
 import { Scene } from './scene'
 import { Renderer2D } from './renderer2D'
 
@@ -16,7 +17,7 @@ export class AnimationHandler {
   start (scene: Scene): void {
     this.state = 1
     this.scene = scene
-    this.handlerId = requestAnimationFrame(r => this.handler(r))
+    this.handlerId = GlobalAnimationFrameHandlerFactory.requestAnimationFrame(r => this.handler(r))
   }
 
   stop (): void {
@@ -31,7 +32,7 @@ export class AnimationHandler {
   private handler (timestamp: number) {
     if (this.startTime < 0) {
       this.startTime = timestamp
-      requestAnimationFrame(r => this.handler(r))
+      GlobalAnimationFrameHandlerFactory.requestAnimationFrame(r => this.handler(r))
       return
     }
 
@@ -45,6 +46,12 @@ export class AnimationHandler {
       if (this.renderer.onFrameChanged) this.renderer.onFrameChanged()
       this.renderer.render(this.scene)
     }
-    requestAnimationFrame(r => this.handler(r))
+    GlobalAnimationFrameHandlerFactory.requestAnimationFrame(r => this.handler(r))
   }
 }
+
+const GlobalAnimationFrameHandlerFactory = {
+  requestAnimationFrame: (callback: FrameRequestCallback) => window.requestAnimationFrame(callback)
+}
+
+export { GlobalAnimationFrameHandlerFactory }

@@ -52,6 +52,7 @@ export class Layer implements Orderable {
     const stl = (typeof style === 'string') ? this.styleManager.texts(style) : style
     const result = new TextBlock(text, stl, this.arrange.order)
     if (target) result.target = target
+    result.globalTransform = this.globalTransform
     this.objects.push(result)
     return result
   }
@@ -65,6 +66,7 @@ export class Layer implements Orderable {
 
   addTextBlock (textBlock: TextBlock): void {
     if (!textBlock.order) textBlock.order = this.arrange.order
+    textBlock.globalTransform = this.globalTransform
     // textBlock.frozen = this.frozen
     this.objects.push(textBlock)
   }

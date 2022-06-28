@@ -40,6 +40,7 @@ export class TextBlock implements Interactive, Orderable, Drawable {
   overflow: 'none' | 'word-break' | 'clip' | 'word-break + clip' = 'none'
   lineHeight: number = 0
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
+  /** @internal */ globalTransform: Matrix2D | null = null
 
   constructor (text: string, style: TextStyle, order: number = 0, measure?: (text: string, style: TextStyle) => any) {
     this.id = uid()
