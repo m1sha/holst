@@ -1,7 +1,7 @@
-import { TextBlock, TextBlockLine } from '../label'
-import { Color } from '../color'
-import { TextStyle } from '../label-style'
-import { Matrix2D } from '../matrix'
+import { TextBlock, TextBlockLine } from '../../label'
+import { Color } from '../../color'
+import { TextStyle } from '../../label-style'
+import { Matrix2D } from '../../matrix'
 
 export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock) {
   assignTextStyle(ctx, block.style)

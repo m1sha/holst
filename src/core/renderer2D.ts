@@ -9,8 +9,8 @@ import { Viewport } from './viewport'
 import Orderable from './orderable'
 import { EventHandler } from './events/event-handler2'
 import { AnimationHandler } from './animation-handler'
-import { drawShape } from './drafters/draw-shape'
-import { drawTextBlock } from './drafters/draw-text-block'
+import { drawShape } from './render/drafters/draw-shape'
+import { drawTextBlock } from './render/drafters/draw-text-block'
 import { Sprite } from './sprite'
 
 export class Renderer2D {

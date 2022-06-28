@@ -1,5 +1,5 @@
 import { TextStyle } from './label-style'
-import Context2DFactory from './canvas-rendering-context-2d-factory'
+import Context2DFactory from './render/canvas-rendering-context-2d-factory'
 import { Color } from './color'
 
 export class TextMeasurer {

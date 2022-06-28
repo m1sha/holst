@@ -1,5 +1,5 @@
-import Shape from '../shape'
-import { Color } from '../color'
+import Shape from '../../shape'
+import { Color } from '../../color'
 
 export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape) {
   const { style } = shape
