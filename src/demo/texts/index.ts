@@ -46,9 +46,9 @@ function createTextBlock (text: string, fontSize: string, color: Color, position
   block.size = size
   if (wrap) block.overflow = 'word-break'
   const bounds = block.bounds.outline(-16)
-  layer.createShape({ strokeStyle: Color.lightGrey, fillStyle: Color.lightGrey }).roundRect(bounds, 8)
+  layer.createShape({ stroke: Color.lightGrey, fill: Color.lightGrey }).roundRect(bounds, 8)
   layer.addTextBlock(block)
-  layer.createShape({ fillStyle: Color.blue }).circle(position, 2)
+  layer.createShape({ fill: Color.blue }).circle(position, 2)
   setHover(block)
   return block
 }
@@ -59,9 +59,9 @@ function createTextBlockInCircle (text: string, color: Color, position: Point, l
   block.alignment = 'center'
   block.target = position
   const bounds = block.bounds.outline(-32)
-  layer.createShape({ fillStyle: Color.lightGrey }).circle(bounds.absCenter, bounds.width / 2)
+  layer.createShape({ fill: Color.lightGrey }).circle(bounds.absCenter, bounds.width / 2)
   layer.addTextBlock(block)
-  layer.createShape({ fillStyle: Color.darkGrey }).circle(position, 3)
+  layer.createShape({ fill: Color.darkGrey }).circle(position, 3)
   setHover(block)
   return block
 }
