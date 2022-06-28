@@ -183,8 +183,8 @@ class MockDOMMatrix {
   readonly is2D: boolean = true
   readonly isIdentity: boolean = false
 
-  static fromMatrix () {
-    return new MockDOMMatrix([])
+  static fromMatrix (other?: any) {
+    return new MockDOMMatrix([other.a, other.b, other.c, other.d, other.e, other.f])
   }
 
   static fromFloat32Array (array32: Float32Array): DOMMatrix {
