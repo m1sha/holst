@@ -42,8 +42,8 @@ export class Editor {
   private createView () {
     this.layer0.clear()
     const grid = new ConstraintGrid(this.size, this.mapSizeY, this.mapSizeX)
-    const neutral = this.layer0.createShape({ fillStyle: new Color('hsv(0, 0, 90)'), lineWidth: 8, strokeStyle: new Color('hsv(0, 0, 50)') })
-    const black = this.layer0.createShape({ fillStyle: new Color('hsv(0, 0, 0)'), strokeStyle: new Color('hsv(0, 0, 50)') })
+    const neutral = this.layer0.createShape({ fill: new Color('hsv(0, 0, 90)'), lineWidth: 8, stroke: new Color('hsv(0, 0, 50)') })
+    const black = this.layer0.createShape({ fill: new Color('hsv(0, 0, 0)'), stroke: new Color('hsv(0, 0, 50)') })
     for (let i = 0; i < grid.rows; i++) {
       for (let j = 0; j < grid.columns; j++) {
         const cell = grid.getCell(i, j)

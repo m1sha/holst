@@ -10,8 +10,8 @@ export interface ShapeStyle {
   lineJoin?: CanvasLineJoin
   lineWidth?: number
   miterLimit?: number
-  fillStyle?: string | CanvasGradient | CanvasPattern | Color
-  strokeStyle?: string | CanvasGradient | CanvasPattern | Color
+  fill?: string | CanvasGradient | CanvasPattern | Color
+  stroke?: string | CanvasGradient | CanvasPattern | Color
 }
 
 export class ShapeStyleImpl {
@@ -22,8 +22,8 @@ export class ShapeStyleImpl {
   #lineJoin?: CanvasLineJoin
   #lineWidth?: number
   #miterLimit?: number
-  #fillStyle?: string | CanvasGradient | CanvasPattern | Color
-  #strokeStyle?: string | CanvasGradient | CanvasPattern | Color
+  #fill?: string | CanvasGradient | CanvasPattern | Color
+  #stroke?: string | CanvasGradient | CanvasPattern | Color
 
   get lineCap (): CanvasLineCap | undefined {
     return this.#lineCap
@@ -79,22 +79,22 @@ export class ShapeStyleImpl {
     this.#miterLimit = value
   }
 
-  get fillStyle () : string | CanvasGradient | CanvasPattern | Color | undefined {
-    return this.#fillStyle
+  get fill () : string | CanvasGradient | CanvasPattern | Color | undefined {
+    return this.#fill
   }
 
-  set fillStyle (value: string | CanvasGradient | CanvasPattern | Color | undefined) {
+  set fill (value: string | CanvasGradient | CanvasPattern | Color | undefined) {
     this.#onSetDelegate()
-    this.#fillStyle = value
+    this.#fill = value
   }
 
-  get strokeStyle () : string | CanvasGradient | CanvasPattern | Color | undefined {
-    return this.#strokeStyle
+  get stroke () : string | CanvasGradient | CanvasPattern | Color | undefined {
+    return this.#stroke
   }
 
-  set strokeStyle (value: string | CanvasGradient | CanvasPattern | Color | undefined) {
+  set stroke (value: string | CanvasGradient | CanvasPattern | Color | undefined) {
     this.#onSetDelegate()
-    this.#strokeStyle = value
+    this.#stroke = value
   }
 
   constructor (style: ShapeStyle, onSetDelegate: () => void) {
@@ -105,8 +105,8 @@ export class ShapeStyleImpl {
     this.#lineJoin = style.lineJoin ?? 'bevel'
     this.#lineWidth = style.lineWidth ?? 1
     this.#miterLimit = style.miterLimit
-    this.#fillStyle = style.fillStyle ? this.getStyle(style.fillStyle) : undefined
-    this.#strokeStyle = style.strokeStyle ? this.getStyle(style.strokeStyle) : undefined
+    this.#fill = style.fill ? this.getStyle(style.fill) : undefined
+    this.#stroke = style.stroke ? this.getStyle(style.stroke) : undefined
   }
 
   clone (): ShapeStyle {
@@ -117,8 +117,8 @@ export class ShapeStyleImpl {
       lineJoin: this.#lineJoin,
       lineWidth: this.#lineWidth,
       miterLimit: this.#miterLimit,
-      fillStyle: this.#fillStyle,
-      strokeStyle: this.#strokeStyle
+      fill: this.#fill,
+      stroke: this.#stroke
     }
   }
 

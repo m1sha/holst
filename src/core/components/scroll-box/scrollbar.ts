@@ -47,7 +47,7 @@ export abstract class ScrollBar {
     const { track } = this.style
     const { width, height } = this.containerSize
     layer
-      .createShape({ fillStyle: track.color, strokeStyle: track.border })
+      .createShape({ fill: track.color, stroke: track.border })
       .rect(new Rect(width - track.width, height - track.width, track.width, track.width))
   }
 

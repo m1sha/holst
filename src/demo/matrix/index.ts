@@ -11,25 +11,25 @@ export function createMatrixDemo (canvas: HTMLCanvasElement) {
   scene.styleManager.defineShapeStyle('base', { lineWidth: 8, lineJoin: 'miter' })
   const style = (s: ShapeStyle) => scene.styleManager.shapes('base').clone(s)
   const layer = scene.createLayer()
-  const shape0 = layer.createShape(style({ strokeStyle: Color.lightGrey }))
+  const shape0 = layer.createShape(style({ stroke: Color.lightGrey }))
 
   const rect = new Rect(200, 200, 120, 80)
   shape0.rect(rect)
 
   const shapes = [
-    layer.createShape(style({ strokeStyle: Color.blue })).roundRect(rect, 12),
-    layer.createShape(style({ strokeStyle: Color.red })).roundRect(rect, 12),
-    layer.createShape(style({ strokeStyle: Color.green })).roundRect(rect, 12),
-    layer.createShape(style({ strokeStyle: Color.darkGrey })).roundRect(rect, 12)
+    layer.createShape(style({ stroke: Color.blue })).roundRect(rect, 12),
+    layer.createShape(style({ stroke: Color.red })).roundRect(rect, 12),
+    layer.createShape(style({ stroke: Color.green })).roundRect(rect, 12),
+    layer.createShape(style({ stroke: Color.darkGrey })).roundRect(rect, 12)
   ]
   const lines = [
-    layer.createShape({ strokeStyle: Color.lightGrey }).moveTo(Point.zero).lineTo(Point.zero),
-    layer.createShape({ strokeStyle: Color.lightGrey }).moveTo(Point.zero).lineTo(Point.zero),
-    layer.createShape({ strokeStyle: Color.lightGrey }).moveTo(Point.zero).lineTo(Point.zero),
-    layer.createShape({ strokeStyle: Color.lightGrey }).moveTo(Point.zero).lineTo(Point.zero)
+    layer.createShape({ stroke: Color.lightGrey }).moveTo(Point.zero).lineTo(Point.zero),
+    layer.createShape({ stroke: Color.lightGrey }).moveTo(Point.zero).lineTo(Point.zero),
+    layer.createShape({ stroke: Color.lightGrey }).moveTo(Point.zero).lineTo(Point.zero),
+    layer.createShape({ stroke: Color.lightGrey }).moveTo(Point.zero).lineTo(Point.zero)
   ]
 
-  layer.createShape({ fillStyle: Color.red }).circle(frame.absCenter, 3)
+  layer.createShape({ fill: Color.red }).circle(frame.absCenter, 3)
 
   let angle = 0
   let dScale = 0.1

@@ -41,7 +41,7 @@ export async function createSpriteDemo (canvas: HTMLCanvasElement) {
       sprite4.next()
     }
 
-    x += 0.2
+    x += 0.25
     if (x > 1) x = 0
   }
 }

@@ -20,19 +20,19 @@ function createScene (): Scene {
   const layer0 = scene.createLayer()
 
   const rect = layer0
-    .createShape({ strokeStyle: '#333' })
+    .createShape({ stroke: '#333' })
     .rect(new Rect(10, 10, 150, 150))
   setInteractive(rect)
 
-  const fillRect = layer0.createShape({ fillStyle: '#ff00ff' })
+  const fillRect = layer0.createShape({ fill: '#ff00ff' })
     .rect(new Rect(600, 10, 150, 150))
   setInteractive(fillRect)
 
-  const arc = layer0.createShape({ fillStyle: '#510051', strokeStyle: '#3f3f53', lineWidth: 12 })
+  const arc = layer0.createShape({ fill: '#510051', stroke: '#3f3f53', lineWidth: 12 })
     .arc({ x: 500, y: 310 }, 50, Math.PI, Math.PI * 2)
   setInteractive(arc)
 
-  const triangle = layer0.createShape({ fillStyle: '#113051', strokeStyle: '#3f3ff3', lineWidth: 4 })
+  const triangle = layer0.createShape({ fill: '#113051', stroke: '#3f3ff3', lineWidth: 4 })
     .moveTo({ x: 100, y: 300 })
     .lineTo({ x: 100, y: 500 })
     .lineTo({ x: 50, y: 400 })
@@ -48,11 +48,11 @@ function setInteractive (shape: Shape) {
   const style = shape.copyStyle()
   shape
     .on('hover', e => {
-      shape.style.fillStyle = '#cd853a'
+      shape.style.fill = '#cd853a'
       e.cursor = 'move'
     })
     .on('leave', e => {
-      shape.style.fillStyle = style.fillStyle
+      shape.style.fill = style.fill
       e.cursor = 'default'
     })
     .on('mousedown', e => {

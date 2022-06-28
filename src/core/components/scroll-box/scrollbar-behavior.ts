@@ -102,10 +102,10 @@ export class ScrollbarBehavior {
     const { thumbButton } = this.style
     button
       .on('hover', () => {
-        button.style.fillStyle = thumbButton.hover
+        button.style.fill = thumbButton.hover
       })
       .on('leave', () => {
-        button.style.fillStyle = oldStyle.fillStyle
+        button.style.fill = oldStyle.fill
       })
   }
 }

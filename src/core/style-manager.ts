@@ -40,21 +40,21 @@ class ShapeStyleDecorator implements ShapeStyle {
   lineJoin?: CanvasLineJoin
   lineWidth?: number
   miterLimit?: number
-  fillStyle?: string | CanvasGradient | CanvasPattern | Color
-  strokeStyle?: string | CanvasGradient | CanvasPattern | Color
+  fill?: string | CanvasGradient | CanvasPattern | Color
+  stroke?: string | CanvasGradient | CanvasPattern | Color
   constructor (style: ShapeStyle) {
     this.assign(style)
   }
 
   assign (style?: ShapeStyle) {
-    if (style && !isUndefined(style.strokeStyle)) this.strokeStyle = style.strokeStyle
+    if (style && !isUndefined(style.stroke)) this.stroke = style.stroke
     if (style && !isUndefined(style.lineDashOffset)) this.lineDashOffset = style.lineDashOffset
     if (style && !isUndefined(style.lineDash)) this.lineDash = style.lineDash
     if (style && !isUndefined(style.lineJoin)) this.lineJoin = style.lineJoin
     if (style && !isUndefined(style.lineWidth)) this.lineWidth = style.lineWidth
     if (style && !isUndefined(style.miterLimit)) this.miterLimit = style.miterLimit
-    if (style && !isUndefined(style.fillStyle)) this.fillStyle = style.fillStyle
-    if (style && !isUndefined(style.strokeStyle)) this.strokeStyle = style.strokeStyle
+    if (style && !isUndefined(style.fill)) this.fill = style.fill
+    if (style && !isUndefined(style.stroke)) this.stroke = style.stroke
     return this
   }
 

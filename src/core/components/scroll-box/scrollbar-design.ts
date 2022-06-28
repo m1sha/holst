@@ -35,7 +35,7 @@ export abstract class ScrollBarDesign {
   createTracker () {
     const rect = this.getTrackerRect()
     const { track } = this.style
-    const trackStyle = { fillStyle: track.color, strokeStyle: track.border }
+    const trackStyle = { fill: track.color, stroke: track.border }
     return this.layer
       .createShape(trackStyle)
       .rect(rect)
@@ -51,7 +51,7 @@ export abstract class ScrollBarDesign {
 
   createArrows (type: 'h' | 'v') {
     const { thumbButton } = this.style
-    const arrowStyle = { fillStyle: thumbButton.color, strokeStyle: thumbButton.border }
+    const arrowStyle = { fill: thumbButton.color, stroke: thumbButton.border }
     const ps = this.getBackArrowPoint()
     const pe = this.getForwardArrowPoint()
 
@@ -69,7 +69,7 @@ export abstract class ScrollBarDesign {
   createThumbButton () {
     const { thumbButton } = this.style
     const rect = this.getThumbButtonRect()
-    const thumbStyle = { fillStyle: thumbButton.color, strokeStyle: thumbButton.border }
+    const thumbStyle = { fill: thumbButton.color, stroke: thumbButton.border }
     return this.layer
       .createShape(thumbStyle)
       .roundRect(rect, 4)
@@ -79,7 +79,7 @@ export abstract class ScrollBarDesign {
     const rect = val === '<' ? this.getBackButtonRect() : this.getForwardButtonRect()
     const { trackButton } = this.style
     return this.layer
-      .createShape({ fillStyle: trackButton.color, strokeStyle: trackButton.border })
+      .createShape({ fill: trackButton.color, stroke: trackButton.border })
       .roundRect(rect, 2)
   }
 }

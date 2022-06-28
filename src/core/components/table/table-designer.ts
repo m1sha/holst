@@ -43,7 +43,7 @@ export class TableDesigner {
           }
           cell.bounds = constraints.rect
         } else {
-          cellShape = layer.createShape({ strokeStyle: cell.hidden ? Color.white : '#B1B1B1' }).rect(constraints.rect)
+          cellShape = layer.createShape({ stroke: cell.hidden ? Color.white : '#B1B1B1' }).rect(constraints.rect)
           cell.bounds = constraints.rect
           if (cell.content) content.push(this.createDefaultLabel(cell, constraints.rect, layer))
         }

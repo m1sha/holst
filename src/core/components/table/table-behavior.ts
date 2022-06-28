@@ -31,10 +31,10 @@ export class TableBehavior {
           if (this.onDragleave) this.onDragleave(control, point)
         })
         .on('hover', e => {
-          shape.style.fillStyle = '#819911'
+          shape.style.fill = '#819911'
         })
         .on('leave', e => {
-          shape.style.fillStyle = style.fillStyle
+          shape.style.fill = style.fill
         })
         .on('mousemove', e => {
           // console.log(e)

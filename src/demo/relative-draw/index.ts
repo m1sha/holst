@@ -5,10 +5,10 @@ export function createRelativeDrawExample (canvas: HTMLCanvasElement) {
   const bg = scene.createLayer()
   const layer = scene.createLayer()
 
-  bg.createShape({ fillStyle: '#1ee' })
+  bg.createShape({ fill: '#1ee' })
     .rect(new Rect(0, 0, 100, 100))
 
-  const pos = layer.createShape({ strokeStyle: 'blue', lineWidth: 4, lineCap: 'round' })
+  const pos = layer.createShape({ stroke: 'blue', lineWidth: 4, lineCap: 'round' })
     .relative
     .moveTo(new Point(20, 20))
     .lineTo(new Point(0, 20))
@@ -16,14 +16,14 @@ export function createRelativeDrawExample (canvas: HTMLCanvasElement) {
     .lineTo(new Point(0, -20))
     .lineTo(new Point(20, 0))
     .position
-  layer.createShape({ strokeStyle: 'green', lineWidth: 1 })
+  layer.createShape({ stroke: 'green', lineWidth: 1 })
     .relative
     .moveTo(pos)
     .ellipse(10, 10, 0, 0, Math.PI * 2)
 
   const b = layer.bounds
 
-  layer.createShape({ strokeStyle: 'red' })
+  layer.createShape({ stroke: 'red' })
     .rect(b)
 
   const renderer = new Renderer2D(canvas.getContext('2d')!!)

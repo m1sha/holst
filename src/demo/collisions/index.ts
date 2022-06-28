@@ -26,7 +26,7 @@ function initScene (scene: Scene, { width, height }: Size): Element[] {
   for (let i = 0; i < elementCount; i++) {
     // const frame = layer.createShape({ strokeStyle: getColor() })
 
-    const shape = layer.createShape({ fillStyle: getColor() })
+    const shape = layer.createShape({ fill: getColor() })
     const x = Math.floor(Math.random() * (width - 150)) + 100
     const y = Math.floor(Math.random() * (height - 150)) + 100
     const r = Math.floor(Math.random() * 30) + 25
@@ -66,9 +66,9 @@ function collisionsDetect (elements: Element[]) {
       if (intersec(c, c2)) {
         // el.velocity.x *= -1
         // el.velocity.y *= -1
-        el.shape.style.fillStyle = '#ff0000'
+        el.shape.style.fill = '#ff0000'
       } else {
-        el.shape.style.fillStyle = '#3f3f3f'
+        el.shape.style.fill = '#3f3f3f'
       }
       j++
     }

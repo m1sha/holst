@@ -8,7 +8,7 @@ import { Block } from '../elements/block'
 export default function (s: Scene, block: Block) {
   const color = block.hovered ? '#b1b1b1' : '#f5f5f5'
   const layer = s.createLayer()
-  const shape = layer.createShape({ fillStyle: color, strokeStyle: '#444' })
+  const shape = layer.createShape({ fill: color, stroke: '#444' })
   shape.name = block._uid.toString()
   const width = helpers.getTextWidth(block.text, layer)
   const height = 18
@@ -29,7 +29,7 @@ const helpers = {
   drawSelectionRect ({ x, y, width, height }: Rect, layer: Layer): void {
     const margin = 5
     layer.createShape({
-      strokeStyle: '#d39303',
+      stroke: '#d39303',
       lineDash: [3],
       lineDashOffset: 2,
       lineWidth: 3
