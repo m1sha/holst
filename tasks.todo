@@ -8,6 +8,13 @@ Task list
 ✔ Cash mode for shape.toPath2D when idle scene @done(22-05-22 21:32)
 ✔ A case with a mousemove when the mouse butten clicked but the cursor out of a shape. Moving must continue (ScrollBar) @done(22-05-23 19:01)
 ✔ Recover tests @done(22-05-24 13:53)
+☐ Viewport must work over scene global matrix tranformation
+☐ Scene elements must know about global matrix tranformation
+☐ Texts and Images (Sprites) must changing if global matrix changed
+☐ Add onto Shapes, Texts and Images (Sprites) attribute frozen with types: bool | 'x-axis' | 'y-axis'
+☐ Make a logger for intergational tests for check results
+☐ Make a decorator for text-style like for shape-style
+☐ Create animation from event. example: shape.on('click', e.animation(() => {}), timeout)
 ☐ Viewport scroll & scale (global matrix transform)
   ✔ UI @done(22-05-19 18:36)
   ✔ Event listners @done(22-05-19 23:08)
