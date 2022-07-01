@@ -41,7 +41,7 @@ export class TableBehavior {
         })
 
       shape.on('drop', e => {
-        const data = e.event.origin.dataTransfer!!.getData('text/plain')
+        const data = JSON.parse(e.event.origin.dataTransfer!!.getData('text/plain'))
         const point = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
         if (this.onDrop) this.onDrop(data, point, shape.bounds)
       })
