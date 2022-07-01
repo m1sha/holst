@@ -9,6 +9,7 @@ import { uid } from '../tools/uid'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { Size } from './size'
 import { Drawable, DrawableType } from './drawable'
+import { Anchor } from './anchor'
 
 /** @deprecated */
 export interface Text {
@@ -39,6 +40,7 @@ export class TextBlock implements Interactive, Orderable, Drawable {
   size?: Size
   overflow: 'none' | 'word-break' | 'clip' | 'word-break + clip' = 'none'
   lineHeight: number = 0
+  anchor: Anchor | null = null
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
   /** @internal */ globalTransform: Matrix2D | null = null
 

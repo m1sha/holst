@@ -2,6 +2,8 @@ import { TextBlock, TextBlockLine } from '../../label'
 import { Color } from '../../color'
 import { TextStyle } from '../../label-style'
 import { Matrix2D } from '../../matrix'
+import { Drawable } from '../../drawable'
+import { IPoint, Point } from '../../point'
 
 export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock) {
   assignTextStyle(ctx, block.style)
@@ -13,13 +15,15 @@ export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock) 
     ctx.clip()
   }
   if (!block.multiline && !block.size) {
-    ctx.fillText(block.text, block.target.x, block.target.y)
+    const { x, y } = applyAnchor(block)
+    ctx.fillText(block.text, x, y)
   } else {
-    let y = block.target.y + block.charHeight
+    const p = applyAnchor(block)
+    let y = p.y + block.charHeight
     const wrap = block.overflow === 'word-break' || block.overflow === 'word-break + clip'
     const lines = wrap ? block.wrappedLines : block.lines
     for (const line of lines) {
-      const x = getAlignmentPosition(block, line)
+      const x = getAlignmentPosition(p.x, block, line)
       if (block.alignment === 'justify') makeLineJustify(ctx, block, line, x, y)
       else ctx.fillText(line.text, x, y)
       y += block.charHeight + block.lineHeight
@@ -27,8 +31,8 @@ export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock) 
   }
 }
 
-function getAlignmentPosition ({ target, alignment, width, size }: TextBlock, line: TextBlockLine) {
-  const x = target.x
+function getAlignmentPosition (dx: number, { alignment, width, size }: TextBlock, line: TextBlockLine) {
+  const x = dx
   const realWidth = size ? size.width : width
   switch (alignment) {
     case 'left': return x
@@ -64,4 +68,18 @@ function assignTextStyle (ctx: CanvasRenderingContext2D, style: TextStyle) {
   const italic = style.italic ? 'italic ' : 'normal'
   const fontVariant = style.fontVariant ?? 'normal'
   ctx.font = `${italic} ${bold} ${fontVariant} ${fontSize} ${fontName}`
+}
+
+function applyAnchor (block: Drawable) {
+  let { x, y } = block.bounds
+  if (block.anchor && block.anchor.container) {
+    let dp = Point.zero as IPoint
+    if (block.anchor.container.anchor && block.anchor.container.anchor.container) {
+      dp = applyAnchor(block.anchor.container)
+    }
+    const r = block.anchor.container.bounds
+    x = r.x + x + dp.x
+    y = r.y + y + dp.y
+  }
+  return { x, y }
 }
