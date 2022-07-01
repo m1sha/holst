@@ -8,6 +8,7 @@ Task list
 ✔ Cash mode for shape.toPath2D when idle scene @done(22-05-22 21:32)
 ✔ A case with a mousemove when the mouse butten clicked but the cursor out of a shape. Moving must continue (ScrollBar) @done(22-05-23 19:01)
 ✔ Recover tests @done(22-05-24 13:53)
+☐ Make an anchor for shape and other elements
 ☐ Viewport must work over scene global matrix tranformation
 ☐ Scene elements must know about global matrix tranformation
 ☐ Texts and Images (Sprites) must changing if global matrix changed
