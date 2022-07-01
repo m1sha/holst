@@ -2,7 +2,7 @@ const path = require('path')
 
 const config = {
   mode: process.env.mode,
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   entry: {},
   target: 'web',
   output: {
