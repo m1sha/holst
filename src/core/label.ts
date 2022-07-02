@@ -9,7 +9,7 @@ import { uid } from '../tools/uid'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { Size } from './size'
 import { Drawable, DrawableType } from './drawable'
-import { Anchor } from './anchor'
+import { Anchor, applyAnchor } from './anchor'
 
 /** @deprecated */
 export interface Text {
@@ -106,6 +106,10 @@ export class TextBlock implements Interactive, Orderable, Drawable {
 
   get bounds (): Rect {
     return new Rect(this.target, this.size ? this.size : { width: this.width, height: this.height })
+  }
+
+  get position (): IPoint {
+    return applyAnchor(this)
   }
 
   get transform () {

@@ -2,8 +2,7 @@ import { TextBlock, TextBlockLine } from '../../label'
 import { Color } from '../../color'
 import { TextStyle } from '../../label-style'
 import { Matrix2D } from '../../matrix'
-import { Drawable } from '../../drawable'
-import { IPoint, Point } from '../../point'
+import { applyAnchor } from '../../anchor'
 
 export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock) {
   assignTextStyle(ctx, block.style)
@@ -68,18 +67,4 @@ function assignTextStyle (ctx: CanvasRenderingContext2D, style: TextStyle) {
   const italic = style.italic ? 'italic ' : 'normal'
   const fontVariant = style.fontVariant ?? 'normal'
   ctx.font = `${italic} ${bold} ${fontVariant} ${fontSize} ${fontName}`
-}
-
-function applyAnchor (block: Drawable) {
-  let { x, y } = block.bounds
-  if (block.anchor && block.anchor.container) {
-    let dp = Point.zero as IPoint
-    if (block.anchor.container.anchor && block.anchor.container.anchor.container) {
-      dp = applyAnchor(block.anchor.container)
-    }
-    const r = block.anchor.container.bounds
-    x = r.x + x + dp.x
-    y = r.y + y + dp.y
-  }
-  return { x, y }
 }
