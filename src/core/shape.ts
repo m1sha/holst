@@ -16,6 +16,7 @@ import { IVector } from './vector'
 import { Figures } from './figures'
 import { Drawable, DrawableType } from './drawable'
 import { Anchor } from './anchor'
+import { Shadow } from './shadow'
 
 export default class Shape implements Interactive, Orderable, Drawable {
   #modified: boolean = true
@@ -32,6 +33,7 @@ export default class Shape implements Interactive, Orderable, Drawable {
   frozen: boolean = false
   readonly figures: Figures
   anchor: Anchor | null = null
+  readonly shadow: Shadow = new Shadow()
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
     this.id = uid()

@@ -4,6 +4,13 @@ import { Color } from '../../color'
 export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape) {
   const { style } = shape
   const path = shape.toPath2D()
+  if (shape.shadow.has()) {
+    const { x, y, blur, color } = shape.shadow.values()
+    ctx.shadowOffsetX = x
+    ctx.shadowOffsetY = y
+    ctx.shadowBlur = blur
+    ctx.shadowColor = color instanceof Color ? color.toString() : color
+  }
   if (style.stroke) {
     ctx.strokeStyle = style.stroke instanceof Color ? style.stroke.toString() : style.stroke
     ctx.lineWidth = style.lineWidth || 1
