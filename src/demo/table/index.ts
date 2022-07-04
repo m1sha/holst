@@ -1,23 +1,23 @@
 import { Table } from '../../core/components/table/table'
 import { Scene, Renderer2D, Point, Rect, TextBlock, Shape } from 'index'
-import { createTable } from './table-data'
+// import { createTable } from './table-data'
 
 export function createTableDemo (canvas: HTMLCanvasElement) {
   const scene = new Scene()
   const rect = new Rect(Point.zero, canvas).outline(32)
-  const table = new Table(scene, rect)
+  const table = new Table(rect)
 
-  createTable(table)
+  // createTable(table)
 
-  table.create()
+  table.create(scene)
 
   const layer = scene.createLayer()
-  table.drop = (data, point, rect) => {
+  table.onDrop = (data, _, rect) => {
     const cardRect = rect.outline(10, 8, -40, 8)
-    const cardShape = layer.createShape({ fillStyle: '#505559' }).roundRect(cardRect, 8)
+    const cardShape = layer.createShape({ fill: '#505559' }).roundRect(cardRect, 8)
 
     const textStyle = { fontSize: '24px', color: '#f1fff1' }
-    const text = new TextBlock(data, textStyle)
+    const text = new TextBlock(data as string, textStyle)
     text.target = new Point(rect).add({ x: 20, y: 20 })
     text.size = rect.outline(20)
     text.alignment = 'center'
@@ -37,11 +37,11 @@ function createCardControl (cardShape: Shape, text: TextBlock) {
   const textStyle = text.copyStyle()
   cardShape
     .on('hover', () => {
-      cardShape.style.fillStyle = '#808589'
+      cardShape.style.fill = '#808589'
       text.style.color = '#4141f1'
     })
     .on('leave', () => {
-      cardShape.style.fillStyle = cardStyle.fillStyle
+      cardShape.style.fill = cardStyle.fill
       text.style.color = textStyle.color
     })
     .on('mousedown', () => {})
