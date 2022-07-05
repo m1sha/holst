@@ -1,4 +1,5 @@
-import { Rect, TextStyle } from 'index'
+import { Rect } from '../../rect'
+import { TextStyle } from '../../label-style'
 
 export class Cell {
   content: unknown = null
