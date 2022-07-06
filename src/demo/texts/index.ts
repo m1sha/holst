@@ -1,6 +1,7 @@
 import { Matrix2D } from '../../core/matrix'
 import { Scene, Renderer2D, Point, Color, TextBlock, Layer } from 'index'
 import { Size } from '../../core/size'
+import { linearGradient } from '../../core/colors/linear-gradient'
 
 const bigText2 = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -28,6 +29,7 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
   let i = 1
   let a = 0.02
   let t = 0.5
+  let ic = 0.0
   renderer.onFrameChanged = () => {
     text.injectTransform(Matrix2D.identity.scale({ x: i, y: i }, text.bounds.absCenter).rotate(t, text.bounds.absCenter))
     if (i < 0.8) a = 0.02
@@ -36,6 +38,11 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
     i += a
     t += -0.5
     if (t < -360) t = 0
+    ic += 0.01
+    if (ic >= 1) ic = 0
+
+    // const c = linearGradient([[1, 1, 1, 1, 1], [1, 1, 1, 1, 0]], ic)
+    // text.style.color = new Color(c[0] * 255, c[1] * 255, c[2] * 255, c[3] * 255)
   }
 }
 

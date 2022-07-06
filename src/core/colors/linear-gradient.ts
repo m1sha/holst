@@ -1,7 +1,8 @@
 type RGBAL = [number, number, number, number, number]
 export function linearGradient (stops: RGBAL[], value: number) {
   let stopIndex = 0
-  while (stops[stopIndex + 1][4] < value) {
+  const stop = stops[stopIndex + 1]
+  while (stop[4] < value) {
     stopIndex++
   }
 
