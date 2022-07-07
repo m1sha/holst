@@ -2,7 +2,7 @@ import { IRect } from '../../rect'
 import { Scene } from '../../scene'
 import { Row } from './row'
 import { CellDrawCallback, TableDesigner } from './table-designer'
-import { TableBehavior, CellDropEventCallBack } from './table-behavior'
+import { TableBehavior, CellDropEventCallBack, CellDragoverEventCallBack, CellDragleaveEventCallBack, CellMouseEventCallBack } from './table-behavior'
 import { IComponent } from '../component'
 
 export class Table implements IComponent {
@@ -11,6 +11,10 @@ export class Table implements IComponent {
   rows: Row[] = []
   onCellDraw: CellDrawCallback | null = null
   onDrop: CellDropEventCallBack | null = null
+  onDragover: CellDragoverEventCallBack | null = null
+  onDragleave: CellDragleaveEventCallBack | null = null
+  onCellHover: CellMouseEventCallBack | null = null
+  onCellLeave: CellMouseEventCallBack | null = null
 
   constructor (containerSize: IRect) {
     this.containerRect = containerSize
@@ -23,6 +27,10 @@ export class Table implements IComponent {
 
     this.behavior = new TableBehavior(controls)
     this.behavior.onDrop = this.onDrop
+    this.behavior.onDragover = this.onDragover
+    this.behavior.onDragleave = this.onDragleave
+    this.behavior.onCellHover = this.onCellHover
+    this.behavior.onCellLeave = this.onCellLeave
     this.behavior.create()
   }
 
