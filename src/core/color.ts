@@ -1,3 +1,4 @@
+import { linearGradient } from './colors/linear-gradient'
 import utils from '../tools/color-utils'
 
 type RGBA = { r: number, g: number, b: number, a: number }
@@ -151,6 +152,18 @@ export class Color {
   static readonly red = new Color('#ff0000')
   static readonly green = new Color('#00ff00')
   static readonly blue = new Color('#0000ff')
+
+  static fromGradient (value: number, colors: (Color | string)[]) {
+    const r = linearGradient(colors.map(p => {
+      if (p instanceof Color) return p.toFloatArray()
+      return new Color(p).toFloatArray()
+    }), value)
+    return new Color(Math.floor(r[0] * 255), Math.floor(r[1] * 255), Math.floor(r[2] * 255), r[3])
+  }
+
+  private toFloatArray (): [number, number, number, number] {
+    return [this.r / 255, this.g / 255, this.b / 255, this.a]
+  }
 }
 export class HSV {
   h: number

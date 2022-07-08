@@ -1,14 +1,12 @@
-type RGBAL = [number, number, number, number, number]
+type RGBAL = [number, number, number, number]
 export function linearGradient (stops: RGBAL[], value: number) {
-  let stopIndex = 0
-  const stop = stops[stopIndex + 1]
-  while (stop[4] < value) {
-    stopIndex++
+  const stopLength = 1 / (stops.length - 1)
+  const valueRatio = value / stopLength
+  const stopIndex = Math.floor(valueRatio)
+  if (stopIndex === (stops.length - 1)) {
+    return stops[stops.length - 1]
   }
-
-  const remainder = value - stops[stopIndex][4]
-  const stopFraction = remainder / (stops[stopIndex + 1][4] - stops[stopIndex][4])
-
+  const stopFraction = valueRatio % 1
   return lerp(stops[stopIndex], stops[stopIndex + 1], stopFraction)
 }
 
