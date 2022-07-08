@@ -15,7 +15,7 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
   const position = new Point(100, 150)
   const text = createTextBlockInCircle('Your\nAd\nCan be here', Color.white, position, layer)
 
-  createTextBlock(bigText2, '18px', Color.darkGrey, new Point(400, 50), layer)
+  const t2 = createTextBlock(bigText2, '18px', Color.darkGrey, new Point(400, 50), layer)
   createTextBlock(bigText2, '18px', Color.darkGrey, new Point(400, 250), layer).alignment = 'center'
   createTextBlock(bigText2, '18px', Color.darkGrey, new Point(400, 450), layer).alignment = 'right'
   createTextBlock(bigText2, '18px', Color.darkGrey, new Point(400, 650), layer).alignment = 'justify'
@@ -24,6 +24,17 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
 
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
   renderer.render(scene)
+
+  const task = scene.taskManager.add('task 1', { timeout: 3000 })
+  task.callback = () => {
+    t2.style.color = Color.green
+    console.log('green')
+  }
+  const task2 = scene.taskManager.add('task 2', { timeout: 6000 })
+  task2.callback = () => {
+    t2.style.color = Color.darkGrey
+    console.log('darkGrey')
+  }
 
   let i = 1
   let a = 0.02

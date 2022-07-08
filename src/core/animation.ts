@@ -123,6 +123,9 @@ export class AnimationTask {
   }
 }
 
+/**
+ * @deprecated Use the TaskManager class instead
+ */
 export class AnimationQueue {
   private renderer: Renderer2D
   private scene: Scene

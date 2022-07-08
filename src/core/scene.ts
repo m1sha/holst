@@ -2,17 +2,21 @@ import { Matrix2D } from './matrix'
 import { Arrange } from './arrange'
 import { Layer } from './layers'
 import { StyleManager } from './style-manager'
+import { TaskManager } from './tasks/task-manager'
 
 export class Scene {
     private _layers: Layer []
     readonly actionLayer: Layer
     readonly styleManager: StyleManager
+    readonly taskManager: TaskManager
     private arrange: Arrange
     private globalTransform: Matrix2D
+
     constructor () {
       this._layers = []
       this.arrange = new Arrange(this._layers)
       this.styleManager = new StyleManager()
+      this.taskManager = new TaskManager()
       this.actionLayer = new Layer(0, this.styleManager)
       this.globalTransform = Matrix2D.identity
     }

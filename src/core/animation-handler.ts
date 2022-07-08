@@ -43,6 +43,7 @@ export class AnimationHandler {
         throw new Error('scene is not defined')
       }
       this.renderer.clear()
+      this.scene.taskManager.invoke(timestamp)
       if (this.renderer.onFrameChanged) this.renderer.onFrameChanged()
       this.renderer.render(this.scene)
     }
