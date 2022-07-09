@@ -3,18 +3,19 @@
 ```html
 <canvas id="canvas" width="300" height="300"></canvas>
 <script>
+  import { Scene, Renderer2D, Color } from 'ts-graphic'
+  
   const scene = new Scene()
   const layer = scene.createLayer()
   const shape = layer.createShape({ fill: Color.blue })
-  const oldStyle = shape.copyStyle()
+
+  const task = scene.taskManager.create({ duration: 200 })
+  task.action = { percent } => shape.style.fill = Color.fromGradient(percent / 100, [Color.blue, Color.red])
+
   shape
     .circle({ x: 150, y: 150 }, 50)
-    .on('hover', e => {
-      e.animate({ percent } => {
-        shape.style.fill = Color.fromGradient(percent / 100, [Color.blue, Color.red])
-      }, 200)
-    })
-    .on('leave', () => shape.style.fill = oldStyle.fill)
+    .on('hover', () => task.start())
+    .on('leave', () => shape.style.fill = Color.blue)
 
   const canvas = document.getElementById('canvas')
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
