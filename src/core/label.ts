@@ -64,6 +64,7 @@ export class TextBlock implements Interactive, Orderable, Drawable {
 
   get height (): number {
     const w = this.getHeight()
+    if (this.size) return this.wrappedLines.length * (w + this.lineHeight)
     if (this.multiline) return this.lines.length * (w + this.lineHeight)
     return w
   }
