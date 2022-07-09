@@ -8,6 +8,9 @@ const millis = () => new Date().getTime()
 
 export type Between = { then: (delegate: (value: number) => void) => void }
 
+/**
+ * @deprecated Use the TaskManager class instead
+ */
 export interface FrameInfo {
   timeStamp: number,
   startTime: number,
@@ -17,6 +20,9 @@ export interface FrameInfo {
   between: (min: number, max: number) => Between
 }
 
+/**
+ * @deprecated Use the TaskManager class instead
+ */
 class Task {
   readonly id: string
   readonly name: string
@@ -87,6 +93,9 @@ class Task {
   }
 }
 
+/**
+ * @deprecated Use the TaskManager class instead
+ */
 export class AnimationTask {
   private task: Task
 

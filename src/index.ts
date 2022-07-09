@@ -6,7 +6,6 @@ import { Renderer2D } from './core/renderer2D'
 import { Scene } from './core/scene'
 import Shape from './core/shape'
 import { SvgPathD } from './core/svg/svg-path-d'
-import { AnimationQueue, AnimationTask } from './core/animation'
 import { Color, HSV } from './core/color'
 import { EventHandler } from './core/event-handler'
 import { ConstraintGrid } from './core/constraint-grid'
@@ -21,15 +20,12 @@ export * from './core/point'
 export * from './core/rect'
 
 export {
-  AnimationQueue,
-  AnimationTask,
   BitmapReader,
   BitmapWriter,
   ConstraintGrid,
   Color,
   HSV,
   EventHandler,
-  // EventInfo,
   Layer,
   MutablePath2D,
   Point,
