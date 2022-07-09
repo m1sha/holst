@@ -15,8 +15,7 @@ export type TaskOption = { timeout?: number, duration?: number, infinity?: boole
 
 export class Task {
   readonly id: string
-  readonly name: string
-  callback: null | FrameChangeCallback
+  action: null | FrameChangeCallback
   private timeout: number
   private duration: number
   readonly infinity: boolean
@@ -25,10 +24,9 @@ export class Task {
   isDone: boolean
   isStarted: boolean
 
-  constructor (name: string, option: TaskOption) {
-    this.name = name
+  constructor (option: TaskOption) {
     this.id = uid()
-    this.callback = null
+    this.action = null
     this.timeout = option.timeout ?? 0
     this.duration = option.duration ?? 100
     this.infinity = option.infinity ?? false
@@ -53,8 +51,8 @@ export class Task {
   execute (time: number, timeStamp: number) {
     const timeLeft = this.сountdown + this.timeout + this.duration - time
     const percent = (100 / this.duration) * (this.duration - timeLeft)
-    if (!this.callback) throw new Error(`An action at the task ${this.name} is not defined`)
-    this.callback({
+    if (!this.action) throw new Error(`An action at the task ${this.id} is not defined`)
+    this.action({
       startTime: time,
       сountdown: timeLeft,
       percent,

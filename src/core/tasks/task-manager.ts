@@ -5,19 +5,18 @@ import millis from './millis'
 export class TaskManager {
   private tasks: Task[] = []
 
-  add (name: string, option: TaskOption) {
-    const task = new Task(name, option)
+  create (option: TaskOption) {
+    const task = new Task(option)
     this.tasks.push(task)
     return task
   }
 
   invoke (timeStamp: number) {
     for (const task of this.tasks) {
-      if (task.isCanceled) continue
+      if (task.isCanceled || !task.isStarted) continue
 
       const t = millis()
       if (!task.isTime(t)) continue
-      if (!task.isStarted) task.start()
 
       if (task.isDone) {
         if (task.infinity) task.reset()
@@ -39,7 +38,7 @@ export class TaskManager {
 
   private garbageCollect () {
     while (true) {
-      const task = this.tasks.filter(p => p.isCanceled || (!p.infinity && p.isDone))[0]
+      const task = this.tasks.find(p => p.isCanceled)
       if (!task) break
       removeItem(this.tasks, p => p.id === task.id)
     }

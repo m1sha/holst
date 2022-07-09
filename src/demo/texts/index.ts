@@ -1,4 +1,4 @@
-import { Matrix2D } from '../../core/matrix'
+// import { Matrix2D } from '../../core/matrix'
 import { Scene, Renderer2D, Point, Color, TextBlock, Layer } from 'index'
 import { Size } from '../../core/size'
 
@@ -14,6 +14,7 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
 
   const position = new Point(100, 150)
   const text = createTextBlockInCircle('Your\nAd\nCan be here', Color.white, position, layer)
+  text.on('click', () => {})
 
   const t2 = createTextBlock(bigText2, '18px', Color.darkGrey, new Point(400, 50), layer)
   createTextBlock(bigText2, '18px', Color.darkGrey, new Point(400, 250), layer).alignment = 'center'
@@ -25,34 +26,34 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
   renderer.render(scene)
 
-  const task = scene.taskManager.add('task 1', { timeout: 3000 })
-  task.callback = () => {
+  const task = scene.taskManager.create({ timeout: 3000 })
+  task.action = () => {
     t2.style.color = Color.green
     console.log('green')
   }
-  const task2 = scene.taskManager.add('task 2', { timeout: 6000 })
-  task2.callback = () => {
+  const task2 = scene.taskManager.create({ timeout: 6000 })
+  task2.action = () => {
     t2.style.color = Color.darkGrey
     console.log('darkGrey')
   }
 
-  let i = 1
-  let a = 0.02
-  let t = 0.5
-  let colorValue = 0.0
-  renderer.onFrameChanged = () => {
-    text.injectTransform(Matrix2D.identity.scale({ x: i, y: i }, text.bounds.absCenter).rotate(t, text.bounds.absCenter))
-    if (i < 0.8) a = 0.02
-    if (i > 1.2) a = -0.02
+  // let i = 1
+  // let a = 0.02
+  // let t = 0.5
+  // let colorValue = 0.0
+  // renderer.onFrameChanged = () => {
+  //   text.injectTransform(Matrix2D.identity.scale({ x: i, y: i }, text.bounds.absCenter).rotate(t, text.bounds.absCenter))
+  //   if (i < 0.8) a = 0.02
+  //   if (i > 1.2) a = -0.02
 
-    i += a
-    t += -0.5
-    if (t < -360) t = 0
-    colorValue += 0.005
-    if (colorValue >= 1) colorValue = 0
+  //   i += a
+  //   t += -0.5
+  //   if (t < -360) t = 0
+  //   colorValue += 0.005
+  //   if (colorValue >= 1) colorValue = 0
 
-    text.style.color = Color.fromGradient(colorValue, ['#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff0000'])
-  }
+  //   text.style.color = Color.fromGradient(colorValue, ['#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff0000'])
+  // }
 }
 
 function createTextBlock (text: string, fontSize: string, color: Color, position: Point, layer: Layer, size?: Size, wrap?: boolean) {
