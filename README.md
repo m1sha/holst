@@ -10,8 +10,9 @@
   const shape = layer.createShape({ fill: Color.blue }).circle({ x: 150, y: 150 }, 50)
 
   const animation = scene.createAnimation({ duration: 500 })
-  animation.action = { percent } => shape.style.fill = Color.fromGradient(percent / 100, [Color.blue, Color.red])
-  animation.onDone = () => shape.style.fill = Color.blue
+  animation.action =
+    { percent } => shape.style.fill = Color.fromGradient(percent / 100, [Color.blue, Color.red])
+  animation.finish = () => shape.style.fill = Color.blue
 
   shape.on('click', () => animation.start())
 
