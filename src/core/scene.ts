@@ -3,14 +3,15 @@ import { Arrange } from './arrange'
 import { Layer } from './layers'
 import { StyleManager } from './style-manager'
 import { TaskManager } from './tasks/task-manager'
+import { Animation, AnimationOptions } from './animations/animation'
 
 export class Scene {
     private _layers: Layer []
-    readonly actionLayer: Layer
-    readonly styleManager: StyleManager
-    readonly taskManager: TaskManager
+    private taskManager: TaskManager
     private arrange: Arrange
     private globalTransform: Matrix2D
+    readonly actionLayer: Layer
+    readonly styleManager: StyleManager
 
     constructor () {
       this._layers = []
@@ -39,6 +40,10 @@ export class Scene {
       this.actionLayer.clear()
     }
 
+    createAnimation (options?: AnimationOptions) {
+      return new Animation(this.taskManager, options)
+    }
+
     sendToBack (layer: Layer) {
       this.arrange.sendToBack(layer)
     }
@@ -57,5 +62,9 @@ export class Scene {
 
     get layers (): Readonly<Layer>[] {
       return this._layers
+    }
+
+    /* @internal */ invokeAnimation (t: number) {
+      this.taskManager.invoke(t)
     }
 }

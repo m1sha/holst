@@ -1,14 +1,12 @@
-import { Task, TaskOption } from './task'
+import { Task } from './task'
 import { removeItem } from '../../tools/array'
 import millis from './millis'
 
 export class TaskManager {
   private tasks: Task[] = []
 
-  create (option: TaskOption) {
-    const task = new Task(option)
+  add (task: Task): void {
     this.tasks.push(task)
-    return task
   }
 
   invoke (timeStamp: number) {

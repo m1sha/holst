@@ -4,18 +4,16 @@
 <canvas id="canvas" width="300" height="300"></canvas>
 <script>
   import { Scene, Renderer2D, Color } from 'ts-graphic'
-  
+
   const scene = new Scene()
   const layer = scene.createLayer()
-  const shape = layer.createShape({ fill: Color.blue })
+  const shape = layer.createShape({ fill: Color.blue }).circle({ x: 150, y: 150 }, 50)
 
-  const task = scene.taskManager.create({ duration: 200 })
-  task.action = { percent } => shape.style.fill = Color.fromGradient(percent / 100, [Color.blue, Color.red])
+  const animation = scene.createAnimation({ duration: 500 })
+  animation.action = { percent } => shape.style.fill = Color.fromGradient(percent / 100, [Color.blue, Color.red])
+  animation.onDone = () => shape.style.fill = Color.blue
 
-  shape
-    .circle({ x: 150, y: 150 }, 50)
-    .on('hover', () => task.start())
-    .on('leave', () => shape.style.fill = Color.blue)
+  shape.on('click', () => animation.start())
 
   const canvas = document.getElementById('canvas')
   const renderer = new Renderer2D(canvas.getContext('2d')!!)

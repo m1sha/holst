@@ -26,16 +26,19 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
   renderer.render(scene)
 
-  const task = scene.taskManager.create({ timeout: 3000 })
-  task.action = () => {
+  const animation = scene.createAnimation({ timeout: 3000 })
+  animation.action = () => {
     t2.style.color = Color.green
     console.log('green')
   }
-  const task2 = scene.taskManager.create({ timeout: 6000 })
-  task2.action = () => {
+  animation.start()
+
+  const animation2 = scene.createAnimation({ timeout: 6000 })
+  animation2.action = () => {
     t2.style.color = Color.darkGrey
     console.log('darkGrey')
   }
+  animation2.start()
 
   // let i = 1
   // let a = 0.02
