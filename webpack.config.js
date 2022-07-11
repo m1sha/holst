@@ -42,6 +42,7 @@ if (process.env.libraryTarget === 'umd') {
   config.entry['matrix.bundle'] = './src/demo/matrix/index.ts'
   config.entry['texts.bundle'] = './src/demo/texts/index.ts'
   config.entry['table.bundle'] = './src/demo/table/index.ts'
+  config.entry['readme.bundle'] = './src/demo/readme/index.ts'
   config.output.library = 'demo'
 }
 

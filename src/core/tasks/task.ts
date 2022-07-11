@@ -1,5 +1,5 @@
 import { uid } from '../../tools/uid'
-import millis from './millis'
+// import millis from './millis'
 
 export type Between = { then: (delegate: (value: number) => void) => void }
 export type Frame = {
@@ -19,10 +19,11 @@ export class Task {
   private timeout: number
   private duration: number
   readonly infinity: boolean
-  private сountdown: number
+  private сountdown: number = -1
   isCanceled: boolean
   isDone: boolean
   isStarted: boolean
+  was: boolean = false
 
   constructor (option: TaskOption) {
     this.id = uid()
@@ -30,7 +31,6 @@ export class Task {
     this.timeout = option.timeout ?? 0
     this.duration = option.duration ?? 100
     this.infinity = option.infinity ?? false
-    this.сountdown = millis()
     this.isDone = false
     this.isCanceled = false
     this.isStarted = false
@@ -45,7 +45,7 @@ export class Task {
   }
 
   start () {
-    this.isStarted = true
+    this.reset()
   }
 
   execute (time: number, timeStamp: number) {
@@ -71,13 +71,18 @@ export class Task {
   }
 
   reset () {
-    this.сountdown = millis()
     this.isDone = false
     this.isStarted = true
+    this.was = false
+    this.сountdown = -1
   }
 
   done () {
     this.isDone = true
     this.isStarted = false
+  }
+
+  setCountdown (t: number) {
+    if (this.сountdown === -1) this.сountdown = t
   }
 }

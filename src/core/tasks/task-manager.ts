@@ -1,7 +1,5 @@
 import { Task } from './task'
 import { removeItem } from '../../tools/array'
-import millis from './millis'
-
 export class TaskManager {
   private tasks: Task[] = []
 
@@ -12,23 +10,24 @@ export class TaskManager {
   invoke (timeStamp: number) {
     for (const task of this.tasks) {
       if (task.isCanceled || !task.isStarted) continue
+      if (task.isStarted || !task.was) task.setCountdown(timeStamp)
 
-      const t = millis()
-      if (!task.isTime(t)) continue
+      if (!task.isTime(timeStamp)) continue
 
       if (task.isDone) {
         if (task.infinity) task.reset()
         continue
       }
 
-      if (!task.canRepeat(t)) {
-        task.done()
+      if (!task.canRepeat(timeStamp)) {
+        if (task.was) task.done()
         continue
       }
 
       if (task.isCanceled) continue
 
-      task.execute(t, timeStamp)
+      task.execute(timeStamp, timeStamp)
+      task.was = true
     }
 
     this.garbageCollect()
