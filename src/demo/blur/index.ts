@@ -39,9 +39,9 @@ export async function createBlurDemo (div: HTMLDivElement) {
     arrB2.push(0)
   }
 
-  gaussianBlur(arrR1, arrR2, d.width, d.height, 5)
-  gaussianBlur(arrG1, arrG2, d.width, d.height, 5)
-  gaussianBlur(arrB1, arrB2, 800, 800, 10)
+  gaussianBlur(arrR1, arrR2, d.width, d.height, 4)
+  gaussianBlur(arrG1, arrG2, d.width, d.height, 4)
+  gaussianBlur(arrB1, arrB2, d.width, d.height, 4)
 
   let c = 0
   for (let i = 0; i < d.data.length; i += 4) {

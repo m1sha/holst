@@ -35,9 +35,8 @@ export class Raster implements Orderable {
   }
 
   setData (imagedata: ImageData) {
-    const { data, write } = RasterDataTransfer.createWriter(this.distRect)
-    for (let i = 0; i < data.width * data.height * 4; i++) data.data[i] = imagedata.data[i]
-    this.src = write()
+    const img = RasterDataTransfer.write(imagedata)
+    this.src = img
   }
 }
 export type Images = Raster[]

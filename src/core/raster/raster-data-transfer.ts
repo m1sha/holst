@@ -2,7 +2,7 @@
 import { Size } from '../size'
 import CanvasRenderingContext2DFactory from '../render/canvas-rendering-context-2d-factory'
 
-type RasterDataTransferWriteCallback = { data: ImageData, write: () => CanvasImageSource }
+// type RasterDataTransferWriteCallback = { data: ImageData, write: () => CanvasImageSource }
 
 export class RasterDataTransfer {
   static read (img: CanvasImageSource, size: Size) {
@@ -12,15 +12,9 @@ export class RasterDataTransfer {
     return imageData
   }
 
-  static createWriter (size: Size): RasterDataTransferWriteCallback {
-    const { ctx, canvas } = CanvasRenderingContext2DFactory.create(size)
-    const data = ctx.createImageData(size.width, size.height)
-    return {
-      data,
-      write: () => {
-        ctx.putImageData(data, 0, 0, 0, 0, size.width, size.height)
-        return canvas
-      }
-    }
+  static write (imageData: ImageData) {
+    const { ctx, canvas } = CanvasRenderingContext2DFactory.create(imageData)
+    ctx.putImageData(imageData, 0, 0)
+    return canvas
   }
 }
