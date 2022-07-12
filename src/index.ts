@@ -1,3 +1,4 @@
+import { Assets } from './core/assets'
 import { Layer } from './core/layers'
 import { MutablePath2D } from './core/path2d/mutable-path2d'
 import { Point } from './core/point'
@@ -20,6 +21,7 @@ export * from './core/point'
 export * from './core/rect'
 
 export {
+  Assets,
   BitmapReader,
   BitmapWriter,
   ConstraintGrid,

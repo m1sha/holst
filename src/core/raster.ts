@@ -1,3 +1,4 @@
+import { RasterDataTransfer } from './raster/raster-data-transfer'
 import Orderable from './orderable'
 import { IRect, Rect } from './rect'
 
@@ -20,13 +21,23 @@ export class Raster implements Orderable {
     img.src = url
     if (callback) {
       img.onload = ev => {
-        srcRect.width = img.width
-        srcRect.height = img.height
+        srcRect.width = img.naturalWidth
+        srcRect.height = img.naturalHeight
         callback(ev)
       }
     }
     if (onerror) img.onerror = ev => onerror(ev)
-    return new Raster(img, srcRect, new Rect(0, 0, 0, 0))
+    return new Raster(img, srcRect, srcRect.clone())
+  }
+
+  getData () {
+    return RasterDataTransfer.read(this.src, this.distRect)
+  }
+
+  setData (imagedata: ImageData) {
+    const { data, write } = RasterDataTransfer.createWriter(this.distRect)
+    for (let i = 0; i < data.width * data.height * 4; i++) data.data[i] = imagedata.data[i]
+    this.src = write()
   }
 }
 export type Images = Raster[]

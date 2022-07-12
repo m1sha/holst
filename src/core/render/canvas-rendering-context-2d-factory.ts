@@ -1,3 +1,5 @@
+import { Size } from '../size'
+
 export default class CanvasRenderingContext2DFactory {
   private static canvas: HTMLCanvasElement | null = null
   private static ctx: CanvasRenderingContext2D | null = null
@@ -8,5 +10,14 @@ export default class CanvasRenderingContext2DFactory {
     this.ctx = this.canvas.getContext('2d')
     if (!this.ctx) throw new Error('CanvasRenderingContext2D is unsupported')
     return { ctx: this.ctx, canvas: this.canvas }
+  }
+
+  static create (size: Size) {
+    const canvas = document.createElement('canvas')
+    canvas.width = size.width
+    canvas.height = size.height
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('CanvasRenderingContext2D is unsupported')
+    return { ctx: ctx, canvas: canvas }
   }
 }
