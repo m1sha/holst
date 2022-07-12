@@ -1,4 +1,5 @@
-import { Drawable, Shape } from 'index'
+import { Drawable } from '../../drawable'
+import Shape from '../../shape'
 import { Cell } from './cell'
 import { Row } from './row'
 
