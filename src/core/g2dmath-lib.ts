@@ -1,10 +1,10 @@
-import init, { sum } from 'g2dmath'
+import init, { gaussian_blur } from 'g2dmath'
 
 export class G2dMath {
   private static loaded = false
-  static sum (a: number, b: number) {
+  static gaussianBlur (a: Uint32Array, b: Uint32Array, w: number, h: number, sigma: number) {
     if (!this.loaded) throw new Error('g2dmath_bg.wasm is not loaded.')
-    return sum(a, b)
+    return gaussian_blur(a, b, w, h, sigma)
   }
 
   static async load () {
