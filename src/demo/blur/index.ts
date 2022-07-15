@@ -1,6 +1,6 @@
 import { gaussianBlur } from '../../core/raster/gaussian-blur'
 import { Assets, Scene, Renderer2D } from 'index'
-// import { G2dMath } from '../../core/g2dmath-lib'
+import { G2dMath } from '../../core/g2dmath-lib'
 
 export async function createBlurDemo (div: HTMLDivElement) {
   const assets = new Assets()
@@ -9,21 +9,36 @@ export async function createBlurDemo (div: HTMLDivElement) {
   const raster = assets.get('swamp')
   const imageData = raster.getData()
 
-  // await G2dMath.load()
-  console.time('gaussianBlur')
+  await G2dMath.load()
 
-  // G2dMath.gaussianBlur(arrR1 as unknown as Uint32Array, arrR2 as unknown as Uint32Array, d.width, d.height, 4)
-  // G2dMath.gaussianBlur(arrG1 as unknown as Uint32Array, arrG2 as unknown as Uint32Array, d.width, d.height, 4)
-  // G2dMath.gaussianBlur(arrB1 as unknown as Uint32Array, arrB2 as unknown as Uint32Array, d.width, d.height, 4)
+  // console.time('vanilla toUint8ClampedArray')
+  // const channelRx = raster.channels.r.channel // .toArray()
+  // const channelGx = raster.channels.g.channel // .toArray()
+  // const channelBx = raster.channels.b.channel // .toArray()
+  // console.timeEnd('vanilla toUint8ClampedArray')
+
+  console.time('wasm extractCannel')
+  const c1 = G2dMath.extractCannel(imageData.data, 0)
+  const c2 = G2dMath.extractCannel(imageData.data, 1)
+  const c3 = G2dMath.extractCannel(imageData.data, 2)
+  console.timeEnd('wasm extractCannel')
+
+  console.time('wasm gaussianBlur')
+  G2dMath.gaussianBlur(c1, imageData.width, imageData.height, 4)
+  G2dMath.gaussianBlur(c2, imageData.width, imageData.height, 4)
+  G2dMath.gaussianBlur(c3, imageData.width, imageData.height, 4)
+  console.timeEnd('wasm gaussianBlur')
+
+  console.time('toArray')
   const channelR = raster.channels.r.toArray()
   const channelG = raster.channels.g.toArray()
   const channelB = raster.channels.b.toArray()
-
+  console.timeEnd('toArray')
+  console.time('vanilla gaussianBlur')
   gaussianBlur(channelR, imageData.width, imageData.height, 4)
   gaussianBlur(channelG, imageData.width, imageData.height, 4)
   gaussianBlur(channelB, imageData.width, imageData.height, 4)
-
-  console.timeEnd('gaussianBlur')
+  console.timeEnd('vanilla gaussianBlur')
 
   let c = 0
   for (let i = 0; i < imageData.data.length; i += 4) {

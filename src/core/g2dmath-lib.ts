@@ -1,10 +1,16 @@
-import init, { gaussian_blur } from 'g2dmath'
+import init, { gaussian_blur, extract } from 'g2dmath'
 
 export class G2dMath {
   private static loaded = false
-  static gaussianBlur (a: Uint32Array, b: Uint32Array, w: number, h: number, sigma: number) {
+  static gaussianBlur (a: Uint8ClampedArray, w: number, h: number, sigma: number) {
     if (!this.loaded) throw new Error('g2dmath_bg.wasm is not loaded.')
-    return gaussian_blur(a, b, w, h, sigma)
+    const b = gaussian_blur(a, w, h, sigma)
+    for (let i = 0; i < a.length; i++) a[i] = b[i]
+  }
+
+  static extractCannel (src: Uint8ClampedArray, n: number) {
+    if (!this.loaded) throw new Error('g2dmath_bg.wasm is not loaded.')
+    return extract(src, n)
   }
 
   static async load () {
