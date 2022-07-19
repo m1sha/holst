@@ -1,10 +1,10 @@
-import init, { gaussian_blur, extract } from 'g2dmath'
+import init, { gaussianBlur, extract } from 'g2dmath'
 
 export class G2dMath {
   private static loaded = false
   static gaussianBlur (a: Uint8ClampedArray, w: number, h: number, sigma: number) {
     if (!this.loaded) throw new Error('g2dmath_bg.wasm is not loaded.')
-    const b = gaussian_blur(a, w, h, sigma)
+    const b = gaussianBlur(a, w, h, sigma)
     for (let i = 0; i < a.length; i++) a[i] = b[i]
   }
 

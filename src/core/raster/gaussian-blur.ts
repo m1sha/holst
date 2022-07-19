@@ -44,8 +44,10 @@ function boxBlur (src: number[], out: number[], w: number, h: number, r: number)
   totalBlur(src, out, w, h, r)
 }
 
-export function gaussianBlur (src: number[], w: number, h: number, sigma: number) {
-  const out = new Array(src.length).fill(0)
+export function gaussianBlur (arr: Uint8ClampedArray, w: number, h: number, sigma: number) {
+  const out = new Array(arr.length).fill(0)
+  const src = new Array(arr.length).fill(0)
+  for (let i = 0; i < arr.length; i++) src[i] = arr[i]
   const boxes = [0, 0, 0]
   stdToBox(boxes, sigma, 3)
   boxBlur(src, out, w, h, boxes[0])
