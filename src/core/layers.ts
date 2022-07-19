@@ -12,6 +12,7 @@ import Orderable from './orderable'
 import { Arrange } from './arrange'
 import { Sprite } from './sprite'
 import { Matrix2D } from './matrix'
+import { removeItem } from '../tools/array'
 
 export class Layer implements Orderable {
   private objects: Orderable[] = []
@@ -94,6 +95,14 @@ export class Layer implements Orderable {
 
   removeMask (): void {
     this.mask = null
+  }
+
+  removeShape (shape: Shape): void {
+    removeItem(this.objects, p => (p as Shape).id === shape.id)
+  }
+
+  removeTextBlock (text: TextBlock): void {
+    removeItem(this.objects, p => (p as TextBlock).id === text.id)
   }
 
   sendToBack (item: Shape | TextBlock | Raster) {
