@@ -34,6 +34,7 @@ export default class Shape implements Interactive, Orderable, Drawable {
   readonly figures: Figures
   anchor: Anchor | null = null
   readonly shadow: Shadow = new Shadow()
+  hidden: boolean = false
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
     this.id = uid()

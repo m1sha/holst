@@ -41,6 +41,7 @@ export class TextBlock implements Interactive, Orderable, Drawable {
   overflow: 'none' | 'word-break' | 'clip' | 'word-break + clip' = 'none'
   lineHeight: number = 0
   anchor: Anchor | null = null
+  hidden: boolean = false
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
   /** @internal */ globalTransform: Matrix2D | null = null
 
@@ -185,7 +186,12 @@ export class TextBlock implements Interactive, Orderable, Drawable {
   }
 
   inPath (p: Point): boolean {
-    return this.bounds.intersectsPoint(p)
+    const rect = this.bounds
+    if (this.anchor && this.anchor.container) {
+      rect.x += this.anchor.container.bounds.x
+      rect.y += this.anchor.container.bounds.y
+    }
+    return rect.intersectsPoint(p)
   }
 
   on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): this | TextBlock {

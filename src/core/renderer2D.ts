@@ -55,8 +55,8 @@ export class Renderer2D {
     const list = sort(entities as Orderable[])
 
     for (const item of list) {
-      if (item instanceof Shape) this.drawShape(item, mask)
-      if (item instanceof TextBlock) this.drawTextBlock(item, mask)
+      if (item instanceof Shape && !item.hidden) this.drawShape(item, mask)
+      if (item instanceof TextBlock && !item.hidden) this.drawTextBlock(item, mask)
       if (item instanceof Raster) this.drawImage(item)
       if (item instanceof Sprite) this.drawSprite(item)
     }
