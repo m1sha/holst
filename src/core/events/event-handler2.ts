@@ -1,4 +1,4 @@
-import { removeItem } from '../../tools/array'
+import { removeItem } from '../../utils/array'
 import { EventType, Interactive } from './interactive'
 import { HandlerResolver } from './handler-resolver'
 

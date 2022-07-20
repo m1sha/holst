@@ -1,4 +1,4 @@
-import { ResourceLoader, ResourceLoaderCallBackFactory } from '../src/tools/resource-loader'
+import { ResourceLoader, ResourceLoaderCallBackFactory } from '../src/utils/resource-loader'
 function delay (timeout: number = 0, callback: () => void): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     const timeoutId = setTimeout(() => {

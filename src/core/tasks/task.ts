@@ -1,4 +1,4 @@
-import { uid } from '../../tools/uid'
+import { uid } from '../../utils/uid'
 // import millis from './millis'
 
 export type Between = { then: (delegate: (value: number) => void) => void }

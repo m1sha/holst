@@ -1,5 +1,5 @@
 import { Raster } from './raster'
-import { ResourceLoader, ResourceLoaderCallBackFactory } from '../tools/resource-loader'
+import { ResourceLoader, ResourceLoaderCallBackFactory } from '../utils/resource-loader'
 
 export class Assets extends ResourceLoader<Raster> {
   factory (): ResourceLoaderCallBackFactory<Raster> {

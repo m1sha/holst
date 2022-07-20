@@ -1,5 +1,5 @@
 import { Task } from './task'
-import { removeItem } from '../../tools/array'
+import { removeItem } from '../../utils/array'
 export class TaskManager {
   private tasks: Task[] = []
 

@@ -7,13 +7,12 @@ import Shape from './shape'
 import { ShapeStyle } from './shape-style'
 import { MutablePath2D } from './path2d/mutable-path2d'
 import { StyleManager } from './style-manager'
-import { calcBounds } from './utils'
 import Orderable from './orderable'
 import { Arrange } from './arrange'
 import { Sprite } from './sprite'
 import { Matrix2D } from './matrix'
-import { removeItem } from '../tools/array'
-
+import { removeItem } from '../utils/array'
+import { calcBounds } from '../utils/utils'
 export class Layer implements Orderable {
   private objects: Orderable[] = []
   private styleManager: StyleManager

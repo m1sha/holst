@@ -1,6 +1,6 @@
 /* global AnimationFrameProvider */
-import { removeItem } from '../tools/array'
-import { uid } from '../tools/uid'
+import { removeItem } from '../utils/array'
+import { uid } from '../utils/uid'
 import { Renderer2D } from './renderer2D'
 import { Scene } from './scene'
 
