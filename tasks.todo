@@ -1,4 +1,4 @@
-Task list
+# Common task list
 ✔ Move to all .html files to page directory @done(22-05-07 17:59)
 ✔ Layers or shape that would be frozen for global matrix transform @done(22-05-19 18:20)
 ✔ Deprecate EventHandler v1 @done(22-05-19 18:33)
@@ -8,14 +8,21 @@ Task list
 ✔ Cash mode for shape.toPath2D when idle scene @done(22-05-22 21:32)
 ✔ A case with a mousemove when the mouse butten clicked but the cursor out of a shape. Moving must continue (ScrollBar) @done(22-05-23 19:01)
 ✔ Recover tests @done(22-05-24 13:53)
+✔ TextBlock fix container size + clipping @done(22-07-21 00:04)
+✔ Scene elements must know about global matrix tranformation @done(22-07-21 00:12)
 ☐ Make an anchor for shape and other elements
-☐ Viewport must work over scene global matrix tranformation
-☐ Scene elements must know about global matrix tranformation
 ☐ Texts and Images (Sprites) must changing if global matrix changed
 ☐ Add onto Shapes, Texts and Images (Sprites) attribute frozen with types: bool | 'x-axis' | 'y-axis'
-☐ Make a logger for intergational tests for check results
 ☐ Make a decorator for text-style like for shape-style
-☐ Create animation from event. example: shape.on('click', e.animation(() => {}), timeout)
+☐ Arrange (Implement)
+☐ TextBlock add prop frozen
+
+
+# Tasks (AnimationHandler)
+☐ Review this ticket
+☐ Comine AnimationHandler & AnimationQueue -> .\tasks
+
+# Viewport
 ☐ Viewport scroll & scale (global matrix transform)
   ✔ UI @done(22-05-19 18:36)
   ✔ Event listners @done(22-05-19 23:08)
@@ -24,16 +31,14 @@ Task list
   ☐ Create limits for the thumb button between min and max value
   ☐ Calculate scale and scene bounds for the thumb button length
   ☐ Join Viewport and Scrollbox
-☐ Arrange (Implement)
-☐ Create canvas dynamically
-☐ Comine AnimationHandler & AnimationQueue
+  ☐ Viewport must work over scene global matrix tranformation
+  ☐ Bug: When move a shape after viewport x or y changed, a shape shift doesn't know about viewport changed
+
+#Geomerty for future
 ☐ Remake isPointInPath (IsPointInPolygon4)
 ☐ Cirlces, Elepsis and Arcs must be drawn using Bezier curves
-✘ Shape modifiers. Access to internal forms inside a shape (lines, rect and etc.) @cancelled(22-06-11 23:00)
-  ✘ Impl the base interaction contract @cancelled(22-06-11 23:00)
-  ✘ Impl methods *createFigure* and *updateStack* @cancelled(22-06-11 23:00)
-  ✘ Impl for all primitives @cancelled(22-06-11 23:00)
 ☐ Cashe for the shape bounds
-☐ TextBlock fix container size + clipping
-☐ TextBlock add prop frozen
-☐ Bug: When move a shape after viewport x or y changed, a shape shift doesn't know about viewport changed
+☐ Create canvas dynamically
+
+# Improvment tests
+☐ Make a logger for intergational tests for check results
