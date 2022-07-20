@@ -88,6 +88,16 @@ handlers.Rect = (arr, { element, transform, globalTransform }) => {
   arr.push(p1, p2, p3, p4)
 }
 
+handlers.RoundRect = (arr, { element, transform, globalTransform }) => {
+  if (element.type !== 'RoundRect') return
+  const { x, y, width: w, height: h } = element
+  const p1 = calcPoint({ x, y }, transform, globalTransform)
+  const p2 = calcPoint({ x: x + w, y }, transform, globalTransform)
+  const p3 = calcPoint({ x: x + w, y: y + h }, transform, globalTransform)
+  const p4 = calcPoint({ x, y: y + h }, transform, globalTransform)
+  arr.push(p1, p2, p3, p4)
+}
+
 handlers.Circle = (arr, { element, transform, globalTransform }) => {
   if (element.type !== 'Circle') return
   const { x, y, radius } = element
