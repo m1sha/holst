@@ -31,6 +31,15 @@ export function parseSvgPathD (d: string): SvgPathDElement[] {
         result.push({ type: chr, point: new Point(x, y) })
         continue
       }
+      case 'L':
+      case 'l': {
+        const res = parseParams(i + 1, d)
+        i = res.i
+        const x = parseFloat(res.params[0])
+        const y = parseFloat(res.params[1])
+        result.push({ type: chr, point: new Point(x, y) })
+        continue
+      }
       case 'H':
       case 'h': {
         const res = parseParams(i + 1, d)
@@ -45,6 +54,26 @@ export function parseSvgPathD (d: string): SvgPathDElement[] {
         i = res.i
         const height = parseFloat(res.params[0])
         result.push({ type: chr, height })
+        continue
+      }
+      case 'C':
+      case 'c': {
+        const res = parseParams(i + 1, d)
+        i = res.i
+        const x1 = parseFloat(res.params[0])
+        const y1 = parseFloat(res.params[1])
+        const x2 = parseFloat(res.params[2])
+        const y2 = parseFloat(res.params[3])
+        const x = parseFloat(res.params[4])
+        const y = parseFloat(res.params[5])
+        result.push({ type: chr, point1: new Point(x1, y1), point2: new Point(x2, y2), point: new Point(x, y) })
+        continue
+      }
+      case 'Z':
+      case 'z': {
+        const res = parseParams(i + 1, d)
+        i = res.i
+        result.push({ type: chr })
         continue
       }
       case ' ':
@@ -66,6 +95,10 @@ export function toSvgPathD (items: SvgPathDElement[]) {
       case 'm':
         result += `${item.type}${item.point.x} ${item.point.y}`
         continue
+      case 'L':
+      case 'l':
+        result += `${item.type}${item.point.x} ${item.point.y}`
+        continue
       case 'H':
       case 'h':
         result += item.type + item.width
@@ -73,6 +106,14 @@ export function toSvgPathD (items: SvgPathDElement[]) {
       case 'V':
       case 'v':
         result += item.type + item.height
+        continue
+      case 'C':
+      case 'c':
+        result += `${item.type}${item.point1.x},${item.point1.y} ${item.point2.x},${item.point2.y} ${item.point.x},${item.point.y}`
+        continue
+      case 'Z':
+      case 'z':
+        result += item.type
         continue
     }
   }
