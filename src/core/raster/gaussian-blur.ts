@@ -53,4 +53,5 @@ export function gaussianBlur (arr: Uint8ClampedArray, w: number, h: number, sigm
   boxBlur(src, out, w, h, boxes[0])
   boxBlur(out, src, w, h, boxes[1])
   boxBlur(src, out, w, h, boxes[2])
+  for (let i = 0; i < arr.length; i++) arr[i] = out[i]
 }
