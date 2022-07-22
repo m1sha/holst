@@ -7,6 +7,7 @@ export type Frame = {
   startTime: number,
   сountdown: number,
   percent: number,
+  t: number,
   map: (min: number, max: number) => number
   between: (min: number, max: number) => Between
 }
@@ -59,6 +60,7 @@ export class Task {
       startTime: time,
       сountdown: timeLeft,
       percent,
+      t: percent / 100,
       timeStamp,
       map: (min: number, max: number): number => {
         return ((max - min) / 100 * percent) + min

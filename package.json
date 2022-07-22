@@ -31,8 +31,7 @@
     "typescript": "^4.6.3",
     "typescript-loader": "^1.1.3",
     "webpack": "^5.25.1",
-    "webpack-cli": "^4.5.0",
-    "g2dmath": "file://D:\\dev\\rust\\g2dmath\\pkg"
+    "webpack-cli": "^4.5.0"
   },
   "jest": {
     "moduleFileExtensions": [

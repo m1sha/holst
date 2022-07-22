@@ -7,9 +7,9 @@ export function createReadmeDemo (canvas: HTMLCanvasElement) {
 
   const animation = scene.createAnimation({ duration: 1500 })
   const movement = CubicBezier.linear
-  animation.action = p => {
-    shape.style.fill = Color.fromGradient(movement.calc(p.percent / 100).x, [Color.blue, Color.red, Color.green])
-  }
+  animation.action = ({ t }) => (
+    shape.style.fill = Color.fromGradient(movement.calc(t).x, [Color.blue, Color.red, Color.green])
+  )
   animation.finish = () => (shape.style.fill = Color.blue)
 
   shape.on('click', () => {

@@ -1,16 +1,16 @@
-# TS-Graphic is 2D Graphic library
+# Holst is 2D Graphic library
 
 ```html
 <canvas id="canvas" width="300" height="300"></canvas>
 <script>
-  import { Scene, Renderer2D, Color } from 'ts-graphic'
+  import { Scene, Renderer2D, Color } from 'holst'
 
   const scene = new Scene()
   const layer = scene.createLayer()
   const shape = layer.createShape({ fill: Color.blue }).circle({ x: 150, y: 150 }, 50)
 
   const animation = scene.createAnimation({ duration: 500 })
-  animation.action = { t } => shape.style.fill = Color.fromGradient(t, [Color.blue, Color.red])
+  animation.action = ({ t }) => shape.style.fill = Color.fromGradient(t, [Color.blue, Color.red])
   animation.finish = () => shape.style.fill = Color.blue
 
   shape.on('click', () => animation.start())
