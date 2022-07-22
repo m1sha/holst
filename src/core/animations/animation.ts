@@ -1,5 +1,5 @@
 import { TaskManager } from '../tasks/task-manager'
-import { Task, FrameChangeCallback } from '../tasks/task'
+import { Task, FrameChangeCallback, TaskFinishCallBack } from '../tasks/task'
 
 export type AnimationOptions = { timeout?: number, duration?: number, infinity?: boolean }
 export class Animation {
@@ -26,6 +26,14 @@ export class Animation {
 
   set action (value: FrameChangeCallback) {
     this.task.action = value
+  }
+
+  get finish () {
+    return this.task.finish as TaskFinishCallBack
+  }
+
+  set finish (value: TaskFinishCallBack) {
+    this.task.finish = value
   }
 
   start () {

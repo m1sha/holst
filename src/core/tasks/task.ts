@@ -11,11 +11,13 @@ export type Frame = {
   between: (min: number, max: number) => Between
 }
 export type FrameChangeCallback = (frame: Frame) => void
+export type TaskFinishCallBack = () => void
 export type TaskOption = { timeout?: number, duration?: number, infinity?: boolean }
 
 export class Task {
   readonly id: string
   action: null | FrameChangeCallback
+  finish: null | TaskFinishCallBack
   private timeout: number
   private duration: number
   readonly infinity: boolean
@@ -28,6 +30,7 @@ export class Task {
   constructor (option: TaskOption) {
     this.id = uid()
     this.action = null
+    this.finish = null
     this.timeout = option.timeout ?? 0
     this.duration = option.duration ?? 100
     this.infinity = option.infinity ?? false
@@ -79,6 +82,7 @@ export class Task {
 
   done () {
     this.isDone = true
+    if (this.finish) this.finish()
     this.isStarted = false
   }
 
