@@ -1,7 +1,7 @@
 {
   "name": "holst",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "2D graphic library",
   "main": "index.js",
   "scripts": {
     "build:dev": "cross-env mode=production libraryTarget= webpack --watch",
@@ -9,9 +9,12 @@
     "test:watch": "npx jest --watch",
     "format": "prettier --write src/**/*.ts tests/**/*.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "url": "https://github.com/m1sha/holst"
+  },
+  "keywords": ["2d", "graphic", "animation", "canvas", "vector", "svg"],
+  "author": "m1hailostertag@gmail.com",
+  "license": "MIT",
   "devDependencies": {
     "@types/jest": "^27.0.1",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
