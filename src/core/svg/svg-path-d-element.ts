@@ -1,8 +1,8 @@
 
-import { Point } from '../point'
+import { IPoint } from '../point'
 interface MoveTo {
   type: 'M' | 'm'
-  point: Point
+  point: IPoint
 }
 
 interface HorizontalLine {
@@ -17,40 +17,40 @@ interface VerticalLine {
 
 interface LineTo {
   type: 'L' | 'l'
-  point: Point
+  point: IPoint
 }
 
 interface CubicBezierCurve {
   type: 'C' | 'c'
-  point1: Point
-  point2: Point
-  point: Point
+  point1: IPoint
+  point2: IPoint
+  point: IPoint
 }
 
 interface SmoothCubicBezierCurve {
   type: 'S' | 's'
-  point2: Point
-  point: Point
+  point2: IPoint
+  point: IPoint
 }
 
 interface QuadraticBezierCurve {
   type: 'Q' | 'q'
-  point1: Point
-  point: Point
+  point1: IPoint
+  point: IPoint
 }
 
 interface SmoothQuadraticBezierCurve {
   type: 'T' | 't'
-  point: Point
+  point: IPoint
 }
 
 interface Arc {
   type: 'A' | 'a'
-  target: Point
+  target: IPoint
   angle: number
   largeArcFlag: 0 | 1
   sweepFlag: 0 | 1
-  point: Point
+  point: IPoint
 }
 
 interface ClosePath {
