@@ -16,9 +16,17 @@ export class Arrange {
     }
   }
 
-  sendToBackward (orderable: Orderable) {}
-  bringToFront (orderable: Orderable) {}
-  bringToForward (orderable: Orderable) {}
+  sendToBackward (orderable: Orderable) {
+    console.log(orderable)
+  }
+
+  bringToFront (orderable: Orderable) {
+    console.log(orderable)
+  }
+
+  bringToForward (orderable: Orderable) {
+    console.log(orderable)
+  }
 
   get order () {
     return Math.max.apply(null, this.orderableList.map(p => p.order)) + 1

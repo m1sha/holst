@@ -176,14 +176,14 @@ export class TextBlock implements Interactive, Orderable, Drawable {
     }
   }
 
-  private findBreak (word: string, maxWidth: number, width : number) {
-    // const charWidths = new CharacterWidths(w => this.getWidth(w))
+  // private findBreak (word: string, maxWidth: number, width : number) {
+  //   // const charWidths = new CharacterWidths(w => this.getWidth(w))
 
-    return {
-      lines: [],
-      remainder: 0
-    }
-  }
+  //   return {
+  //     lines: [],
+  //     remainder: 0
+  //   }
+  // }
 
   inPath (p: Point): boolean {
     const rect = this.bounds

@@ -142,7 +142,7 @@ handlers.RoundRect = ({ path, element, transform, stack, globalTransform }) => {
   path.closePath()
 }
 
-handlers.Arrow = ({ path, element, transform, stack, globalTransform }) => {
+handlers.Arrow = ({ path, element, transform, globalTransform }) => {
   if (element.type !== 'Arrow') return
   const sp = { x: element.spx, y: element.spy }
   const ep = { x: element.epx, y: element.epy }

@@ -157,11 +157,11 @@ export class HandlerResolver {
   }
 
   onblur (e: FocusEvent): any {
-    throw new Error('Method not implemented.')
+    throw new Error('Method not implemented.' + e as string)
   }
 
   onfocus (e: FocusEvent): any {
-    throw new Error('Method not implemented.')
+    throw new Error('Method not implemented.' + e as string)
   }
 
   private setHandler (name: keyof EventType, callback: (p: ListenerType) => void) {

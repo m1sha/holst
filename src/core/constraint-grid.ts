@@ -28,23 +28,23 @@ export class ConstraintGrid {
     return this.cells[index]
   }
 
-  private calculate () {
-    const { width, height } = this.size
-    const { columns, rows } = this
-    const cellWidth = width / columns
-    const cellHeight = height / rows
+  // private calculate () {
+  //   const { width, height } = this.size
+  //   const { columns, rows } = this
+  //   const cellWidth = width / columns
+  //   const cellHeight = height / rows
 
-    for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < columns; j++) {
-        const x = cellWidth * j + this.startPoint.x
-        const y = cellHeight * i + this.startPoint.y
-        this.cells.push({
-          rect: new Rect(x, y, cellWidth, cellHeight),
-          center: new Point(cellWidth / 2 + x, cellHeight / 2 + y)
-        })
-      }
-    }
-  }
+  //   for (let i = 0; i < rows; i++) {
+  //     for (let j = 0; j < columns; j++) {
+  //       const x = cellWidth * j + this.startPoint.x
+  //       const y = cellHeight * i + this.startPoint.y
+  //       this.cells.push({
+  //         rect: new Rect(x, y, cellWidth, cellHeight),
+  //         center: new Point(cellWidth / 2 + x, cellHeight / 2 + y)
+  //       })
+  //     }
+  //   }
+  // }
 
   private calcIfConstraints () {
     const { columns, rows } = this

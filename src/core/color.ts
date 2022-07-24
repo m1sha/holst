@@ -116,7 +116,7 @@ export class Color {
     return foreground ? (l2 + 0.05) / (l1 + 0.05) : (l1 + 0.05) / (l2 + 0.05)
   }
 
-  alike ({ r, g, b, a }: RGBA, coefficient: number = 10): boolean {
+  alike ({ r, g, b }: RGBA, coefficient: number = 10): boolean {
     const er = r <= this.r + coefficient && r >= this.r - coefficient
     const eg = g <= this.g + coefficient && g >= this.g - coefficient
     const eb = b <= this.b + coefficient && b >= this.b - coefficient

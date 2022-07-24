@@ -1,17 +1,17 @@
 export default {
-  asc (field: string, fieldType?: string) {
-    return sort(1, field, fieldType || '')
+  asc (field: string) {
+    return sort(1, field)
   },
 
-  desk (field: string, fieldType: string) { // desc
-    return sort(-1, field, fieldType)
+  desk (field: string) { // desc
+    return sort(-1, field)
   }
 }
 
-function sort (direct: number, field: string, fieldType: string) {
+function sort (direct: number, field: string) {
   return function (a: Record<string, unknown>, b: Record<string, unknown>) {
-    const l = toType(a[field], fieldType)
-    const r = toType(b[field], fieldType)
+    const l = a[field] as number
+    const r = b[field] as number
 
     if (l < r) return direct * -1
     if (l > r) return direct * 1
@@ -29,21 +29,4 @@ export function removeItem<T> (items: T[], predicate: (item: T, index: number) =
     }
   }
   if (index >= 0) items.splice(index, 1)
-}
-
-function toType (value: unknown, fieldType: string) {
-  const nValue = value
-  //   if (fieldType === 'date') {
-  //     if (nValue.indexOf('-') > -1) {
-  //       return new Date(nValue).getTime()
-  //     }
-  //     const ii = DateTime.parse(nValue)
-  //     return !ii ? 0 : ii.getTime()
-  //   }
-
-  //   if (fieldType === 'human-string') {
-  //     return toHs(value)
-  //   }
-
-  return nValue as number
 }

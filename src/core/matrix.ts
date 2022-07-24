@@ -1,11 +1,11 @@
 import { Point, IPoint } from './point'
 
-interface IDOMMatrix2D {
-  rotate (deg: number): void
-  scale (x: number, y: number): void
-  translate (x: number, y: number): void
-  multiply (m: DOMMatrix): DOMMatrix
-}
+// interface IDOMMatrix2D {
+//   rotate (deg: number): void
+//   scale (x: number, y: number): void
+//   translate (x: number, y: number): void
+//   multiply (m: DOMMatrix): DOMMatrix
+// }
 
 export class Matrix2D {
   private matrix: DOMMatrix
@@ -96,9 +96,9 @@ export class Matrix2D {
     return matrix(1, 0, 0, 1, 0, 0)
   }
 
-  private get instance () {
-    return (MatrixFactory.instance as unknown) as IDOMMatrix2D
-  }
+  // private get instance () {
+  //   return (MatrixFactory.instance as unknown) as IDOMMatrix2D
+  // }
 }
 
 export function matrix (a: number, b: number, c: number, d: number, e: number, f: number): Matrix2D {
@@ -116,7 +116,7 @@ const MatrixFactory = {
     }
   },
   fromMatrix (m?: { a?: number; b?: number; c?: number; d?: number; e?: number; f?: number }): DOMMatrix {
-    return eval('this.instance.fromMatrix(m)') as DOMMatrix
+    return (this.instance!! as any).fromMatrix(m) as DOMMatrix
   }
 }
 
