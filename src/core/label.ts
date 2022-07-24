@@ -28,6 +28,7 @@ export class TextBlock implements Interactive, Orderable, Drawable {
   #transform: Matrix2D = Matrix2D.identity
   private measure: (text: string, textStyle: TextStyle) => any
   readonly id: string
+  name: string
   type: DrawableType = 'text'
   text: string
   style: TextStyle
@@ -50,6 +51,7 @@ export class TextBlock implements Interactive, Orderable, Drawable {
     this.text = text
     this.style = style
     this.order = order
+    this.name = 'TextBlock'
     this.measure = measure ?? ((text: string, style: TextStyle) => TextMeasurer.measureText(text, style))
     this.target = new Point(0, 0)
   }

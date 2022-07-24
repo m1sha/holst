@@ -7,4 +7,5 @@ export interface Drawable {
   anchor: Anchor | null
   bounds: Rect
   hidden: boolean
+  name: string
 }
