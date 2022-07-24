@@ -67,8 +67,8 @@ export function toPath2D (items: SvgPathDElement[], position: Point, path2d?: Mu
       }
       case 'm': {
         const p = item.point
-        position.x = p.x
-        position.y = p.y
+        position.x += p.x
+        position.y += p.y
         continue
       }
       case 'V':
