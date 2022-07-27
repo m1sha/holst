@@ -34,6 +34,18 @@ export class Path2DRecorder {
     return this.stack[index]
   }
 
+  remove (index: number) {
+    this.stack.splice(index, 1)
+  }
+
+  removeLast () {
+    this.stack.pop()
+  }
+
+  removeFirst () {
+    this.stack.shift()
+  }
+
   find (type: ElementType) {
     const items = []
     for (let index = 0; index < this.stack.length; index++) {

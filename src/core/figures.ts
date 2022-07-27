@@ -63,6 +63,18 @@ export class Figures {
     return this.createDecorator('Arrow')
   }
 
+  remove (index: number) {
+    this.recorder.remove(index)
+  }
+
+  removeLast () {
+    this.recorder.removeLast()
+  }
+
+  removeFirst () {
+    this.recorder.removeFirst()
+  }
+
   private createDecorator <T extends Path2DElement['type']> (type: T) {
     return this.recorder.find(type).map(p => createPath2ElementDecorator<T>(p.element, p.index, this.mutable))
   }

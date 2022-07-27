@@ -16,7 +16,7 @@
 ☐ Make a decorator for text-style like for shape-style
 ☐ Arrange (Implement)
 ☐ TextBlock add prop frozen
-
+☐ Delete from shape.figures complex elements like circle, lineH, LineV and etc. (Stack saves only primitive items).
 
 # Tasks (AnimationHandler)
 ☐ Review this ticket
