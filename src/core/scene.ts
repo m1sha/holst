@@ -4,6 +4,7 @@ import { Layer } from './layers'
 import { StyleManager } from './style-manager'
 import { TaskManager } from './tasks/task-manager'
 import { Animation, AnimationOptions } from './animations/animation'
+import { removeItem } from '../utils/array'
 
 export class Scene {
     private _layers: Layer []
@@ -28,6 +29,21 @@ export class Scene {
       this._layers.push(result)
       if (frozen) result.frozen = true
       return result
+    }
+
+    removeLayer (index: number): void
+    // eslint-disable-next-line no-dupe-class-members
+    removeLayer (name: string): void
+    // eslint-disable-next-line no-dupe-class-members
+    removeLayer (...args: Array<any>): void {
+      if (args.length !== 1) throw new Error('unsupported number of parameters.')
+      const value = args[0]
+      if (typeof value === 'number') {
+        removeItem(this._layers, value)
+      }
+      if (typeof value === 'string') {
+        removeItem(this._layers, p => p.name === value)
+      }
     }
 
     clearAllLayers () {

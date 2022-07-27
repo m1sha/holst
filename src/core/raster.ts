@@ -2,9 +2,17 @@ import { RasterDataTransfer } from './raster/raster-data-transfer'
 import Orderable from './orderable'
 import { IRect, Rect } from './rect'
 import { Channels } from './raster/channels'
+import { uid } from '../utils/uid'
+import { Drawable, DrawableType } from './drawable'
+import { Anchor } from './anchor'
 
 export type AnyImageType = HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap
-export class Raster implements Orderable {
+export class Raster implements Orderable, Drawable {
+  readonly type: DrawableType = 'raster'
+  anchor: Anchor | null = null
+  hidden: boolean = false
+  name: string
+  readonly id: string
   #channels: Channels | null = null
   src: AnyImageType
   srcRect: IRect
@@ -12,9 +20,15 @@ export class Raster implements Orderable {
   order: number = 0
 
   constructor (src: AnyImageType, srcRect: IRect, distRect: IRect) {
+    this.id = uid()
+    this.name = 'Raster'
     this.src = src
     this.srcRect = srcRect
     this.distRect = distRect
+  }
+
+  get bounds (): Rect {
+    return new Rect(this.distRect)
   }
 
   static createImage (url: string, callback?: (ev: Event) => void, onerror?: (ev: string | Event) => void) {

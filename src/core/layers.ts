@@ -71,7 +71,12 @@ export class Layer implements Orderable {
     this.objects.push(textBlock)
   }
 
+  /** @deprecated */
   createImage (raster: Raster) {
+    this.objects.push(raster)
+  }
+
+  addRaster (raster: Raster) {
     this.objects.push(raster)
   }
 
@@ -104,6 +109,14 @@ export class Layer implements Orderable {
     removeItem(this.objects, p => (p as TextBlock).id === text.id)
   }
 
+  removeSprite (sprite: Sprite): void {
+    removeItem(this.objects, p => (p as Sprite).id === sprite.id)
+  }
+
+  removeRaster (raster: Raster): void {
+    removeItem(this.objects, p => (p as Raster).id === raster.id)
+  }
+
   sendToBack (item: Shape | TextBlock | Raster) {
     this.arrange.sendToBack(item)
   }
@@ -128,8 +141,12 @@ export class Layer implements Orderable {
     return this.objects.filter(p => p instanceof TextBlock) as TextBlock[]
   }
 
-  get images (): Raster[] {
+  get rasters (): Raster[] {
     return this.objects.filter(p => p instanceof Raster) as Raster[]
+  }
+
+  get sprites (): Sprite[] {
+    return this.objects.filter(p => p instanceof Sprite) as Sprite[]
   }
 
   get entities (): Readonly<Orderable[]> {

@@ -1,7 +1,7 @@
 import { Rect } from './rect'
 import { Anchor } from './anchor'
 
-export type DrawableType = 'shape' | 'text' | 'image'
+export type DrawableType = 'shape' | 'text' | 'raster' | 'sprite'
 export interface Drawable {
   type: DrawableType
   anchor: Anchor | null
