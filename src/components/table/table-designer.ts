@@ -66,7 +66,7 @@ export class TableDesigner {
         })
       }
     }
-    return { controls, layer, grid }
+    return controls
   }
 
   getConstraint () {
