@@ -2,6 +2,7 @@ import Orderable from './orderable'
 import { sort } from './sorter'
 
 export class Arrange {
+  private nextOrder = 0
   readonly orderableList: Orderable[]
   constructor (orderableList: Orderable[]) {
     this.orderableList = orderableList
@@ -29,7 +30,7 @@ export class Arrange {
   }
 
   get order () {
-    return Math.max.apply(null, this.orderableList.map(p => p.order)) + 1
+    return this.nextOrder + 1
   }
 
   private get sorted () {
