@@ -4,12 +4,11 @@ import { IRect, Rect } from './rect'
 import { Channels } from './raster/channels'
 import { uid } from '../utils/uid'
 import { Drawable, DrawableType } from './drawable'
-import { Anchor } from './anchor'
+import { Container } from './container'
 
 export type AnyImageType = HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap
-export class Raster implements Orderable, Drawable {
+export class Raster extends Container implements Orderable, Drawable {
   readonly type: DrawableType = 'raster'
-  anchor: Anchor | null = null
   hidden: boolean = false
   name: string
   readonly id: string
@@ -18,8 +17,11 @@ export class Raster implements Orderable, Drawable {
   srcRect: IRect
   distRect: IRect
   order: number = 0
+  readonly modified: boolean = true
+  onModified: (() => void) | null = null
 
   constructor (src: AnyImageType, srcRect: IRect, distRect: IRect) {
+    super()
     this.id = uid()
     this.name = 'Raster'
     this.src = src

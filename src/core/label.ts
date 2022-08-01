@@ -9,7 +9,8 @@ import { uid } from '../utils/uid'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { Size } from './size'
 import { Drawable, DrawableType } from './drawable'
-import { Anchor, applyAnchor } from './anchor'
+import { applyAnchor } from './anchor'
+import { Container } from './container'
 
 /** @deprecated */
 export interface Text {
@@ -24,7 +25,7 @@ export interface TextBlockLine {
   getWidth: () => number
 }
 
-export class TextBlock implements Interactive, Orderable, Drawable {
+export class TextBlock extends Container implements Interactive, Orderable, Drawable {
   #transform: Matrix2D = Matrix2D.identity
   private measure: (text: string, textStyle: TextStyle) => any
   readonly id: string
@@ -41,12 +42,14 @@ export class TextBlock implements Interactive, Orderable, Drawable {
   size?: Size
   overflow: 'none' | 'word-break' | 'clip' | 'word-break + clip' = 'none'
   lineHeight: number = 0
-  anchor: Anchor | null = null
+  onModified: (() => void) | null = null
   hidden: boolean = false
+  readonly modified: boolean = true
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
   /** @internal */ globalTransform: Matrix2D | null = null
 
   constructor (text: string, style: TextStyle, order: number = 0, measure?: (text: string, style: TextStyle) => any) {
+    super()
     this.id = uid()
     this.text = text
     this.style = style

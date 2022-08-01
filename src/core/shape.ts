@@ -15,10 +15,10 @@ import { Corner4 } from './corner4'
 import { IVector } from './vector'
 import { Figures } from './figures'
 import { Drawable, DrawableType } from './drawable'
-import { Anchor } from './anchor'
 import { Shadow } from './shadow'
+import { Container } from './container'
 
-export default class Shape implements Interactive, Orderable, Drawable {
+export default class Shape extends Container implements Interactive, Orderable, Drawable {
   #modified: boolean = true
   #cache: Path2DBase | null = null
   private readonly mutablePath: MutablePath2D
@@ -32,17 +32,18 @@ export default class Shape implements Interactive, Orderable, Drawable {
   /** @internal */ globalTransform: Matrix2D | null = null
   frozen: boolean = false
   readonly figures: Figures
-  anchor: Anchor | null = null
   readonly shadow: Shadow = new Shadow()
   hidden: boolean = false
+  onModified: (() => void) | null = null
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
+    super()
     this.id = uid()
     this.mutablePath = path
-    this.figures = new Figures(this.mutablePath.recorder, { setModified: () => (this.#modified = true) })
+    this.figures = new Figures(this.mutablePath.recorder, { setModified: () => (this.modified = true) })
     this.relative = new RelativeMutablePath2D(this.mutablePath)
     this.order = order
-    this.style = new ShapeStyleImpl(style || {}, () => (this.#modified = true))
+    this.style = new ShapeStyleImpl(style || {}, () => (this.modified = true))
     this.name = 'shape'
   }
 
@@ -96,7 +97,7 @@ export default class Shape implements Interactive, Orderable, Drawable {
 
   rect (rect: IRect): this | Shape {
     this.mutablePath.rect(rect.x, rect.y, rect.width, rect.height)
-    this.#modified = true
+    this.modified = true
     return this
   }
 
@@ -104,103 +105,103 @@ export default class Shape implements Interactive, Orderable, Drawable {
     const { x, y, width, height } = rect
     const r = typeof radius === 'number' ? { tl: radius, tr: radius, bl: radius, br: radius } : radius
     this.mutablePath.roundRect(x, y, width, height, r.tl, r.tr, r.bl, r.br)
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   moveTo (point: IPoint): this | Shape {
     this.mutablePath.moveTo(point.x, point.y)
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   lineTo (point: IPoint): this | Shape {
     this.mutablePath.lineTo(point.x, point.y)
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   lineH (point: IPoint, width: number): this | Shape {
     this.moveTo(point).lineTo(new Point(point.x + width, point.y))
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   lineV (point: IPoint, height: number): this | Shape {
     this.moveTo(point).lineTo(new Point(point.x, point.y + height))
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   arc (point: IPoint, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
     if (startAngle === 0) this.mutablePath.moveTo(point.x + radius, point.y + radius)
     this.mutablePath.arc(point.x, point.y, radius, startAngle, endAngle, anticlockwise)
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   ellipse (point: IPoint, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this | Shape {
     if (startAngle === 0) this.mutablePath.moveTo(point.x + radiusX, point.y + radiusY)
     this.mutablePath.ellipse(point.x, point.y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   circle (point: IPoint, radius: number): this | Shape {
     this.mutablePath.moveTo(point.x + radius, point.y + radius)
     this.mutablePath.circle(point.x, point.y, radius)
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   bezierCurveTo (cp1: IPoint, cp2: IPoint, p: IPoint): this | Shape {
     this.mutablePath.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, p.x, p.y)
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   quadraticCurveTo (cp: IPoint, p: IPoint): this | Shape {
     this.mutablePath.quadraticCurveTo(cp.x, cp.y, p.x, p.y)
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   polyline (points: IPoint[]): this | Shape {
     this.mutablePath.polygon(points)
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   line (pointStart: IPoint, pointEnd: IPoint): this | Shape {
     this.moveTo(pointStart)
     this.lineTo(pointEnd)
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   arrow (vector: IVector, length: number, direction: '>' | '<'): this | Shape {
     const { sp, ep } = vector
     this.mutablePath.arrow(sp.x, sp.y, ep.x, ep.y, length, direction)
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   closePath (): this | Shape {
     this.mutablePath.closePath()
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   merge (shape: Shape): this | Shape {
     this.mutablePath.addPath(shape.toPath2D())
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   move (point: IPoint): this | Shape {
     this.mutablePath.transform.e = point.x
     this.mutablePath.transform.f = point.y
-    this.#modified = true
+    this.modified = true
     return this
   }
 
@@ -211,12 +212,12 @@ export default class Shape implements Interactive, Orderable, Drawable {
   scale (point: IPoint): this | Shape {
     this.mutablePath.transform.a = point.x
     this.mutablePath.transform.d = point.y
-    this.#modified = true
+    this.modified = true
     return this
   }
 
   rotate (angle: number): this | Shape {
-    this.#modified = true
+    this.modified = true
     this.mutablePath.transform.b = Math.sin(angle)
     this.mutablePath.transform.c = -Math.cos(angle)
     return this
@@ -226,7 +227,7 @@ export default class Shape implements Interactive, Orderable, Drawable {
     const matrix = Matrix2D.identity
     matrix.d = -1
     this.mutablePath.transform.mul(matrix)
-    this.#modified = true
+    this.modified = true
     return this
   }
 
@@ -239,14 +240,22 @@ export default class Shape implements Interactive, Orderable, Drawable {
   }
 
   get bounds (): Rect {
-    const points = this.mutablePath.toPoints()
-    return calcBounds(points)
+    const points = this.mutablePath.toPoints(this.frozen ? Matrix2D.identity : this.globalTransform ?? Matrix2D.identity, this.anchor || undefined)
+    const rect = calcBounds(points)
+    // if (this.anchor && this.anchor.container) {
+    //   const b = getAnchorPoint(this.anchor)
+    //   rect.x = b.x
+    //   rect.y = b.y
+    // }
+    return rect
   }
 
   toPath2D (): Path2DBase {
-    if (this.#modified) {
-      this.#cache = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : this.globalTransform ?? Matrix2D.identity)
-      this.#modified = false
+    const modified = this.anchor && this.anchor.isModified(this)
+    if (this.#modified || modified) {
+      this.#cache = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : this.globalTransform ?? Matrix2D.identity, this.anchor || undefined)
+      this.modified = false
+      this.anchor && this.anchor.setUnmodified(this)
     }
 
     return this.#cache!!
@@ -273,6 +282,11 @@ export default class Shape implements Interactive, Orderable, Drawable {
 
   get modified (): boolean {
     return this.#modified
+  }
+
+  set modified (value: boolean) {
+    this.#modified = value
+    if (value && this.onModified) this.onModified()
   }
 
   private exportTransformation (): Matrix2D {

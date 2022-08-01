@@ -1,3 +1,4 @@
+import { Anchor } from './core/anchor'
 import { Assets } from './core/assets'
 import { CubicBezier } from './core/motion/cubic-bezier'
 import { Layer } from './core/layers'
@@ -25,6 +26,7 @@ export * from './core/rect'
 export * from './core/size'
 
 export {
+  Anchor,
   Assets,
   CubicBezier,
   BitmapReader,

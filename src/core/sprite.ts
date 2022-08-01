@@ -4,12 +4,11 @@ import Orderable from './orderable'
 import { IPoint, Point } from './point'
 import { Drawable, DrawableType } from './drawable'
 import { Rect } from './rect'
-import { Anchor } from './anchor'
 import { uid } from '../utils/uid'
-export class Sprite implements Orderable, Drawable {
+import { Container } from './container'
+export class Sprite extends Container implements Orderable, Drawable {
   readonly type: DrawableType = 'sprite'
   name: string
-  anchor: Anchor | null = null
   hidden: boolean = false
   id: string
   order: number = 0
@@ -18,8 +17,11 @@ export class Sprite implements Orderable, Drawable {
   readonly frames: number
   position: IPoint
   framePosition: IPoint
+  readonly modified: boolean = true
+  onModified: (() => void) | null = null
 
   constructor (raster: Raster, tileSize: Size, order: number = 0) {
+    super()
     this.id = uid()
     this.name = 'Sprite'
     this.position = Point.zero

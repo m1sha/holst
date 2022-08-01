@@ -1,4 +1,5 @@
-import { Scene, Renderer2D, Color, CubicBezier, SvgPathD, Shape } from '../../src/index'
+import { Anchor } from '../../src/core/anchor'
+import { Scene, Renderer2D, Color, CubicBezier, SvgPathD, Shape, Rect, Point } from '../../src/index'
 
 export function createReadmeDemo (canvas: HTMLCanvasElement) {
   const scene = new Scene()
@@ -11,6 +12,7 @@ export function createReadmeDemo (canvas: HTMLCanvasElement) {
   pen.scale({ x: 4, y: 4 })
 
   const shape = layer.createShape({ fill: Color.blue }).circle({ x: 150, y: 150 }, 50)
+  shape.name = 'circle'
   layer.addShape(pen)
 
   const animation = scene.createAnimation({ duration: 1500 })
@@ -22,7 +24,34 @@ export function createReadmeDemo (canvas: HTMLCanvasElement) {
 
   shape.on('click', () => {
     animation.start()
+    cont.rects[0].y += 10
   })
+
+  const cont = layer.createShape({ fill: '#444' }).rect(new Rect(0, 0, 100, 100))
+  cont.name = 'cont-1'
+
+  const anchor = Anchor.create(cont)
+
+  const shpGrey = layer.createShape({ fill: '#bbb' }).rect(new Rect(10, 10, 20, 20))
+  shpGrey.name = 'shpGrey'
+  shpGrey.setAnchor(anchor)
+
+  const text0 = layer.createTextBlock('Text', { color: '#AAA' }, new Point(10, 40))
+  text0.name = 'Text AAA'
+  text0.setAnchor(anchor)
+
+  const cont2 = layer.createShape({ fill: '#112bbb' }).rect(new Rect(40, 10, 20, 20))
+  cont2.name = 'cont-2'
+  cont2.setAnchor(anchor)
+
+  const anchor2 = Anchor.create(cont2)
+
+  const shp = layer.createShape({ fill: '#fff' }).rect(new Rect(5, 5, 10, 10))
+  shp.name = 'child-cont2'
+  shp.setAnchor(anchor2)
+
+  const anchor3 = Anchor.create(shp)
+  layer.createShape({ fill: '#ff0000' }).circle({ x: 5, y: 5 }, 5).setAnchor(anchor3)
 
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
   renderer.render(scene)

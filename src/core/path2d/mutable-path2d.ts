@@ -1,10 +1,11 @@
 import { Path2DElement } from './path2d-element'
 import { Matrix2D } from '../matrix'
 import { Path2DBase } from './path2d-base'
-import { IPoint } from '../point'
+import { IPoint, Point } from '../point'
 import { createPath2D } from './create-path2d'
 import { createPoints } from './create-points'
 import { Path2DRecorder } from './path2d-recorder'
+import { Anchor, getAnchorPoint } from '../anchor'
 
 export class MutablePath2D implements Path2DBase {
   private stack: Path2DElement[]
@@ -78,12 +79,14 @@ export class MutablePath2D implements Path2DBase {
     this.stack.push({ type: 'ClosePath' })
   }
 
-  createPath2D (globalTransform?: Matrix2D): Path2D {
-    return GlobalPath2DFactory.create(this.stack, this.transform, globalTransform)
+  createPath2D (globalTransform?: Matrix2D, anchor?: Anchor): Path2D {
+    const d = anchor ? getAnchorPoint(anchor) : Point.zero
+    return GlobalPath2DFactory.create(this.stack, d, this.transform, globalTransform)
   }
 
-  toPoints (globalTransform?: Matrix2D): IPoint[] {
-    return createPoints(this.stack, this.transform, globalTransform)
+  toPoints (globalTransform?: Matrix2D, anchor?: Anchor): IPoint[] {
+    const d = anchor ? getAnchorPoint(anchor) : Point.zero
+    return createPoints(this.stack, d, this.transform, globalTransform)
   }
 
   copy () {
@@ -97,8 +100,8 @@ export class MutablePath2D implements Path2DBase {
 }
 
 const GlobalPath2DFactory = {
-  create: (stack: Path2DElement[], transform: Matrix2D, globalTransform?: Matrix2D) => {
-    return createPath2D(stack, transform, globalTransform)
+  create: (stack: Path2DElement[], d: IPoint, transform: Matrix2D, globalTransform?: Matrix2D) => {
+    return createPath2D(stack, d, transform, globalTransform)
   }
 }
 
