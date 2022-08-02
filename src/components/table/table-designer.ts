@@ -30,6 +30,7 @@ export class TableDesigner {
     const columns = this.table.rows[0].cells.length
     const grid = new ConstraintGrid(this.table.containerRect, this.table.rows.length, columns, this.getConstraint())
     const layer = this.scene.createLayer()
+    layer.order = this.table.order
     const controls: TableControl[] = []
     for (let rowIndex = 0; rowIndex < this.table.rows.length; rowIndex++) {
       const row = this.table.rows[rowIndex]

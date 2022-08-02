@@ -17,6 +17,7 @@ export class Table implements IComponent {
   onDragleave: CellDragleaveEventCallBack | null = null
   onCellHover: CellMouseEventCallBack | null = null
   onCellLeave: CellMouseEventCallBack | null = null
+  order: number = 0
 
   constructor (containerSize: IRect) {
     this.containerRect = containerSize
