@@ -1,4 +1,5 @@
 export class MouseEventDecorator {
+  #stopPropagation: boolean = false
   readonly origin: MouseEvent
   readonly pressed: boolean
   readonly hit: boolean
@@ -14,6 +15,14 @@ export class MouseEventDecorator {
 
   get y (): number {
     return this.origin.offsetY
+  }
+
+  stopPropagation (): void {
+    this.#stopPropagation = true
+  }
+
+  get isStopPropagation (): boolean {
+    return this.#stopPropagation
   }
 }
 

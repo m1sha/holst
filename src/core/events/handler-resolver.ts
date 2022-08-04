@@ -21,37 +21,45 @@ export class HandlerResolver {
 
   onclick (e: MouseEvent) {
     this.setHandler('click', p => {
-      if (!this.hit(p, e)) return
+      if (!this.hit(p, e)) return true
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+      if (decorator.isStopPropagation) return false
+      return true
     })
   }
 
   ondblclick (e: MouseEvent): any {
     this.setHandler('dblclick', p => {
-      if (!this.hit(p, e)) return
+      if (!this.hit(p, e)) return true
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+      if (decorator.isStopPropagation) return false
+      return true
     })
   }
 
   onmousemove (e: MouseEvent) {
     this.setHandler('leave', p => {
-      if (this.hit(p, e)) return
+      if (this.hit(p, e)) return true
       const id = p.interactive.id
-      if (!this.hovered.has(id)) return
+      if (!this.hovered.has(id)) return true
       this.hovered.clear(id)
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+      if (decorator.isStopPropagation) return false
+      return true
     })
 
     this.setHandler('hover', p => {
-      if (!this.hit(p, e)) return
+      if (!this.hit(p, e)) return true
       const id = p.interactive.id
-      if (this.hovered.has(id)) return
+      if (this.hovered.has(id)) return true
       this.hovered.set(id)
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+      if (decorator.isStopPropagation) return false
+      return true
     })
 
     this.setHandler('mousemove', p => {
@@ -60,16 +68,20 @@ export class HandlerResolver {
       const pressed = this.pressed.has(id)
       const decorator = new MouseEventDecorator(e, pressed, hit)
       p.listener(this.createEvent(decorator, p))
+      if (decorator.isStopPropagation) return false
+      return true
     })
   }
 
   onmouseleave (e: MouseEvent) {
     this.setHandler('leave', p => {
       const id = p.interactive.id
-      if (!this.hovered.has(id)) return
+      if (!this.hovered.has(id)) return true
       this.hovered.clear(id)
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+
+      return true
     })
 
     this.pressed.clearAll()
@@ -78,21 +90,25 @@ export class HandlerResolver {
   onmouseup (e: MouseEvent) {
     this.setHandler('mouseup', p => {
       const id = p.interactive.id
-      if (!this.pressed.has(id)) return
+      if (!this.pressed.has(id)) return true
       this.pressed.clear(id)
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+
+      return true
     })
   }
 
   onmousedown (e: MouseEvent) {
     this.setHandler('mousedown', p => {
-      if (!this.hit(p, e)) return
+      if (!this.hit(p, e)) return true
       const id = p.interactive.id
-      if (this.pressed.has(id)) return
+      if (this.pressed.has(id)) return true
       this.pressed.set(id)
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+
+      return true
     })
   }
 
@@ -100,6 +116,8 @@ export class HandlerResolver {
     this.setHandler('keyup', p => {
       const decorator = new KeyboardEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+
+      return true
     })
   }
 
@@ -107,6 +125,8 @@ export class HandlerResolver {
     this.setHandler('keydown', p => {
       const decorator = new KeyboardEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+
+      return true
     })
   }
 
@@ -114,6 +134,8 @@ export class HandlerResolver {
     this.setHandler('wheel', p => {
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+
+      return true
     })
   }
 
@@ -122,21 +144,25 @@ export class HandlerResolver {
       e.preventDefault()
       e.dataTransfer!!.dropEffect = 'move'
       if (!this.hit(p, e)) {
-        return
+        return true
       }
       const id = p.interactive.id
       this.dragged.set(id)
       const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+
+      return true
     })
 
     this.setHandler('dragleave', p => {
-      if (this.hit(p, e)) return
+      if (this.hit(p, e)) return true
       const id = p.interactive.id
-      if (!this.dragged.has(id)) return
+      if (!this.dragged.has(id)) return true
       this.dragged.clear(id)
       const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+
+      return true
     })
   }
 
@@ -145,14 +171,18 @@ export class HandlerResolver {
       this.dragged.clearAll()
       const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+
+      return true
     })
   }
 
   ondrop (e: DragEvent): any {
     this.setHandler('drop', p => {
-      if (!this.hit(p, e)) return
+      if (!this.hit(p, e)) return true
       const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
+
+      return true
     })
   }
 
@@ -164,10 +194,12 @@ export class HandlerResolver {
     throw new Error('Method not implemented.' + e as string)
   }
 
-  private setHandler (name: keyof EventType, callback: (p: ListenerType) => void) {
-    const h = this.handlers[name]
-    if (!h) return
-    h.forEach(p => callback(p))
+  private setHandler (name: keyof EventType, callback: (p: ListenerType) => boolean) {
+    const handlers = this.handlers[name]
+    if (!handlers) return
+    for (const handler of handlers) {
+      if (!callback(handler)) break
+    }
   }
 
   private createEvent<T> (e: T, p: ListenerType) {
