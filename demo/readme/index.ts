@@ -22,9 +22,10 @@ export function createReadmeDemo (canvas: HTMLCanvasElement) {
   )
   animation.finish = () => (shape.style.fill = Color.blue)
 
-  shape.on('click', () => {
+  shape.on('click', e => {
     animation.start()
     cont.rects[0].y += 10
+    e.event.stopPropagation()
   })
 
   const cont = layer.createShape({ fill: '#444' }).rect(new Rect(0, 0, 100, 100))
