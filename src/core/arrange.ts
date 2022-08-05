@@ -1,5 +1,5 @@
 import Orderable from './orderable'
-import { sort } from './sorter'
+import { sort } from '../utils/sorter'
 
 export class Arrange {
   private nextOrder = 0
