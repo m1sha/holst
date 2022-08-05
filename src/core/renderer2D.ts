@@ -12,6 +12,7 @@ import { AnimationHandler } from './animation-handler'
 import { drawShape } from './render/drafters/draw-shape'
 import { drawTextBlock } from './render/drafters/draw-text-block'
 import { Sprite } from './sprite'
+import { Drawable } from './drawable'
 
 export class Renderer2D {
   readonly ctx: CanvasRenderingContext2D
@@ -58,8 +59,9 @@ export class Renderer2D {
     const list = sort(entities as Orderable[])
 
     for (const item of list) {
-      if (item instanceof Shape && !item.hidden) this.drawShape(item, mask)
-      if (item instanceof TextBlock && !item.hidden) this.drawTextBlock(item, mask)
+      if ((item as unknown as Drawable).hidden) continue
+      if (item instanceof Shape) this.drawShape(item, mask)
+      if (item instanceof TextBlock) this.drawTextBlock(item, mask)
       if (item instanceof Raster) this.drawImage(item)
       if (item instanceof Sprite) this.drawSprite(item)
     }
