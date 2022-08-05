@@ -16,8 +16,8 @@ import { Sprite } from './sprite'
 export class Renderer2D {
   readonly ctx: CanvasRenderingContext2D
   readonly viewport: Viewport
-  private eventHandler: EventHandler
-  private animationHandler: AnimationHandler
+  eventHandler: EventHandler
+  animationHandler: AnimationHandler
   onFrameChanged: (() => void) | null = null
 
   constructor (ctx: CanvasRenderingContext2D) {
@@ -35,7 +35,10 @@ export class Renderer2D {
       layers.forEach(l => l.shapes.forEach(s => s.update()))
       this.viewport.modified = false
     }
-    for (const layer of [...layers, scene.actionLayer]) this.drawLayer(layer)
+
+    for (const layer of layers) this.drawLayer(layer)
+
+    this.drawLayer(scene.actionLayer)
   }
 
   clear (): void {
