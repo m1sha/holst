@@ -3,8 +3,13 @@ import { Color } from '../../color'
 import { TextStyle } from '../../label-style'
 import { Matrix2D } from '../../matrix'
 import { applyAnchor } from '../../anchor'
+import Shape from '../../shape'
 
-export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock) {
+export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock, clip: Shape | null) {
+  ctx.save()
+
+  if (clip) ctx.clip(clip.toPath2D())
+
   assignTextStyle(ctx, block.style)
   ctx.setTransform(block.transform.mul(block.globalTransform ?? Matrix2D.identity))
   ctx.textBaseline = block.baseline
@@ -28,6 +33,8 @@ export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock) 
       y += block.charHeight + block.lineHeight
     }
   }
+
+  ctx.restore()
 }
 
 function getAlignmentPosition (dx: number, { alignment, width, size }: TextBlock, line: TextBlockLine) {

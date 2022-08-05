@@ -11,6 +11,8 @@ import { EventHandler } from './events/event-handler2'
 import { AnimationHandler } from './animation-handler'
 import { drawShape } from './render/drafters/draw-shape'
 import { drawTextBlock } from './render/drafters/draw-text-block'
+import { drawRaster } from './render/drafters/draw-raster'
+import { drawSprite } from './render/drafters/draw-sprite'
 import { Sprite } from './sprite'
 import { Drawable } from './drawable'
 
@@ -32,13 +34,7 @@ export class Renderer2D {
   render (scene: Scene): void {
     if (!this.animationHandler.isStarted) this.animationHandler.start(scene)
     const layers = sort<Layer>(scene.layers)
-    // if (this.viewport.modified) { // update global matrix
-    //   layers.forEach(l => l.shapes.forEach(s => s.update()))
-    //   this.viewport.modified = false
-    // }
-
     for (const layer of layers) this.drawLayer(layer)
-
     this.drawLayer(scene.actionLayer)
   }
 
@@ -60,60 +56,17 @@ export class Renderer2D {
 
     for (const item of list) {
       if ((item as unknown as Drawable).hidden) continue
-      if (item instanceof Shape) this.drawShape(item, mask)
-      if (item instanceof TextBlock) this.drawTextBlock(item, mask)
-      if (item instanceof Raster) this.drawImage(item)
-      if (item instanceof Sprite) this.drawSprite(item)
+      if (item instanceof Shape) {
+        this.setHandler(item)
+        drawShape(this.ctx, item, mask)
+      }
+      if (item instanceof TextBlock) {
+        this.setHandler(item)
+        drawTextBlock(this.ctx, item, mask)
+      }
+      if (item instanceof Raster) drawRaster(this.ctx, item, mask)
+      if (item instanceof Sprite) drawSprite(this.ctx, item, mask)
     }
-  }
-
-  private drawShape (shape: Shape, mask?: Shape | null) {
-    this.draw(() => drawShape(this.ctx, shape), shape, mask)
-  }
-
-  private drawTextBlock (block: TextBlock, mask?: Shape | null): void {
-    this.draw(() => drawTextBlock(this.ctx, block), block, mask)
-  }
-
-  private drawImage (raster: Raster): void {
-    this.ctx.drawImage(
-      raster.src,
-      raster.srcRect.x,
-      raster.srcRect.y,
-      raster.srcRect.width || 0,
-      raster.srcRect.height || 0,
-      raster.distRect?.x || 0,
-      raster.distRect?.y || 0,
-      raster.distRect?.width || 0,
-      raster.distRect?.height || 0
-    )
-  }
-
-  private drawSprite (sprite: Sprite) {
-    this.ctx.drawImage(
-      sprite.raster.src,
-      sprite.framePosition.x,
-      sprite.framePosition.y,
-      sprite.tileSize.width || 0,
-      sprite.tileSize.height || 0,
-      sprite.position.x || 0,
-      sprite.position.y || 0,
-      sprite.tileSize.width || 0,
-      sprite.tileSize.height || 0
-    )
-  }
-
-  private draw (action: () => void, obj: Shape | TextBlock, mask?: Shape | null) {
-    this.setHandler(obj)
-    this.ctx.save()
-    this.assignMask(mask)
-    action()
-    this.ctx.restore()
-  }
-
-  private assignMask (mask?: Shape | null) {
-    if (!mask) return
-    this.ctx.clip(mask.toPath2D())
   }
 
   private setHandler (obj: Shape | TextBlock) {

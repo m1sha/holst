@@ -1,7 +1,11 @@
 import Shape from '../../shape'
 import { Color } from '../../color'
 
-export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape) {
+export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape, clip: Shape | null) {
+  ctx.save()
+
+  if (clip) ctx.clip(clip.toPath2D())
+
   const { style } = shape
   const path = shape.toPath2D()
   if (shape.shadow.has()) {
@@ -24,4 +28,6 @@ export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape) {
     ctx.fillStyle = style.fill instanceof Color ? ctx.fillStyle = style.fill.toString() : style.fill
     ctx.fill(path)
   }
+
+  ctx.restore()
 }
