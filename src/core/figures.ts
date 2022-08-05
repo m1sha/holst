@@ -75,6 +75,26 @@ export class Figures {
     this.recorder.removeFirst()
   }
 
+  get <T extends Path2DElement['type']> (index: number) {
+    return createPath2ElementDecorator<T>(this.recorder.get(index), index, this.mutable)
+  }
+
+  first <T extends Path2DElement['type']> () {
+    return this.get<T>(0)
+  }
+
+  firstOrDefault <T extends Path2DElement['type']> () {
+    return this.recorder.count > 0 ? this.first<T>() : null
+  }
+
+  last <T extends Path2DElement['type']> () {
+    return this.get<T>(this.recorder.count - 1)
+  }
+
+  lastOrDefault <T extends Path2DElement['type']> () {
+    return this.recorder.count > 0 ? this.last<T>() : null
+  }
+
   private createDecorator <T extends Path2DElement['type']> (type: T) {
     return this.recorder.find(type).map(p => createPath2ElementDecorator<T>(p.element, p.index, this.mutable))
   }
