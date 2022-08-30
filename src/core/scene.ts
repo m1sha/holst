@@ -56,6 +56,10 @@ export class Scene {
       this.actionLayer.clear()
     }
 
+    clearAllAnimations () {
+      this.taskManager.clearAll()
+    }
+
     createAnimation (options?: AnimationOptions) {
       return new Animation(this.taskManager, options)
     }

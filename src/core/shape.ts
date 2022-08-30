@@ -17,6 +17,7 @@ import { Figures } from './figures'
 import { Drawable, DrawableType } from './drawable'
 import { Shadow } from './shadow'
 import { Container } from './container'
+import { Size } from './size'
 
 export default class Shape extends Container implements Interactive, Orderable, Drawable {
   #modified: boolean = true
@@ -95,8 +96,28 @@ export default class Shape extends Container implements Interactive, Orderable, 
     return this.figures.arrows
   }
 
-  rect (rect: IRect): this | Shape {
-    this.mutablePath.rect(rect.x, rect.y, rect.width, rect.height)
+  rect (x: number, y: number, width: number, height: number): this | Shape
+  // eslint-disable-next-line no-dupe-class-members
+  rect (point: IPoint, size: Size): this | Shape
+  // eslint-disable-next-line no-dupe-class-members
+  rect (rect: IRect): this | Shape
+  // eslint-disable-next-line no-dupe-class-members
+  rect (...args: Array<any>): this | Shape {
+    if (args.length === 1) {
+      const [rect] = args
+      this.mutablePath.rect(rect.x, rect.y, rect.width, rect.height)
+    }
+
+    if (args.length === 2) {
+      const [point, size] = args
+      this.mutablePath.rect(point.x, point.y, size.width, size.height)
+    }
+
+    if (args.length === 4) {
+      const [x, y, width, height] = args
+      this.mutablePath.rect(x, y, width, height)
+    }
+
     this.modified = true
     return this
   }
@@ -147,9 +168,22 @@ export default class Shape extends Container implements Interactive, Orderable, 
     return this
   }
 
-  circle (point: IPoint, radius: number): this | Shape {
-    this.mutablePath.moveTo(point.x + radius, point.y + radius)
-    this.mutablePath.circle(point.x, point.y, radius)
+  circle (x: number, y: number, radius: number): this | Shape
+  // eslint-disable-next-line no-dupe-class-members
+  circle (point: IPoint, radius: number): this | Shape
+  // eslint-disable-next-line no-dupe-class-members
+  circle (...args: Array<any>): this | Shape {
+    if (args.length === 2) {
+      const [point, radius] = args
+      this.mutablePath.moveTo(point.x + radius, point.y + radius)
+      this.mutablePath.circle(point.x, point.y, radius)
+    }
+    if (args.length === 3) {
+      const [x, y, radius] = args
+      this.mutablePath.moveTo(x + radius, y + radius)
+      this.mutablePath.circle(x, y, radius)
+    }
+
     this.modified = true
     return this
   }

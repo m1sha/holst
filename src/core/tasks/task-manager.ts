@@ -33,9 +33,13 @@ export class TaskManager {
     this.garbageCollect()
   }
 
+  clearAll () {
+    this.tasks = []
+  }
+
   private garbageCollect () {
     while (true) {
-      const task = this.tasks.find(p => p.isCanceled)
+      const task = this.tasks.find(p => p.isCanceled || (!p.infinity && p.isDone))
       if (!task) break
       removeItem(this.tasks, p => p.id === task.id)
     }
