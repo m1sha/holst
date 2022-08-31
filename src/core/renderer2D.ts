@@ -51,6 +51,18 @@ export class Renderer2D {
     }
   }
 
+  setAnimationRate (rate: number) {
+    this.animationHandler.rate = rate
+  }
+
+  getAnimationRate () {
+    return this.animationHandler.rate
+  }
+
+  getAnimationFps () {
+    return this.animationHandler.fps
+  }
+
   private drawLayer ({ entities, mask }: Readonly<Layer>) {
     const list = sort(entities as Orderable[])
 

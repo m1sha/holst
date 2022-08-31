@@ -9,6 +9,8 @@ export class AnimationHandler {
   private state: number = 0
   private startTime: number = -1
   private animationLength: number = 1000 / 60 // Animation length in milliseconds
+  private clock = 0
+  #fps = 0
 
   constructor (renderer: Renderer2D) {
     this.renderer = renderer
@@ -29,10 +31,23 @@ export class AnimationHandler {
     return this.state === 1
   }
 
+  get rate (): number {
+    return this.animationLength
+  }
+
+  set rate (value: number) {
+    this.animationLength = value
+  }
+
+  get fps (): number {
+    return this.#fps
+  }
+
   private handler (timestamp: number) {
     if (this.startTime < 0) {
       this.startTime = timestamp
       GlobalAnimationFrameHandlerFactory.requestAnimationFrame(r => this.handler(r))
+      this.clock = timestamp
       return
     }
 
@@ -46,6 +61,9 @@ export class AnimationHandler {
       this.scene.invokeAnimation(timestamp)
       if (this.renderer.onFrameChanged) this.renderer.onFrameChanged()
       this.renderer.render(this.scene)
+
+      this.#fps = 1000 / (timestamp - this.clock)
+      this.clock = timestamp
     }
     GlobalAnimationFrameHandlerFactory.requestAnimationFrame(r => this.handler(r))
   }
