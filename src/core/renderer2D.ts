@@ -15,8 +15,9 @@ import { drawRaster } from './render/drafters/draw-raster'
 import { drawSprite } from './render/drafters/draw-sprite'
 import { Sprite } from './sprite'
 import { Drawable } from './drawable'
+import { IRenderer } from './render/renderer'
 
-export class Renderer2D {
+export class Renderer2D implements IRenderer {
   readonly ctx: CanvasRenderingContext2D
   readonly viewport: Viewport
   eventHandler: EventHandler

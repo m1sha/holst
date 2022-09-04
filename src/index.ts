@@ -1,6 +1,8 @@
 import { Anchor } from './core/anchor'
+import { Animation } from './core/animations/animation'
 import { Assets } from './core/assets'
 import { CubicBezier } from './core/motion/cubic-bezier'
+import { DynamicCanvasRenderer2D } from './core/render/dynamic-canvas-renderer-2d'
 import { Layer } from './core/layers'
 import { Matrix2D } from './core/matrix'
 import { MutablePath2D } from './core/path2d/mutable-path2d'
@@ -27,8 +29,10 @@ export * from './core/size'
 
 export {
   Anchor,
+  Animation,
   Assets,
   CubicBezier,
+  DynamicCanvasRenderer2D,
   BitmapReader,
   BitmapWriter,
   ConstraintGrid,

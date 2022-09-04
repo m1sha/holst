@@ -22,6 +22,7 @@ export class Layer implements Orderable {
   name: string
   frozen: boolean = false
   globalTransform: Matrix2D | null = null
+  canvasOrder: 'foreground' | 'background' = 'foreground'
 
   constructor (order: number, styleManager: StyleManager, name?: string) {
     this.name = name || 'Layer' + order

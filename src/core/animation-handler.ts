@@ -1,9 +1,9 @@
 /* global FrameRequestCallback */
 import { Scene } from './scene'
-import { Renderer2D } from './renderer2D'
+import { IRenderer } from './render/renderer'
 
 export class AnimationHandler {
-  private renderer: Renderer2D
+  private renderer: IRenderer
   private scene: Scene | null = null
   private handlerId: number = -1
   private state: number = 0
@@ -12,7 +12,7 @@ export class AnimationHandler {
   private clock = 0
   #fps = 0
 
-  constructor (renderer: Renderer2D) {
+  constructor (renderer: IRenderer) {
     this.renderer = renderer
   }
 

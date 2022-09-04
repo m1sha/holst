@@ -43,6 +43,7 @@ if (process.env.libraryTarget === 'umd') {
   config.entry['readme.bundle'] = './demo/readme/index.ts'
   config.entry['blur.bundle'] = './demo/blur/index.ts'
   config.entry['containers.bundle'] = './demo/containers/index.ts'
+  config.entry['dynamic_canvas_renderer.bundle'] = './demo/dynamic-canvas-renderer/index.ts'
 
   config.output.library = 'demo'
 }
