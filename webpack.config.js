@@ -40,9 +40,10 @@ if (process.env.libraryTarget === 'umd') {
   config.entry['collisions.bundle'] = './demo/collisions/index.ts'
   config.entry['matrix.bundle'] = './demo/matrix/index.ts'
   config.entry['texts.bundle'] = './demo/texts/index.ts'
-  config.entry['table.bundle'] = './demo/table/index.ts'
   config.entry['readme.bundle'] = './demo/readme/index.ts'
   config.entry['blur.bundle'] = './demo/blur/index.ts'
+  config.entry['containers.bundle'] = './demo/containers/index.ts'
+
   config.output.library = 'demo'
 }
 
