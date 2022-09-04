@@ -40,6 +40,11 @@ export class Animation {
     this.task.start()
   }
 
+  stop () {
+    this.task.isStarted = false
+    this.task.isDone = true
+  }
+
   cancel () {
     this.task.isCanceled = true
   }
