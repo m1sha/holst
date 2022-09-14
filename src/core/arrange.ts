@@ -30,7 +30,7 @@ export class Arrange {
   }
 
   get order () {
-    return this.nextOrder + 1
+    return ++this.nextOrder
   }
 
   private get sorted () {

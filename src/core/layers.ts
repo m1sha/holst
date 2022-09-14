@@ -78,10 +78,12 @@ export class Layer implements Orderable {
   }
 
   addRaster (raster: Raster) {
+    if (!raster.order) raster.order = this.arrange.order
     this.objects.push(raster)
   }
 
   addSprite (sprite: Sprite) {
+    if (!sprite.order) sprite.order = this.arrange.order
     this.objects.push(sprite)
   }
 
