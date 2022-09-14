@@ -197,7 +197,14 @@ export class HandlerResolver {
   private setHandler (name: keyof EventType, callback: (p: ListenerType) => boolean) {
     const handlers = this.handlers[name]
     if (!handlers) return
-    for (const handler of handlers) {
+
+    const sortedHandlers = handlers.sort((a, b) => { // BADCODE revise this solution
+      if (a.interactive.order > b.interactive.order) return -1
+      if (a.interactive.order < b.interactive.order) return 1
+      return 0
+    })
+
+    for (const handler of sortedHandlers) {
       if (!callback(handler)) break
     }
   }

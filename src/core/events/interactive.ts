@@ -30,4 +30,5 @@ export interface Interactive {
   off<K extends keyof EventType> (type: K): this | Interactive
   inPath (p: Point): boolean
   id: string
+  order: number
 }
