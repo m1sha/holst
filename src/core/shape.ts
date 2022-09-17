@@ -348,6 +348,15 @@ export default class Shape extends Container implements Interactive, Orderable, 
     this.#modified = true
   }
 
+  toString () {
+    const figures = new Array(this.figures.count)
+      .fill('')
+      .map((_, i) => JSON.stringify(this.figures.get(i)))
+      .join('; ')
+
+    return `${this.name} ${figures}`
+  }
+
   static create (style: ShapeStyle | null = null, path2d: MutablePath2D = new MutablePath2D()) {
     return new Shape(path2d ?? new MutablePath2D(), 0, style)
   }
