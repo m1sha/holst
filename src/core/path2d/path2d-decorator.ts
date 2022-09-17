@@ -5,12 +5,12 @@ type ElementType = Path2DElement['type']
 export function createPath2ElementDecorator <T extends ElementType> (el: Path2DElement, index: number, mutable: Mutable) {
   (el as any).index = index
   const p = new Proxy(el, {
-    get: (_: Path2DElement, p: string) => {
-      return el[p as keyof typeof el]
+    get: (path2d: Path2DElement, p: string) => {
+      return path2d[p as keyof typeof path2d]
     },
-    set: (_: Path2DElement, p: string, value: any): boolean => {
+    set: (path2d: Path2DElement, p: string, value: any): boolean => {
       if (p in el) {
-        el[p as keyof typeof el] = value
+        path2d[p as keyof typeof path2d] = value
         mutable.setModified()
       }
       return true
