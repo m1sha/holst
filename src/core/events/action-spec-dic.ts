@@ -1,19 +1,33 @@
+type LastEventState = {
+  active: boolean,
+  stopPropagation: boolean
+}
+
 export class ActionSpecDic {
-  private items: Record<string, boolean> = {}
+  private items: Map<string, LastEventState> = new Map()
 
   has (id: string) {
-    return this.items[id]
+    return this.items.has(id)
   }
 
   set (id: string) {
-    this.items[id] = true
+    this.items.set(id, { active: true, stopPropagation: false })
   }
 
   clear (id: string) {
-    delete this.items[id]
+    this.items.delete(id)
+  }
+
+  setStopPropagation (id: string) {
+    if (!this.items.has(id)) return
+    this.items.get(id)!!.stopPropagation = true
+  }
+
+  isStopPropagation (id: string) {
+    return this.items.get(id)!!.stopPropagation
   }
 
   clearAll () {
-    for (const id of Object.keys(this.items)) delete this.items[id]
+    this.items.clear()
   }
 }

@@ -24,8 +24,8 @@ export class HandlerResolver {
       if (!this.hit(p, e)) return true
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
-      if (decorator.isStopPropagation) return false
-      return true
+
+      return !decorator.isStopPropagation
     })
   }
 
@@ -34,8 +34,8 @@ export class HandlerResolver {
       if (!this.hit(p, e)) return true
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
-      if (decorator.isStopPropagation) return false
-      return true
+
+      return !decorator.isStopPropagation
     })
   }
 
@@ -47,18 +47,25 @@ export class HandlerResolver {
       this.hovered.clear(id)
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
-      if (decorator.isStopPropagation) return false
-      return true
+
+      return !decorator.isStopPropagation
     })
 
     this.setHandler('hover', p => {
       if (!this.hit(p, e)) return true
       const id = p.interactive.id
-      if (this.hovered.has(id)) return true
+      if (this.hovered.has(id)) {
+        return !this.hovered.isStopPropagation(id)
+      }
+
       this.hovered.set(id)
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
-      if (decorator.isStopPropagation) return false
+
+      if (decorator.isStopPropagation) {
+        this.hovered.setStopPropagation(id)
+        return false
+      }
       return true
     })
 
@@ -68,8 +75,8 @@ export class HandlerResolver {
       const pressed = this.pressed.has(id)
       const decorator = new MouseEventDecorator(e, pressed, hit)
       p.listener(this.createEvent(decorator, p))
-      if (decorator.isStopPropagation) return false
-      return true
+
+      return !decorator.isStopPropagation
     })
   }
 
@@ -95,7 +102,7 @@ export class HandlerResolver {
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
 
-      return true
+      return !decorator.isStopPropagation
     })
   }
 
@@ -108,7 +115,7 @@ export class HandlerResolver {
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
 
-      return true
+      return !decorator.isStopPropagation
     })
   }
 
@@ -117,7 +124,7 @@ export class HandlerResolver {
       const decorator = new KeyboardEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
 
-      return true
+      return !decorator.isStopPropagation
     })
   }
 
@@ -126,7 +133,7 @@ export class HandlerResolver {
       const decorator = new KeyboardEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
 
-      return true
+      return !decorator.isStopPropagation
     })
   }
 
@@ -135,7 +142,7 @@ export class HandlerResolver {
       const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
 
-      return true
+      return !decorator.isStopPropagation
     })
   }
 
@@ -151,7 +158,7 @@ export class HandlerResolver {
       const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
 
-      return true
+      return !decorator.isStopPropagation
     })
 
     this.setHandler('dragleave', p => {
@@ -162,7 +169,7 @@ export class HandlerResolver {
       const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
 
-      return true
+      return !decorator.isStopPropagation
     })
   }
 
@@ -172,7 +179,7 @@ export class HandlerResolver {
       const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
 
-      return true
+      return !decorator.isStopPropagation
     })
   }
 
@@ -182,7 +189,7 @@ export class HandlerResolver {
       const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
 
-      return true
+      return !decorator.isStopPropagation
     })
   }
 

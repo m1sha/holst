@@ -1,9 +1,21 @@
-export class MouseEventDecorator {
+class EventDecorator {
   #stopPropagation: boolean = false
+
+  stopPropagation (): void {
+    this.#stopPropagation = true
+  }
+
+  get isStopPropagation (): boolean {
+    return this.#stopPropagation
+  }
+}
+
+export class MouseEventDecorator extends EventDecorator {
   readonly origin: MouseEvent
   readonly pressed: boolean
   readonly hit: boolean
   constructor (event: MouseEvent | WheelEvent, pressed: boolean = false, hit: boolean = false) {
+    super()
     this.origin = event
     this.pressed = pressed
     this.hit = hit
@@ -16,33 +28,28 @@ export class MouseEventDecorator {
   get y (): number {
     return this.origin.offsetY
   }
-
-  stopPropagation (): void {
-    this.#stopPropagation = true
-  }
-
-  get isStopPropagation (): boolean {
-    return this.#stopPropagation
-  }
 }
 
-export class KeyboardEventDecorator {
+export class KeyboardEventDecorator extends EventDecorator {
   origin: KeyboardEvent
   constructor (event: KeyboardEvent) {
+    super()
     this.origin = event
   }
 }
 
-export class FocusEventDecorator {
+export class FocusEventDecorator extends EventDecorator {
   origin: FocusEvent
   constructor (event: FocusEvent) {
+    super()
     this.origin = event
   }
 }
 
-export class DragEventDecorator {
+export class DragEventDecorator extends EventDecorator {
   origin: DragEvent
   constructor (event: DragEvent) {
+    super()
     this.origin = event
   }
 }
