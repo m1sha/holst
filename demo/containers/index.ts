@@ -26,7 +26,10 @@ export async function createContainersDemo (canvas: HTMLCanvasElement) {
 
   let delta = Point.zero
   shape
-    .on('hover', () => shape.shadow.set({ x: 10, y: 4 }, 8, '#aaa'))
+    .on('hover', e => {
+      e.event.stopPropagation()
+      shape.shadow.set({ x: 10, y: 4 }, 8, '#aaa')
+    })
     .on('leave', () => shape.shadow.clear())
     .on('mousedown', e => {
       e.event.stopPropagation()
@@ -54,7 +57,10 @@ export async function createContainersDemo (canvas: HTMLCanvasElement) {
 
   let delta2 = Point.zero
   circle
-    .on('hover', () => circle.shadow.set({ x: 10, y: 4 }, 8, '#aaa'))
+    .on('hover', e => {
+      e.event.stopPropagation()
+      circle.shadow.set({ x: 10, y: 4 }, 8, '#aaa')
+    })
     .on('leave', () => circle.shadow.clear())
     .on('mousedown', e => {
       e.event.stopPropagation()
@@ -75,9 +81,11 @@ export async function createContainersDemo (canvas: HTMLCanvasElement) {
       const rect = circle.figures.last() as IPoint
       rect.x = delta2.x + p.x
       rect.y = delta2.y + p.y
+
+      // console.log(circle.toString())
     })
     .on('dblclick', e => {
-      console.log('main shape shape order is ' + shape.order)
+      console.log('circle order is ' + circle.order)
     })
 
   whiteRect.on('dblclick', e => {
