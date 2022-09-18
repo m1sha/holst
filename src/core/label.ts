@@ -38,6 +38,7 @@ export class TextBlock extends Container implements Interactive, Orderable, Draw
   before?: Orderable
   target: IPoint
   alignment: 'left' | 'center' | 'right' | 'justify' = 'left'
+  verticalAlignment: 'top' | 'center' | 'bottom' = 'top'
   baseline: 'top' | 'hanging' | 'middle' | 'alphabetic' | 'ideographic' | 'bottom' = 'alphabetic'
   size?: Size
   overflow: 'none' | 'word-break' | 'clip' | 'word-break + clip' = 'none'

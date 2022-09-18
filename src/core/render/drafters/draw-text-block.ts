@@ -23,7 +23,7 @@ export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock, 
     ctx.fillText(block.text, x, y)
   } else {
     const p = applyAnchor(block)
-    let y = p.y + block.charHeight
+    let y = p.y + block.charHeight + getVerticalAlignmentPosition(block)
     const wrap = block.overflow === 'word-break' || block.overflow === 'word-break + clip'
     const lines = wrap ? block.wrappedLines : block.lines
     for (const line of lines) {
@@ -46,6 +46,14 @@ function getAlignmentPosition (dx: number, { alignment, width, size }: TextBlock
     case 'right': return x + realWidth - line.getWidth()
     case 'justify': return x
   }
+}
+
+function getVerticalAlignmentPosition (block: TextBlock) {
+  if (!block.size) return 0
+  if (block.verticalAlignment === 'top') return 0
+  if (block.verticalAlignment === 'bottom') return block.size.height - block.height
+  if (block.verticalAlignment === 'center') return (block.size.height / 2) - (block.height / 2)
+  return 0
 }
 
 function makeLineJustify (ctx: CanvasRenderingContext2D, { width, style, size }: TextBlock, line: TextBlockLine, x: number, y: number) {

@@ -11,6 +11,15 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
   const scene = new Scene()
   const layer = scene.createLayer()
 
+  const text0 = TextBlock.create('One Line\nLine Two', {})
+  text0.target = new Point(30, 20)
+  text0.size = { width: 100, height: 100 }
+  text0.verticalAlignment = 'center'
+  text0.alignment = 'center'
+
+  layer.addTextBlock(text0)
+  layer.createShape({ stroke: '#333' }).rect(text0.bounds)
+
   const position = new Point(100, 150)
   const text = createTextBlockInCircle('Your\nAd\nCan be here', Color.white, position, layer)
   text.on('click', () => {})
@@ -38,24 +47,6 @@ export function createTextsDemo (canvas: HTMLCanvasElement) {
     console.log('darkGrey')
   }
   animation2.start()
-
-  // let i = 1
-  // let a = 0.02
-  // let t = 0.5
-  // let colorValue = 0.0
-  // renderer.onFrameChanged = () => {
-  //   text.injectTransform(Matrix2D.identity.scale({ x: i, y: i }, text.bounds.absCenter).rotate(t, text.bounds.absCenter))
-  //   if (i < 0.8) a = 0.02
-  //   if (i > 1.2) a = -0.02
-
-  //   i += a
-  //   t += -0.5
-  //   if (t < -360) t = 0
-  //   colorValue += 0.005
-  //   if (colorValue >= 1) colorValue = 0
-
-  //   text.style.color = Color.fromGradient(colorValue, ['#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff0000'])
-  // }
 }
 
 function createTextBlock (text: string, fontSize: string, color: Color, position: Point, layer: Layer, size?: Size, wrap?: boolean) {
@@ -63,6 +54,7 @@ function createTextBlock (text: string, fontSize: string, color: Color, position
   block.lineHeight = 4
   block.target = position
   block.size = size
+  block.verticalAlignment = 'center'
   if (wrap) block.overflow = 'word-break'
   const bounds = block.bounds.outline(-16)
   layer.createShape({ stroke: Color.lightGrey, fill: Color.lightGrey }).roundRect(bounds, 8)
