@@ -1,8 +1,9 @@
 import { Path2DElement } from './path2d/path2d-element'
 import { Path2DRecorder } from './path2d/path2d-recorder'
 import { Mutable } from './mutable'
-import { createPath2ElementDecorator } from './path2d/path2d-decorator'
+import { createPath2ElementDecorator, ProxyPath2DElement } from './path2d/path2d-decorator'
 export class Figures {
+  private decoratorCache: { type: Path2DElement['type'], index: number, proxy: ProxyPath2DElement<Path2DElement['type']>}[] = []
   private recorder: Path2DRecorder
   private mutable: Mutable
 
@@ -76,7 +77,8 @@ export class Figures {
   }
 
   get <T extends Path2DElement['type']> (index: number) {
-    return createPath2ElementDecorator<T>(this.recorder.get(index), index, this.mutable)
+    const element = this.recorder.get(index)
+    return this.fromCache<T>(element.type as T, element, index) // createPath2ElementDecorator<T>(element, index, this.mutable)
   }
 
   first <T extends Path2DElement['type']> () {
@@ -96,6 +98,14 @@ export class Figures {
   }
 
   private createDecorator <T extends Path2DElement['type']> (type: T) {
-    return this.recorder.find(type).map(p => createPath2ElementDecorator<T>(p.element, p.index, this.mutable))
+    return this.recorder.find(type).map(p => this.fromCache<T>(p.element.type as T, p.element, p.index))
+  }
+
+  private fromCache <T extends Path2DElement['type']> (type: T, element: Path2DElement, index: number) {
+    const d = this.decoratorCache.find(p => p.type === type && p.index === index)
+    if (d) return d.proxy as ProxyPath2DElement<T>
+    const decorator = createPath2ElementDecorator<T>(element, index, this.mutable)
+    this.decoratorCache.push({ type, index, proxy: decorator })
+    return decorator
   }
 }

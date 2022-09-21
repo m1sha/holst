@@ -1,6 +1,7 @@
 import { Mutable } from '../mutable'
 import { Path2DElement } from './path2d-element'
 type ElementType = Path2DElement['type']
+export type ProxyPath2DElement<T extends ElementType> = Extract<Path2DElement & { index: number }, { type: T }>
 
 export function createPath2ElementDecorator <T extends ElementType> (el: Path2DElement, index: number, mutable: Mutable) {
   (el as any).index = index
@@ -16,5 +17,5 @@ export function createPath2ElementDecorator <T extends ElementType> (el: Path2DE
       return true
     }
   })
-  return p as Extract<Path2DElement & { index: number }, { type: T }>
+  return p as ProxyPath2DElement<T>
 }
