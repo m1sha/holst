@@ -11,4 +11,5 @@ export interface Drawable {
   modified: boolean
   onModified: (() => void) | null
   name: string
+  setAnchor: (anchor: Anchor) => void
 }
