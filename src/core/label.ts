@@ -210,8 +210,10 @@ export class TextBlock extends Container implements Interactive, Orderable, Draw
     return this
   }
 
-  static create (text: string, style: TextStyle) {
-    return new TextBlock(text, style)
+  static create (text: string, style: TextStyle, target?: IPoint) {
+    const result = new TextBlock(text, style)
+    if (target) result.target = target
+    return result
   }
 }
 
