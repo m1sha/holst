@@ -1,13 +1,13 @@
 type hsv = { h: number, s: number, v: number }
-type rgb = { r: number, g: number, b: number }
+type rgba = { r: number, g: number, b: number, a: number }
 export default {
 
-  hsl2rgb (h: number, s: number, l: number): rgb {
+  hsl2rgb (h: number, s: number, l: number): rgba {
     const ch = h >= 0 && h <= 360
     const cs = s >= 0 && s <= 1
     const cl = l >= 0 && l <= 1
     if (!ch || !cs || !cl) throw new Error(`hsl2rgb: h:${h} s:${s} l:${l} ch:${ch} cs:${cs} cl:${cl}`)
-    const result: rgb = { r: 0, g: 0, b: 0 }
+    const result: rgba = { r: 0, g: 0, b: 0, a: 1 }
 
     const c = (1 - (2 * l - 1)) * s
     const hh = h / 60
@@ -104,7 +104,8 @@ export default {
     return {
       r: R || 0,
       g: G || 0,
-      b: B || 0
+      b: B || 0,
+      a: 1
     }
   },
 
@@ -146,24 +147,31 @@ export default {
     return result
   },
 
-  hex2rgb (hex: string): rgb {
+  hex2rgb (hex: string): rgba {
     if (hex.charAt(0) !== '#') throw new Error('hex must start with # character')
     if (hex.length === 4) {
       const r = parseInt(hex.substring(1, 2) + hex.substring(1, 2), 16)
       const g = parseInt(hex.substring(2, 3) + hex.substring(2, 3), 16)
       const b = parseInt(hex.substring(3, 4) + hex.substring(3, 4), 16)
-      return { r, g, b }
+      return { r, g, b, a: 1 }
     }
     if (hex.length === 7) {
       const r = parseInt(hex.substring(1, 3), 16)
       const g = parseInt(hex.substring(3, 5), 16)
       const b = parseInt(hex.substring(5, 7), 16)
-      return { r, g, b }
+      return { r, g, b, a: 1 }
+    }
+    if (hex.length === 9) {
+      const r = parseInt(hex.substring(1, 3), 16)
+      const g = parseInt(hex.substring(3, 5), 16)
+      const b = parseInt(hex.substring(5, 7), 16)
+      const a = parseInt(hex.substring(7, 9), 16) / 255
+      return { r, g, b, a }
     }
     throw new Error('hex length is invalid')
   },
 
-  fromString (value: string): rgb {
+  fromString (value: string): rgba {
     if (value.charAt(0) === '#') return this.hex2rgb(value)
     if (value.startsWith('hsv(')) {
       const { h, s, v } = parseHsvString(value)

@@ -15,6 +15,18 @@ test('color from hex', () => {
   expect(color3.r).toBe(255)
   expect(color3.g).toBe(255)
   expect(color3.b).toBe(255)
+
+  const color4 = new Color('#ffffffff')
+  expect(color4.r).toBe(255)
+  expect(color4.g).toBe(255)
+  expect(color4.b).toBe(255)
+  expect(color4.a).toBe(1)
+
+  const color5 = new Color('#ffffff00')
+  expect(color5.r).toBe(255)
+  expect(color5.g).toBe(255)
+  expect(color5.b).toBe(255)
+  expect(color5.a).toBe(0)
 })
 
 test('color from rgb', () => {

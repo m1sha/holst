@@ -17,10 +17,11 @@ export class Color {
   constructor (...args: Array<any>) {
     if (!args || !args.length) return
     if (typeof args[0] === 'string') {
-      const { r, g, b } = utils.fromString(args[0])
+      const { r, g, b, a } = utils.fromString(args[0])
       this.r = r
       this.g = g
       this.b = b
+      this.a = a
       return
     }
 
@@ -130,7 +131,7 @@ export class Color {
     g = g.length === 1 ? '0' + g : g
     let b = this.b.toString(16)
     b = b.length === 1 ? '0' + b : b
-    return this.a === 1 ? `#${r}${g}${b}` : `rgba(${r},${g},${b},${this.a})`
+    return this.a === 1 ? `#${r}${g}${b}` : `rgba(${this.r},${this.g},${this.b},${this.a})`
   }
 
   toHSV () {
