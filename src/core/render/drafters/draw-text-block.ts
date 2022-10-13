@@ -1,9 +1,9 @@
 import { TextBlock, TextBlockLine } from '../../label'
-import { Color } from '../../color'
 import { TextStyle } from '../../label-style'
 import { Matrix2D } from '../../matrix'
 import { applyAnchor } from '../../anchor'
 import Shape from '../../shape'
+import { applyGraphicStyle } from '../../styles/apply-graphic-style'
 
 export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock, clip: Shape | null) {
   ctx.save()
@@ -20,7 +20,7 @@ export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock, 
   }
   if (!block.multiline && !block.size) {
     const { x, y } = applyAnchor(block)
-    ctx.fillText(block.text, x, y)
+    drawText(ctx, block.style, block.text, x, y)
   } else {
     const p = applyAnchor(block)
     let y = p.y + block.charHeight + getVerticalAlignmentPosition(block)
@@ -29,7 +29,7 @@ export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock, 
     for (const line of lines) {
       const x = getAlignmentPosition(p.x, block, line)
       if (block.alignment === 'justify') makeLineJustify(ctx, block, line, x, y)
-      else ctx.fillText(line.text, x, y)
+      else drawText(ctx, block.style, line.text, x, y)
       y += block.charHeight + block.lineHeight
     }
   }
@@ -59,7 +59,7 @@ function getVerticalAlignmentPosition (block: TextBlock) {
 function makeLineJustify (ctx: CanvasRenderingContext2D, { width, style, size }: TextBlock, line: TextBlockLine, x: number, y: number) {
   const realWidth = size ? size.width : width
   if (realWidth === line.getWidth()) {
-    ctx.fillText(line.text, x, y)
+    drawText(ctx, style, line.text, x, y)
     return
   }
 
@@ -75,11 +75,18 @@ function makeLineJustify (ctx: CanvasRenderingContext2D, { width, style, size }:
 
 function assignTextStyle (ctx: CanvasRenderingContext2D, style: TextStyle) {
   style = style || {}
-  ctx.fillStyle = style.color instanceof Color ? style.color.toString() : style.color || '#000'
+  ctx.fillStyle = style.color ? applyGraphicStyle(style.color, ctx) : '#000'
+  ctx.strokeStyle = style.outlineColor ? applyGraphicStyle(style.outlineColor, ctx) : ''
+  if (style.outlineWidth) ctx.lineWidth = style.outlineWidth
   const fontName = style.fontName || 'serif'
   const fontSize = style.fontSize || '10pt'
   const bold = typeof style.bold === 'boolean' && style.bold ? 'bold ' : style.bold ? style.bold : 'normal'
   const italic = style.italic ? 'italic ' : 'normal'
   const fontVariant = style.fontVariant ?? 'normal'
   ctx.font = `${italic} ${bold} ${fontVariant} ${fontSize} ${fontName}`
+}
+
+function drawText (ctx: CanvasRenderingContext2D, style: TextStyle, text: string, x: number, y: number) {
+  if (style.color !== 'transparent') ctx.fillText(text, x, y)
+  if (style.outlineColor && style.outlineColor !== 'transparent') ctx.strokeText(text, x, y)
 }
