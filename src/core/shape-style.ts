@@ -1,6 +1,7 @@
 /* global CanvasLineCap, CanvasLineJoin */
 
 import { Color } from './color'
+import { GraphicStyle } from './styles/graphic-style'
 
 /* eslint no-undef: "error" */
 export interface ShapeStyle {
@@ -10,8 +11,8 @@ export interface ShapeStyle {
   lineJoin?: CanvasLineJoin
   lineWidth?: number
   miterLimit?: number
-  fill?: string | CanvasGradient | CanvasPattern | Color
-  stroke?: string | CanvasGradient | CanvasPattern | Color
+  fill?: GraphicStyle
+  stroke?: GraphicStyle
 }
 
 export class ShapeStyleImpl {
@@ -22,8 +23,8 @@ export class ShapeStyleImpl {
   #lineJoin?: CanvasLineJoin
   #lineWidth?: number
   #miterLimit?: number
-  #fill?: string | CanvasGradient | CanvasPattern | Color
-  #stroke?: string | CanvasGradient | CanvasPattern | Color
+  #fill?: GraphicStyle
+  #stroke?: GraphicStyle
 
   get lineCap (): CanvasLineCap | undefined {
     return this.#lineCap
@@ -79,20 +80,20 @@ export class ShapeStyleImpl {
     this.#miterLimit = value
   }
 
-  get fill () : string | CanvasGradient | CanvasPattern | Color | undefined {
+  get fill () : GraphicStyle | undefined {
     return this.#fill
   }
 
-  set fill (value: string | CanvasGradient | CanvasPattern | Color | undefined) {
+  set fill (value: GraphicStyle | undefined) {
     this.#onSetDelegate()
     this.#fill = value
   }
 
-  get stroke () : string | CanvasGradient | CanvasPattern | Color | undefined {
+  get stroke () : GraphicStyle | undefined {
     return this.#stroke
   }
 
-  set stroke (value: string | CanvasGradient | CanvasPattern | Color | undefined) {
+  set stroke (value: GraphicStyle | undefined) {
     this.#onSetDelegate()
     this.#stroke = value
   }
@@ -122,7 +123,7 @@ export class ShapeStyleImpl {
     }
   }
 
-  private getStyle (style: string | CanvasGradient | CanvasPattern | Color): string | CanvasGradient | CanvasPattern {
+  private getStyle (style: GraphicStyle): GraphicStyle {
     return style instanceof Color ? style.toString() : style
   }
 }

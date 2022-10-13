@@ -1,5 +1,6 @@
 import Shape from '../../shape'
 import { Color } from '../../color'
+import { applyGraphicStyle } from '../../styles/apply-graphic-style'
 
 export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape, clip: Shape | null) {
   ctx.save()
@@ -16,7 +17,7 @@ export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape, clip: Sh
     ctx.shadowColor = color instanceof Color ? color.toString() : color
   }
   if (style.stroke) {
-    ctx.strokeStyle = style.stroke instanceof Color ? style.stroke.toString() : style.stroke
+    ctx.strokeStyle = applyGraphicStyle(style.stroke, ctx)
     ctx.lineWidth = style.lineWidth || 1
     ctx.lineJoin = style.lineJoin || 'bevel'
     ctx.lineDashOffset = style.lineDashOffset || 0
@@ -25,7 +26,7 @@ export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape, clip: Sh
     ctx.stroke(path)
   }
   if (style.fill) {
-    ctx.fillStyle = style.fill instanceof Color ? ctx.fillStyle = style.fill.toString() : style.fill
+    ctx.fillStyle = applyGraphicStyle(style.fill, ctx)
     ctx.fill(path)
   }
 

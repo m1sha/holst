@@ -1,5 +1,5 @@
 /* global CanvasLineCap, CanvasLineJoin */
-import { Color } from './color'
+import { GraphicStyle } from './styles/graphic-style'
 import { TextStyle } from './label-style'
 import { ShapeStyle } from './shape-style'
 
@@ -40,8 +40,8 @@ class ShapeStyleDecorator implements ShapeStyle {
   lineJoin?: CanvasLineJoin
   lineWidth?: number
   miterLimit?: number
-  fill?: string | CanvasGradient | CanvasPattern | Color
-  stroke?: string | CanvasGradient | CanvasPattern | Color
+  fill?: GraphicStyle
+  stroke?: GraphicStyle
   constructor (style: ShapeStyle) {
     this.assign(style)
   }
