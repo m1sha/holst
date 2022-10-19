@@ -58,6 +58,26 @@ export class Layer implements Orderable {
     return result
   }
 
+  add (entity: Shape | TextBlock | Raster | Sprite): void {
+    if (entity instanceof Shape) {
+      this.addShape(entity)
+      return
+    }
+    if (entity instanceof TextBlock) {
+      this.addTextBlock(entity)
+      return
+    }
+    if (entity instanceof Raster) {
+      this.addRaster(entity)
+      return
+    }
+    if (entity instanceof Sprite) {
+      this.addSprite(entity)
+      return
+    }
+    throw new Error('The entity has an unknown type')
+  }
+
   addShape (shape: Shape): void {
     if (!shape.order) shape.order = this.arrange.order
     shape.frozen = this.frozen
