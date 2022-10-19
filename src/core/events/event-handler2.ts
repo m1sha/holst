@@ -1,6 +1,7 @@
 import { removeItem } from '../../utils/array'
 import { EventType, Interactive } from './interactive'
 import { HandlerResolver } from './handler-resolver'
+import { MouseCursorTypes } from './mouse-cursor-types'
 
 export interface IEventHandler {
   type: 'bag' | 'common'
@@ -93,11 +94,11 @@ export class InteractiveEvent<TEvent> {
     this.canvas = canvas
   }
 
-  get cursor (): string {
-    return this.canvas.style.cursor
+  get cursor (): MouseCursorTypes {
+    return this.canvas.style.cursor as MouseCursorTypes
   }
 
-  set cursor (value: string) {
+  set cursor (value: MouseCursorTypes) {
     this.canvas.style.cursor = value
   }
 }
