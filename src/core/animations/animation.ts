@@ -2,6 +2,7 @@ import { TaskManager } from '../tasks/task-manager'
 import { Task, FrameChangeCallback, TaskFinishCallBack } from '../tasks/task'
 
 export type AnimationOptions = { timeout?: number, duration?: number, infinity?: boolean }
+export type AnimationState = 'playing' | 'paused' | 'stopped' | 'died'
 export class Animation {
   private options: AnimationOptions
   private task: Task
@@ -36,16 +37,31 @@ export class Animation {
     this.task.finish = value
   }
 
-  start () {
-    this.task.start()
+  play (): Promise<void> {
+    return this.task.start()
   }
+
+  // pause () {
+  //   this.task.isFrozen = true
+  // }
+
+  // resume () {
+  //   this.task.isFrozen = false
+  // }
 
   stop () {
     this.task.isStarted = false
     this.task.isDone = true
   }
 
-  cancel () {
+  kill () {
     this.task.isCanceled = true
+  }
+
+  get state (): AnimationState {
+    if (this.task.isCanceled) return 'died'
+    if (this.task.isStarted) return 'playing'
+    if (this.task.isFrozen) return 'paused'
+    return 'stopped'
   }
 }

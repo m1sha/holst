@@ -1,5 +1,4 @@
 import { uid } from '../../utils/uid'
-// import millis from './millis'
 
 export type Between = { then: (delegate: (value: number) => void) => void }
 export type Frame = {
@@ -23,7 +22,9 @@ export class Task {
   private duration: number
   readonly infinity: boolean
   private сountdown: number = -1
+  private playResolve: (() => void) | null = null
   isCanceled: boolean
+  isFrozen: boolean
   isDone: boolean
   isStarted: boolean
   was: boolean = false
@@ -38,6 +39,7 @@ export class Task {
     this.isDone = false
     this.isCanceled = false
     this.isStarted = false
+    this.isFrozen = false
   }
 
   isTime (time: number) {
@@ -48,8 +50,11 @@ export class Task {
     return this.isTime(time) && time < this.сountdown + this.timeout + this.duration
   }
 
-  start () {
+  start (): Promise<void> {
     this.reset()
+    return new Promise((resolve, reject) => {
+      this.playResolve = resolve
+    })
   }
 
   execute (time: number, timeStamp: number) {
@@ -84,6 +89,7 @@ export class Task {
 
   done () {
     this.isDone = true
+    if (this.playResolve) this.playResolve()
     if (this.finish) this.finish()
     this.isStarted = false
   }
