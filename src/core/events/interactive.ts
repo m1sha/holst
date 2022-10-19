@@ -1,9 +1,10 @@
 import { FocusEventDecorator, KeyboardEventDecorator, MouseEventDecorator, DragEventDecorator } from './decorators'
 import { Point } from '../point'
+import { MouseCursorTypes } from './mouse-cursor-types'
 
 export interface InteractiveEvent<TEvent> {
   event: TEvent
-  cursor: string
+  cursor: MouseCursorTypes
   target: any
 }
 
