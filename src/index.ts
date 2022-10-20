@@ -14,12 +14,13 @@ import Shape from './core/shape'
 import { Sprite } from './core/sprite'
 import { SvgPathD } from './core/svg/svg-path-d'
 import { Color, HSV } from './core/color'
-import { EventHandler } from './core/event-handler'
 import { ConstraintGrid } from './core/constraint-grid'
 import { BitmapReader } from './core/raster/bitmap-reader'
 import { BitmapWriter } from './core/raster/bitmap-writer'
 import { TextBlock } from './core/label'
 import { StyleManager } from './core/style-manager'
+import { LinearGradient } from './core/gradients/linear-gradient'
+import { RadialGradient } from './core/gradients/radial-gradient'
 export * from './core/shape-style'
 export * from './core/label-style'
 export * from './core/drawable'
@@ -38,7 +39,6 @@ export {
   ConstraintGrid,
   Color,
   HSV,
-  EventHandler,
   Layer,
   Matrix2D,
   MutablePath2D,
@@ -50,5 +50,7 @@ export {
   Sprite,
   StyleManager,
   SvgPathD,
-  TextBlock
+  TextBlock,
+  LinearGradient,
+  RadialGradient
 }

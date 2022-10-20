@@ -1,12 +1,12 @@
 
-import { Scene, Renderer2D, Color, ConstraintGrid, EventHandler, Layer, Size } from '../../src/index'
+import { Scene, Renderer2D, Color, ConstraintGrid, Layer, Size } from '../../src/index'
 import { Runtime } from './runtime'
 
 export class Editor {
   private scene: Scene
   private renderer: Renderer2D
   size: Size
-  eventHandler: EventHandler
+  // eventHandler: EventHandler
   private runtime: Runtime
   mapSizeX: number = 16
   mapSizeY: number = 16
@@ -21,8 +21,8 @@ export class Editor {
     if (!ctx) throw new Error('')
     this.size = { width: canvas.width, height: canvas.height }
     this.renderer = new Renderer2D(ctx)
-    this.eventHandler = new EventHandler(this.scene, this.renderer)
-    this.eventHandler.onRendering = () => this.createView()
+    // this.eventHandler = new EventHandler(this.scene, this.renderer)
+    // this.eventHandler.onRendering = () => this.createView()
     this.runtime = new Runtime(this)
 
     for (let i = 0; i < this.mapSizeX * this.mapSizeY; i++) this.map.push(0)

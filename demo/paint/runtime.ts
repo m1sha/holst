@@ -1,12 +1,12 @@
 // import { EventInfo } from '../../src/'
-import { EventHandler } from '../../src/index'
+// import { EventHandler } from '../../src/index'
 import { Editor } from './editor'
 
 export class Runtime {
-  private eventHandler: EventHandler
+  // private eventHandler: EventHandler
   private editor: Editor
   constructor (editor: Editor) {
-    this.eventHandler = editor.eventHandler
+    // this.eventHandler = editor.eventHandler
     this.editor = editor
     this.start()
   }
