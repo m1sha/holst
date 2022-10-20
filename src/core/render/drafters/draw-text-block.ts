@@ -87,6 +87,21 @@ function assignTextStyle (ctx: CanvasRenderingContext2D, style: TextStyle) {
 }
 
 function drawText (ctx: CanvasRenderingContext2D, style: TextStyle, text: string, x: number, y: number) {
+  if (style.fillStrokeOrder === 'stroke-first') {
+    strokeText(ctx, style, text, x, y)
+    fillText(ctx, style, text, x, y)
+  }
+
+  if (!style.fillStrokeOrder || style.fillStrokeOrder === 'fill-first') {
+    fillText(ctx, style, text, x, y)
+    strokeText(ctx, style, text, x, y)
+  }
+}
+
+function fillText (ctx: CanvasRenderingContext2D, style: TextStyle, text: string, x: number, y: number) {
   if (style.color !== 'transparent') ctx.fillText(text, x, y)
+}
+
+function strokeText (ctx: CanvasRenderingContext2D, style: TextStyle, text: string, x: number, y: number) {
   if (style.outlineColor && style.outlineColor !== 'transparent') ctx.strokeText(text, x, y)
 }

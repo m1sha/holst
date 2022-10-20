@@ -1,6 +1,7 @@
 import Shape from '../../shape'
 import { Color } from '../../color'
 import { applyGraphicStyle } from '../../styles/apply-graphic-style'
+import { ShapeStyle } from '../../shape-style'
 
 export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape, clip: Shape | null) {
   ctx.save()
@@ -16,19 +17,33 @@ export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape, clip: Sh
     ctx.shadowBlur = blur
     ctx.shadowColor = color instanceof Color ? color.toString() : color
   }
-  if (style.stroke) {
-    ctx.strokeStyle = applyGraphicStyle(style.stroke, ctx)
-    ctx.lineWidth = style.lineWidth || 1
-    ctx.lineJoin = style.lineJoin || 'bevel'
-    ctx.lineDashOffset = style.lineDashOffset || 0
-    ctx.lineCap = style.lineCap || 'butt'
-    if (style.lineDash) ctx.setLineDash(style.lineDash)
-    ctx.stroke(path)
-  }
-  if (style.fill) {
-    ctx.fillStyle = applyGraphicStyle(style.fill, ctx)
-    ctx.fill(path)
+
+  if (style.fillStrokeOrder === 'stroke-first') {
+    stoke(ctx, style, path)
+    fill(ctx, style, path)
+  } else {
+    fill(ctx, style, path)
+    stoke(ctx, style, path)
   }
 
   ctx.restore()
+}
+
+function stoke (ctx: CanvasRenderingContext2D, style: ShapeStyle, path: Path2D) {
+  if (!style.stroke) return
+
+  ctx.strokeStyle = applyGraphicStyle(style.stroke, ctx)
+  ctx.lineWidth = style.lineWidth || 1
+  ctx.lineJoin = style.lineJoin || 'bevel'
+  ctx.lineDashOffset = style.lineDashOffset || 0
+  ctx.lineCap = style.lineCap || 'butt'
+  if (style.lineDash) ctx.setLineDash(style.lineDash)
+  ctx.stroke(path)
+}
+
+function fill (ctx: CanvasRenderingContext2D, style: ShapeStyle, path: Path2D) {
+  if (!style.fill) return
+
+  ctx.fillStyle = applyGraphicStyle(style.fill, ctx)
+  ctx.fill(path)
 }

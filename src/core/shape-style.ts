@@ -2,6 +2,7 @@
 
 import { Color } from './color'
 import { GraphicStyle } from './styles/graphic-style'
+import { FillStrokeOrder } from './styles/fill-stroke-order'
 
 /* eslint no-undef: "error" */
 export interface ShapeStyle {
@@ -13,6 +14,7 @@ export interface ShapeStyle {
   miterLimit?: number
   fill?: GraphicStyle
   stroke?: GraphicStyle
+  fillStrokeOrder?: FillStrokeOrder
 }
 
 export class ShapeStyleImpl {
@@ -25,6 +27,7 @@ export class ShapeStyleImpl {
   #miterLimit?: number
   #fill?: GraphicStyle
   #stroke?: GraphicStyle
+  #fillStrokeOrder?: FillStrokeOrder
 
   get lineCap (): CanvasLineCap | undefined {
     return this.#lineCap
@@ -98,6 +101,15 @@ export class ShapeStyleImpl {
     this.#stroke = value
   }
 
+  get fillStrokeOrder (): FillStrokeOrder | undefined {
+    return this.#fillStrokeOrder
+  }
+
+  set fillStrokeOrder (value: FillStrokeOrder | undefined) {
+    this.#onSetDelegate()
+    this.#fillStrokeOrder = value
+  }
+
   constructor (style: ShapeStyle, onSetDelegate: () => void) {
     this.#onSetDelegate = onSetDelegate
     this.#lineCap = style.lineCap ?? 'butt'
@@ -108,6 +120,7 @@ export class ShapeStyleImpl {
     this.#miterLimit = style.miterLimit
     this.#fill = style.fill ? this.getStyle(style.fill) : undefined
     this.#stroke = style.stroke ? this.getStyle(style.stroke) : undefined
+    this.#fillStrokeOrder = style.fillStrokeOrder ?? 'stroke-first'
   }
 
   clone (): ShapeStyle {
