@@ -44,6 +44,10 @@ export class MutablePath2D implements Path2DBase {
     this.stack.push({ type: 'Circle', x, y, radius })
   }
 
+  segmentedCircle (x: number, y: number, radius: number, segmentCount: number, smooth: number) {
+    this.stack.push({ type: 'SegmentedCircle', x, y, radius, segmentCount, smooth })
+  }
+
   lineTo (x: number, y: number): void {
     this.stack.push({ type: 'LineTo', x, y })
   }

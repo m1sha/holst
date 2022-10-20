@@ -28,6 +28,10 @@ export class Figures {
     return this.createDecorator('Circle')
   }
 
+  get segmentedCircles () {
+    return this.createDecorator('SegmentedCircle')
+  }
+
   get ellipses () {
     return this.createDecorator('Ellipse')
   }

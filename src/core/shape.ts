@@ -52,6 +52,10 @@ export default class Shape extends Container implements Interactive, Orderable, 
     return this.figures.circles
   }
 
+  get segmentedCircles () {
+    return this.figures.segmentedCircles
+  }
+
   get ellipses () {
     return this.figures.ellipses
   }
@@ -182,6 +186,12 @@ export default class Shape extends Container implements Interactive, Orderable, 
       this.mutablePath.circle(x, y, radius)
     }
 
+    this.modified = true
+    return this
+  }
+
+  segmentedCircle (x: number, y: number, radius: number, segmentCount: number, smooth: number): this | Shape {
+    this.mutablePath.segmentedCircle(x, y, radius, segmentCount, smooth)
     this.modified = true
     return this
   }

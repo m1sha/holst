@@ -2,6 +2,7 @@ import { arrow } from '../transform'
 import { Matrix2D } from '../matrix'
 import { IPoint, Point } from '../point'
 import { Path2DElement } from './path2d-element'
+import { drawSegmentedCircle } from '../geometry/segmented-circle'
 
 type HandlerInputType = {
   path: Path2D,
@@ -126,6 +127,19 @@ handlers.Circle = ({ path, element, d, transform, stack, globalTransform }) => {
   const { x, y, radius } = element
   const pack = packager(path, d, transform, stack, globalTransform)
   exec('Ellipse', pack({ type: 'Ellipse', x, y, radiusX: radius, radiusY: radius, rotation: 0, startAngle: 0, endAngle: Math.PI * 2 }))
+}
+
+handlers.SegmentedCircle = ({ path, element, d, transform, stack, globalTransform }) => {
+  if (element.type !== 'SegmentedCircle') return
+  const { x, y, radius, segmentCount, smooth } = element
+  const pack = packager(path, d, transform, stack, globalTransform)
+  const points = drawSegmentedCircle(x, y, radius, segmentCount, smooth)
+  exec('MoveTo', pack({ type: 'MoveTo', x: points[0].x, y: points[0].y }))
+  for (let i = 1; i < points.length; i += 2) {
+    const cp = points[i]
+    const { x, y } = points[i + 1]
+    exec('QuadraticCurveTo', pack({ type: 'QuadraticCurveTo', cpx: cp.x, cpy: cp.y, x, y }))
+  }
 }
 
 handlers.RoundRect = ({ path, element, d, transform, stack, globalTransform }) => {

@@ -8,6 +8,11 @@ export type Circle = {
   x: number, y: number, radius: number
 }
 
+export type SegmentedCircle = {
+  type: 'SegmentedCircle'
+  x: number, y: number, radius: number, segmentCount: number, smooth: number
+}
+
 export type ArcTo = {
   type: 'ArcTo'
   x1: number, y1: number, x2: number, y2: number, radius: number
@@ -61,6 +66,7 @@ export type Path2DElement =
   | Arc
   | ArcTo
   | Circle
+  | SegmentedCircle
   | BezierCurveTo
   | Ellipse
   | LineTo
