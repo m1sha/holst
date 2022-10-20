@@ -175,12 +175,10 @@ export default class Shape extends Container implements Interactive, Orderable, 
   circle (...args: Array<any>): this | Shape {
     if (args.length === 2) {
       const [point, radius] = args
-      this.mutablePath.moveTo(point.x + radius, point.y + radius)
       this.mutablePath.circle(point.x, point.y, radius)
     }
     if (args.length === 3) {
       const [x, y, radius] = args
-      this.mutablePath.moveTo(x + radius, y + radius)
       this.mutablePath.circle(x, y, radius)
     }
 
