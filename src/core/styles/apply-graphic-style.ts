@@ -5,6 +5,7 @@ import { RadialGradient } from '../gradients/radial-gradient'
 import { ConicGradient } from '../gradients/conic-gradient'
 import { Gradient } from '../gradients/gradient'
 import { ColorStop } from '../gradients/color-stop'
+import { Pattern } from '../pattern'
 
 export function applyGraphicStyle (style: GraphicStyle, ctx: CanvasRenderingContext2D): NativeGraphicStyle {
   if (style instanceof Color) return style.toString()
@@ -29,6 +30,11 @@ export function applyGraphicStyle (style: GraphicStyle, ctx: CanvasRenderingCont
 
   if (style instanceof Gradient) {
     throw new Error('Gradient is an abstract class')
+  }
+
+  if (style instanceof Pattern) {
+    const pattern = ctx.createPattern(style.raster.src, style.repetition)
+    return pattern!
   }
 
   return style

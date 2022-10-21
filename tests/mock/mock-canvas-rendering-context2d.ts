@@ -1,5 +1,5 @@
 
-/* global CanvasRenderingContext2DSettings, GlobalCompositeOperation, CanvasImageSource, CanvasFillRule, ImageDataSettings, ImageSmoothingQuality, CanvasLineCap, CanvasLineJoin, CanvasDirection, CanvasTextAlign, CanvasTextBaseline, DOMMatrix2DInit */
+/* global CanvasRenderingContext2DSettings, GlobalCompositeOperation, CanvasImageSource, CanvasFillRule, ImageDataSettings, ImageSmoothingQuality, CanvasLineCap, CanvasLineJoin, CanvasDirection, CanvasTextAlign, CanvasTextBaseline, DOMMatrix2DInit, CanvasFontKerning */
 import { Size } from '../../src/core/size'
 import { ICanvasRenderingContext2D } from '../../src/core/render/canvas-rendering-context-2d'
 import { GlobalAnimationFrameHandlerFactory } from '../../src/core/animation-handler'
@@ -27,6 +27,7 @@ class MockCanvasRenderingContext2D implements ICanvasRenderingContext2D {
     }
   }
 
+  fontKerning: CanvasFontKerning = 'auto'
   globalAlpha: number = 0
   globalCompositeOperation: GlobalCompositeOperation = 'color'
 
