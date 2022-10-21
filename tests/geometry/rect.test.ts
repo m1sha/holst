@@ -1,4 +1,4 @@
-import { Rect } from '../../src/core/rect'
+import { Rect } from '../../src/core/geometry/rect'
 
 test('rect intersectsHorizontal & Vertical', () => {
   const rect = new Rect(200, 80, 100, 40)

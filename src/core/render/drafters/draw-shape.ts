@@ -1,7 +1,7 @@
 import Shape from '../../shape'
-import { Color } from '../../color'
+import { Color } from '../../colors/color'
 import { applyGraphicStyle } from '../../styles/apply-graphic-style'
-import { ShapeStyle } from '../../shape-style'
+import { ShapeStyle } from '../../styles/shape-style'
 
 export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape, clip: Shape | null) {
   ctx.save()

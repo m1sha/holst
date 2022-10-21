@@ -1,6 +1,6 @@
-import { Size } from './size'
-import { Rect, IRect } from './rect'
-import { Point, IPoint } from './point'
+import { Size } from './geometry/size'
+import { Rect, IRect } from './geometry/rect'
+import { Point, IPoint } from './geometry/point'
 
 export type ConstraintGridCell = { rect: Rect, center: Point }
 export type ColumnConstraint = { column: number, width: number }

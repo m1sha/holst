@@ -1,6 +1,6 @@
-import { arrow } from '../transform'
+import { arrow } from '../geometry/transform'
 import { Matrix2D } from '../matrix'
-import { IPoint, Point } from '../point'
+import { IPoint, Point } from '../geometry/point'
 import { Path2DElement } from './path2d-element'
 import { drawSegmentedCircle } from '../geometry/segmented-circle'
 

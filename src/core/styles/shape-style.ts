@@ -1,8 +1,8 @@
 /* global CanvasLineCap, CanvasLineJoin */
 
-import { Color } from './color'
-import { GraphicStyle } from './styles/graphic-style'
-import { FillStrokeOrder } from './styles/fill-stroke-order'
+import { Color } from '../colors/color'
+import { GraphicStyle } from './graphic-style'
+import { FillStrokeOrder } from './fill-stroke-order'
 
 /* eslint no-undef: "error" */
 export interface ShapeStyle {

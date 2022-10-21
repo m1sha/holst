@@ -1,6 +1,6 @@
 /* global FrameRequestCallback */
-import { Scene } from './scene'
-import { IRenderer } from './render/renderer'
+import { Scene } from '../scene'
+import { IRenderer } from '../render/renderer'
 
 export class AnimationHandler {
   private renderer: IRenderer

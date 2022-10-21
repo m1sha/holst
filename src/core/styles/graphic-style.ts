@@ -1,5 +1,5 @@
 import { Gradient } from '../gradients/gradient'
-import { Color } from '../color'
+import { Color } from '../colors/color'
 import { Pattern } from '../pattern'
 
 export type GraphicStyle = string | Color | CanvasGradient | CanvasPattern | Gradient | Pattern

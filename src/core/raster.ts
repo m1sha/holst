@@ -1,6 +1,6 @@
 import { RasterDataTransfer } from './raster/raster-data-transfer'
 import Orderable from './orderable'
-import { IRect, Rect } from './rect'
+import { IRect, Rect } from './geometry/rect'
 import { Channels } from './raster/channels'
 import { uid } from '../utils/uid'
 import { Drawable, DrawableType } from './drawable'

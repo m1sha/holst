@@ -1,4 +1,4 @@
-import { Point } from '../point'
+import { Point } from '../geometry/point'
 import { SvgPathDElement } from './svg-path-d-element'
 
 export function parseSvgPathD (d: string): SvgPathDElement[] {

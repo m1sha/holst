@@ -1,4 +1,4 @@
-import { Point } from '../point'
+import { Point } from '../geometry/point'
 import { parseSvgPathD, toSvgPathD } from './svg-path-d-parser'
 import { SvgPathDElement } from './svg-path-d-element'
 import { toPath2D } from './path2d-converter'

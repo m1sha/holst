@@ -1,4 +1,4 @@
-import { IPoint } from '../point'
+import { IPoint } from '../geometry/point'
 
 export function mpCircleDraw (xc: number, yc: number, r: number): IPoint[] {
   const result = []

@@ -1,4 +1,4 @@
-import { Color } from '../color'
+import { Color } from '../colors/color'
 import { GraphicStyle, NativeGraphicStyle } from './graphic-style'
 import { LinearGradient } from '../gradients/linear-gradient'
 import { RadialGradient } from '../gradients/radial-gradient'

@@ -1,4 +1,4 @@
-import { TextStyle } from './label-style'
+import { TextStyle } from './styles/label-style'
 import Context2DFactory from './render/canvas-rendering-context-2d-factory'
 import { applyGraphicStyle } from './styles/apply-graphic-style'
 

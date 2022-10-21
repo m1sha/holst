@@ -1,4 +1,4 @@
-import { StyleManager } from '../src/core/style-manager'
+import { StyleManager } from '../src/core/styles/style-manager'
 
 test('Style Manager', () => {
   const manager = new StyleManager()

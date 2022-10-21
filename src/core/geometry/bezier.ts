@@ -1,4 +1,4 @@
-import { Point } from '../point'
+import { Point } from '../geometry/point'
 
 export function quadratic (p0: Point, p1: Point, p2: Point, t: number): Point {
   const ot2 = (1 - t) * (1 - t)

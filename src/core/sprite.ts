@@ -1,9 +1,9 @@
-import { Size } from './size'
+import { Size } from './geometry/size'
 import { Raster } from './raster'
 import Orderable from './orderable'
-import { IPoint, Point } from './point'
+import { IPoint, Point } from './geometry/point'
 import { Drawable, DrawableType } from './drawable'
-import { Rect } from './rect'
+import { Rect } from './geometry/rect'
 import { uid } from '../utils/uid'
 import { Container } from './container'
 export class Sprite extends Container implements Orderable, Drawable {

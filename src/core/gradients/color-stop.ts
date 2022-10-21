@@ -1,4 +1,4 @@
-import { Color } from '../color'
+import { Color } from '../colors/color'
 
 export interface ColorStop {
   offset: number

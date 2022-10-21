@@ -1,5 +1,5 @@
 import { Drawable } from './drawable'
-import { Point, IPoint } from './point'
+import { Point, IPoint } from './geometry/point'
 
 export class Anchor {
   #container: Drawable | null = null

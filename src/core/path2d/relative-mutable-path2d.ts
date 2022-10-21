@@ -1,5 +1,5 @@
-import { Point } from '../point'
-import { Size } from '../size'
+import { Point } from '../geometry/point'
+import { Size } from '../geometry/size'
 import { Path2DBase } from './path2d-base'
 
 export class RelativeMutablePath2D {

@@ -1,4 +1,4 @@
-import { IPoint } from '../point'
+import { IPoint } from '../geometry/point'
 
 export function mpEllipseDraw (xc: number, yc: number, rx: number, ry: number): IPoint[] {
   const result = []

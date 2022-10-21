@@ -1,5 +1,5 @@
 import { ColorStop } from './color-stop'
-import { Color } from '../color'
+import { Color } from '../colors/color'
 
 export abstract class Gradient {
   stops: ColorStop[]

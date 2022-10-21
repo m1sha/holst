@@ -1,5 +1,5 @@
-import { Color } from './color'
-import { IPoint, Point } from './point'
+import { Color } from '../colors/color'
+import { IPoint, Point } from '../geometry/point'
 
 export class Shadow {
   point: IPoint | null = null

@@ -1,6 +1,6 @@
 import '../mock/mockDOMMatrix'
 import { fooShape } from './foo/foo-shape'
-import { Rect } from '../../src/core/rect'
+import { Rect } from '../../src/core/geometry/rect'
 
 test('shape crud', () => {
   const shape = fooShape()

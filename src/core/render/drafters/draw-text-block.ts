@@ -1,5 +1,5 @@
 import { TextBlock, TextBlockLine } from '../../label'
-import { TextStyle } from '../../label-style'
+import { TextStyle } from '../../styles/label-style'
 import { Matrix2D } from '../../matrix'
 import { applyAnchor } from '../../anchor'
 import Shape from '../../shape'

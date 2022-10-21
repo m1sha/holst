@@ -1,4 +1,4 @@
-import { IPoint, Point } from '../../src/core/point'
+import { IPoint, Point } from '../../src/core/geometry/point'
 import { GlobalMatrixFactory } from '../../src/core/matrix'
 
 class MockDOMMatrix {

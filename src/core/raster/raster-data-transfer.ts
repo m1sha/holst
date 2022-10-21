@@ -1,5 +1,5 @@
 /* global CanvasImageSource */
-import { Size } from '../size'
+import { Size } from '../geometry/size'
 import CanvasRenderingContext2DFactory from '../render/canvas-rendering-context-2d-factory'
 
 // type RasterDataTransferWriteCallback = { data: ImageData, write: () => CanvasImageSource }

@@ -1,6 +1,6 @@
-import { Point, IPoint } from '../core/point'
-import { Rect } from '../core/rect'
-import { Size } from '../core/size'
+import { Point, IPoint } from '../core/geometry/point'
+import { Rect } from '../core/geometry/rect'
+import { Size } from '../core/geometry/size'
 
 const size = (width: number, height: number): Size => {
   return { width, height }

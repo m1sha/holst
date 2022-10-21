@@ -1,4 +1,4 @@
-import { Rect } from '../../../src/core/rect'
+import { Rect } from '../../../src/core/geometry/rect'
 import { Raster } from '../../../src/core/raster'
 
 export function fooRaster () {

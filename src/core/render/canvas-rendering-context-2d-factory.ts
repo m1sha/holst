@@ -1,4 +1,4 @@
-import { Size } from '../size'
+import { Size } from '../geometry/size'
 
 export default class CanvasRenderingContext2DFactory {
   private static canvas: HTMLCanvasElement | null = null

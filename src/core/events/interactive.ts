@@ -1,5 +1,5 @@
 import { FocusEventDecorator, KeyboardEventDecorator, MouseEventDecorator, DragEventDecorator } from './decorators'
-import { Point } from '../point'
+import { Point } from '../geometry/point'
 import { MouseCursorTypes } from './mouse-cursor-types'
 
 export interface InteractiveEvent<TEvent> {

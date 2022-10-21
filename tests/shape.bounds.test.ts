@@ -1,5 +1,5 @@
 import './mock/mockDOMMatrix'
-import { Rect } from '../src/core/rect'
+import { Rect } from '../src/core/geometry/rect'
 import { mockShapeFactory } from './mock/mock-shape-factory'
 
 test('Shape check bounds rect', () => {

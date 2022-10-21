@@ -1,6 +1,6 @@
-import { Size } from './size'
+import { Size } from './geometry/size'
 import { Matrix2D } from './matrix'
-import { IRect } from './rect'
+import { IRect } from './geometry/rect'
 
 export class Viewport implements IRect {
   modified: boolean = false

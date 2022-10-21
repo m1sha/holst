@@ -1,5 +1,5 @@
-import { linearGradient } from './colors/linear-gradient'
-import utils from '../utils/color-utils'
+import { linearGradient } from './linear-gradient'
+import utils from '../../utils/color-utils'
 
 type RGBA = { r: number, g: number, b: number, a: number }
 export class Color {

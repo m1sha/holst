@@ -1,5 +1,5 @@
 import { cubic } from '../geometry/bezier'
-import { IPoint, Point } from '../point'
+import { IPoint, Point } from '../geometry/point'
 
 export class CubicBezier {
   x1: number

@@ -1,7 +1,7 @@
 import { Path2DElement } from './path2d-element'
 import { Matrix2D } from '../matrix'
 import { Path2DBase } from './path2d-base'
-import { IPoint, Point } from '../point'
+import { IPoint, Point } from '../geometry/point'
 import { createPath2D } from './create-path2d'
 import { createPoints } from './create-points'
 import { Path2DRecorder } from './path2d-recorder'

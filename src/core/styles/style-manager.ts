@@ -1,5 +1,5 @@
 /* global CanvasLineCap, CanvasLineJoin */
-import { GraphicStyle } from './styles/graphic-style'
+import { GraphicStyle } from './graphic-style'
 import { TextStyle } from './label-style'
 import { ShapeStyle } from './shape-style'
 

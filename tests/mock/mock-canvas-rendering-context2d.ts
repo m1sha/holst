@@ -1,8 +1,8 @@
 
 /* global CanvasRenderingContext2DSettings, GlobalCompositeOperation, CanvasImageSource, CanvasFillRule, ImageDataSettings, ImageSmoothingQuality, CanvasLineCap, CanvasLineJoin, CanvasDirection, CanvasTextAlign, CanvasTextBaseline, DOMMatrix2DInit, CanvasFontKerning */
-import { Size } from '../../src/core/size'
+import { Size } from '../../src/core/geometry/size'
 import { ICanvasRenderingContext2D } from '../../src/core/render/canvas-rendering-context-2d'
-import { GlobalAnimationFrameHandlerFactory } from '../../src/core/animation-handler'
+import { GlobalAnimationFrameHandlerFactory } from '../../src/core/animations/animation-handler'
 
 class Logger {
   messages: unknown[] = []

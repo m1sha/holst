@@ -1,4 +1,4 @@
-import { Color, HSV } from '../src/core/color'
+import { Color, HSV } from '../src/core/colors/color'
 
 test('color from hex', () => {
   const color = new Color('#ffffff')

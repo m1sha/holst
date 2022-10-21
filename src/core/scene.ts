@@ -1,7 +1,7 @@
 import { Matrix2D } from './matrix'
 import { Arrange } from './arrange'
 import { Layer } from './layers'
-import { StyleManager } from './style-manager'
+import { StyleManager } from './styles/style-manager'
 import { TaskManager } from './tasks/task-manager'
 import { Animation, AnimationOptions } from './animations/animation'
 import { removeItem } from '../utils/array'

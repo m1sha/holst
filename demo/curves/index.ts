@@ -1,7 +1,7 @@
 // import { Deformation } from '../../core/modifiers/deformation'
 import { Scene, Renderer2D, Rect, Shape, Layer, IPoint } from '../../src/index'
 // import { IPoint } from '../../core/point'
-import { rotate } from '../../src/core/transform'
+import { rotate } from '../../src/core/geometry/transform'
 
 export function createCurvesDemo (canvas: HTMLCanvasElement) {
   const scene = new Scene()

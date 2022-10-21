@@ -1,5 +1,5 @@
 
-import { IPoint } from '../point'
+import { IPoint } from '../geometry/point'
 interface MoveTo {
   type: 'M' | 'm'
   point: IPoint

@@ -1,5 +1,5 @@
 import { Gradient } from './gradient'
-import { IPoint } from '../point'
+import { IPoint } from '../geometry/point'
 import { ColorStop } from './color-stop'
 
 export class LinearGradient extends Gradient {

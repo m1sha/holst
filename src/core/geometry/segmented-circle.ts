@@ -1,4 +1,4 @@
-import { IPoint } from '../point'
+import { IPoint } from '../geometry/point'
 
 export function drawSegmentedCircle (cx: number, cy: number, radius: number, segmentCount: number, smooth: number): IPoint[] {
   const PI2 = Math.PI * 2

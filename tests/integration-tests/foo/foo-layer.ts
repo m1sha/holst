@@ -1,4 +1,4 @@
-import { StyleManager } from '../../../src/core/style-manager'
+import { StyleManager } from '../../../src/core/styles/style-manager'
 import { Layer } from '../../../src/core/layers'
 
 export function fooLayer () {

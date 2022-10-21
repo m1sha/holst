@@ -1,5 +1,5 @@
 import { EventType } from './interactive'
-import { Point } from '../point'
+import { Point } from '../geometry/point'
 import { EventHandlers, InteractiveEvent, ListenerType } from './event-handler2'
 import { ActionSpecDic } from './action-spec-dic'
 import { MouseEventDecorator, KeyboardEventDecorator, DragEventDecorator } from './decorators'

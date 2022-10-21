@@ -1,4 +1,4 @@
-import { Rect } from './rect'
+import { Rect } from './geometry/rect'
 import { Anchor } from './anchor'
 
 export type DrawableType = 'shape' | 'text' | 'raster' | 'sprite'

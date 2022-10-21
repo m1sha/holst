@@ -1,4 +1,4 @@
-import { Point } from '../point'
+import { Point } from '../geometry/point'
 import { MutablePath2D } from '../path2d/mutable-path2d'
 import { SvgPathDElement } from './svg-path-d-element'
 

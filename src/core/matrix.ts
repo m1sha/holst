@@ -1,4 +1,4 @@
-import { Point, IPoint } from './point'
+import { Point, IPoint } from './geometry/point'
 
 // interface IDOMMatrix2D {
 //   rotate (deg: number): void
