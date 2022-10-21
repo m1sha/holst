@@ -1,4 +1,4 @@
-import { Scene, Renderer2D, Color, Rect, Point, Size, ShapeStyle, Matrix2D } from '../../src/index'
+import { Scene, Renderer2D, Color, Rect, Point, Size, ShapeStyle, Matrix2D, TextBlock } from '../../src/index'
 // import { Size } from '../../core/size'
 // import { ShapeStyle } from '../../core/shape-style'
 
@@ -34,7 +34,11 @@ export function createMatrixDemo (canvas: HTMLCanvasElement) {
   let dScale = 0.1
   let scale = 1
   const renderer = new Renderer2D(canvas.getContext('2d', { colorSpace: 'display-p3' })!!)
+  renderer.setAnimationRate(1000 / 240)
   renderer.render(scene)
+  const fps = TextBlock.create('FPS: ' + renderer.getAnimationFps().toString(), { })
+  fps.target = new Point(10, 20)
+  layer.addTextBlock(fps)
   renderer.onFrameChanged = () => {
     const count = shapes.length
     const d = 360 / count
@@ -60,4 +64,8 @@ export function createMatrixDemo (canvas: HTMLCanvasElement) {
     if (scale > 1.4) dScale = -0.02
     if (scale < 0.8) dScale = 0.02
   }
+
+  setInterval(() => {
+    fps.text = 'FPS: ' + renderer.getAnimationFps().toFixed(0).toString()
+  }, 1000)
 }
