@@ -5,9 +5,11 @@ import { Channels } from './raster/channels'
 import { uid } from '../utils/uid'
 import { Drawable, DrawableType } from './drawable'
 import { Container } from './container'
+import { UseFilters } from './raster/filters/use-filters'
 
 export type AnyImageType = HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap
 export class Raster extends Container implements Orderable, Drawable {
+  readonly useFilters: UseFilters
   readonly type: DrawableType = 'raster'
   hidden: boolean = false
   name: string
@@ -27,6 +29,7 @@ export class Raster extends Container implements Orderable, Drawable {
     this.src = src
     this.srcRect = srcRect
     this.distRect = distRect
+    this.useFilters = new UseFilters(this)
   }
 
   get bounds (): Rect {
@@ -51,7 +54,7 @@ export class Raster extends Container implements Orderable, Drawable {
     return new Raster(img, srcRect, distRect)
   }
 
-  getData () {
+  getData (): ImageData {
     return RasterDataTransfer.read(this.src, this.distRect)
   }
 
@@ -60,10 +63,14 @@ export class Raster extends Container implements Orderable, Drawable {
     this.src = img
   }
 
-  get channels () {
+  get channels (): Channels {
     if (this.#channels) return this.#channels
     this.#channels = new Channels(this.getData())
     return this.#channels
+  }
+
+  clone () {
+    return new Raster(this.src, this.srcRect, this.distRect)
   }
 }
 export type Images = Raster[]

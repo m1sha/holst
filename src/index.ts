@@ -2,6 +2,9 @@ import { Anchor } from './core/anchor'
 import { Animation } from './core/animations/animation'
 import { Assets } from './core/assets'
 import { CubicBezier } from './core/motion/cubic-bezier'
+import { Brightness } from './core/raster/filters/brightness'
+import { GreyScale } from './core/raster/filters/greyscale'
+import { Randomize } from './core/raster/filters/randomize'
 import { DynamicCanvasRenderer2D } from './core/render/dynamic-canvas-renderer-2d'
 import { Layer } from './core/layers'
 import { Matrix2D } from './core/matrix'
@@ -32,6 +35,8 @@ export {
   Anchor,
   Animation,
   Assets,
+  Brightness,
+  GreyScale,
   CubicBezier,
   DynamicCanvasRenderer2D,
   BitmapReader,
@@ -42,6 +47,7 @@ export {
   Layer,
   Matrix2D,
   MutablePath2D,
+  Randomize,
   Point,
   Rect,
   Renderer2D,
