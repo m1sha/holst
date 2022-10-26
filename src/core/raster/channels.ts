@@ -21,6 +21,10 @@ export class Channels {
     return this.extract(3)
   }
 
+  get length () {
+    return Math.floor(this.imageData.data.length / 4)
+  }
+
   private extract (n: number) {
     let j = 0
     const len = this.imageData.data.length
