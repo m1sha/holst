@@ -114,4 +114,8 @@ export class Rect implements IRect, Size {
   clone () {
     return new Rect(this)
   }
+
+  equals (rect: IRect): boolean {
+    return this.x === rect.x && this.y === rect.y && this.width === rect.width && this.height === rect.height
+  }
 }

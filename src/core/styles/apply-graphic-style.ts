@@ -6,6 +6,9 @@ import { ConicGradient } from '../gradients/conic-gradient'
 import { Gradient } from '../gradients/gradient'
 import { ColorStop } from '../gradients/color-stop'
 import { Pattern } from '../pattern'
+import { Rect } from '../geometry/rect'
+import CanvasRenderingContext2DFactory from '../render/canvas-rendering-context-2d-factory'
+import { drawRaster } from '../render/drafters/draw-raster'
 
 export function applyGraphicStyle (style: GraphicStyle, ctx: CanvasRenderingContext2D): NativeGraphicStyle {
   if (style instanceof Color) return style.toString()
@@ -33,8 +36,14 @@ export function applyGraphicStyle (style: GraphicStyle, ctx: CanvasRenderingCont
   }
 
   if (style instanceof Pattern) {
-    const pattern = ctx.createPattern(style.raster.src, style.repetition)
-    return pattern!
+    if (new Rect(style.raster.distRect).equals(style.raster.srcRect)) {
+      return ctx.createPattern(style.raster.src, style.repetition)!
+    }
+
+    const rendererContext = CanvasRenderingContext2DFactory.create(style.raster.distRect)
+    drawRaster(rendererContext.ctx, style.raster, null)
+
+    return ctx.createPattern(rendererContext.canvas, style.repetition)!
   }
 
   return style
