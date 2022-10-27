@@ -65,24 +65,19 @@ export class Renderer2D implements IRenderer {
   }
 
   private drawLayer ({ entities, mask }: Readonly<Layer>) {
-    const list = sort(entities as Orderable[])
+    const list = sort(entities as Orderable[]) as Drawable[]
 
     for (const item of list) {
-      if ((item as unknown as Drawable).hidden) continue
-      if (item instanceof Shape) {
-        this.setHandler(item)
-        drawShape(this.ctx, item, mask)
-      }
-      if (item instanceof TextBlock) {
-        this.setHandler(item)
-        drawTextBlock(this.ctx, item, mask)
-      }
+      if (item.hidden) continue
+      if (item instanceof Shape) drawShape(this.ctx, item, mask)
+      if (item instanceof TextBlock) drawTextBlock(this.ctx, item, mask)
       if (item instanceof Raster) drawRaster(this.ctx, item, mask)
       if (item instanceof Sprite) drawSprite(this.ctx, item, mask)
+      this.setHandler(item)
     }
   }
 
-  private setHandler (obj: Shape | TextBlock) {
+  private setHandler (obj: Drawable) {
     if (obj.eventHandler.type !== 'bag') return
     this.eventHandler.fromBag(obj.eventHandler)
     obj.eventHandler = this.eventHandler

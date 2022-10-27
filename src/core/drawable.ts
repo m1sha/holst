@@ -1,15 +1,74 @@
 import { Rect } from './geometry/rect'
 import { Anchor } from './anchor'
+import { EventType, Interactive } from './events/interactive'
+import Orderable from './orderable'
+import { uid } from '../utils/uid'
+import { Point } from './geometry/point'
+import { EventHandlerBag, IEventHandler } from './events/event-handler2'
+import { Matrix2D } from './matrix'
 
 export type DrawableType = 'shape' | 'text' | 'raster' | 'sprite'
-export interface Drawable {
-  id: string
-  type: DrawableType
-  anchor: Anchor | null
-  bounds: Rect
+export abstract class Drawable implements Interactive, Orderable {
+  #modified: boolean
+  #anchor: Anchor | null = null
+  readonly id: string
+  readonly type: DrawableType
   hidden: boolean
-  modified: boolean
   onModified: (() => void) | null
   name: string
-  setAnchor: (anchor: Anchor) => void
+
+  order: number
+  /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
+  /** @internal */ globalTransform: Matrix2D | null = null
+
+  constructor (order: number) {
+    this.id = uid()
+    this.type = this.getType()
+    this.hidden = false
+    this.#modified = true
+    this.onModified = null
+    this.name = this.type + ' ' + order
+    this.order = order
+  }
+
+  on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): this | Drawable {
+    this.eventHandler.add(this, type, listener)
+    return this
+  }
+
+  off<K extends keyof EventType> (type: K): this | Drawable {
+    this.eventHandler.remove(this, type)
+    return this
+  }
+
+  abstract getType(): DrawableType
+  abstract get bounds(): Rect
+  abstract inPath(p: Point): boolean
+
+  setAnchor (anchor: Anchor) {
+    this.#anchor = anchor
+    anchor.addChild(this as unknown as Drawable)
+  }
+
+  clearContainer () {
+    if (this.#anchor) this.#anchor.container = null
+  }
+
+  get anchor () {
+    return this.#anchor
+  }
+
+  get modified (): boolean {
+    return this.#modified
+  }
+
+  set modified (value: boolean) {
+    this.#modified = value
+    if (value && this.onModified) this.onModified()
+  }
+
+  /** @internal */
+  update (): void {
+    this.#modified = true
+  }
 }
