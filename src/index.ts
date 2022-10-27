@@ -5,6 +5,7 @@ import { CubicBezier } from './core/motion/cubic-bezier'
 import { Brightness } from './core/raster/filters/brightness'
 import { GreyScale } from './core/raster/filters/greyscale'
 import { Randomize } from './core/raster/filters/randomize'
+import { Drawable } from './core/drawable'
 import { DynamicCanvasRenderer2D } from './core/render/dynamic-canvas-renderer-2d'
 import { Layer } from './core/layers'
 import { Matrix2D } from './core/matrix'
@@ -38,6 +39,7 @@ export {
   Brightness,
   GreyScale,
   CubicBezier,
+  Drawable,
   DynamicCanvasRenderer2D,
   BitmapReader,
   BitmapWriter,

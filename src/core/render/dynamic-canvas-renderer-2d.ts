@@ -73,24 +73,19 @@ export class DynamicCanvasRenderer2D implements IRenderer {
   }
 
   private drawLayer ({ entities, mask }: Readonly<Layer>, ctx: CanvasRenderingContext2D) {
-    const list = sort(entities as Orderable[])
+    const list = sort(entities as Orderable[]) as Drawable[]
 
     for (const item of list) {
-      if ((item as unknown as Drawable).hidden) continue
-      if (item instanceof Shape) {
-        this.setHandler(item)
-        drawShape(ctx, item, mask)
-      }
-      if (item instanceof TextBlock) {
-        this.setHandler(item)
-        drawTextBlock(ctx, item, mask)
-      }
+      if (item.hidden) continue
+      if (item instanceof Shape) drawShape(ctx, item, mask)
+      if (item instanceof TextBlock) drawTextBlock(ctx, item, mask)
       if (item instanceof Raster) drawRaster(ctx, item, mask)
       if (item instanceof Sprite) drawSprite(ctx, item, mask)
+      this.setHandler(item)
     }
   }
 
-  private setHandler (obj: Shape | TextBlock) {
+  private setHandler (obj: Drawable) {
     if (obj.eventHandler.type !== 'bag') return
     this.eventHandler.fromBag(obj.eventHandler)
     obj.eventHandler = this.eventHandler

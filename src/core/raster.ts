@@ -1,31 +1,20 @@
 import { RasterDataTransfer } from './raster/raster-data-transfer'
-import Orderable from './orderable'
 import { IRect, Rect } from './geometry/rect'
 import { Channels } from './raster/channels'
-import { uid } from '../utils/uid'
 import { Drawable, DrawableType } from './drawable'
-import { Container } from './container'
 import { UseFilters } from './raster/filters/use-filters'
+import { Point } from './geometry/point'
 
 export type AnyImageType = HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap
-export class Raster extends Container implements Orderable, Drawable {
+export class Raster extends Drawable {
   readonly useFilters: UseFilters
-  readonly type: DrawableType = 'raster'
-  hidden: boolean = false
-  name: string
-  readonly id: string
   #channels: Channels | null = null
   src: AnyImageType
   srcRect: IRect
   distRect: IRect
-  order: number = 0
-  readonly modified: boolean = true
-  onModified: (() => void) | null = null
 
-  constructor (src: AnyImageType, srcRect: IRect, distRect: IRect) {
-    super()
-    this.id = uid()
-    this.name = 'Raster'
+  constructor (src: AnyImageType, srcRect: IRect, distRect: IRect, order: number = 0) {
+    super(order)
     this.src = src
     this.srcRect = srcRect
     this.distRect = distRect
@@ -71,6 +60,14 @@ export class Raster extends Container implements Orderable, Drawable {
 
   clone () {
     return new Raster(this.src, this.srcRect, this.distRect)
+  }
+
+  getType (): DrawableType {
+    return 'raster'
+  }
+
+  inPath (p: Point): boolean {
+    return this.bounds.intersectsPoint(p)
   }
 }
 export type Images = Raster[]
