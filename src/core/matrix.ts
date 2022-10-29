@@ -79,6 +79,27 @@ export class Matrix2D {
     return this
   }
 
+  translate (point: IPoint): Matrix2D {
+    let m = new DOMMatrix()
+    m = m.translate(point.x, point.y)
+    this.matrix = this.matrix.multiply(m)
+    return this
+  }
+
+  flipX (point?: IPoint) {
+    let m = new DOMMatrix()
+    m = point ? m.translate(point.x, point.y).flipX().translate(-point.x, -point.y) : m.flipX()
+    this.matrix = this.matrix.multiply(m)
+    return this
+  }
+
+  flipY (point?: IPoint) {
+    let m = new DOMMatrix()
+    m = point ? m.translate(point.x, point.y).flipY().translate(-point.x, -point.y) : m.flipY()
+    this.matrix = this.matrix.multiply(m)
+    return this
+  }
+
   mul (m: Matrix2D): Matrix2D {
     this.matrix = this.matrix.multiply(MatrixFactory.fromMatrix(m))
     return this
@@ -90,6 +111,11 @@ export class Matrix2D {
 
   copy () {
     return new Matrix2D(this)
+  }
+
+  equals (m: Matrix2D): boolean {
+    return this.a === m.a && this.b === m.b && this.b === m.b &&
+    this.d === m.d && this.e === m.e && this.f === m.f
   }
 
   static get identity (): Matrix2D {

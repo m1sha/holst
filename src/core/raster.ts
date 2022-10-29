@@ -4,9 +4,11 @@ import { Channels } from './raster/channels'
 import { Drawable, DrawableType } from './drawable'
 import { UseFilters } from './raster/filters/use-filters'
 import { Point } from './geometry/point'
+import { Matrix2D } from './matrix'
 
 export type AnyImageType = HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap
 export class Raster extends Drawable {
+  #transform: Matrix2D = Matrix2D.identity
   readonly useFilters: UseFilters
   #channels: Channels | null = null
   src: AnyImageType
@@ -68,6 +70,15 @@ export class Raster extends Drawable {
 
   inPath (p: Point): boolean {
     return this.bounds.intersectsPoint(p)
+  }
+
+  protected get transform (): Matrix2D {
+    return this.#transform
+  }
+
+  protected set transform (value: Matrix2D) {
+    this.#transform = value
+    this.update()
   }
 }
 export type Images = Raster[]

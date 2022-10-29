@@ -93,14 +93,6 @@ export class TextBlock extends Drawable {
     return applyAnchor(this)
   }
 
-  get transform () {
-    return this.#transform
-  }
-
-  injectTransform (transform: Matrix2D) {
-    this.#transform = transform
-  }
-
   setMeasurer (measure: (text: string, style: TextStyle) => any): void {
     this.measure = measure
   }
@@ -113,6 +105,15 @@ export class TextBlock extends Drawable {
       italic: this.style.italic,
       color: this.style.color
     }
+  }
+
+  protected get transform (): Matrix2D {
+    return this.#transform
+  }
+
+  protected set transform (value: Matrix2D) {
+    this.#transform = value
+    this.update()
   }
 
   private getWidth (text?: string): number {
