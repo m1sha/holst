@@ -9,7 +9,7 @@ import { UseFilters } from './raster/filters/use-filters'
 
 export type AnyImageType = HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap
 export class Raster extends Container implements Orderable, Drawable {
-  readonly useFilters: UseFilters
+  readonly filters: UseFilters
   readonly type: DrawableType = 'raster'
   hidden: boolean = false
   name: string
@@ -29,7 +29,7 @@ export class Raster extends Container implements Orderable, Drawable {
     this.src = src
     this.srcRect = srcRect
     this.distRect = distRect
-    this.useFilters = new UseFilters(this)
+    this.filters = new UseFilters(this)
   }
 
   get bounds (): Rect {
