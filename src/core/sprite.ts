@@ -1,34 +1,21 @@
 import { Size } from './geometry/size'
 import { Raster } from './raster'
-import Orderable from './orderable'
 import { IPoint, Point } from './geometry/point'
 import { Drawable, DrawableType } from './drawable'
 import { Rect } from './geometry/rect'
-import { uid } from '../utils/uid'
-import { Container } from './container'
-export class Sprite extends Container implements Orderable, Drawable {
-  readonly type: DrawableType = 'sprite'
-  name: string
-  hidden: boolean = false
-  id: string
-  order: number = 0
+export class Sprite extends Drawable {
   raster: Raster
   tileSize: Size
   readonly frames: number
   position: IPoint
   framePosition: IPoint
-  readonly modified: boolean = true
-  onModified: (() => void) | null = null
 
   constructor (raster: Raster, tileSize: Size, order: number = 0) {
-    super()
-    this.id = uid()
-    this.name = 'Sprite'
+    super(order)
     this.position = Point.zero
     this.framePosition = Point.zero
     this.raster = raster
     this.tileSize = tileSize
-    this.order = order ?? 0
     this.frames = (raster.srcRect.width / tileSize.width) * (raster.srcRect.height / tileSize.height)
   }
 
@@ -47,5 +34,13 @@ export class Sprite extends Container implements Orderable, Drawable {
 
   next () {
     this.frame = this.frame < this.frames - 1 ? this.frame + 1 : 0
+  }
+
+  getType (): DrawableType {
+    return 'raster'
+  }
+
+  inPath (p: Point): boolean {
+    return this.bounds.intersectsPoint(p)
   }
 }

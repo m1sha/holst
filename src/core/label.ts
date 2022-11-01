@@ -1,41 +1,22 @@
 import { Matrix2D } from './matrix'
 import { TextStyle } from './styles/label-style'
-import Orderable from './orderable'
-import { EventType, Interactive } from './events/interactive'
 import { Point, IPoint } from './geometry/point'
 import { Rect } from './geometry/rect'
 import { TextMeasurer } from './text-measurer'
-import { uid } from '../utils/uid'
-import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { Size } from './geometry/size'
 import { Drawable, DrawableType } from './drawable'
 import { applyAnchor } from './anchor'
-import { Container } from './container'
-
-/** @deprecated */
-export interface Text {
-  value: string,
-  x: (textWidth: number) => number,
-  y: (textWidth: number) => number,
-  style: TextStyle
-}
 
 export interface TextBlockLine {
   text: string
   getWidth: () => number
 }
 
-export class TextBlock extends Container implements Interactive, Orderable, Drawable {
+export class TextBlock extends Drawable {
   #transform: Matrix2D = Matrix2D.identity
   private measure: (text: string, textStyle: TextStyle) => any
-  readonly id: string
-  name: string
-  type: DrawableType = 'text'
   text: string
   style: TextStyle
-  order: number
-  after?: Orderable
-  before?: Orderable
   target: IPoint
   alignment: 'left' | 'center' | 'right' | 'justify' = 'left'
   verticalAlignment: 'top' | 'center' | 'bottom' = 'top'
@@ -43,19 +24,11 @@ export class TextBlock extends Container implements Interactive, Orderable, Draw
   size?: Size
   overflow: 'none' | 'word-break' | 'clip' | 'word-break + clip' = 'none'
   lineHeight: number = 0
-  onModified: (() => void) | null = null
-  hidden: boolean = false
-  readonly modified: boolean = true
-  /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
-  /** @internal */ globalTransform: Matrix2D | null = null
 
   constructor (text: string, style: TextStyle, order: number = 0, measure?: (text: string, style: TextStyle) => any) {
-    super()
-    this.id = uid()
+    super(order)
     this.text = text
     this.style = style
-    this.order = order
-    this.name = 'TextBlock'
     this.measure = measure ?? ((text: string, style: TextStyle) => TextMeasurer.measureText(text, style))
     this.target = new Point(0, 0)
   }
@@ -182,15 +155,6 @@ export class TextBlock extends Container implements Interactive, Orderable, Draw
     }
   }
 
-  // private findBreak (word: string, maxWidth: number, width : number) {
-  //   // const charWidths = new CharacterWidths(w => this.getWidth(w))
-
-  //   return {
-  //     lines: [],
-  //     remainder: 0
-  //   }
-  // }
-
   inPath (p: Point): boolean {
     const rect = this.bounds
     if (this.anchor && this.anchor.container) {
@@ -200,14 +164,8 @@ export class TextBlock extends Container implements Interactive, Orderable, Draw
     return rect.intersectsPoint(p)
   }
 
-  on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): this | TextBlock {
-    this.eventHandler.add(this, type, listener)
-    return this
-  }
-
-  off<K extends keyof EventType> (type: K): this | TextBlock {
-    this.eventHandler.remove(this, type)
-    return this
+  getType (): DrawableType {
+    return 'text'
   }
 
   static create (text: string, style: TextStyle, target?: IPoint) {
@@ -216,19 +174,3 @@ export class TextBlock extends Container implements Interactive, Orderable, Draw
     return result
   }
 }
-
-// class CharacterWidths {
-//   private chars: Record<string, number> = {}
-//   private getWidth: (c: string) => number
-
-//   constructor (getWidth: (c: string) => number) {
-//     this.getWidth = getWidth
-//   }
-
-//   get (char: string) {
-//     let w = this.chars[char]
-//     if (w) return w
-//     w = this.chars[char] = this.getWidth(char)
-//     return w
-//   }
-// }

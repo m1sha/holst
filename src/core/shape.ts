@@ -1,4 +1,3 @@
-import Orderable from './orderable'
 import { Path2DBase } from './path2d/path2d-base'
 import { Point, IPoint } from './geometry/point'
 import { Rect, IRect } from './geometry/rect'
@@ -8,44 +7,29 @@ import { Matrix2D } from './matrix'
 import Context2DFactory from './render/canvas-rendering-context-2d-factory'
 import { calcBounds } from '../utils/utils'
 import { RelativeMutablePath2D } from './path2d/relative-mutable-path2d'
-import { EventType, Interactive } from './events/interactive'
-import { EventHandlerBag, IEventHandler } from './events/event-handler2'
-import { uid } from '../utils/uid'
 import { Corner4 } from './geometry/corner4'
 import { IVector } from './geometry/vector'
 import { Figures } from './figures'
 import { Drawable, DrawableType } from './drawable'
 import { Shadow } from './styles/shadow'
-import { Container } from './container'
 import { Size } from './geometry/size'
 
-export default class Shape extends Container implements Interactive, Orderable, Drawable {
-  #modified: boolean = true
+export default class Shape extends Drawable {
   #cache: Path2DBase | null = null
   private readonly mutablePath: MutablePath2D
-  readonly id: string
   readonly relative: RelativeMutablePath2D
-  type: DrawableType = 'shape'
   style: ShapeStyleImpl
-  name: string
-  order: number
-  /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
-  /** @internal */ globalTransform: Matrix2D | null = null
+
   frozen: boolean = false
   readonly figures: Figures
   readonly shadow: Shadow = new Shadow()
-  hidden: boolean = false
-  onModified: (() => void) | null = null
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
-    super()
-    this.id = uid()
+    super(order)
     this.mutablePath = path
     this.figures = new Figures(this.mutablePath.recorder, { setModified: () => (this.modified = true) })
     this.relative = new RelativeMutablePath2D(this.mutablePath)
-    this.order = order
     this.style = new ShapeStyleImpl(style || {}, () => (this.modified = true))
-    this.name = 'shape'
   }
 
   get circles () {
@@ -294,7 +278,7 @@ export default class Shape extends Container implements Interactive, Orderable, 
 
   toPath2D (): Path2DBase {
     const modified = this.anchor && this.anchor.isModified(this)
-    if (this.#modified || modified) {
+    if (this.modified || modified) {
       this.#cache = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : this.globalTransform ?? Matrix2D.identity, this.anchor || undefined)
       this.modified = false
       this.anchor && this.anchor.setUnmodified(this)
@@ -315,20 +299,15 @@ export default class Shape extends Container implements Interactive, Orderable, 
   injectTransform (transform: Matrix2D) {
     if (!transform) throw new Error('matrix is undefined')
     this.mutablePath.transform = transform.copy()
-    this.#modified = true
+    this.update()
   }
 
   copyStyle (): ShapeStyle {
     return this.style.clone()
   }
 
-  get modified (): boolean {
-    return this.#modified
-  }
-
-  set modified (value: boolean) {
-    this.#modified = value
-    if (value && this.onModified) this.onModified()
+  getType (): DrawableType {
+    return 'shape'
   }
 
   private exportTransformation (): Matrix2D {
@@ -338,22 +317,7 @@ export default class Shape extends Container implements Interactive, Orderable, 
   private importTransformation (transform: Matrix2D): void {
     if (!transform) throw new Error('matrix is undefined')
     this.mutablePath.transform = transform.copy()
-    this.#modified = true
-  }
-
-  on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): this | Shape {
-    this.eventHandler.add(this, type, listener)
-    return this
-  }
-
-  off<K extends keyof EventType> (type: K): this | Shape {
-    this.eventHandler.remove(this, type)
-    return this
-  }
-
-  /** @internal */
-  update (): void {
-    this.#modified = true
+    this.update()
   }
 
   toString () {
