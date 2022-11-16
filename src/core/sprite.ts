@@ -3,7 +3,10 @@ import { Raster } from './raster'
 import { IPoint, Point } from './geometry/point'
 import { Drawable, DrawableType } from './drawable'
 import { Rect } from './geometry/rect'
+import { Matrix2D } from './matrix'
+
 export class Sprite extends Drawable {
+  #transform: Matrix2D = Matrix2D.identity
   raster: Raster
   tileSize: Size
   readonly frames: number
@@ -42,5 +45,14 @@ export class Sprite extends Drawable {
 
   inPath (p: Point): boolean {
     return this.bounds.intersectsPoint(p)
+  }
+
+  protected get transform (): Matrix2D {
+    return this.#transform
+  }
+
+  protected set transform (value: Matrix2D) {
+    this.#transform = value
+    this.update()
   }
 }

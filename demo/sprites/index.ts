@@ -1,4 +1,4 @@
-import { Assets, Sprite, Scene, Renderer2D } from '../../src/index'
+import { Assets, Sprite, Scene, Renderer2D, Rect } from '../../src/index'
 
 export async function createSpriteDemo (canvas: HTMLCanvasElement) {
   const assets = new Assets()
@@ -18,8 +18,10 @@ export async function createSpriteDemo (canvas: HTMLCanvasElement) {
   sprite2.position = { x: 10, y: 60 }
   const sprite3 = new Sprite(raster3, { width: 48, height: 48 })
   sprite3.position = { x: 60, y: 10 }
+  sprite3.flipX(new Rect(120, 10, 48, 48).absCenter)
   const sprite4 = new Sprite(raster4, { width: 48, height: 48 })
   sprite4.position = { x: 60, y: 60 }
+  sprite4.flipX()
 
   const scene = new Scene()
   const layer = scene.createLayer()
