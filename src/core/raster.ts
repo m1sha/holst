@@ -7,9 +7,12 @@ import { Point } from './geometry/point'
 import { Matrix2D } from './matrix'
 
 export type AnyImageType = HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap
+
 export class Raster extends Drawable {
+  readonly filters: UseFilters
+  readonly type: DrawableType = 'raster'
+  hidden: boolean = false
   #transform: Matrix2D = Matrix2D.identity
-  readonly useFilters: UseFilters
   #channels: Channels | null = null
   src: AnyImageType
   srcRect: IRect
@@ -20,7 +23,7 @@ export class Raster extends Drawable {
     this.src = src
     this.srcRect = srcRect
     this.distRect = distRect
-    this.useFilters = new UseFilters(this)
+    this.filters = new UseFilters(this)
   }
 
   get bounds (): Rect {

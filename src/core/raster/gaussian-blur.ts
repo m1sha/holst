@@ -1,7 +1,8 @@
 /* Sources: https://www.peterkovesi.com/papers/FastGaussianSmoothing.pdf, https://gist.github.com/bfraboni/946d9456b15cac3170514307cf032a27 */
 
-function stdToBox (boxes: number[], sigma: number, n: number) {
+function stdToBox (sigma: number, n: number) {
   // ideal filter width
+  const boxes: number[] = [0, 0, 0]
   const wi = Math.sqrt((12 * sigma * sigma / n) + 1)
   let wl = Math.floor(wi)
   if (wl % 2 === 0) wl--
@@ -11,6 +12,7 @@ function stdToBox (boxes: number[], sigma: number, n: number) {
   const m = Math.round(mi)
 
   for (let i = 0; i < n; i++) { boxes[i] = ((i < m ? wl : wu) - 1) / 2 }
+  return boxes
 }
 
 function horizontalBlur (src: number[], out: number[], w: number, h: number, r: number) {
@@ -38,7 +40,6 @@ function totalBlur (src: number[], out: number[], w: number, h: number, r: numbe
 }
 
 function boxBlur (src: number[], out: number[], w: number, h: number, r: number) {
-  // std::swap(src, out);
   for (let i = 0; i < src.length; i++) out[i] = src[i]
   horizontalBlur(out, src, w, h, r)
   totalBlur(src, out, w, h, r)
@@ -46,10 +47,9 @@ function boxBlur (src: number[], out: number[], w: number, h: number, r: number)
 
 export function gaussianBlur (arr: Uint8ClampedArray, w: number, h: number, sigma: number) {
   const out = new Array(arr.length).fill(0)
-  const src = new Array(arr.length).fill(0)
-  for (let i = 0; i < arr.length; i++) src[i] = arr[i]
-  const boxes = [0, 0, 0]
-  stdToBox(boxes, sigma, 3)
+  const src = Array.from(arr)
+
+  const boxes = stdToBox(sigma, 3)
   boxBlur(src, out, w, h, boxes[0])
   boxBlur(out, src, w, h, boxes[1])
   boxBlur(src, out, w, h, boxes[2])

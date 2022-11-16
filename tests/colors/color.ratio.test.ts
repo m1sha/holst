@@ -1,4 +1,4 @@
-import { Color } from '../src/core/colors/color'
+import { Color } from '../../src/core/colors/color'
 
 test('color ratio contrast good', () => {
   const color1 = new Color('#9e9e9e')
