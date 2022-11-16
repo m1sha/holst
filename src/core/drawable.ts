@@ -6,9 +6,10 @@ import { uid } from '../utils/uid'
 import { Point } from './geometry/point'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { Matrix2D } from './matrix'
+import { Transformable } from './transformable'
 
 export type DrawableType = 'shape' | 'text' | 'raster' | 'sprite'
-export abstract class Drawable implements Interactive, Orderable {
+export abstract class Drawable extends Transformable implements Interactive, Orderable {
   #modified: boolean
   #anchor: Anchor | null = null
   readonly id: string
@@ -22,6 +23,7 @@ export abstract class Drawable implements Interactive, Orderable {
   /** @internal */ globalTransform: Matrix2D | null = null
 
   constructor (order: number) {
+    super()
     this.id = uid()
     this.type = this.getType()
     this.hidden = false

@@ -235,28 +235,6 @@ export default class Shape extends Drawable {
     return new Point(this.mutablePath.transform.e, this.mutablePath.transform.f)
   }
 
-  scale (point: IPoint): this | Shape {
-    this.mutablePath.transform.a = point.x
-    this.mutablePath.transform.d = point.y
-    this.modified = true
-    return this
-  }
-
-  rotate (angle: number): this | Shape {
-    this.modified = true
-    this.mutablePath.transform.b = Math.sin(angle)
-    this.mutablePath.transform.c = -Math.cos(angle)
-    return this
-  }
-
-  flipY (): this | Shape {
-    const matrix = Matrix2D.identity
-    matrix.d = -1
-    this.mutablePath.transform.mul(matrix)
-    this.modified = true
-    return this
-  }
-
   inPath (p: Point): boolean {
     return Context2DFactory.default.ctx.isPointInPath(this.toPath2D(), p.x, p.y) // IsPointInPolygon4(this.mutablePath.toPoints(), p)
   }
@@ -308,6 +286,20 @@ export default class Shape extends Drawable {
 
   getType (): DrawableType {
     return 'shape'
+  }
+
+  rotateByCenter (angle: number) {
+    this.update()
+    return super.rotateByCenter(angle)
+  }
+
+  protected get transform (): Matrix2D {
+    return this.mutablePath.transform
+  }
+
+  protected set transform (value: Matrix2D) {
+    this.mutablePath.transform = value
+    this.update()
   }
 
   private exportTransformation (): Matrix2D {

@@ -11,7 +11,7 @@ export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock, 
   if (clip) ctx.clip(clip.toPath2D())
 
   assignTextStyle(ctx, block.style)
-  ctx.setTransform(block.transform.mul(block.globalTransform ?? Matrix2D.identity))
+  ctx.setTransform(block.getTransform().mul(block.globalTransform ?? Matrix2D.identity))
   ctx.textBaseline = block.baseline
   const cut = block.overflow === 'clip' || block.overflow === 'word-break + clip'
   if (cut && block.size) {

@@ -1,11 +1,14 @@
 import Shape from '../../shape'
 import { applyAnchor } from '../../anchor'
 import { Raster } from '../../raster'
+import { Matrix2D } from '../../matrix'
 
 export function drawRaster (ctx: CanvasRenderingContext2D, raster: Raster, clip: Shape | null) {
   ctx.save()
 
   if (clip) ctx.clip(clip.toPath2D())
+
+  ctx.setTransform(raster.getTransform().mul(raster.globalTransform ?? Matrix2D.identity))
 
   const { x, y } = applyAnchor(raster)
   ctx.drawImage(
