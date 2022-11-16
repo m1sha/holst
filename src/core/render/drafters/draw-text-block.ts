@@ -15,8 +15,9 @@ export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock, 
   ctx.textBaseline = block.baseline
   const cut = block.overflow === 'clip' || block.overflow === 'word-break + clip'
   if (cut && block.size) {
-    ctx.rect(block.target.x, block.target.y, block.size.width, block.size.height)
-    ctx.clip()
+    const textClipping = new Path2D()
+    textClipping.rect(block.target.x, block.target.y, block.size.width, block.size.height)
+    ctx.clip(textClipping)
   }
   if (!block.multiline && !block.size) {
     const { x, y } = applyAnchor(block)
