@@ -1,5 +1,5 @@
 import { IImageData } from './image-data'
-import { Matrix3x3, Matrix3x3ReadOnly } from './matrix3x3'
+import { Matrix3x3, Matrix3x3ReadOnly } from '../../../../utils/matrix3x3'
 
 export class PixelMatrix {
   private imageData: IImageData

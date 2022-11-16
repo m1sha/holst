@@ -1,4 +1,4 @@
-import { Matrix3x3 } from '../../src/core/raster/filters/helpers/matrix3x3'
+import { Matrix3x3 } from '../../src/utils/matrix3x3'
 
 test('matrix 3x3: identity matrix * identity = identity', () => {
   const c = Matrix3x3.identity.mul(Matrix3x3.identity)
