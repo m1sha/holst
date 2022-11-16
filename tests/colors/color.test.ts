@@ -1,4 +1,5 @@
-import { Color, HSV } from '../src/core/colors/color'
+import { HSV } from '../../src/core/colors/hsv'
+import { Color } from '../../src/core/colors/color'
 
 test('color from hex', () => {
   const color = new Color('#ffffff')
@@ -79,4 +80,15 @@ test('color from number to rgb', () => {
     expect(color2.g).toEqual(color.g)
     expect(color2.b).toEqual(color.b)
   }
+})
+
+test('distance', () => {
+  const d1 = new Color('#fff').distance(new Color('#000'))
+  const d2 = new Color('#000').distance(new Color('#fff'))
+  const d3 = new Color('#ff0000').distance(new Color('#fff'))
+  const d4 = new Color('#ff0000').distance(new Color('#fe0000'))
+  const d5 = new Color('#0000ff').distance(new Color('#0000fe'))
+  expect(d1).toEqual(d2)
+  expect(d3).toBeLessThan(d2)
+  expect(d5).toEqual(d4)
 })

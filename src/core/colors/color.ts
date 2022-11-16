@@ -1,7 +1,12 @@
 import { linearGradient } from './linear-gradient'
-import utils from '../../utils/color-utils'
+import { hsl2rgb } from './converters/hsl-2-rgb'
+import { hsv2rgb } from './converters/hsv-2-rgb'
+import { rgb2hsv } from './converters/rgb-2-hsv'
+import { str2rgba } from './converters/str-2-rgba'
+import { HSV } from './hsv'
+import { HSL } from './hsl'
+import { TRGBA } from './converters/types/rgba'
 
-type RGBA = { r: number, g: number, b: number, a: number }
 export class Color {
   private _r: number = 0
   private _g: number = 0
@@ -17,7 +22,7 @@ export class Color {
   constructor (...args: Array<any>) {
     if (!args || !args.length) return
     if (typeof args[0] === 'string') {
-      const { r, g, b, a } = utils.fromString(args[0])
+      const { r, g, b, a } = str2rgba(args[0])
       this.r = r
       this.g = g
       this.b = b
@@ -42,7 +47,7 @@ export class Color {
     }
 
     if (args[0] instanceof HSV) {
-      const { r, g, b } = utils.hsv2rgb(args[0].h, args[0].s, args[0].v)
+      const { r, g, b } = hsv2rgb(args[0].h, args[0].s, args[0].v)
       this.r = r
       this.g = g
       this.b = b
@@ -50,7 +55,7 @@ export class Color {
     }
 
     if (args[0] instanceof HSL) {
-      const { r, g, b } = utils.hsl2rgb(args[0].h, args[0].s, args[0].l)
+      const { r, g, b } = hsl2rgb(args[0].h, args[0].s, args[0].l)
       this.r = r
       this.g = g
       this.b = b
@@ -117,11 +122,20 @@ export class Color {
     return foreground ? (l2 + 0.05) / (l1 + 0.05) : (l1 + 0.05) / (l2 + 0.05)
   }
 
-  alike ({ r, g, b }: RGBA, coefficient: number = 10): boolean {
-    const er = r <= this.r + coefficient && r >= this.r - coefficient
-    const eg = g <= this.g + coefficient && g >= this.g - coefficient
-    const eb = b <= this.b + coefficient && b >= this.b - coefficient
-    return er && eg && eb
+  alike (c /* { r, g, b } */: TRGBA, coefficient: number = 10): boolean {
+    // const er = r <= this.r + coefficient && r >= this.r - coefficient
+    // const eg = g <= this.g + coefficient && g >= this.g - coefficient
+    // const eb = b <= this.b + coefficient && b >= this.b - coefficient
+    // return er && eg && eb
+    return this.distance(c) < coefficient
+  }
+
+  distance (color: Color | TRGBA): number {
+    const rm = (this.r + color.r) / 2
+    const dr = this.r - color.r
+    const dg = this.g - color.g
+    const db = this.b - color.b
+    return Math.sqrt((((512 + rm) * dr * dr) >> 8) + 4 * dg * dg + (((767 - rm) * db * db) >> 8))
   }
 
   toString () {
@@ -135,7 +149,7 @@ export class Color {
   }
 
   toHSV () {
-    const { h, s, v } = utils.rgb2hsv(this.r, this.g, this.b)
+    const { h, s, v } = rgb2hsv(this.r, this.g, this.b)
     return new HSV(Math.floor(Math.round(h)), Math.floor(s * 100), Math.floor(v * 100))
   }
 
@@ -164,34 +178,5 @@ export class Color {
 
   private toFloatArray (): [number, number, number, number] {
     return [this.r / 255, this.g / 255, this.b / 255, this.a]
-  }
-}
-export class HSV {
-  h: number
-  s: number
-  v: number
-  a: number
-  constructor (h: number, s: number, v: number, a?: number) {
-    this.h = h
-    this.s = s
-    this.v = v
-    this.a = a === undefined ? 1 : a
-  }
-
-  toString () {
-    return `hsv(${this.h}, ${this.s}%, ${this.v}%)`
-  }
-}
-
-export class HSL {
-  h: number
-  s: number
-  l: number
-  a: number
-  constructor (h: number, s: number, l: number, a?: number) {
-    this.h = h
-    this.s = s
-    this.l = l
-    this.a = a === undefined ? 1 : a
   }
 }
