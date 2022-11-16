@@ -1,6 +1,4 @@
-import { TRGBA } from './types/rgba'
-
-export function hsv2rgb (h: number, s: number, v: number): TRGBA {
+export function hsv2rgb (h: number, s: number, v: number): [number, number, number, number] {
   let H = h / 360
   const S = s / 100
   let V = v / 100
@@ -52,10 +50,5 @@ export function hsv2rgb (h: number, s: number, v: number): TRGBA {
         break
     }
   }
-  return {
-    r: R || 0,
-    g: G || 0,
-    b: B || 0,
-    a: 1
-  }
+  return [R || 0, G || 0, B || 0, 1]
 }
