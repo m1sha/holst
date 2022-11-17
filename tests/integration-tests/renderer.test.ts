@@ -1,8 +1,8 @@
-import { Scene } from '../src/core/scene'
-import { Renderer2D } from '../src/core/render/renderer2D'
-import { createMockContext } from './mock/mock-canvas-rendering-context2d'
-import './mock/mock-path2d'
-import './mock/mockDOMMatrix'
+import { Scene } from '../../src/core/scene'
+import { Renderer2D } from '../../src/core/render/renderer2D'
+import { createMockContext } from '../mock/mock-canvas-rendering-context2d'
+import '../mock/mock-path2d'
+import '../mock/mockDOMMatrix'
 
 test('MockCanvasRenderingContext2D', () => {
   const mock = createMockContext()

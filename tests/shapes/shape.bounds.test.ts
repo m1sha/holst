@@ -1,6 +1,6 @@
-import './mock/mockDOMMatrix'
-import { Rect } from '../src/core/geometry/rect'
-import { mockShapeFactory } from './mock/mock-shape-factory'
+import '../mock/mockDOMMatrix'
+import { Rect } from '../../src/core/geometry/rect'
+import { mockShapeFactory } from '../mock/mock-shape-factory'
 
 test('Shape check bounds rect', () => {
   const shape = mockShapeFactory()
