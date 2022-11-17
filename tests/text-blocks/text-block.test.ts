@@ -1,6 +1,6 @@
-import './mock/mockDOMMatrix'
-import { TextBlock } from '../src/core/label'
-import { measure } from './mock'
+import '../mock/mockDOMMatrix'
+import { TextBlock } from '../../src/core/label'
+import { measure } from '../mock/test-measure'
 
 test('text is singleline', () => {
   const text = 'This is singleline text'

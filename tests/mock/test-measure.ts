@@ -1,4 +1,4 @@
-import { TextStyle } from '../src/core/styles/label-style'
+import { TextStyle } from '../../src/core/styles/label-style'
 
 const measure = (text: string, style: TextStyle) => {
   return {

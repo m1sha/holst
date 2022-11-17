@@ -1,4 +1,4 @@
-import { ConstraintGrid } from '../src/core/constraint-grid'
+import { ConstraintGrid } from '../../src/core/constraint-grid'
 
 test('Constraint Grid 3x3', () => {
   const grid = new ConstraintGrid({ width: 300, height: 300 }, 3, 3)
