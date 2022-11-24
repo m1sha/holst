@@ -41,6 +41,7 @@ if (process.env.libraryTarget === 'umd') {
   config.entry['containers.bundle'] = './demo/containers/index.ts'
   config.entry['dynamic_canvas_renderer.bundle'] = './demo/dynamic-canvas-renderer/index.ts'
   config.entry['raster.bundle'] = './demo/raster-filters/index.ts'
+  config.entry['shape-bounds.bundle'] = './demo/shape-bounds/index.ts'
 
   config.output.library = 'demo'
 }

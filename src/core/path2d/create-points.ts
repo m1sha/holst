@@ -20,23 +20,20 @@ const calcPoint = (p: IPoint, transform: Matrix2D, globalTransform?: Matrix2D): 
 handlers.Arc = (arr, { element, d, transform }) => {
   if (element.type !== 'Arc') return
   const p = transform.applyMatrix(new Point(element).add(d))
-  arr.push(p)
-  arr.push(new Point(p.x, p.y + element.radius))
-  arr.push(new Point(p.x, p.y + -element.radius))
-  arr.push(new Point(p.y, p.y + element.radius))
-  arr.push(new Point(p.x, p.y + -element.radius))
+  arr.push(new Point(p.x - element.radius, p.y - element.radius))
+  arr.push(new Point(p.x + element.radius, p.y - element.radius))
+  arr.push(new Point(p.x + element.radius, p.y + element.radius))
+  arr.push(new Point(p.x - element.radius, p.y + element.radius))
 }
 
 handlers.ArcTo = (arr, { element, d, transform }) => {
   if (element.type !== 'ArcTo') return
   const p1 = transform.applyMatrix(new Point(element.x1 + d.x, element.y1 + d.y))
   const p2 = transform.applyMatrix(new Point(element.x2 + d.x, element.y2 + d.y))
-  arr.push(p1)
-  arr.push(p2)
-  arr.push(new Point(p1.x, p1.y + element.radius))
-  arr.push(new Point(p1.x, p1.y + -element.radius))
-  arr.push(new Point(p1.y, p1.y + element.radius))
-  arr.push(new Point(p1.x, p1.y + -element.radius))
+  arr.push(new Point(p1.x - element.radius, p1.y - element.radius))
+  arr.push(new Point(p1.x + element.radius, p1.y - element.radius))
+  arr.push(new Point(p2.x + element.radius, p2.y + element.radius))
+  arr.push(new Point(p2.x - element.radius, p2.y + element.radius))
 }
 
 handlers.BezierCurveTo = (arr, { element, transform }) => {
@@ -109,6 +106,18 @@ handlers.RoundRect = (arr, { element, d, transform, globalTransform }) => {
 
 handlers.Circle = (arr, { element, d, transform, globalTransform }) => {
   if (element.type !== 'Circle') return
+  const { radius } = element
+  const x = element.x + d.x
+  const y = element.y + d.y
+  const p1 = calcPoint({ x: x - radius, y: y - radius }, transform, globalTransform)
+  const p2 = calcPoint({ x: x + radius, y: y - radius }, transform, globalTransform)
+  const p3 = calcPoint({ x: x + radius, y: y + radius }, transform, globalTransform)
+  const p4 = calcPoint({ x: x - radius, y: y + radius }, transform, globalTransform)
+  arr.push(p1, p2, p3, p4)
+}
+
+handlers.SegmentedCircle = (arr, { element, d, transform, globalTransform }) => {
+  if (element.type !== 'SegmentedCircle') return
   const { radius } = element
   const x = element.x + d.x
   const y = element.y + d.y
