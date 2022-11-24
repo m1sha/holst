@@ -8,6 +8,18 @@ export interface IRect {
   width: number
   height: number
 }
+
+export interface IRectReadonly{
+  readonly x: number
+  readonly y: number
+  readonly width: number
+  readonly height: number
+  readonly absWidth: number
+  readonly absHeight: number
+  readonly center: Readonly<IPoint>
+  readonly absCenter: Readonly<IPoint>
+}
+
 export class Rect implements IRect, Size {
   x: number = 0
   y: number = 0
