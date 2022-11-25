@@ -1,5 +1,6 @@
 import { Path2DBase } from '../path2d/path2d-base'
 import { Figure } from './figure'
+import { Rect } from '../geometry/rect'
 
 export class FigureStack {
   #figures: Figure[] = []
@@ -15,6 +16,18 @@ export class FigureStack {
     for (const figure of this.#figures) {
       figure.create(this.#path)
     }
+  }
+
+  get bounds (): Rect {
+    return new Rect(0, 0, 0, 0)
+  }
+
+  get figures (): Readonly<Figure[]> {
+    return this.#figures
+  }
+
+  get path2d (): Readonly<Path2DBase> {
+    return this.#path
   }
 
   static path2dCreateFactory: (() => Path2DBase) = () => new Path2D()

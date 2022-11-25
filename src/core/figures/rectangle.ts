@@ -1,17 +1,17 @@
-import { Rect, IRectReadonly } from '../geometry/rect'
+import { IRect, Rect, IRectReadonly } from '../geometry/rect'
 import { Path2DBase } from '../path2d/path2d-base'
 import { Figure } from './figure'
 
 export class Rectangle extends Figure {
-  #rect: Rect
+  #rect: IRect
 
-  constructor (rect: Rect) {
+  constructor (rect: IRect) {
     super()
     this.#rect = rect
   }
 
   get bounds (): IRectReadonly {
-    return this.#rect
+    return new Rect(this.#rect)
   }
 
   create (path: Path2DBase): void {

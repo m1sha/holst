@@ -13,6 +13,7 @@ import { Sprite } from './sprite'
 import { Matrix2D } from './matrix'
 import { removeItem } from '../utils/array'
 import { calcBounds } from '../utils/utils'
+import { Shape2 } from './shape2'
 export class Layer implements Orderable {
   private objects: Orderable[] = []
   private styleManager: StyleManager
@@ -58,7 +59,11 @@ export class Layer implements Orderable {
     return result
   }
 
-  add (entity: Shape | TextBlock | Raster | Sprite): void {
+  add (entity: Shape2 | Shape | TextBlock | Raster | Sprite): void {
+    if (entity instanceof Shape2) {
+      this.addShape2(entity)
+      return
+    }
     if (entity instanceof Shape) {
       this.addShape(entity)
       return
@@ -81,6 +86,12 @@ export class Layer implements Orderable {
   addShape (shape: Shape): void {
     if (!shape.order) shape.order = this.arrange.order
     shape.frozen = this.frozen
+    shape.globalTransform = this.globalTransform
+    this.objects.push(shape)
+  }
+
+  addShape2 (shape: Shape2): void {
+    if (!shape.order) shape.order = this.arrange.order
     shape.globalTransform = this.globalTransform
     this.objects.push(shape)
   }

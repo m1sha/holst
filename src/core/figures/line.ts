@@ -6,9 +6,15 @@ import { Figure } from './figure'
 
 type LineSegment = { point: IPoint, type: 'line' | 'gap' }
 
-export class Line extends Figure {
+export class Line<T> extends Figure {
   private isClosed: boolean = false
   #segments: LineSegment[] = []
+  #sender: T
+
+  constructor (obj: T) {
+    super()
+    this.#sender = obj
+  }
 
   begin (point: IPoint): this {
     this.#segments.push({ point, type: 'line' })
@@ -27,6 +33,10 @@ export class Line extends Figure {
 
   close () {
     this.isClosed = true
+  }
+
+  end (): T {
+    return this.#sender
   }
 
   get bounds (): IRectReadonly {
