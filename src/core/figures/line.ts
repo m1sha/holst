@@ -1,4 +1,4 @@
-import { calcBounds } from 'utils/utils'
+import { calcBounds } from '../../utils/utils'
 import { IPoint } from '../geometry/point'
 import { IRectReadonly } from '../geometry/rect'
 import { Path2DBase } from '../path2d/path2d-base'
