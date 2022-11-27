@@ -1,4 +1,7 @@
 import { Drawable, DrawableType } from './drawable'
+import { Arc } from './figures/arc'
+import { Circle } from './figures/circle'
+import { Ellipse } from './figures/ellipse'
 import { FigureStack } from './figures/figure-stack'
 import { Line } from './figures/line'
 import { Rectangle } from './figures/rectangle'
@@ -30,40 +33,100 @@ export class Shape2 extends Drawable {
   rect (rect: IRect): this | Shape2
   // eslint-disable-next-line no-dupe-class-members
   rect (...args: Array<any>): this | Shape2 {
-    let rectangle: Rectangle | null = null
+    let figure: Rectangle | null = null
     if (args.length === 1) {
-      rectangle = new Rectangle(args[0])
+      figure = new Rectangle(args[0])
     }
     if (args.length === 2) {
       const rect: IRect = { ...args[0], ...args[1] }
-      rectangle = new Rectangle(rect)
+      figure = new Rectangle(rect)
     }
     if (args.length === 4) {
       const [x, y, width, height] = args
-      rectangle = new Rectangle({ x, y, width, height })
+      figure = new Rectangle({ x, y, width, height })
     }
-    if (!rectangle) throw new Error('mismatch parameters')
-    this.#figureStack.add(rectangle)
-    rectangle.onModified = () => (this.modified = true)
+    if (!figure) throw new Error('mismatch parameters')
+    this.#figureStack.add(figure)
+    figure.onModified = () => (this.modified = true)
     return this
   }
 
   line () {
-    const line = new Line(this)
-    this.#figureStack.add(line)
-    line.onModified = () => (this.modified = true)
-    return line
+    const figure = new Line(this)
+    this.#figureStack.add(figure)
+    figure.onModified = () => (this.modified = true)
+    return figure
   }
 
+  circle (center: IPoint, radius: number): this | Shape2
+  // eslint-disable-next-line no-dupe-class-members
+  circle (x: number, y: number, radius: number): this | Shape2
+  // eslint-disable-next-line no-dupe-class-members
   circle (...args: Array<any>): this | Shape2 {
+    let figure: Circle | null = null
+
+    if (args.length === 3 && typeof args[0] === 'number' && typeof args[1] === 'number' && typeof args[2] === 'number') {
+      const [x, y, radius] = args
+      figure = new Circle(x, y, radius)
+    }
+
+    if (args.length === 2 && typeof args[0] === 'object' && typeof args[1] === 'number') {
+      const [center, radius] = args
+      figure = new Circle(center.x, center.y, radius)
+    }
+
+    if (!figure) throw new Error('mismatch parameters')
+
+    this.#figureStack.add(figure)
+    figure.onModified = () => (this.modified = true)
     return this
   }
 
+  arc (center: IPoint, radius: number, startAngle?: number, endAngle?: number, counterclockwise?: boolean): this | Shape2
+  // eslint-disable-next-line no-dupe-class-members
+  arc (x: number, y: number, radius: number, startAngle?: number, endAngle?: number, counterclockwise?: boolean): this | Shape2
+  // eslint-disable-next-line no-dupe-class-members
   arc (...args: Array<any>): this | Shape2 {
+    let figure: Arc | null = null
+
+    if (args.length >= 3 && typeof args[0] === 'number' && typeof args[1] === 'number' && typeof args[2] === 'number') {
+      const [x, y, radius, startAngle, endAngle, counterclockwise] = args
+      figure = new Arc(x, y, radius, startAngle ?? 0, endAngle ?? Math.PI * 2, counterclockwise)
+    }
+
+    if (args.length >= 2 && typeof args[0] === 'object' && typeof args[1] === 'number') {
+      const [point, radius, startAngle, endAngle, counterclockwise] = args
+      figure = new Arc(point.x, point.y, radius, startAngle ?? 0, endAngle ?? Math.PI * 2, counterclockwise)
+    }
+
+    if (!figure) throw new Error('mismatch parameters')
+
+    this.#figureStack.add(figure)
+    figure.onModified = () => (this.modified = true)
     return this
   }
 
+  ellipse (center: IPoint, radiusX: number, radiusY: number, rotation?: number, startAngle?: number, endAngle?: number, counterclockwise?: boolean): this | Shape2
+  // eslint-disable-next-line no-dupe-class-members
+  ellipse (x: number, y: number, radiusX: number, radiusY: number, rotation?: number, startAngle?: number, endAngle?: number, counterclockwise?: boolean): this | Shape2
+  // eslint-disable-next-line no-dupe-class-members
   ellipse (...args: Array<any>): this | Shape2 {
+    let figure: Ellipse | null = null
+
+    if (args.length >= 4 && typeof args[0] === 'number' && typeof args[1] === 'number' && typeof args[2] === 'number') {
+      const [x, y, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise] = args
+      figure = new Ellipse(x, y, radiusX, radiusY, rotation ?? 0, startAngle ?? 0, endAngle ?? Math.PI * 2, counterclockwise)
+    }
+
+    if (args.length >= 3 && typeof args[0] === 'object' && typeof args[1] === 'number') {
+      const [point, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise] = args
+      figure = new Ellipse(point.x, point.y, radiusX, radiusY, rotation ?? 0, startAngle ?? 0, endAngle ?? Math.PI * 2, counterclockwise)
+    }
+
+    if (!figure) throw new Error('mismatch parameters')
+
+    this.#figureStack.add(figure)
+    figure.onModified = () => (this.modified = true)
     return this
   }
 

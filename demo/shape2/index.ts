@@ -20,6 +20,18 @@ export function createDemo (div: HTMLDivElement) {
 
   createView(scene, div)
 
+  const shape2 = new Shape2(0, { stroke: '#f35313' })
+  shape2.circle(100, 100, 40)
+  layer.add(shape2)
+
+  const shape3 = new Shape2(0, { stroke: '#f353f3' })
+  shape3.ellipse(300, 100, 40, 80)
+  layer.add(shape3)
+
+  const shape4 = new Shape2(0, { stroke: '#136343' })
+  shape4.arc(300, 300, 40, -Math.PI / 2, Math.PI)
+  layer.add(shape4)
+
   line.segments[1].x = 400
 }
 

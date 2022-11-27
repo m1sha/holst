@@ -8,6 +8,7 @@ export class Rectangle extends Figure {
   constructor (rect: IRect) {
     super()
     this.#rect = rect
+    this.setModified()
   }
 
   get x (): number { return this.#rect.x }

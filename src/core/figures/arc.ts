@@ -19,6 +19,7 @@ export class Arc extends Figure {
     this.#startAngle = startAngle
     this.#endAngle = endAngle
     this.#counterclockwise = counterclockwise
+    this.setModified()
   }
 
   get x (): number { return this.#x }

@@ -13,6 +13,7 @@ export class Circle extends Figure {
     this.#x = x
     this.#y = y
     this.#radius = radius
+    this.setModified()
   }
 
   get x (): number { return this.#x }
