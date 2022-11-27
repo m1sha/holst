@@ -29,7 +29,7 @@ export function createDemo (div: HTMLDivElement) {
   layer.add(shape3)
 
   const shape4 = new Shape2(0, { stroke: '#136343' })
-  shape4.arc(300, 300, 40, -Math.PI / 2, Math.PI)
+  shape4.arc(300, 300, 40, 0, Math.PI / 2)
   layer.add(shape4)
 
   line.segments[1].x = 400

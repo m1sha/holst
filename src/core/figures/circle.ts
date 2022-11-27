@@ -38,7 +38,7 @@ export class Circle extends Figure {
   }
 
   get bounds (): IRectReadonly {
-    return new GeometryArc(this.#x, this.#y, this.#radius).bounds
+    return new GeometryArc(this.#x, this.#y, this.#radius, 0, Math.PI * 2).bounds
   }
 
   create (path: Path2DBase): void {

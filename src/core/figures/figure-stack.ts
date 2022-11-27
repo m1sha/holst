@@ -5,6 +5,7 @@ import { Rect } from '../geometry/rect'
 export class FigureStack {
   #figures: Figure[] = []
   #path: Path2DBase = FigureStack.path2dCreateFactory()
+  #bounds: Rect = new Rect(0, 0, 0, 0)
 
   add (figure: Figure) {
     this.#figures.push(figure)
@@ -18,7 +19,7 @@ export class FigureStack {
   }
 
   get bounds (): Rect {
-    return new Rect(0, 0, 0, 0)
+    return this.#bounds
   }
 
   get figures (): Readonly<Figure[]> {
