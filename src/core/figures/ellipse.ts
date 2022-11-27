@@ -25,11 +25,61 @@ export class Ellipse extends Figure {
     this.#counterclockwise = counterclockwise
   }
 
+  get x (): number { return this.#x }
+
+  set x (value: number) {
+    this.#x = value
+    this.setModified()
+  }
+
+  get y (): number { return this.#y }
+
+  set y (value: number) {
+    this.#y = value
+    this.setModified()
+  }
+
+  get radiusX (): number { return this.#radiusX }
+
+  set radiusX (value: number) {
+    this.#radiusX = value
+    this.setModified()
+  }
+
+  get radiusY (): number { return this.#radiusY }
+
+  set radiusY (value: number) {
+    this.#radiusY = value
+    this.setModified()
+  }
+
+  get rotation (): number { return this.#rotation }
+
+  set rotation (value: number) {
+    this.#rotation = value
+    this.setModified()
+  }
+
+  get startAngle (): number { return this.#startAngle }
+
+  set startAngle (value: number) {
+    this.#startAngle = value
+    this.setModified()
+  }
+
+  get endAngle (): number { return this.#endAngle }
+
+  set endAngle (value: number) {
+    this.#endAngle = value
+    this.setModified()
+  }
+
   get bounds (): IRectReadonly {
     return new GeometryEllipse(this.#x, this.#y, this.#radiusX, this.#radiusY).bounds
   }
 
   create (path: Path2DBase): void {
     path.ellipse(this.#x, this.#y, this.#radiusX, this.#radiusY, this.#rotation, this.#startAngle, this.#endAngle, this.#counterclockwise)
+    this.setUnmodified()
   }
 }

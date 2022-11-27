@@ -44,13 +44,27 @@ export class Shape2 extends Drawable {
     }
     if (!rectangle) throw new Error('mismatch parameters')
     this.#figureStack.add(rectangle)
+    rectangle.onModified = () => (this.modified = true)
     return this
   }
 
   line () {
     const line = new Line(this)
     this.#figureStack.add(line)
+    line.onModified = () => (this.modified = true)
     return line
+  }
+
+  circle (...args: Array<any>): this | Shape2 {
+    return this
+  }
+
+  arc (...args: Array<any>): this | Shape2 {
+    return this
+  }
+
+  ellipse (...args: Array<any>): this | Shape2 {
+    return this
   }
 
   getType (): DrawableType {
@@ -66,6 +80,7 @@ export class Shape2 extends Drawable {
   }
 
   toPath2D (): Path2DBase {
+    this.modified = false
     return this.#figureStack.path2d
   }
 
@@ -75,5 +90,9 @@ export class Shape2 extends Drawable {
 
   protected set transform (value: Matrix2D) {
     this.transform = value
+  }
+
+  static create (style?: ShapeStyle) {
+    return new Shape2(0, style || {})
   }
 }

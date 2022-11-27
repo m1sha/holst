@@ -1,7 +1,7 @@
 import { GlobalPath2DFactory } from '../../src/core/path2d/mutable-path2d'
 import { Path2DBase } from '../../src/core/path2d/path2d-base'
 
-class MockPath2D implements Path2DBase {
+export class MockPath2D implements Path2DBase {
   addPath (path: Path2D, transform?: unknown): void {
     //
   }

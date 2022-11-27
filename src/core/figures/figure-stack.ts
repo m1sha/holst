@@ -7,7 +7,6 @@ export class FigureStack {
   #path: Path2DBase = FigureStack.path2dCreateFactory()
 
   add (figure: Figure) {
-    figure.create(this.#path)
     this.#figures.push(figure)
   }
 
@@ -27,6 +26,7 @@ export class FigureStack {
   }
 
   get path2d (): Readonly<Path2DBase> {
+    if (this.#figures.some(p => p.modified)) this.update()
     return this.#path
   }
 
