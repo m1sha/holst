@@ -4,7 +4,7 @@ import { IRectReadonly } from '../geometry/rect'
 import { Path2DBase } from '../path2d/path2d-base'
 import { Figure } from './figure'
 
-type LineSegmentType = 'line' | 'quadratic-bezier' | 'cubic-bezier' | 'gap' | 'move'
+type LineSegmentType = 'line' | 'quadratic-bezier' | 'cubic-bezier' | 'gap' | 'move' | 'arc'
 export interface LineSegment {
   point: IPoint
   type: LineSegmentType
@@ -156,6 +156,12 @@ export class Line<T> extends Figure {
     return this
   }
 
+  arcTo (point1: IPoint, point2: IPoint, radius: number) {
+    this.setModified()
+    this.#segments.push(new LineSegmentDecorator(point1, 'arc', [point2, { x: radius, y: radius }], () => this.setModified()))
+    return this
+  }
+
   close () {
     this.isClosed = true
   }
@@ -192,6 +198,12 @@ export class Line<T> extends Figure {
         if (!this.#segments[i].controlPoints) throw new Error('')
         const [sp1, sp2] = this.#segments[i].controlPoints!
         path.bezierCurveTo(sp1.x, sp1.y, sp2.x, sp2.y, p.x, p.y)
+      }
+      if (this.#segments[i].type === 'arc') {
+        const p = this.#segments[i].point
+        if (!this.#segments[i].controlPoints) throw new Error('')
+        const [sp1, sp2] = this.#segments[i].controlPoints!
+        path.arcTo(p.x, p.y, sp1.x, sp1.y, sp2.x)
       }
     }
 
