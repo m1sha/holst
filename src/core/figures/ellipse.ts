@@ -1,5 +1,5 @@
 import { IRectReadonly } from '../geometry/rect'
-import { Ellipse as GeometryEllipse } from '../geometry/ellipse'
+import { Radial } from '../geometry/radial'
 import { Path2DBase } from '../path2d/path2d-base'
 import { Figure } from './figure'
 
@@ -76,7 +76,7 @@ export class Ellipse extends Figure {
   }
 
   get bounds (): IRectReadonly {
-    return new GeometryEllipse(this.#x, this.#y, this.#radiusX, this.#radiusY).bounds
+    return new Radial(this.#x, this.#y, this.#radiusX, this.#radiusY, this.#rotation, this.#startAngle, this.#endAngle).bounds
   }
 
   create (path: Path2DBase): void {
