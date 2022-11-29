@@ -2,17 +2,22 @@ import { IRectReadonly } from '../geometry/rect'
 import { Radial } from '../geometry/radial'
 import { Path2DBase } from '../path2d/path2d-base'
 import { Figure } from './figure'
+import { drawSegmentedCircle } from '../geometry/segmented-circle'
 
 export class Circle extends Figure {
   #x: number
   #y: number
   #radius: number
+  #segmentCount: number
+  #smooth: number
 
-  constructor (x: number, y: number, radius: number) {
+  constructor (x: number, y: number, radius: number, segmentCount?: number, smooth?: number) {
     super()
     this.#x = x
     this.#y = y
     this.#radius = radius
+    this.#segmentCount = segmentCount ?? 0
+    this.#smooth = smooth ?? 1
     this.setModified()
   }
 
@@ -42,7 +47,18 @@ export class Circle extends Figure {
   }
 
   create (path: Path2DBase): void {
-    path.arc(this.#x, this.#y, this.#radius, 0, Math.PI * 2)
+    if (this.#segmentCount === 0) {
+      path.arc(this.#x, this.#y, this.#radius, 0, Math.PI * 2)
+    } else {
+      const points = drawSegmentedCircle(this.#x, this.#y, this.#radius, this.#segmentCount, this.#smooth)
+      path.moveTo(points[0].x, points[0].y)
+      for (let i = 1; i < points.length; i += 2) {
+        const cp = points[i]
+        const { x, y } = points[i + 1]
+        path.quadraticCurveTo(cp.x, cp.y, x, y)
+      }
+    }
+
     this.setUnmodified()
   }
 }

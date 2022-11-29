@@ -1,13 +1,16 @@
+import { Corner4 } from '../geometry/corner4'
 import { IRect, Rect, IRectReadonly } from '../geometry/rect'
 import { Path2DBase } from '../path2d/path2d-base'
 import { Figure } from './figure'
 
 export class Rectangle extends Figure {
   #rect: IRect
+  #corners: Corner4 | number
 
-  constructor (rect: IRect) {
+  constructor (rect: IRect, corners?: Corner4 | number) {
     super()
     this.#rect = rect
+    this.#corners = corners ?? 0
     this.setModified()
   }
 
@@ -45,7 +48,24 @@ export class Rectangle extends Figure {
 
   create (path: Path2DBase): void {
     const { x, y, width, height } = this.#rect
-    path.rect(x, y, width, height)
+    if (!this.#corners) {
+      path.rect(x, y, width, height)
+    } else {
+      const { tl, tr, br, bl }: Corner4 = typeof this.#corners === 'number'
+        ? { tl: this.#corners, tr: this.#corners, br: this.#corners, bl: this.#corners }
+        : this.#corners
+
+      path.moveTo(x + tl, y)
+      path.lineTo(x + width - tr, y)
+      path.quadraticCurveTo(x + width, y, x + width, y + tr)
+      path.lineTo(x + width, y + height - br)
+      path.quadraticCurveTo(x + width, y + height, x + width - br, y + height)
+      path.lineTo(x + bl, y + height)
+      path.quadraticCurveTo(x, y + height, x, y + height - bl)
+      path.lineTo(x, y + tl)
+      path.quadraticCurveTo(x, y, x + tl, y)
+    }
+
     this.setUnmodified()
   }
 }

@@ -1,4 +1,4 @@
-import { Scene, Renderer2D } from '../../src/index'
+import { Scene, Renderer2D, Rect } from '../../src/index'
 import { Shape2 } from '../../src/core/shape2'
 
 export function createDemo (div: HTMLDivElement) {
@@ -31,6 +31,18 @@ export function createDemo (div: HTMLDivElement) {
   const shape4 = new Shape2(0, { stroke: '#136343' })
   shape4.arc(300, 300, 40, 0, Math.PI / 2)
   layer.add(shape4)
+
+  const shape5 = new Shape2(0, { stroke: '#1300f3' })
+  shape5.arc(500, 300, 90, 0, Math.PI)
+  layer.add(shape5)
+
+  const shape6 = new Shape2(0, { stroke: '#136023' })
+  shape6.rect(new Rect(500, 100, 190, 80), 18)
+  layer.add(shape6)
+
+  const shape7 = new Shape2(0, { stroke: '#438393' })
+  shape7.circle(400, 100, 80, 4, 0.9)
+  layer.add(shape7)
 
   line.segments[1].x = 400
 }

@@ -5,6 +5,7 @@ import { Ellipse } from './figures/ellipse'
 import { FigureStack } from './figures/figure-stack'
 import { Line } from './figures/line'
 import { Rectangle } from './figures/rectangle'
+import { Corner4 } from './geometry/corner4'
 import { IPoint, Point } from './geometry/point'
 import { Rect, IRect } from './geometry/rect'
 import { Size } from './geometry/size'
@@ -26,24 +27,30 @@ export class Shape2 extends Drawable {
     this.style = new ShapeStyleImpl(style || {}, () => (this.modified = true))
   }
 
-  rect (x: number, y: number, width: number, height: number): this | Shape2
+  rect (x: number, y: number, width: number, height: number, corners?: Corner4 | number): this | Shape2
   // eslint-disable-next-line no-dupe-class-members
-  rect (point: IPoint, size: Size): this | Shape2
+  rect (point: IPoint, size: Size, corners?: Corner4 | number): this | Shape2
   // eslint-disable-next-line no-dupe-class-members
-  rect (rect: IRect): this | Shape2
+  rect (rect: IRect, corners?: Corner4 | number): this | Shape2
   // eslint-disable-next-line no-dupe-class-members
   rect (...args: Array<any>): this | Shape2 {
     let figure: Rectangle | null = null
-    if (args.length === 1) {
-      figure = new Rectangle(args[0])
+    if (
+      (args.length === 1 && typeof args[0] === 'object' && Object.hasOwn(args[0], 'width')) ||
+      (args.length === 2 && (typeof args[1] === 'number' || (typeof args[1] === 'object' && !Object.hasOwn(args[0], 'width'))))
+    ) {
+      figure = new Rectangle(args[0], args[1])
     }
-    if (args.length === 2) {
+    if (
+      (args.length === 2 && typeof args[0] === 'object' && !Object.hasOwn(args[0], 'width') && typeof args[1] === 'object' && Object.hasOwn(args[1], 'width')) ||
+      args.length === 3
+    ) {
       const rect: IRect = { ...args[0], ...args[1] }
-      figure = new Rectangle(rect)
+      figure = new Rectangle(rect, args[2])
     }
-    if (args.length === 4) {
-      const [x, y, width, height] = args
-      figure = new Rectangle({ x, y, width, height })
+    if (args.length === 4 || args.length === 5) {
+      const [x, y, width, height, corners] = args
+      figure = new Rectangle({ x, y, width, height }, corners)
     }
     if (!figure) throw new Error('mismatch parameters')
     this.#figureStack.add(figure)
@@ -58,21 +65,21 @@ export class Shape2 extends Drawable {
     return figure
   }
 
-  circle (center: IPoint, radius: number): this | Shape2
+  circle (center: IPoint, radius: number, segmentCount?: number, smooth?: number): this | Shape2
   // eslint-disable-next-line no-dupe-class-members
-  circle (x: number, y: number, radius: number): this | Shape2
+  circle (x: number, y: number, radius: number, segmentCount?: number, smooth?: number): this | Shape2
   // eslint-disable-next-line no-dupe-class-members
   circle (...args: Array<any>): this | Shape2 {
     let figure: Circle | null = null
 
-    if (args.length === 3 && typeof args[0] === 'number' && typeof args[1] === 'number' && typeof args[2] === 'number') {
-      const [x, y, radius] = args
-      figure = new Circle(x, y, radius)
+    if (args.length >= 3 && typeof args[0] === 'number' && typeof args[1] === 'number' && typeof args[2] === 'number') {
+      const [x, y, radius, segmentCount, smooth] = args
+      figure = new Circle(x, y, radius, segmentCount, smooth)
     }
 
-    if (args.length === 2 && typeof args[0] === 'object' && typeof args[1] === 'number') {
-      const [center, radius] = args
-      figure = new Circle(center.x, center.y, radius)
+    if (args.length >= 2 && typeof args[0] === 'object' && typeof args[1] === 'number') {
+      const [center, radius, segmentCount, smooth] = args
+      figure = new Circle(center.x, center.y, radius, segmentCount, smooth)
     }
 
     if (!figure) throw new Error('mismatch parameters')
