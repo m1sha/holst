@@ -21,7 +21,7 @@ export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock, 
   }
   if (!block.multiline && !block.size) {
     const { x, y } = applyAnchor(block)
-    drawText(ctx, block.style, block.text, x, y)
+    drawText(ctx, block.style, block.text, x, y + block.charHeight)
   } else {
     const p = applyAnchor(block)
     let y = p.y + block.charHeight + getVerticalAlignmentPosition(block)
