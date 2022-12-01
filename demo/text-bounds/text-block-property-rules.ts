@@ -13,10 +13,10 @@ export function createTextBlockPropertyRules (textBlock: TextBlock): Rules {
     .category('Text Style')
     .color('Color', 'style.color', 0)
     .string('Size', 'style.fontSize', 0)
-    .string('Font Name', 'style.fontName', 0)
+    .string('Font', 'style.fontName', 0)
     .select('Bold', 'style.bold', Bold, 0)
     .bool('Italic', 'style.italic', 0)
-    .select('Font Variant', 'style.fontVariant', FontVariant, 0)
+    .select('Variant', 'style.fontVariant', FontVariant, 0)
     .custom('Outline', 'checkbox', () => textBlock.style.outlineColor && textBlock.style.outlineColor !== 'transparent',
       (rules, value) => {
         textBlock.style.outlineColor = value ? '#000' : undefined
@@ -31,11 +31,6 @@ export function createTextBlockPropertyRules (textBlock: TextBlock): Rules {
     .category('Text Transform')
     .number('x', 'target.x', 1)
     .number('y', 'target.y', 1)
-    .number('Line Height', 'lineHeight', 1)
-    .select('Overflow', 'overflow', Overflow, 1)
-    .select('Alignment', 'alignment', Alignment, 1)
-    .select('Vertical Alignment: ', 'verticalAlignment', VerticalAlignment, 1)
-    .select('Baseline', 'baseline', Baseline, 1)
     .custom('Fixed Size', 'checkbox', 'size',
       (rules, value) => {
         textBlock.size = value ? { width: 0, height: 0 } : undefined
@@ -47,4 +42,9 @@ export function createTextBlockPropertyRules (textBlock: TextBlock): Rules {
     )
     .number('Width', 'size.width', 1, !textBlock.size)
     .number('Height', 'size.height', 1, !textBlock.size)
+    .select('Overflow', 'overflow', Overflow, 1)
+    .number('Line Height', 'lineHeight', 1)
+    .select('Alignment', 'alignment', Alignment, 1)
+    .select('Vertical Alignment', 'verticalAlignment', VerticalAlignment, 1)
+    .select('Baseline', 'baseline', Baseline, 1)
 }
