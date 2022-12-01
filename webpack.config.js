@@ -43,6 +43,7 @@ if (process.env.libraryTarget === 'umd') {
   config.entry['raster.bundle'] = './demo/raster-filters/index.ts'
   config.entry['shape-bounds.bundle'] = './demo/shape-bounds/index.ts'
   config.entry['shape2.bundle'] = './demo/shape2/index.ts'
+  config.entry['text-bounds.bundle'] = './demo/text-bounds/index.ts'
 
   config.output.library = 'demo'
 }
