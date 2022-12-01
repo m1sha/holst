@@ -17,8 +17,17 @@ export function createTextBlockPropertyRules (textBlock: TextBlock): Rules {
     .select('Bold', 'style.bold', Bold, 0)
     .bool('Italic', 'style.italic', 0)
     .select('Font Variant', 'style.fontVariant', FontVariant, 0)
-    .color('Outline Color', 'style.outlineColor', 0)
-    .number('Outline Width', 'style.outlineWidth', 0)
+    .custom('Outline', 'checkbox', () => textBlock.style.outlineColor && textBlock.style.outlineColor !== 'transparent',
+      (rules, value) => {
+        textBlock.style.outlineColor = value ? '#000' : undefined
+        rules.getRule('Outline Color')!.hidden = !value
+        rules.getRule('Outline Width')!.hidden = !value
+      },
+      0,
+      false
+    )
+    .color('Outline Color', 'style.outlineColor', 0, !textBlock.style.outlineColor || textBlock.style.outlineColor !== 'transparent')
+    .number('Outline Width', 'style.outlineWidth', 0, !textBlock.style.outlineColor || textBlock.style.outlineColor !== 'transparent')
     .category('Text Transform')
     .number('x', 'target.x', 1)
     .number('y', 'target.y', 1)
@@ -30,12 +39,12 @@ export function createTextBlockPropertyRules (textBlock: TextBlock): Rules {
     .custom('Fixed Size', 'checkbox', 'size',
       (rules, value) => {
         textBlock.size = value ? { width: 0, height: 0 } : undefined
-        rules.getRule('width')!.hidden = !value
-        rules.getRule('height')!.hidden = !value
+        rules.getRule('Width')!.hidden = !value
+        rules.getRule('Height')!.hidden = !value
       },
       1,
       false
     )
-    .number('width', 'size.width', 1, !textBlock.size)
-    .number('height', 'size.height', 1, !textBlock.size)
+    .number('Width', 'size.width', 1, !textBlock.size)
+    .number('Height', 'size.height', 1, !textBlock.size)
 }
