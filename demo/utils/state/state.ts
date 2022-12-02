@@ -43,4 +43,8 @@ export class State {
     this.#storage.addViewObject(viewObject)
     viewObject.create(this.selectedLayer!)
   }
+
+  addViewObjects (viewObjects: ViewObject[]) {
+    viewObjects.forEach(p => this.addViewObject(p))
+  }
 }

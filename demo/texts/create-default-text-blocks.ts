@@ -1,4 +1,5 @@
 import { TextBlock, Point, TextStyle, IPoint, Color } from '../../src/index'
+import { ViewObject } from '../utils/model/view-object'
 
 export function createDefaultTextBlocks () {
   const textBlock0 = createText('Some Text\n', new Point(10, 100))
@@ -16,7 +17,14 @@ export function createDefaultTextBlocks () {
   textBlock.size = { width: 100, height: 50 }
   textBlock.overflow = 'word-break + clip'
 
-  return [textBlock0, textBlock1, textBlock2, textBlock3, textBlock4, textBlock]
+  return [
+    new ViewObject(textBlock0),
+    new ViewObject(textBlock1),
+    new ViewObject(textBlock2),
+    new ViewObject(textBlock3),
+    new ViewObject(textBlock4),
+    new ViewObject(textBlock)
+  ]
 }
 
 function createText (str: string, pos: IPoint) {

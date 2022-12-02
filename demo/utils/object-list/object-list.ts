@@ -7,8 +7,7 @@ export class ObjectList {
   #rootElement: HTMLDivElement | null = null
   #array: any[] = []
   filter: ((item: any) => boolean) | null = null
-  onGetTitle: ((item: any) => any) | null = null
-  // itemTemplate: ObjectItemTemplate | null = null
+  title: ((item: any) => any) | null = null
 
   constructor (state: State) {
     this.state = state
@@ -42,7 +41,7 @@ export class ObjectList {
       root.append(div)
       const p = document.createElement('p')
       div.append(p)
-      if (this.onGetTitle) p.textContent = this.onGetTitle(item)
+      if (this.title) p.textContent = this.title(item)
     }
   }
 
