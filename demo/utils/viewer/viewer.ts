@@ -1,5 +1,5 @@
 import { Renderer2D } from '../../../src'
-import { createDefaultTextBlocks } from '../../text-bounds/create-default-text-blocks'
+import { createDefaultTextBlocks } from '../../texts/create-default-text-blocks'
 import { MovementController } from '../movement/movement-controller'
 import { State } from '../state/state'
 
