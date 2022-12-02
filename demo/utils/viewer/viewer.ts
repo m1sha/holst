@@ -1,5 +1,4 @@
-import { Renderer2D } from '../../../src'
-import { createDefaultTextBlocks } from '../../texts/create-default-text-blocks'
+import { Renderer2D, TextBlock } from '../../../src'
 import { MovementController } from '../movement/movement-controller'
 import { State } from '../state/state'
 
@@ -27,7 +26,7 @@ export class Viewer {
   }
 
   build () {
-    createDefaultTextBlocks(this.state.selectedLayer!).forEach(p => this.movement.add(p))
+    this.state.selectedLayer!.entities.forEach(p => this.movement.add(p as TextBlock))
 
     const ctx = this.rootElement.getContext('2d')!
     const renderer = new Renderer2D(ctx)

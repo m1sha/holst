@@ -2,11 +2,12 @@ import { PropertyViewer } from '../utils/property-viewer/property-viewer'
 import { ObjectList } from '../utils/object-list/object-list'
 import { State } from '../utils/state/state'
 import { Viewer } from '../utils/viewer/viewer'
+import { createDefaultTextBlocks } from './create-default-text-blocks'
+import { ViewObject } from '../utils/model/view-object'
 
 export class Demo {
   private state: State
   private propertyViewer: PropertyViewer
-
   private objectList: ObjectList
   private viewer: Viewer
   private appDiv: HTMLDivElement
@@ -23,13 +24,14 @@ export class Demo {
     this.objectList.setItems(this.state.selectedLayer!.entities as any[])
     this.objectList.filter = item => item.type === 'text'
     this.objectList.onGetTitle = item => item.text ? item.text.replaceAll('\n', ' ') : ''
+    const textBlocks = createDefaultTextBlocks()
+    textBlocks.forEach(p => this.state.addViewObject(new ViewObject(p)))
 
     this.createView()
   }
 
   private createView () {
     this.appDiv.className = 'app'
-
     this.appDiv.append(this.objectList.rootElement)
     this.appDiv.append(this.viewer.rootElement)
     this.appDiv.append(this.propertyViewer.rootElement)
