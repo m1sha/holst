@@ -1,12 +1,15 @@
 import { Drawable, Point, Shape, TextBlock } from '../../../src'
 import { MouseEventDecorator } from '../../../src/core/events/decorators'
 import { InteractiveEvent } from '../../../src/core/events/interactive'
+import { State } from '../state/state'
 
 export class MovementController {
+  private state: State
   private drawables: (Shape | TextBlock)[] = []
-  selected: Drawable | null = null
-  onUpdate: (() => void) | null = null
-  onDrawableChanged: (() => void) | null = null
+
+  constructor (state: State) {
+    this.state = state
+  }
 
   add (drawable: Shape | TextBlock) {
     this.drawables.push(drawable)
@@ -14,26 +17,28 @@ export class MovementController {
   }
 
   private setEvents (drawable: Drawable) {
+    let delta = Point.zero
     drawable
       .on('hover', e => { e.cursor = 'pointer' })
       .on('leave', e => { e.cursor = 'default' })
       .on('mousedown', e => {
-        this.selected = drawable
-        if (this.onDrawableChanged) this.onDrawableChanged()
-        getPoint(e)
+        this.state.selectedObject = drawable
+        this.state.update()
+        delta = new Point(drawable.bounds).dec(getPoint(e))
       })
       .on('mousemove', e => {
         if (!e.event.pressed) return
         e.cursor = 'move'
         const p = getPoint(e)
         const t = drawable as TextBlock
-        t.target.x = p.x
-        t.target.y = p.y
+        t.target.x = delta.x + p.x
+        t.target.y = delta.y + p.y
       })
       .on('mouseup', e => {
-        getPoint(e)
+        delta = Point.zero
+        // getPoint(e)
         e.cursor = 'pointer'
-        if (this.onUpdate) this.onUpdate()
+        this.state.update()
       })
   }
 }

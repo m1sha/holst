@@ -12,24 +12,30 @@ export interface TextBlockLine {
   getWidth: () => number
 }
 
+export type TextAlignment = 'left' | 'center' | 'right' | 'justify'
+export type TextVerticalAlignment = 'top' | 'center' | 'bottom'
+export type Baseline = 'top' | 'hanging' | 'middle' | 'alphabetic' | 'ideographic' | 'bottom'
+export type Overflow = 'none' | 'word-break' | 'clip' | 'word-break + clip'
+export type TextMeasure = (text: string, style: TextStyle) => any
+
 export class TextBlock extends Drawable {
   #transform: Matrix2D = Matrix2D.identity
   private measure: (text: string, textStyle: TextStyle) => any
   text: string
   style: TextStyle
   target: IPoint
-  alignment: 'left' | 'center' | 'right' | 'justify' = 'left'
-  verticalAlignment: 'top' | 'center' | 'bottom' = 'top'
-  baseline: 'top' | 'hanging' | 'middle' | 'alphabetic' | 'ideographic' | 'bottom' = 'alphabetic'
+  alignment: TextAlignment = 'left'
+  verticalAlignment: TextVerticalAlignment = 'top'
+  baseline: Baseline = 'alphabetic'
   size?: Size
-  overflow: 'none' | 'word-break' | 'clip' | 'word-break + clip' = 'none'
+  overflow: Overflow = 'none'
   lineHeight: number = 0
 
-  constructor (text: string, style: TextStyle, order: number = 0, measure?: (text: string, style: TextStyle) => any) {
+  constructor (text: string, style: TextStyle, order: number = 0, measure?: TextMeasure) {
     super(order)
     this.text = text
     this.style = style
-    this.measure = measure ?? ((text: string, style: TextStyle) => TextMeasurer.measureText(text, style))
+    this.measure = measure ?? ((text, style) => TextMeasurer.measureText(text, style))
     this.target = new Point(0, 0)
   }
 
@@ -151,8 +157,8 @@ export class TextBlock extends Drawable {
 
     if (sentence) lines.push(sentence)
     return {
-      lines,
-      remainder: width
+      lines // ,
+      // remainder: width
     }
   }
 

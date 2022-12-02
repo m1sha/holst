@@ -2,6 +2,14 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.property-viewer {
+  width: 320px;
+  margin-left: 12px;
+  padding-right: 12px;
+  overflow-y: auto;
+  max-height: 600px;
+}
+
 .property-rules-category {
   color: #717171;
   font-size: 18px;

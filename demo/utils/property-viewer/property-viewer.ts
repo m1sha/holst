@@ -1,4 +1,7 @@
-import { Rules } from './prorerty-rules'
+import { TextBlock } from '../../../src'
+import { createTextBlockPropertyRules } from './text-block-property-rules'
+import { State } from '../state/state'
+import { Rules } from './property-rules'
 
 export type Rule = {
   title: string
@@ -43,22 +46,51 @@ class PropertyViewerControl {
 export class PropertyViewer {
   private rules: Rules | null = null
   private controls: PropertyViewerControl[] = []
+  private state: State
+  #rootElement: HTMLDivElement | null = null
+
+  constructor (state: State) {
+    this.state = state
+    this.state.addOnChange(() => {
+      if (!this.state.selectedObject) {
+        this.clearRules()
+        this.build()
+        return
+      }
+
+      this.setRules(createTextBlockPropertyRules(this.state.selectedObject as TextBlock))
+      this.build()
+      // this.rebuild()
+    })
+  }
+
+  get rootElement (): HTMLDivElement {
+    if (!this.#rootElement) {
+      this.#rootElement = document.createElement('div')
+      this.#rootElement.className = 'property-viewer'
+    }
+    return this.#rootElement
+  }
 
   setRules (rules: Rules) {
     this.rules = rules
     if (this.rules) this.rules.onUpdate = () => this.rebuild()
   }
 
-  build (root: HTMLDivElement) {
-    root.innerHTML = ''
+  clearRules () {
+    this.rules = null
+  }
+
+  build () {
+    this.rootElement.innerHTML = ''
     let categoryIndex = -1
     for (const rule of this.rules?.toArray() ?? []) {
       if (rule.categoryIndex !== categoryIndex) {
         categoryIndex = rule.categoryIndex
-        this.createCategory(categoryIndex, root)
+        this.createCategory(categoryIndex, this.rootElement)
       }
 
-      const div = this.createRow(root)
+      const div = this.createRow(this.rootElement)
       if (rule.hidden) div.style.display = 'none'
 
       const label = this.createLabel(rule, div)
@@ -87,7 +119,7 @@ export class PropertyViewer {
     }
   }
 
-  rebuild () {
+  private rebuild () {
     for (const control of this.controls) {
       control.update()
     }

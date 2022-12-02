@@ -1,5 +1,5 @@
-import { TextBlock } from '../../src/index'
-import { Rules } from '../utils/property-viewer/prorerty-rules'
+import { TextBlock } from '../../../src/index'
+import { Rules } from './property-rules'
 
 const Bold = ['normal', 'bold', 'lighter', 'bolder', '100', '200', '300', '400', '500', '600', '700', '800', '900']
 const FontVariant = ['normal', 'small-caps']
