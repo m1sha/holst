@@ -12,7 +12,7 @@ export class ObjectStorage {
     this.viewObjects.forEach(p => p.update(layer))
   }
 
-  select (viewObject: ViewObject) {
+  select (viewObject: Readonly<ViewObject>) {
     this.unselect()
     for (const object of this.viewObjects) {
       if (object.object.id === viewObject.object.id) {

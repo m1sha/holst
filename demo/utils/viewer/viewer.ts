@@ -9,9 +9,7 @@ export class Viewer {
 
   constructor (state: State) {
     this.state = state
-    this.state.addOnChange(() => {
-      this.update()
-    })
+    this.state.addOnChange(() => this.update())
     this.movement = new MovementController(this.state)
   }
 

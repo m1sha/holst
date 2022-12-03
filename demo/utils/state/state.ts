@@ -23,7 +23,7 @@ export class State {
     return this.#storage.viewObjects.find(p => p.selected)
   }
 
-  set selectedObject (value: ViewObject | undefined) {
+  set selectedObject (value: ViewObject | Readonly<ViewObject> | undefined) {
     if (value) {
       this.#storage.select(value)
     } else {

@@ -5,15 +5,12 @@ export type ObjectItemTemplate = (item: any, div: HTMLDivElement) => boolean
 export class ObjectList {
   private state: State
   #rootElement: HTMLDivElement | null = null
-  #array: any[] = []
   filter: ((item: any) => boolean) | null = null
   title: ((item: any) => any) | null = null
 
   constructor (state: State) {
     this.state = state
-    this.state.addOnChange(() => {
-      this.build()
-    })
+    this.state.addOnChange(() => this.build())
   }
 
   get rootElement (): HTMLDivElement {
@@ -24,18 +21,14 @@ export class ObjectList {
     return this.#rootElement
   }
 
-  setItems (array: any[]) {
-    this.#array = array
-  }
-
   build () {
-    if (!this.#array) return
+    if (!this.state.viewObjects) return
     const root = this.rootElement
     root.innerHTML = ''
 
-    for (const item of this.#array) {
+    for (const item of this.state.viewObjects) {
       const div = document.createElement('div')
-      const selected = item.id === this.state.selectedObject?.object.id
+      const selected = item.object.id === this.state.selectedObject?.object.id
       div.className = selected ? 'object-list-item selected' : 'object-list-item'
       if (!this.filter || !this.filter(item)) continue
       root.append(div)

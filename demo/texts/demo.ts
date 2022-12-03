@@ -9,33 +9,27 @@ export class Demo {
   private propertyViewer: PropertyViewer
   private objectList: ObjectList
   private viewer: Viewer
-  private appDiv: HTMLDivElement
 
-  constructor (div: HTMLDivElement) {
+  constructor () {
     this.state = new State()
     this.propertyViewer = new PropertyViewer(this.state)
     this.objectList = new ObjectList(this.state)
     this.viewer = new Viewer(this.state)
-    this.appDiv = div
   }
 
-  build () {
-    this.objectList.setItems(this.state.viewObjects as any[])
-    this.objectList.filter = item => item.object.type === 'text'
-    this.objectList.title = item => item.object.text ? item.object.text.replaceAll('\n', ' ') : ''
+  create (appDiv: HTMLDivElement) {
     this.state.addViewObjects(createDefaultTextBlocks())
 
-    this.createView()
-  }
+    this.objectList.filter = item => item.object.type === 'text'
+    this.objectList.title = item => item.object.text ? item.object.text.replaceAll('\n', ' ') : ''
 
-  private createView () {
-    this.appDiv.className = 'app'
-    this.appDiv.append(this.objectList.rootElement)
-    this.appDiv.append(this.viewer.rootElement)
-    this.appDiv.append(this.propertyViewer.rootElement)
-
+    this.objectList.build()
     this.propertyViewer.build()
     this.viewer.build()
-    this.objectList.build()
+
+    appDiv.className = 'app'
+    appDiv.append(this.objectList.rootElement)
+    appDiv.append(this.viewer.rootElement)
+    appDiv.append(this.propertyViewer.rootElement)
   }
 }
