@@ -22,7 +22,7 @@ export class MovementController {
       .on('hover', e => { e.cursor = 'pointer' })
       .on('leave', e => { e.cursor = 'default' })
       .on('mousedown', e => {
-        this.state.selectedObject = drawable
+        this.state.selectedObject = this.state.findViewObject(drawable.id)
         this.state.update()
         delta = new Point(drawable.bounds).dec(getPoint(e))
       })

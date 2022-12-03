@@ -1,4 +1,3 @@
-import { Drawable } from '../../../src'
 import { ViewObject } from './view-object'
 
 export class ObjectStorage {
@@ -11,10 +10,10 @@ export class ObjectStorage {
     this.viewObjects.forEach(p => p.update())
   }
 
-  select (drawable: Drawable) {
+  select (viewObject: ViewObject) {
     this.unselect()
     for (const object of this.viewObjects) {
-      if (object.object.id === drawable.id) {
+      if (object.object.id === viewObject.object.id) {
         object.selected = true
         return
       }

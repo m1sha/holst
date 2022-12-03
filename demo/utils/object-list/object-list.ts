@@ -35,13 +35,17 @@ export class ObjectList {
 
     for (const item of this.#array) {
       const div = document.createElement('div')
-      const selected = item.id === this.state.selectedObject?.id
+      const selected = item.id === this.state.selectedObject?.object.id
       div.className = selected ? 'object-list-item selected' : 'object-list-item'
       if (!this.filter || !this.filter(item)) continue
       root.append(div)
       const p = document.createElement('p')
       div.append(p)
       if (this.title) p.textContent = this.title(item)
+      div.addEventListener('click', () => {
+        this.state.selectedObject = item
+        this.state.update()
+      })
     }
   }
 

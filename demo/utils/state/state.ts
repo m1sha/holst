@@ -1,10 +1,10 @@
-import { Drawable, Layer, Scene } from '../../../src'
+import { Layer, Scene } from '../../../src'
 import { ObjectStorage } from '../model/storage'
 import { ViewObject } from '../model/view-object'
 
 export class State {
   private delegates: (() => void)[] = []
-  selectedLayer: Layer | null = null
+  private selectedLayer: Layer | null = null
   #scene: Scene | null = null
   #storage: ObjectStorage = new ObjectStorage()
 
@@ -17,12 +17,11 @@ export class State {
     return this.#scene
   }
 
-  get selectedObject () {
-    const viewObject = this.#storage.viewObjects.find(p => p.selected)
-    return viewObject ? viewObject.object : null
+  get selectedObject (): ViewObject | undefined {
+    return this.#storage.viewObjects.find(p => p.selected)
   }
 
-  set selectedObject (value: Drawable | null) {
+  set selectedObject (value: ViewObject | undefined) {
     if (value) {
       this.#storage.select(value)
     } else {
@@ -31,8 +30,16 @@ export class State {
     this.#storage.update()
   }
 
+  get viewObjects (): Readonly<Readonly<ViewObject>[]> {
+    return this.#storage.viewObjects
+  }
+
+  findViewObject (id: string) {
+    return this.#storage.viewObjects.find(p => p.object.id === id)
+  }
+
   update () {
-    this.delegates.forEach(p => p())
+    this.delegates.forEach(update => update())
   }
 
   addOnChange (delegate: () => void) {

@@ -26,7 +26,7 @@ export class Viewer {
   }
 
   build () {
-    this.state.selectedLayer!.entities.forEach(p => this.movement.add(p as TextBlock))
+    this.state.viewObjects.forEach(p => this.movement.add(p.object as TextBlock))
 
     const ctx = this.rootElement.getContext('2d')!
     const renderer = new Renderer2D(ctx)

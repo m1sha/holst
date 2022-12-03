@@ -20,9 +20,9 @@ export class Demo {
   }
 
   build () {
-    this.objectList.setItems(this.state.selectedLayer!.entities as any[])
-    this.objectList.filter = item => item.type === 'text'
-    this.objectList.title = item => item.text ? item.text.replaceAll('\n', ' ') : ''
+    this.objectList.setItems(this.state.viewObjects as any[])
+    this.objectList.filter = item => item.object.type === 'text'
+    this.objectList.title = item => item.object.text ? item.object.text.replaceAll('\n', ' ') : ''
     this.state.addViewObjects(createDefaultTextBlocks())
 
     this.createView()

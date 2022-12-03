@@ -1,4 +1,3 @@
-import { TextBlock } from '../../../src'
 import { createTextBlockPropertyRules } from './text-block-property-rules'
 import { State } from '../state/state'
 import { Rules } from './property-rules'
@@ -58,7 +57,7 @@ export class PropertyViewer {
         return
       }
 
-      this.setRules(createTextBlockPropertyRules(this.state.selectedObject as TextBlock))
+      this.setRules(createTextBlockPropertyRules(this.state.selectedObject))
       this.build()
       // this.rebuild()
     })
