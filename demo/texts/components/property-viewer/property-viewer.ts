@@ -1,6 +1,7 @@
 import { createTextBlockPropertyRules } from './text-block-property-rules'
 import { State } from '../../model/state'
 import { Rules } from './property-rules'
+import { Component } from '../base/component'
 
 export type Rule = {
   title: string
@@ -42,13 +43,13 @@ class PropertyViewerControl {
   }
 }
 
-export class PropertyViewer {
+export class PropertyViewer extends Component<HTMLDivElement> {
   private rules: Rules | null = null
   private controls: PropertyViewerControl[] = []
   private state: State
-  #rootElement: HTMLDivElement | null = null
 
   constructor (state: State) {
+    super()
     this.state = state
     this.state.addOnChange(() => {
       if (!this.state.selectedObject) {
@@ -61,14 +62,6 @@ export class PropertyViewer {
       this.build()
       // this.rebuild()
     })
-  }
-
-  get rootElement (): HTMLDivElement {
-    if (!this.#rootElement) {
-      this.#rootElement = document.createElement('div')
-      this.#rootElement.className = 'property-viewer'
-    }
-    return this.#rootElement
   }
 
   setRules (rules: Rules) {
@@ -181,4 +174,7 @@ export class PropertyViewer {
     parentNode.append(select)
     return select
   }
+
+  protected get name (): string { return 'property-viewer' }
+  protected get elementType (): string { return 'div' }
 }

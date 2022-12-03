@@ -1,26 +1,17 @@
 import { Renderer2D, TextBlock } from '../../../../src'
 import { State } from '../../model/state'
+import { Component } from '../base/component'
 import { MovementController } from './movement/movement-controller'
 
-export class Viewer {
+export class Viewer extends Component<HTMLCanvasElement> {
   private movement: MovementController
   private state: State
-  #rootElement: HTMLCanvasElement | null = null
 
   constructor (state: State) {
+    super()
     this.state = state
     this.state.addOnChange(() => this.update())
     this.movement = new MovementController(this.state)
-  }
-
-  get rootElement (): HTMLCanvasElement {
-    if (!this.#rootElement) {
-      this.#rootElement = document.createElement('canvas')
-      this.#rootElement.className = 'viewer'
-      this.#rootElement.width = 800
-      this.#rootElement.height = 600
-    }
-    return this.#rootElement
   }
 
   build () {
@@ -33,5 +24,12 @@ export class Viewer {
 
   update () {
     //
+  }
+
+  protected get name (): string { return 'viewer' }
+  protected get elementType (): string { return 'canvas' }
+  protected onElementSetting (element: HTMLCanvasElement) {
+    element.width = 800
+    element.height = 600
   }
 }

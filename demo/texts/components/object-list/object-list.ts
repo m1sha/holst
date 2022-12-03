@@ -1,24 +1,17 @@
 import { State } from '../../model/state'
+import { Component } from '../base/component'
 
 export type ObjectItemTemplate = (item: any, div: HTMLDivElement) => boolean
 
-export class ObjectList {
+export class ObjectList extends Component<HTMLDivElement> {
   private state: State
-  #rootElement: HTMLDivElement | null = null
   filter: ((item: any) => boolean) | null = null
   title: ((item: any) => any) | null = null
 
   constructor (state: State) {
+    super()
     this.state = state
     this.state.addOnChange(() => this.build())
-  }
-
-  get rootElement (): HTMLDivElement {
-    if (!this.#rootElement) {
-      this.#rootElement = document.createElement('div')
-      this.#rootElement.className = 'object-list'
-    }
-    return this.#rootElement
   }
 
   build () {
@@ -45,4 +38,7 @@ export class ObjectList {
   private rebuild () {
     //
   }
+
+  protected get name (): string { return 'object-list' }
+  protected get elementType (): string { return 'div' }
 }
