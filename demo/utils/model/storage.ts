@@ -1,3 +1,4 @@
+import { Layer } from '../../../src'
 import { ViewObject } from './view-object'
 
 export class ObjectStorage {
@@ -6,8 +7,9 @@ export class ObjectStorage {
     this.viewObjects.push(viewObject)
   }
 
-  update () {
-    this.viewObjects.forEach(p => p.update())
+  update (layer: Layer) {
+    layer.clear()
+    this.viewObjects.forEach(p => p.update(layer))
   }
 
   select (viewObject: ViewObject) {

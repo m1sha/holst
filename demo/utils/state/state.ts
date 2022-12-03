@@ -5,11 +5,13 @@ import { ViewObject } from '../model/view-object'
 export class State {
   private delegates: (() => void)[] = []
   private selectedLayer: Layer | null = null
+  private techLayer: Layer | null = null
   #scene: Scene | null = null
   #storage: ObjectStorage = new ObjectStorage()
 
   constructor () {
     this.selectedLayer = this.scene.createLayer()
+    this.techLayer = this.scene.createLayer()
   }
 
   get scene () {
@@ -27,7 +29,7 @@ export class State {
     } else {
       this.#storage.unselect()
     }
-    this.#storage.update()
+    this.#storage.update(this.techLayer!)
   }
 
   get viewObjects (): Readonly<Readonly<ViewObject>[]> {

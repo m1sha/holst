@@ -1,26 +1,34 @@
 import { Drawable, Layer, TextBlock, Shape, Color } from '../../../src'
 
 export class ViewObject {
-  object: Drawable
-  frame: Shape | null
+  readonly object: Drawable
+  private boundsFrame: Shape | null
+  private selectFrame: Shape | null
   selected: boolean = false
+  showBounds: boolean = false
 
   constructor (drawable: Drawable) {
     this.object = drawable
-    this.frame = null
+    this.boundsFrame = null
+    this.selectFrame = null
   }
 
   create (layer: Layer) {
     const drawable = this.object as TextBlock
     layer.add(drawable)
     const bounds = drawable.bounds
-    this.frame = Shape.create({ stroke: Color.orange }).rect(bounds)
-    this.frame.hidden = !this.selected
-    layer.add(this.frame)
+    this.boundsFrame = Shape.create({ stroke: Color.orange }).rect(bounds)
+    this.boundsFrame.hidden = !this.showBounds
+    layer.add(this.boundsFrame)
   }
 
-  update () {
-    if (!this.frame) return
-    this.frame.hidden = !this.selected
+  update (layer: Layer) {
+    if (!this.boundsFrame) return
+    this.boundsFrame.hidden = !this.showBounds
+    if (this.selected) {
+      const bounds = this.object.bounds
+      this.selectFrame = Shape.create({ stroke: Color.blue, lineDash: [5, 3] }).rect(bounds.outline(-8))
+      layer.add(this.selectFrame)
+    }
   }
 }
