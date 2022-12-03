@@ -1,5 +1,5 @@
 import { createTextBlockPropertyRules } from './text-block-property-rules'
-import { State } from '../state/state'
+import { State } from '../../model/state'
 import { Rules } from './property-rules'
 
 export type Rule = {

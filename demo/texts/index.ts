@@ -1,3 +1,3 @@
-import { Demo } from './demo'
+import { App } from './components/app'
 
-export const createDemo = (app: HTMLDivElement) => (new Demo()).create(app)
+export const createDemo = (app: HTMLDivElement) => (new App().create(app))

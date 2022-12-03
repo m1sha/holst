@@ -1,10 +1,10 @@
-import { PropertyViewer } from '../utils/property-viewer/property-viewer'
-import { ObjectList } from '../utils/object-list/object-list'
-import { State } from '../utils/state/state'
-import { Viewer } from '../utils/viewer/viewer'
-import { createDefaultTextBlocks } from './create-default-text-blocks'
+import { PropertyViewer } from './property-viewer/property-viewer'
+import { ObjectList } from './object-list/object-list'
+import { State } from '../model/state'
+import { createDefaultTextBlocks } from '../create-default-text-blocks'
+import { Viewer } from './viewer/viewer'
 
-export class Demo {
+export class App {
   private state: State
   private propertyViewer: PropertyViewer
   private objectList: ObjectList

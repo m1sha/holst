@@ -1,5 +1,5 @@
 import { TextBlock, Point, TextStyle, IPoint, Color } from '../../src/index'
-import { ViewObject } from '../utils/model/view-object'
+import { ViewObject } from './model/view-object'
 
 export function createDefaultTextBlocks () {
   const textBlock0 = createText('Some Text\n', new Point(10, 100))

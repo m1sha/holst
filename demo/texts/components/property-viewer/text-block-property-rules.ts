@@ -1,5 +1,5 @@
-import { TextBlock } from '../../../src/index'
-import { ViewObject } from '../model/view-object'
+import { TextBlock } from '../../../../src/index'
+import { ViewObject } from '../../model/view-object'
 import { Rules } from './property-rules'
 
 const Bold = ['normal', 'bold', 'lighter', 'bolder', '100', '200', '300', '400', '500', '600', '700', '800', '900']

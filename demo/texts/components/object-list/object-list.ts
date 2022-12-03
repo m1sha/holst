@@ -1,4 +1,4 @@
-import { State } from '../state/state'
+import { State } from '../../model/state'
 
 export type ObjectItemTemplate = (item: any, div: HTMLDivElement) => boolean
 

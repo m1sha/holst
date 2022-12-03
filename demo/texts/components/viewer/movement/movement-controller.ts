@@ -1,7 +1,7 @@
-import { Drawable, Point, Shape, TextBlock } from '../../../src'
-import { MouseEventDecorator } from '../../../src/core/events/decorators'
-import { InteractiveEvent } from '../../../src/core/events/interactive'
-import { State } from '../state/state'
+import { Drawable, Point, Shape, TextBlock } from '../../../../../src'
+import { MouseEventDecorator } from '../../../../../src/core/events/decorators'
+import { InteractiveEvent } from '../../../../../src/core/events/interactive'
+import { State } from '../../../model/state'
 
 export class MovementController {
   private state: State

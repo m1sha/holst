@@ -1,4 +1,4 @@
-import { getValue, setValue } from '../reflection'
+import { getValue, setValue } from '../../utils/reflection'
 import { Rule } from './property-viewer'
 
 export class Rules {

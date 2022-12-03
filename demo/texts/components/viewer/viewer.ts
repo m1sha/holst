@@ -1,6 +1,6 @@
-import { Renderer2D, TextBlock } from '../../../src'
-import { MovementController } from '../movement/movement-controller'
-import { State } from '../state/state'
+import { Renderer2D, TextBlock } from '../../../../src'
+import { State } from '../../model/state'
+import { MovementController } from './movement/movement-controller'
 
 export class Viewer {
   private movement: MovementController

@@ -1,6 +1,6 @@
 import { Layer, Scene } from '../../../src'
-import { ObjectStorage } from '../model/storage'
-import { ViewObject } from '../model/view-object'
+import { ObjectStorage } from './storage'
+import { ViewObject } from './view-object'
 
 export class State {
   private delegates: (() => void)[] = []
