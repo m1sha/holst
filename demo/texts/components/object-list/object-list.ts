@@ -4,13 +4,11 @@ import { Component } from '../base/component'
 export type ObjectItemTemplate = (item: any, div: HTMLDivElement) => boolean
 
 export class ObjectList extends Component<HTMLDivElement> {
-  private state: State
   filter: ((item: any) => boolean) | null = null
   title: ((item: any) => any) | null = null
 
   constructor (state: State) {
-    super()
-    this.state = state
+    super(state)
     this.state.addOnChange(() => this.build())
   }
 

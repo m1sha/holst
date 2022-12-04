@@ -5,11 +5,9 @@ import { MovementController } from './movement/movement-controller'
 
 export class Viewer extends Component<HTMLCanvasElement> {
   private movement: MovementController
-  private state: State
 
   constructor (state: State) {
-    super()
-    this.state = state
+    super(state)
     this.state.addOnChange(() => this.update())
     this.movement = new MovementController(this.state)
   }

@@ -19,11 +19,9 @@ export type Rule = {
 export class PropertyViewer extends Component<HTMLDivElement> {
   private rules: Rules | null = null
   private controls: PropertyViewerControl[] = []
-  private state: State
 
   constructor (state: State) {
-    super()
-    this.state = state
+    super(state)
     this.state.addOnChange(() => {
       if (!this.state.selectedObject) {
         this.clearRules()
