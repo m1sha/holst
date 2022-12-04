@@ -6,15 +6,7 @@ import { Layer } from '../layers'
 import { sort } from '../../utils/sorter'
 import Orderable from '../orderable'
 import { Drawable } from '../drawable'
-import Shape from '../shape'
-import { TextBlock } from '../label'
-import { Raster } from '../raster'
-import { Sprite } from '../sprite'
-import { drawRaster } from './drafters/draw-raster'
-import { drawShape } from './drafters/draw-shape'
-import { drawSprite } from './drafters/draw-sprite'
-import { drawTextBlock } from './drafters/draw-text-block'
-import { Shape2 } from '../shape2'
+import { drawDrawables } from './drafters/draw-drawables'
 export interface IRenderer {
   render (scene: Scene): void
   clear (): void
@@ -58,14 +50,7 @@ export abstract class RendererBase implements IRenderer {
   protected drawLayer ({ entities, mask }: Readonly<Layer>, ctx: CanvasRenderingContext2D) {
     const list = sort(entities as Orderable[]) as Drawable[]
 
-    for (const item of list) {
-      if (item.hidden) continue
-      if (item instanceof Shape || item instanceof Shape2) drawShape(ctx, item, mask)
-      if (item instanceof TextBlock) drawTextBlock(ctx, item, mask)
-      if (item instanceof Raster) drawRaster(ctx, item, mask)
-      if (item instanceof Sprite) drawSprite(ctx, item, mask)
-      this.setHandler(item)
-    }
+    drawDrawables(ctx, list, mask, item => this.setHandler(item))
   }
 
   protected setHandler (obj: Drawable) {
