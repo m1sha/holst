@@ -14,6 +14,7 @@ import { Matrix2D } from './matrix'
 import { removeItem } from '../utils/array'
 import { calcBounds } from '../utils/utils'
 import { Shape2 } from './shape2'
+import { Group } from './group'
 export class Layer implements Orderable {
   private objects: Orderable[] = []
   private styleManager: StyleManager
@@ -59,7 +60,7 @@ export class Layer implements Orderable {
     return result
   }
 
-  add (entity: Shape2 | Shape | TextBlock | Raster | Sprite): void {
+  add (entity: Shape2 | Shape | TextBlock | Raster | Sprite | Group): void {
     if (entity instanceof Shape2) {
       this.addShape2(entity)
       return
@@ -78,6 +79,10 @@ export class Layer implements Orderable {
     }
     if (entity instanceof Sprite) {
       this.addSprite(entity)
+      return
+    }
+    if (entity instanceof Group) {
+      this.addGroup(entity)
       return
     }
     throw new Error('The entity has an unknown type')
@@ -116,6 +121,11 @@ export class Layer implements Orderable {
   addSprite (sprite: Sprite) {
     if (!sprite.order) sprite.order = this.arrange.order
     this.objects.push(sprite)
+  }
+
+  addGroup (group: Group) {
+    if (!group.order) group.order = this.arrange.order
+    this.objects.push(group)
   }
 
   clear () {
@@ -181,6 +191,10 @@ export class Layer implements Orderable {
 
   get sprites (): Sprite[] {
     return this.objects.filter(p => p instanceof Sprite) as Sprite[]
+  }
+
+  get groups (): Group[] {
+    return this.objects.filter(p => p instanceof Group) as Group[]
   }
 
   get entities (): Readonly<Orderable[]> {

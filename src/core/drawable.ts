@@ -8,7 +8,7 @@ import { EventHandlerBag, IEventHandler } from './events/event-handler2'
 import { Matrix2D } from './matrix'
 import { Transformable } from './transformable'
 
-export type DrawableType = 'shape' | 'text' | 'raster' | 'sprite'
+export type DrawableType = 'shape' | 'text' | 'raster' | 'sprite' | 'group'
 export abstract class Drawable extends Transformable implements Interactive, Orderable {
   #modified: boolean
   #anchor: Anchor | null = null

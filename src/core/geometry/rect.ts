@@ -147,6 +147,14 @@ export class Rect implements IRect, Size {
     return this.x === rect.x && this.y === rect.y && this.width === rect.width && this.height === rect.height
   }
 
+  join (rect: IRect): this {
+    this.x = Math.min(this.x, rect.x)
+    this.y = Math.min(this.x, rect.x)
+    this.width = this.x + this.width > rect.x + rect.width ? this.width : rect.width
+    this.height = this.y + this.height > rect.y + rect.height ? this.height : rect.height
+    return this
+  }
+
   static fromCenter (cp: IPoint, size: Size): Rect
   // eslint-disable-next-line no-dupe-class-members
   static fromCenter (cp: IPoint, width: number, height: number): Rect
