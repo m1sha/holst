@@ -50,7 +50,7 @@ export class TextBlock extends Drawable {
 
   get height (): number {
     const w = this.getHeight()
-    if (this.size) return this.wrappedLines.length * (w + this.lineHeight)
+    if (this.size) return this.computedLines.length * (w + this.lineHeight)
     if (this.multiline) return this.lines.length * (w + this.lineHeight)
     return w
   }
@@ -70,11 +70,13 @@ export class TextBlock extends Drawable {
     })
   }
 
-  get wrappedLines (): TextBlockLine[] {
+  get computedLines (): TextBlockLine[] {
     if (!this.size) throw new Error('The property size must be defined.')
     const lines = this.lines
     if (!lines) return []
-    const maxWidth = this.size.width
+    const maxWidth = this.overflow === 'word-break' || this.overflow === 'word-break + clip'
+      ? this.size.width
+      : Math.max.apply(null, lines.map(p => p.getWidth()))
 
     const result = []
     for (let i = 0; i < lines.length; i++) {
@@ -91,8 +93,24 @@ export class TextBlock extends Drawable {
     return result
   }
 
+  get computedSize (): Size {
+    const lines = this.size ? this.computedLines : this.lines
+    const rowHeight = this.charHeight
+    const width = this.overflow === 'word-break' || this.overflow === 'word-break + clip'
+      ? this.size!.width
+      : Math.max.apply(null, lines.map(p => p.getWidth()))
+    const height = this.overflow === 'clip' || this.overflow === 'word-break + clip'
+      ? this.size!.height
+      : lines.length * (rowHeight + this.lineHeight)
+
+    return {
+      width,
+      height
+    }
+  }
+
   get bounds (): Rect {
-    return new Rect(this.target, this.size ? this.size : { width: this.width, height: this.height })
+    return new Rect(this.target, this.computedSize)
   }
 
   get position (): IPoint {

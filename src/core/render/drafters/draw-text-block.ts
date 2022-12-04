@@ -13,26 +13,26 @@ export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock, 
   assignTextStyle(ctx, block.style)
   ctx.setTransform(block.getTransform().mul(block.globalTransform ?? Matrix2D.identity))
   ctx.textBaseline = block.baseline
+
   const cut = block.overflow === 'clip' || block.overflow === 'word-break + clip'
   if (cut && block.size) {
     const textClipping = new Path2D()
     textClipping.rect(block.target.x, block.target.y, block.size.width, block.size.height)
     ctx.clip(textClipping)
   }
-  if (!block.multiline && !block.size) {
-    const { x, y } = applyAnchor(block)
-    drawText(ctx, block.style, block.text, x, y + block.charHeight)
-  } else {
-    const p = applyAnchor(block)
-    let y = p.y + block.charHeight + getVerticalAlignmentPosition(block)
-    const wrap = block.overflow === 'word-break' || block.overflow === 'word-break + clip'
-    const lines = wrap ? block.wrappedLines : block.lines
-    for (const line of lines) {
-      const x = getAlignmentPosition(p.x, block, line)
-      if (block.alignment === 'justify') makeLineJustify(ctx, block, line, x, y)
-      else drawText(ctx, block.style, line.text, x, y)
-      y += block.charHeight + block.lineHeight
-    }
+
+  const position = applyAnchor(block)
+  let y = position.y + block.charHeight + getVerticalAlignmentPosition(block)
+  const wrap = block.overflow === 'word-break' || block.overflow === 'word-break + clip'
+  const lines = wrap ? block.computedLines : block.lines
+
+  for (const line of lines) {
+    const x = getAlignmentPosition(position.x, block, line)
+
+    if (block.alignment === 'justify') makeLineJustify(ctx, block, line, x, y)
+    else drawText(ctx, block.style, line.text, x, y)
+
+    y += block.charHeight + block.lineHeight
   }
 
   ctx.restore()
@@ -50,15 +50,15 @@ function getAlignmentPosition (dx: number, { alignment, width, size }: TextBlock
 }
 
 function getVerticalAlignmentPosition (block: TextBlock) {
-  if (!block.size) return 0
+  const size = block.computedSize
   if (block.verticalAlignment === 'top') return 0
-  if (block.verticalAlignment === 'bottom') return block.size.height - block.height
-  if (block.verticalAlignment === 'center') return (block.size.height / 2) - (block.height / 2)
+  if (block.verticalAlignment === 'bottom') return size.height - block.height
+  if (block.verticalAlignment === 'center') return (size.height / 2) - (block.height / 2)
   return 0
 }
 
-function makeLineJustify (ctx: CanvasRenderingContext2D, { width, style, size }: TextBlock, line: TextBlockLine, x: number, y: number) {
-  const realWidth = size ? size.width : width
+function makeLineJustify (ctx: CanvasRenderingContext2D, { style, computedSize }: TextBlock, line: TextBlockLine, x: number, y: number) {
+  const realWidth = computedSize.width
   if (realWidth === line.getWidth()) {
     drawText(ctx, style, line.text, x, y)
     return
