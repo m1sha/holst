@@ -1,5 +1,5 @@
 import { Matrix2D } from './matrix'
-import { TextStyle } from './styles/label-style'
+import { TextStyle, TextStyleImpl } from './styles/label-style'
 import { Point, IPoint } from './geometry/point'
 import { Rect } from './geometry/rect'
 import { TextMeasurer } from './text-measurer'
@@ -34,7 +34,7 @@ export class TextBlock extends Drawable {
   constructor (text: string, style: TextStyle, order: number = 0, measure?: TextMeasure) {
     super(order)
     this.text = text
-    this.style = style
+    this.style = new TextStyleImpl(style || {}, () => (this.modified = true))
     this.measure = measure ?? ((text, style) => TextMeasurer.measureText(text, style))
     this.target = new Point(0, 0)
   }
