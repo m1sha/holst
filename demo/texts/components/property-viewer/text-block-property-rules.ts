@@ -8,6 +8,7 @@ const Overflow = ['none', 'word-break', 'clip', 'word-break + clip']
 const Alignment = ['left', 'center', 'right', 'justify']
 const VerticalAlignment = ['top', 'center', 'bottom']
 const Baseline = ['top', 'hanging', 'middle', 'alphabetic', 'ideographic', 'bottom']
+const FontNames = ['Arial', 'Courier New', 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif', 'serif']
 
 export function createTextBlockPropertyRules (viewObject: ViewObject): Rules {
   const textBlock = viewObject.object as TextBlock
@@ -17,7 +18,7 @@ export function createTextBlockPropertyRules (viewObject: ViewObject): Rules {
     .category('Text Style')
     .color('Color', 'object.style.color', 0)
     .string('Size', 'object.style.fontSize', 0)
-    .string('Font', 'object.style.fontName', 0)
+    .select('Font', 'object.style.fontName', FontNames, 0)
     .select('Bold', 'object.style.bold', Bold, 0)
     .bool('Italic', 'object.style.italic', 0)
     .select('Variant', 'object.style.fontVariant', FontVariant, 0)
@@ -37,7 +38,7 @@ export function createTextBlockPropertyRules (viewObject: ViewObject): Rules {
     .number('y', 'object.target.y', 1)
     .custom('Fixed Size', 'checkbox', 'object.size',
       (rules, value) => {
-        textBlock.size = value ? { width: 0, height: 0 } : undefined
+        textBlock.size = value ? textBlock.computedSize : undefined
         rules.getRule('Width')!.hidden = !value
         rules.getRule('Height')!.hidden = !value
       },
