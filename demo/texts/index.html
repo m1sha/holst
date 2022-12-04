@@ -3,19 +3,17 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Texts Demo</title>
+  <title>Text bounds</title>
+  <link rel="stylesheet" href="./components/css/app.css">
+  <link rel="stylesheet" href="./components/property-viewer/css/property-viewer.css">
+  <link rel="stylesheet" href="./components/object-list/css/object-list.css">
   <style>
-    .border {
-      border: 1px solid #d4d4d4;
-    }
+    canvas { border: 1px solid #333;}
   </style>
 </head>
 <body>
-  <canvas id="canvas" width="1500" height="850" class="border"></canvas>
+  <div id="app"></div>
   <script src="../../dist/texts.bundle.js"></script>
-  <script>
-    var canvas = document.getElementById('canvas')
-    demo.createTextsDemo(canvas)
-  </script>
+  <script>demo.createDemo(document.getElementById('app'))</script>
 </body>
 </html>

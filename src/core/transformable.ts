@@ -3,8 +3,16 @@ import { Rect } from './geometry/rect'
 import { Matrix2D } from './matrix'
 
 export abstract class Transformable {
-  protected abstract get transform(): Matrix2D
-  protected abstract set transform(value: Matrix2D)
+  protected _transform: Matrix2D = Matrix2D.identity
+
+  protected get transform (): Matrix2D {
+    return this._transform
+  }
+
+  protected set transform (value: Matrix2D) {
+    this._transform = value
+  }
+
   abstract get bounds(): Rect
 
   getTransform () {
