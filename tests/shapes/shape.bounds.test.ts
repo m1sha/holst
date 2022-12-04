@@ -8,6 +8,18 @@ test('Shape check bounds rect', () => {
   expect(shape.bounds).toEqual(new Rect(0, 0, 100, 100))
 })
 
+test('Shape check bounds roundRect', () => {
+  const shape = mockShapeFactory()
+  shape.roundRect(new Rect(0, 0, 100, 100), 8)
+  expect(shape.bounds).toEqual(new Rect(0, 0, 100, 100))
+})
+
+test('Shape check bounds segmentedCircle', () => {
+  const shape = mockShapeFactory()
+  shape.segmentedCircle(50, 50, 50, 6, 1)
+  expect(shape.bounds).toEqual(new Rect(0, 0, 100, 100))
+})
+
 test('Shape check bounds circle', () => {
   const shape = mockShapeFactory()
   shape.circle({ x: 50, y: 50 }, 50)
@@ -17,6 +29,12 @@ test('Shape check bounds circle', () => {
 test('Shape check bounds ellipse', () => {
   const shape = mockShapeFactory()
   shape.ellipse({ x: 50, y: 50 }, 50, 50, 0, 0, Math.PI * 2)
+  expect(shape.bounds).toEqual(new Rect(0, 0, 100, 100))
+})
+
+test('Shape check bounds arc', () => {
+  const shape = mockShapeFactory()
+  shape.arc({ x: 50, y: 50 }, 50, 0, Math.PI * 2)
   expect(shape.bounds).toEqual(new Rect(0, 0, 100, 100))
 })
 

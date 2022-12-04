@@ -14,6 +14,7 @@ import { drawRaster } from './drafters/draw-raster'
 import { drawShape } from './drafters/draw-shape'
 import { drawSprite } from './drafters/draw-sprite'
 import { drawTextBlock } from './drafters/draw-text-block'
+import { Shape2 } from '../shape2'
 export interface IRenderer {
   render (scene: Scene): void
   clear (): void
@@ -59,7 +60,7 @@ export abstract class RendererBase implements IRenderer {
 
     for (const item of list) {
       if (item.hidden) continue
-      if (item instanceof Shape) drawShape(ctx, item, mask)
+      if (item instanceof Shape || item instanceof Shape2) drawShape(ctx, item, mask)
       if (item instanceof TextBlock) drawTextBlock(ctx, item, mask)
       if (item instanceof Raster) drawRaster(ctx, item, mask)
       if (item instanceof Sprite) drawSprite(ctx, item, mask)

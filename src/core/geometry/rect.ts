@@ -8,6 +8,18 @@ export interface IRect {
   width: number
   height: number
 }
+
+export interface IRectReadonly{
+  readonly x: number
+  readonly y: number
+  readonly width: number
+  readonly height: number
+  readonly absWidth: number
+  readonly absHeight: number
+  readonly center: Readonly<IPoint>
+  readonly absCenter: Readonly<IPoint>
+}
+
 export class Rect implements IRect, Size {
   x: number = 0
   y: number = 0
@@ -57,12 +69,28 @@ export class Rect implements IRect, Size {
     return this.y + this.height
   }
 
+  get topLeft () {
+    return new Point(this.x, this.y)
+  }
+
+  get topRight () {
+    return new Point(this.absWidth, this.y)
+  }
+
+  get bottomLeft () {
+    return new Point(this.x, this.absHeight)
+  }
+
+  get bottomRight () {
+    return new Point(this.absWidth, this.absHeight)
+  }
+
   get points (): Point[] {
     return [
-      new Point(this.x, this.y),
-      new Point(this.absWidth, this.y),
-      new Point(this.absWidth, this.absHeight),
-      new Point(this.x, this.absHeight)
+      this.topLeft,
+      this.topRight,
+      this.bottomRight,
+      this.bottomLeft
     ]
   }
 
@@ -117,5 +145,21 @@ export class Rect implements IRect, Size {
 
   equals (rect: IRect): boolean {
     return this.x === rect.x && this.y === rect.y && this.width === rect.width && this.height === rect.height
+  }
+
+  static fromCenter (cp: IPoint, size: Size): Rect
+  // eslint-disable-next-line no-dupe-class-members
+  static fromCenter (cp: IPoint, width: number, height: number): Rect
+  // eslint-disable-next-line no-dupe-class-members
+  static fromCenter (...args: Array<any>): Rect {
+    if (args.length === 2 && typeof args[0] === 'object' && typeof args[1] === 'object') {
+      const [cp, size] = args
+      return new Rect(cp.x - size.width / 2, cp.y - size.height / 2, size.width, size.height)
+    }
+    if (args.length === 3 && typeof args[0] === 'object' && typeof args[1] === 'number' && typeof args[2] === 'number') {
+      const [cp, width, height] = args
+      return new Rect(cp.x - width / 2, cp.y - height / 2, width, height)
+    }
+    throw new Error('mismatch parameters')
   }
 }
