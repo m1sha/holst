@@ -12,7 +12,8 @@ const FontNames = ['Arial', 'Courier New', 'Segoe UI', 'Tahoma', 'Geneva', 'Verd
 
 export function createTextBlockPropertyRules (viewObject: ViewObject): Rules {
   const textBlock = viewObject.object as TextBlock
-  const isTransparent = () => textBlock.style.outlineColor && textBlock.style.outlineColor !== 'transparent'
+  const isTransparent = (viewObject: ViewObject) =>
+    !(viewObject.object as TextBlock).style.outlineColor || textBlock.style.outlineColor === 'transparent'
 
   return new Rules(viewObject)
     .category('Text Style')
@@ -22,7 +23,7 @@ export function createTextBlockPropertyRules (viewObject: ViewObject): Rules {
     .select('Bold', 'object.style.bold', Bold, 0)
     .bool('Italic', 'object.style.italic', 0)
     .select('Variant', 'object.style.fontVariant', FontVariant, 0)
-    .custom('Outline', 'checkbox', isTransparent,
+    .custom('Outline', 'checkbox', () => !isTransparent(viewObject),
       (rules, value) => {
         textBlock.style.outlineColor = value ? '#000' : undefined
         rules.getRule('Outline Color')!.hidden = !value
@@ -31,8 +32,8 @@ export function createTextBlockPropertyRules (viewObject: ViewObject): Rules {
       0,
       false
     )
-    .color('Outline Color', 'object.style.outlineColor', 0, !textBlock.style.outlineColor || textBlock.style.outlineColor !== 'transparent')
-    .number('Outline Width', 'object.style.outlineWidth', 0, !textBlock.style.outlineColor || textBlock.style.outlineColor !== 'transparent')
+    .color('Outline Color', 'object.style.outlineColor', 0, isTransparent(viewObject))
+    .number('Outline Width', 'object.style.outlineWidth', 0, isTransparent(viewObject))
     .category('Text Transform')
     .number('x', 'object.target.x', 1)
     .number('y', 'object.target.y', 1)
