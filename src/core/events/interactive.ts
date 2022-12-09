@@ -26,10 +26,13 @@ export interface EventType {
   'drop': InteractiveEvent<DragEventDecorator>
 }
 
+export type EventListener = <K extends keyof EventType>(ev: EventType[K]) => void
+
 export interface Interactive {
-  on<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): this | Interactive
+  on<K extends keyof EventType> (type: K, listener: EventListener): this | Interactive
   off<K extends keyof EventType> (type: K): this | Interactive
   inPath (p: Point): boolean
   id: string
   order: number
+  name: string
 }

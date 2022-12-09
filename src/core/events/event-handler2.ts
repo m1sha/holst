@@ -2,6 +2,7 @@ import { removeItem } from '../../utils/array'
 import { EventType, Interactive } from './interactive'
 import { HandlerResolver } from './handler-resolver'
 import { MouseCursorTypes } from './mouse-cursor-types'
+import { IHTMLCanvasElement } from '../render/html-canvas-element'
 
 export interface IEventHandler {
   type: 'bag' | 'common'
@@ -10,8 +11,11 @@ export interface IEventHandler {
 }
 
 type F<K extends keyof EventType> = { interactive: Interactive; listener: (ev: EventType[K]) => void }
+type F2<K extends keyof EventType> = (ev: EventType[K]) => void
+
 export type ListenerType = F<keyof EventType>
 export type EventHandlers = Record<string, ListenerType[]>
+export type ListenerCallback = F2<keyof EventType>
 export class EventHandlerBag implements IEventHandler {
   type: 'bag' | 'common' = 'bag'
   /** @internal */ handlers: EventHandlers = {}
@@ -27,10 +31,23 @@ export class EventHandlerBag implements IEventHandler {
   }
 }
 
+export class SceneEventHandler {
+  handlers: Record<string, ListenerCallback> = {}
+
+  add<K extends keyof EventType> (type: K, listener: (ev: EventType[K]) => void): void {
+    this.handlers[type] = listener as ListenerCallback
+  }
+
+  remove<K extends keyof EventType> (type: K): void {
+    delete this.handlers[type]
+  }
+}
+
 export class EventHandler implements IEventHandler {
   type: 'bag' | 'common' = 'common'
   private handlers: EventHandlers
   private element: HTMLCanvasElement
+  private sceneEventHandler: SceneEventHandler | null = null
 
   constructor (canvas: HTMLCanvasElement) {
     this.element = canvas
@@ -64,8 +81,12 @@ export class EventHandler implements IEventHandler {
     }
   }
 
+  setSceneEventHandlers (sceneEventHandler: SceneEventHandler) {
+    this.sceneEventHandler = sceneEventHandler
+  }
+
   private init () {
-    const resolver = new HandlerResolver(this.handlers, this.element)
+    const resolver = new HandlerResolver(this.element, this.handlers, this.sceneEventHandler?.handlers)
     this.element.onclick = e => resolver.onclick(e)
     this.element.ondblclick = e => resolver.ondblclick(e)
     this.element.onmousemove = e => resolver.onmousemove(e)
@@ -84,11 +105,11 @@ export class EventHandler implements IEventHandler {
 }
 
 export class InteractiveEvent<TEvent> {
-  private canvas: HTMLCanvasElement
+  private canvas: IHTMLCanvasElement
   event: TEvent
   target: Interactive
 
-  constructor (event: TEvent, target: Interactive, canvas: HTMLCanvasElement) {
+  constructor (event: TEvent, target: Interactive, canvas: IHTMLCanvasElement) {
     this.event = event
     this.target = target
     this.canvas = canvas

@@ -21,6 +21,7 @@ export abstract class RendererBase implements IRenderer {
   render (scene: Scene): void {
     if (this.animationHandler.isStarted) return
     this.animationHandler.start(scene)
+    this.eventHandler.setSceneEventHandlers(scene.eventHandler)
   }
 
   abstract clear (): void

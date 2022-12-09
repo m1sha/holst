@@ -11,8 +11,10 @@ export async function createContainersDemo (canvas: HTMLCanvasElement) {
   const layer = scene.createLayer()
 
   const circle = layer.createShape({ fill: Color.red }).circle(300, 100, 50)
+  circle.name = 'Red Circle'
 
   const shape = layer.createShape({ fill: '#115511' }).rect(10, 10, 100, 100)
+  shape.name = 'Green Rect'
   const anchor = Anchor.create(shape)
   const whiteRect = layer.createShape({ fill: '#fff' }).rect(10, 10, 20, 20)
   // whiteRect.order = 2
@@ -52,7 +54,8 @@ export async function createContainersDemo (canvas: HTMLCanvasElement) {
       rect.y = delta.y + p.y
     })
     .on('dblclick', e => {
-      console.log('main shape shape order is ' + shape.order)
+      console.log('main shape shape order is ' + shape.name)
+      e.event.stopPropagation()
     })
 
   let delta2 = Point.zero
@@ -85,7 +88,7 @@ export async function createContainersDemo (canvas: HTMLCanvasElement) {
       // console.log(circle.toString())
     })
     .on('dblclick', e => {
-      console.log('circle order is ' + circle.order)
+      console.log('circle order is ' + circle.name)
     })
 
   whiteRect.on('dblclick', e => {
