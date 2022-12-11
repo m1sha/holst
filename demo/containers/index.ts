@@ -1,101 +1,88 @@
-import { Assets, Scene, Renderer2D, Rect, Point, Anchor, IPoint, Color } from '../../src/index'
+import { Assets, Scene, Renderer2D, Rect, Point, Anchor, IPoint, Color, Drawable, Shape } from '../../src/index'
 
-export async function createContainersDemo (canvas: HTMLCanvasElement) {
-  const assets = new Assets()
-  assets.add('swamp', '/img/swamp.png')
-  await assets.busy
+export async function createDemo (appDiv: HTMLDivElement) {
+  const assets = await loadAssets()
   const raster = assets.get('swamp')
 
   const scene = new Scene()
-
   const layer = scene.createLayer()
 
-  const circle = layer.createShape({ fill: Color.red }).circle(300, 100, 50)
-  circle.name = 'Red Circle'
+  const redCircle = Shape.create({ fill: Color.red }).circle(300, 100, 50)
+  redCircle.name = 'Red Circle'
 
-  const shape = layer.createShape({ fill: '#115511' }).rect(10, 10, 100, 100)
-  shape.name = 'Green Rect'
-  const anchor = Anchor.create(shape)
-  const whiteRect = layer.createShape({ fill: '#fff' }).rect(10, 10, 20, 20)
-  // whiteRect.order = 2
-  whiteRect.setAnchor(anchor)
-  whiteRect.hidden = true
+  const blueCircle = Shape.create({ fill: Color.darkBlue }).circle(300, 300, 70)
+  blueCircle.name = 'Blue Circle'
 
-  layer.addRaster(raster)
+  const greenRect = Shape.create({ fill: '#115511' }).rect(10, 10, 100, 100)
+  greenRect.name = 'Green Rect'
+  const anchor = Anchor.create(greenRect)
+
+  layer.add(redCircle)
+  layer.add(blueCircle)
+  layer.add(greenRect)
+
+  layer.add(raster)
+
   raster.setAnchor(anchor)
   raster.distRect = new Rect(10, 40, 150, 150)
-  // raster.order = 5
 
-  let delta = Point.zero
-  shape
-    .on('hover', e => {
-      e.event.stopPropagation()
-      shape.shadow.set({ x: 10, y: 4 }, 8, '#aaa')
-    })
-    .on('leave', () => shape.shadow.clear())
-    .on('mousedown', e => {
-      e.event.stopPropagation()
-      const p = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
-      delta = new Point(shape.figures.first() as IPoint).dec(p)
-    })
-    .on('mouseup', e => {
-      e.cursor = 'default'
-    })
-    .on('mousemove', e => {
-      if (!e.event.pressed) {
-        return
-      }
-      e.event.stopPropagation()
+  setEvents(redCircle)
+  setEvents(blueCircle)
+  setEvents(greenRect)
 
-      e.cursor = 'move'
-      const p = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
-      const rect = shape.figures.first() as IPoint
-      rect.x = delta.x + p.x
-      rect.y = delta.y + p.y
-    })
-    .on('dblclick', e => {
-      console.log('main shape shape order is ' + shape.name)
-      e.event.stopPropagation()
-    })
-
-  let delta2 = Point.zero
-  circle
-    .on('hover', e => {
-      e.event.stopPropagation()
-      circle.shadow.set({ x: 10, y: 4 }, 8, '#aaa')
-    })
-    .on('leave', () => circle.shadow.clear())
-    .on('mousedown', e => {
-      e.event.stopPropagation()
-      const p = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
-      delta2 = new Point(circle.figures.last() as IPoint).dec(p)
-    })
-    .on('mouseup', e => {
-      e.cursor = 'default'
-    })
-    .on('mousemove', e => {
-      if (!e.event.pressed) {
-        return
-      }
-      e.event.stopPropagation()
-
-      e.cursor = 'move'
-      const p = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
-      const rect = circle.figures.last() as IPoint
-      rect.x = delta2.x + p.x
-      rect.y = delta2.y + p.y
-
-      // console.log(circle.toString())
-    })
-    .on('dblclick', e => {
-      console.log('circle order is ' + circle.name)
-    })
-
-  whiteRect.on('dblclick', e => {
-    e.event.stopPropagation()
-    console.log('whiteRect order is ' + whiteRect.order)
-  })
-
+  const canvas = document.createElement('canvas')
+  canvas.width = 900
+  canvas.height = 700
   const renderer = new Renderer2D(canvas.getContext('2d')!!)
   renderer.render(scene)
+  appDiv.append(canvas)
+}
+
+function setEvents (drawable: Drawable) {
+  let delta = Point.zero
+  drawable
+    .on('hover', e => {
+      e.event.stopPropagation()
+      if (drawable instanceof Shape) drawable.shadow.set({ x: 10, y: 4 }, 8, '#aaa')
+    })
+    .on('leave', e => {
+      e.event.stopPropagation()
+      if (drawable instanceof Shape) drawable.shadow.clear()
+    })
+    .on('mousedown', e => {
+      e.event.stopPropagation()
+      const p = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
+      if (drawable instanceof Shape) delta = new Point(drawable.figures.last() as IPoint).dec(p)
+    })
+    .on('mouseup', e => {
+      e.cursor = 'default'
+    })
+    .on('mousemove', e => {
+      if (!e.event.hit) return
+      e.event.stopPropagation()
+      console.log('mousemove on ' + drawable.name)
+      if (!e.event.pressed) {
+        return
+      }
+
+      e.cursor = 'move'
+      const p = { x: e.event.origin.offsetX, y: e.event.origin.offsetY }
+
+      if (drawable instanceof Shape) {
+        const rect = drawable.figures.last() as IPoint
+        rect.x = delta.x + p.x
+        rect.y = delta.y + p.y
+      }
+    })
+    .on('dblclick', e => {
+      console.log('name ' + drawable.name + ' order ' + drawable.order)
+      e.event.stopPropagation()
+    })
+}
+
+async function loadAssets () {
+  const assets = new Assets()
+  assets.add('swamp', '/img/swamp.png')
+  await assets.busy
+  return assets
 }
