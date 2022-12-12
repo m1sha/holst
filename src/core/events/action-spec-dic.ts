@@ -19,12 +19,13 @@ export class ActionSpecDic {
   }
 
   setStopPropagation (id: string) {
-    if (!this.items.has(id)) return
-    this.items.get(id)!!.stopPropagation = true
+    // if (!this.items.has(id)) return
+    this.items.get(id)!.stopPropagation = true
   }
 
   isStopPropagation (id: string) {
-    return this.items.get(id)!!.stopPropagation
+    const item = this.items.get(id)
+    return item && item.stopPropagation
   }
 
   clearAll () {

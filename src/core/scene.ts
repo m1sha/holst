@@ -5,6 +5,8 @@ import { StyleManager } from './styles/style-manager'
 import { TaskManager } from './tasks/task-manager'
 import { Animation, AnimationOptions } from './animations/animation'
 import { removeItem } from '../utils/array'
+import { EventType } from './events/interactive'
+import { SceneEventHandler } from './events/event-handler2'
 
 export class Scene {
     private _layers: Layer []
@@ -83,6 +85,18 @@ export class Scene {
     get layers (): Readonly<Layer>[] {
       return this._layers
     }
+
+    on<EventTypeKey extends keyof EventType> (type: EventTypeKey, listener: (ev: EventType[EventTypeKey]) => void): this {
+      this.eventHandler.add(type, listener)
+      return this
+    }
+
+    off<EventTypeKey extends keyof EventType> (type: EventTypeKey): this {
+      this.eventHandler.remove(type)
+      return this
+    }
+
+    /** @internal */ eventHandler: SceneEventHandler = new SceneEventHandler()
 
     /* @internal */ invokeAnimation (t: number) {
       this.taskManager.invoke(t)

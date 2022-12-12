@@ -1,195 +1,166 @@
 import { EventType } from './interactive'
 import { Point } from '../geometry/point'
-import { EventHandlers, InteractiveEvent, ListenerType } from './event-handler2'
+import { EventHandlers, InteractiveEvent, ListenerCallback, ListenerType } from './event-handler2'
 import { ActionSpecDic } from './action-spec-dic'
 import { MouseEventDecorator, KeyboardEventDecorator, DragEventDecorator } from './decorators'
+import { IHTMLCanvasElement } from '../render/html-canvas-element'
 
 export class HandlerResolver {
   private handlers: EventHandlers
-  private element: HTMLCanvasElement
+  private element: IHTMLCanvasElement
   private hovered: ActionSpecDic
   private pressed: ActionSpecDic
   private dragged: ActionSpecDic
+  private sceneHandlers: Record<string, ListenerCallback>
 
-  constructor (handlers: EventHandlers, canvas: HTMLCanvasElement) {
+  constructor (canvas: IHTMLCanvasElement, handlers: EventHandlers, sceneHandlers?: Record<string, ListenerCallback>) {
     this.handlers = handlers
     this.element = canvas
     this.hovered = new ActionSpecDic()
     this.pressed = new ActionSpecDic()
     this.dragged = new ActionSpecDic()
+    this.sceneHandlers = sceneHandlers ?? {}
   }
 
   onclick (e: MouseEvent) {
-    this.setHandler('click', p => {
-      if (!this.hit(p, e)) return true
-      const decorator = new MouseEventDecorator(e)
-      p.listener(this.createEvent(decorator, p))
+    callAll(this.handlers.click, 'click', e, (p, decorator) => {
+      if (!this.hit(p, e)) return
 
-      return !decorator.isStopPropagation
+      p.listener(this.createEvent(decorator, p))
     })
   }
 
   ondblclick (e: MouseEvent): any {
-    this.setHandler('dblclick', p => {
-      if (!this.hit(p, e)) return true
-      const decorator = new MouseEventDecorator(e)
-      p.listener(this.createEvent(decorator, p))
+    callAll(this.handlers.dblclick, 'dblclick', e, (p, decorator) => {
+      if (!this.hit(p, e)) return
 
-      return !decorator.isStopPropagation
+      p.listener(this.createEvent(decorator, p))
     })
   }
 
   onmousemove (e: MouseEvent) {
-    this.setHandler('leave', p => {
-      if (this.hit(p, e)) return true
+    callAll(this.handlers.leave, 'leave', e, (p, decorator) => {
+      if (this.hit(p, e)) return
       const id = p.interactive.id
-      if (!this.hovered.has(id)) return true
-      this.hovered.clear(id)
-      const decorator = new MouseEventDecorator(e)
-      p.listener(this.createEvent(decorator, p))
 
-      return !decorator.isStopPropagation
+      if (!this.hovered.has(id)) return
+
+      this.hovered.clear(id)
+
+      p.listener(this.createEvent(decorator, p))
     })
 
-    this.setHandler('hover', p => {
-      if (!this.hit(p, e)) return true
+    callAll(this.handlers.hover, 'hover', e, (p, decorator) => {
+      if (!this.hit(p, e)) return
       const id = p.interactive.id
-      if (this.hovered.has(id)) {
-        return !this.hovered.isStopPropagation(id)
+
+      if (this.hovered.isStopPropagation(id)) {
+        decorator.stopPropagation()
+        return
       }
 
+      if (this.hovered.has(id)) return
       this.hovered.set(id)
-      const decorator = new MouseEventDecorator(e)
+
       p.listener(this.createEvent(decorator, p))
 
       if (decorator.isStopPropagation) {
         this.hovered.setStopPropagation(id)
-        return false
       }
-      return true
     })
 
-    this.setHandler('mousemove', p => {
+    callAll(this.handlers.mousemove, 'mousemove', e, (p, decorator) => {
       const id = p.interactive.id
       const hit = this.hit(p, e)
       const pressed = this.pressed.has(id)
-      const decorator = new MouseEventDecorator(e, pressed, hit)
+      decorator.pressed = pressed
+      decorator.hit = hit
       p.listener(this.createEvent(decorator, p))
-
-      return !decorator.isStopPropagation
     })
   }
 
   onmouseleave (e: MouseEvent) {
-    this.setHandler('leave', p => {
+    callAll(this.handlers.leave, 'leave', e, (p, decorator) => {
       const id = p.interactive.id
-      if (!this.hovered.has(id)) return true
+      if (!this.hovered.has(id)) return
       this.hovered.clear(id)
-      const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
-
-      return true
     })
 
     this.pressed.clearAll()
   }
 
   onmouseup (e: MouseEvent) {
-    this.setHandler('mouseup', p => {
+    callAll(this.handlers.mouseup, 'mouseup', e, (p, decorator) => {
       const id = p.interactive.id
-      if (!this.pressed.has(id)) return true
+      if (!this.pressed.has(id)) return
       this.pressed.clear(id)
-      const decorator = new MouseEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
-
-      return !decorator.isStopPropagation
     })
   }
 
   onmousedown (e: MouseEvent) {
-    this.setHandler('mousedown', p => {
-      if (!this.hit(p, e)) return true
+    callAll(this.handlers.mousedown, 'mousedown', e, (p, decorator) => {
+      if (!this.hit(p, e)) return
       const id = p.interactive.id
-      if (this.pressed.has(id)) return true
+      if (this.pressed.has(id)) return
       this.pressed.set(id)
-      const decorator = new MouseEventDecorator(e)
-      p.listener(this.createEvent(decorator, p))
 
-      return !decorator.isStopPropagation
+      p.listener(this.createEvent(decorator, p))
     })
   }
 
   onkeyup (e: KeyboardEvent) {
-    this.setHandler('keyup', p => {
-      const decorator = new KeyboardEventDecorator(e)
+    callAll(this.handlers.keyup, 'keyup', e, (p, decorator) => {
       p.listener(this.createEvent(decorator, p))
-
-      return !decorator.isStopPropagation
     })
   }
 
   onkeydown (e: KeyboardEvent) {
-    this.setHandler('keydown', p => {
-      const decorator = new KeyboardEventDecorator(e)
+    callAll(this.handlers.keydown, 'keydown', e, (p, decorator) => {
       p.listener(this.createEvent(decorator, p))
-
-      return !decorator.isStopPropagation
     })
   }
 
   onwheel (e: WheelEvent): any {
-    this.setHandler('wheel', p => {
-      const decorator = new MouseEventDecorator(e)
+    callAll(this.handlers.wheel, 'wheel', e, (p, decorator) => {
       p.listener(this.createEvent(decorator, p))
-
-      return !decorator.isStopPropagation
     })
   }
 
   ondragover (e: DragEvent): any {
-    this.setHandler('dragover', p => {
+    callAll(this.handlers.dragover, 'dragover', e, (p, decorator) => {
       e.preventDefault()
       e.dataTransfer!!.dropEffect = 'move'
       if (!this.hit(p, e)) {
-        return true
+        return
       }
       const id = p.interactive.id
       this.dragged.set(id)
-      const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
-
-      return !decorator.isStopPropagation
     })
 
-    this.setHandler('dragleave', p => {
-      if (this.hit(p, e)) return true
+    callAll(this.handlers.dragleave, 'dragleave', e, (p, decorator) => {
+      if (this.hit(p, e)) return
       const id = p.interactive.id
-      if (!this.dragged.has(id)) return true
+      if (!this.dragged.has(id)) return
       this.dragged.clear(id)
-      const decorator = new DragEventDecorator(e)
-      p.listener(this.createEvent(decorator, p))
 
-      return !decorator.isStopPropagation
+      p.listener(this.createEvent(decorator, p))
     })
   }
 
   ondragleave (e: DragEvent): any {
-    this.setHandler('dragleave', p => {
+    callAll(this.handlers.dragleave, 'dragleave', e, (p, decorator) => {
       this.dragged.clearAll()
-      const decorator = new DragEventDecorator(e)
       p.listener(this.createEvent(decorator, p))
-
-      return !decorator.isStopPropagation
     })
   }
 
   ondrop (e: DragEvent): any {
-    this.setHandler('drop', p => {
-      if (!this.hit(p, e)) return true
-      const decorator = new DragEventDecorator(e)
+    callAll(this.handlers.drop, 'drop', e, (p, decorator) => {
+      if (!this.hit(p, e)) return
       p.listener(this.createEvent(decorator, p))
-
-      return !decorator.isStopPropagation
     })
   }
 
@@ -201,21 +172,6 @@ export class HandlerResolver {
     throw new Error('Method not implemented.' + e as string)
   }
 
-  private setHandler (name: keyof EventType, callback: (p: ListenerType) => boolean) {
-    const handlers = this.handlers[name]
-    if (!handlers) return
-
-    const sortedHandlers = handlers.sort((a, b) => { // BADCODE revise this solution
-      if (a.interactive.order > b.interactive.order) return -1
-      if (a.interactive.order < b.interactive.order) return 1
-      return 0
-    })
-
-    for (const handler of sortedHandlers) {
-      if (!callback(handler)) break
-    }
-  }
-
   private createEvent<T> (e: T, p: ListenerType) {
     return new InteractiveEvent(e, p.interactive, this.element)
   }
@@ -223,4 +179,46 @@ export class HandlerResolver {
   private hit (p: ListenerType, e: MouseEvent) {
     return p.interactive.inPath(new Point(e.offsetX, e.offsetY))
   }
+}
+
+function callAll (handlers: ListenerType[], name: keyof EventType, e: Event, callback: (p: ListenerType, decorator: any) => void) {
+  if (!handlers) return
+
+  const sortedHandlers = handlers.sort((a, b) => { // BADCODE revise this solution
+    return b.interactive.order - a.interactive.order
+  })
+
+  // console.log(sortedHandlers.map(p => p.interactive.order).join(', '))
+
+  const decorator = createDecorator(name, e)
+  for (const handler of sortedHandlers) {
+    callback(handler, decorator)
+    // console.log(name + ': ' + handler.interactive.name + ' (' + handler.interactive.order + ') is stopped:' + decorator.isStopPropagation)
+    if (decorator.isStopPropagation) break
+  }
+  // if (!decorator.isStopPropagation) {
+  //   if (this.sceneHandlers[name]) this.sceneHandlers[name](this.createEvent(decorator))
+  // }
+}
+
+function createDecorator (name: keyof EventType, e: Event) {
+  switch (name) {
+    case 'click':
+    case 'dblclick':
+    case 'mousedown':
+    case 'mousemove':
+    case 'mouseup':
+    case 'hover':
+    case 'leave':
+    case 'wheel':
+      return new MouseEventDecorator(e as MouseEvent)
+    case 'keydown':
+    case 'keyup':
+      return new KeyboardEventDecorator(e as KeyboardEvent)
+    case 'drop':
+    case 'dragleave':
+    case 'dragover':
+      return new DragEventDecorator(e as DragEvent)
+  }
+  throw new Error(`Event type ${name} is unsupported`)
 }
