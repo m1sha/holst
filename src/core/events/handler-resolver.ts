@@ -42,7 +42,9 @@ export class HandlerResolver {
     callAll(this.handlers.leave, 'leave', e, (p, decorator) => {
       if (this.hit(p, e)) return
       const id = p.interactive.id
+
       if (!this.hovered.has(id)) return
+
       this.hovered.clear(id)
 
       p.listener(this.createEvent(decorator, p))
@@ -51,6 +53,12 @@ export class HandlerResolver {
     callAll(this.handlers.hover, 'hover', e, (p, decorator) => {
       if (!this.hit(p, e)) return
       const id = p.interactive.id
+
+      if (this.hovered.isStopPropagation(id)) {
+        decorator.stopPropagation()
+        return
+      }
+
       if (this.hovered.has(id)) return
       this.hovered.set(id)
 
@@ -176,8 +184,6 @@ export class HandlerResolver {
 function callAll (handlers: ListenerType[], name: keyof EventType, e: Event, callback: (p: ListenerType, decorator: any) => void) {
   if (!handlers) return
 
-  // console.log(name)
-
   const sortedHandlers = handlers.sort((a, b) => { // BADCODE revise this solution
     return b.interactive.order - a.interactive.order
   })
@@ -187,7 +193,7 @@ function callAll (handlers: ListenerType[], name: keyof EventType, e: Event, cal
   const decorator = createDecorator(name, e)
   for (const handler of sortedHandlers) {
     callback(handler, decorator)
-    console.log(name + ': ' + handler.interactive.name + ' (' + handler.interactive.order + ') is stopped:' + decorator.isStopPropagation)
+    // console.log(name + ': ' + handler.interactive.name + ' (' + handler.interactive.order + ') is stopped:' + decorator.isStopPropagation)
     if (decorator.isStopPropagation) break
   }
   // if (!decorator.isStopPropagation) {
