@@ -1,41 +1,14 @@
 import { Component } from '../base/component'
 import { Panel } from './panel'
 
+export type AppMap = any
 export class Grid extends Component<HTMLDivElement> {
   private panels: Panel[] = []
   protected get name (): string { return 'grid' }
   protected get elementType (): string { return 'div' }
 
-  addPanels (...panelNames: Array<string | any>) {
-    for (const panelName of panelNames) {
-      if (typeof panelName === 'string') {
-        this.panels.push(new Panel(panelName))
-        continue
-      }
-
-      if (typeof panelName === 'object') {
-        const keys = Object.keys(panelName)
-        if (!keys.length) throw new Error('')
-        const rootPanelName = keys[0]
-        const items = panelName[rootPanelName]
-        if (!Array.isArray(items)) throw new Error(rootPanelName + ' value must be array')
-
-        const rootPanel = new Panel(rootPanelName)
-        this.panels.push(rootPanel)
-        for (const subPanelName of items) {
-          if (typeof subPanelName === 'string') {
-            const subPanel = new Panel(subPanelName)
-            rootPanel.addPanel(subPanel)
-          }
-        }
-      }
-    }
-  }
-
-  appendToPanel (panelName: string, element: HTMLElement) {
-    const panel = this.findPanel(panelName, this.panels)
-    if (!panel) throw new Error('Panel ' + panelName + ' is not found')
-    panel.addElement(element)
+  add (appMap: AppMap) {
+    this.addPanel(appMap, this.panels)
   }
 
   build () {
@@ -45,17 +18,19 @@ export class Grid extends Component<HTMLDivElement> {
     }
   }
 
-  private findPanel (panelName: string, panels: Panel[]): Panel | undefined {
-    for (const panel of panels) {
-      if (panel.panelName === panelName) {
-        return panel
+  private addPanel (obj: any, parents: Panel[]) {
+    const keys = Object.keys(obj)
+    for (const key of keys) {
+      const value = obj[key]
+      const panel = new Panel(key)
+      parents.push(panel)
+
+      if (value instanceof Component) {
+        panel.addElement(value.rootElement)
+        continue
       }
 
-      if (panel.panels) {
-        const result = this.findPanel(panelName, panel.panels)
-        if (result) return result
-      }
+      this.addPanel(value, panel.panels)
     }
-    return undefined
   }
 }

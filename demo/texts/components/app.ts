@@ -38,11 +38,16 @@ export class App {
     appDiv.className = 'app'
     appDiv.append(this.grid.rootElement)
 
-    this.grid.addPanels('top-side', { 'body-side': ['left-side', 'middle-side', 'right-side', 'bottom-side'] })
-    this.grid.appendToPanel('top-side', this.toolbar.rootElement)
-    this.grid.appendToPanel('left-side', this.objectList.rootElement)
-    this.grid.appendToPanel('middle-side', this.viewer.rootElement)
-    this.grid.appendToPanel('right-side', this.propertyViewer.rootElement)
+    const appMap = {
+      'top-side': this.toolbar,
+      'body-side': {
+        'left-side': this.objectList,
+        'middle-side': this.viewer,
+        'right-side': this.propertyViewer
+      }
+    }
+
+    this.grid.add(appMap)
     this.grid.build()
   }
 }
