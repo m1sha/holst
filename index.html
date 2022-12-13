@@ -34,7 +34,7 @@
         var ref = document.createElement('a')
         ref.href = '/#' + item.name
         ref.textContent = item.title
-        ref.addEventListener('click', function () { loadDemo(item) })
+        ref.addEventListener('click', function () { unloadDemo(); loadDemo(item) })
 
         itemBlock.append(ref)
         listBlock.append(itemBlock)
@@ -54,13 +54,25 @@
       var script = document.createElement('script')
       script.onload = () => demo.createDemo(document.getElementById('app'))
       script.src = 'dist/' + item.name + '.bundle.js'
+      script.id = 'demo'
       document.head.append(script)
+      let i = 0
       if (item.css) for (const css of item.css) {
         const style = document.createElement('link')
         style.rel = 'stylesheet'
         style.setAttribute('rel', 'stylesheet')
         style.href = 'demo/' + item.name + css
+        style.id = 'demo' + (++i).toString()
         document.head.append(style)
+      }
+    }
+
+    function unloadDemo () {
+      let item = document.getElementById('demo')
+      if (item) document.head.removeChild(item)
+      for (let i = 0; i < 10; i++) {
+        item = document.getElementById('demo' + i)
+        if (item) document.head.removeChild(item)
       }
     }
 
