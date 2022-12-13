@@ -2,7 +2,11 @@ import { Scene, Renderer2D, Color, Rect, Point, Size, ShapeStyle, Matrix2D, Text
 // import { Size } from '../../core/size'
 // import { ShapeStyle } from '../../core/shape-style'
 
-export function createMatrixDemo (canvas: HTMLCanvasElement) {
+export function createDemo (appDiv: HTMLDivElement) {
+  const canvas = document.createElement('canvas')
+  canvas.height = 600
+  canvas.width = 800
+  appDiv.append(canvas)
   const scene = new Scene()
   const size: Size = canvas
   const frame = new Rect(0, 0, size.width, size.height)

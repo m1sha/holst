@@ -3,7 +3,12 @@ import { Scene, Renderer2D, Rect, Shape, Layer, IPoint } from '../../src/index'
 // import { IPoint } from '../../core/point'
 import { rotate } from '../../src/core/geometry/transform'
 
-export function createCurvesDemo (canvas: HTMLCanvasElement) {
+export function createDemo (appDiv: HTMLDivElement) {
+  const canvas = document.createElement('canvas')
+  canvas.height = 600
+  canvas.width = 800
+  appDiv.append(canvas)
+
   const scene = new Scene()
   const layer0 = scene.createLayer()
   const rect = new Rect(100, 100, 200, 200)

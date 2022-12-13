@@ -1,5 +1,5 @@
 import { DynamicCanvasRenderer2D, Scene } from '../../src/index'
-export function createDynamicCanvasRendererDemo (container: HTMLDivElement) {
+export function createDemo (container: HTMLDivElement) {
   const scene = new Scene()
   const renderer = new DynamicCanvasRenderer2D()
   renderer.render(scene)

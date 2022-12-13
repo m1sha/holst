@@ -1,6 +1,10 @@
 import { Scene, Renderer2D, Color, Shape, TextBlock, Layer, Anchor, Animation } from '../../src/index'
 
-export function createReadmeDemo (canvas: HTMLCanvasElement) {
+export function createDemo (appDiv: HTMLDivElement) {
+  const canvas = document.createElement('canvas')
+  canvas.height = 600
+  canvas.width = 800
+  appDiv.append(canvas)
   const scene = new Scene()
   const layer = scene.createLayer()
 

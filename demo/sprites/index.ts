@@ -1,6 +1,10 @@
 import { Assets, Sprite, Scene, Renderer2D, Rect } from '../../src/index'
 
-export async function createSpriteDemo (canvas: HTMLCanvasElement) {
+export async function createDemo (appDiv: HTMLDivElement) {
+  const canvas = document.createElement('canvas')
+  canvas.height = 600
+  canvas.width = 800
+  appDiv.append(canvas)
   const assets = new Assets()
   assets.add('graveRobber.attack1', '/img/sprites/graveRobber/GraveRobber_attack1.png')
   assets.add('graveRobber.attack2', '/img/sprites/graveRobber/GraveRobber_attack2.png')

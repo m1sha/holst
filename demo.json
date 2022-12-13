@@ -1,0 +1,12 @@
+[
+  { "name": "shape2", "title": "Shapes v2" },
+  { "name": "shape-bounds", "title": "Shape bounds" },
+  { "name": "containers", "title": "Containers" },
+  { "name": "texts", "title": "Text", "css": [ "/components/css/app.css", "/components/property-viewer/css/property-viewer.css", "/components/object-list/css/object-list.css"]},
+  { "name": "sprites", "title": "Sprite animation" },
+  { "name": "matrix", "title": "Animation base on matrixes" },
+  { "name": "movement", "title": "Animation base on Cubic-Bezier" },
+  { "name": "collisions", "title": "Collisions detection" },
+  { "name": "readme", "title": "Example from readme" },
+  { "name": "dynamic-canvas-renderer", "title": "Dynamic Canvas", "css": ["/index.css"]}
+]

@@ -7,7 +7,11 @@ interface Element {
   acceleration: Point
 }
 
-export function createCollisionsDemo (canvas: HTMLCanvasElement) {
+export function createDemo (appDiv: HTMLDivElement) {
+  const canvas = document.createElement('canvas')
+  canvas.height = 600
+  canvas.width = 800
+  appDiv.append(canvas)
   const sceneSize: Size = canvas
   const scene = new Scene()
   const elements = initScene(scene, sceneSize)
