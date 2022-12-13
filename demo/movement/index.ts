@@ -1,7 +1,11 @@
 import { Scene, Renderer2D, Shape, Rect, CubicBezier } from '../../src/index'
 // import { CubicBezier } from '../../core/motion/cubic-bezier'
 
-export function createMovementDemo (canvas: HTMLCanvasElement) {
+export function createDemo (appDiv: HTMLDivElement) {
+  const canvas = document.createElement('canvas')
+  canvas.height = 600
+  canvas.width = 800
+  appDiv.append(canvas)
   const scene = new Scene()
   const layer0 = scene.createLayer()
   const shp0 = layer0.createShape({ stroke: '#333', fill: '#84a2cb' })
