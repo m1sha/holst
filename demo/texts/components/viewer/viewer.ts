@@ -1,9 +1,9 @@
 import { Renderer2D, TextBlock } from '../../../../src'
 import { State } from '../../model/state'
-import { Component } from '../base/component'
+import { StateComponent } from '../base/state-component'
 import { MovementController } from './movement/movement-controller'
 
-export class Viewer extends Component<HTMLCanvasElement> {
+export class Viewer extends StateComponent<HTMLCanvasElement> {
   private movement: MovementController
 
   constructor (state: State) {

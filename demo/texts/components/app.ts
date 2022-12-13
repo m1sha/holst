@@ -4,9 +4,11 @@ import { Toolbar } from './toolbar/toolbar'
 import { State } from '../model/state'
 import { createDefaultTextBlocks } from '../create-default-text-blocks'
 import { Viewer } from './viewer/viewer'
+import { Grid } from './grid/grid'
 
 export class App {
   private state: State
+  private grid: Grid
   private propertyViewer: PropertyViewer
   private objectList: ObjectList
   private toolbar: Toolbar
@@ -14,6 +16,7 @@ export class App {
 
   constructor () {
     this.state = new State()
+    this.grid = new Grid()
     this.propertyViewer = new PropertyViewer(this.state)
     this.objectList = new ObjectList(this.state)
     this.toolbar = new Toolbar(this.state)
@@ -33,14 +36,13 @@ export class App {
     this.viewer.build()
 
     appDiv.className = 'app'
-    appDiv.append(this.toolbar.rootElement)
+    appDiv.append(this.grid.rootElement)
 
-    const content = document.createElement('div')
-    content.className = 'content'
-    appDiv.append(content)
-
-    content.append(this.objectList.rootElement)
-    content.append(this.viewer.rootElement)
-    content.append(this.propertyViewer.rootElement)
+    this.grid.addPanels('top-side', { 'body-side': ['left-side', 'middle-side', 'right-side', 'bottom-side'] })
+    this.grid.appendToPanel('top-side', this.toolbar.rootElement)
+    this.grid.appendToPanel('left-side', this.objectList.rootElement)
+    this.grid.appendToPanel('middle-side', this.viewer.rootElement)
+    this.grid.appendToPanel('right-side', this.propertyViewer.rootElement)
+    this.grid.build()
   }
 }

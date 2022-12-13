@@ -1,9 +1,9 @@
 import { State } from '../../model/state'
-import { Component } from '../base/component'
+import { StateComponent } from '../base/state-component'
 
 export type ObjectItemTemplate = (item: any, div: HTMLDivElement) => boolean
 
-export class ObjectList extends Component<HTMLDivElement> {
+export class ObjectList extends StateComponent<HTMLDivElement> {
   filter: ((item: any) => boolean) | null = null
   title: ((item: any) => any) | null = null
 

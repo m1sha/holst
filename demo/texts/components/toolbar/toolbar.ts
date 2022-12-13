@@ -1,6 +1,6 @@
-import { Component } from '../base/component'
+import { StateComponent } from '../base/state-component'
 
-export class Toolbar extends Component<HTMLDivElement> {
+export class Toolbar extends StateComponent<HTMLDivElement> {
   protected get name (): string { return 'toolbar' }
   protected get elementType (): string { return 'div' }
 

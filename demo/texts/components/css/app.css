@@ -1,8 +1,13 @@
 .app {
   display: flex;
   flex-direction: column;
+  padding-top: 8px;
 }
 
-.content {
+.grid, .body-side-panel {
   display: flex;
+}
+
+.grid {
+  flex-direction: column;
 }

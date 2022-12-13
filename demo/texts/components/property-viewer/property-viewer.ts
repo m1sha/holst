@@ -1,9 +1,9 @@
 import { createTextBlockPropertyRules } from './text-block-property-rules'
 import { State } from '../../model/state'
 import { Rules } from './property-rules'
-import { Component } from '../base/component'
 import { createCategory, createCheckBox, createInput, createLabel, createRow, createSelect } from './property-viewer-control-builders'
 import { PropertyViewerControl } from './property-viewer-control'
+import { StateComponent } from '../base/state-component'
 
 export type Rule = {
   title: string
@@ -16,7 +16,7 @@ export type Rule = {
   categoryIndex: number
 }
 
-export class PropertyViewer extends Component<HTMLDivElement> {
+export class PropertyViewer extends StateComponent<HTMLDivElement> {
   private rules: Rules | null = null
   private controls: PropertyViewerControl[] = []
 

@@ -1,12 +1,5 @@
-import { State } from '../../model/state'
-
 export abstract class Component<TRootElement extends HTMLElement> {
-  protected state: State
   #rootElement: TRootElement | null = null
-
-  constructor (state: State) {
-    this.state = state
-  }
 
   get rootElement (): TRootElement {
     if (!this.#rootElement) {
