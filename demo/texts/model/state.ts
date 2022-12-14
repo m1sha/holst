@@ -1,6 +1,6 @@
-import { Layer, Scene } from '../../../src'
+import { Drawable, Layer, Scene } from '../../../src'
 import { ObjectStorage } from './storage'
-import { ViewObject } from './view-object'
+import { Entity } from './entities/entity'
 
 export class State {
   private delegates: (() => void)[] = []
@@ -19,25 +19,25 @@ export class State {
     return this.#scene
   }
 
-  get selectedObject (): ViewObject | undefined {
-    return this.#storage.viewObjects.find(p => p.selected)
+  get selectedObject (): Entity<Drawable> | undefined {
+    return this.#storage.entities.find(p => p.selected)
   }
 
-  set selectedObject (value: ViewObject | Readonly<ViewObject> | undefined) {
+  set selectedObject (value: Entity<Drawable> | Readonly<Entity<Drawable>> | undefined) {
     if (value) {
       this.#storage.select(value)
     } else {
       this.#storage.unselect()
     }
-    this.#storage.update(this.techLayer!)
+    this.#storage.update()
   }
 
-  get viewObjects (): Readonly<Readonly<ViewObject>[]> {
-    return this.#storage.viewObjects
+  get entities (): Readonly<Readonly<Entity<Drawable>>[]> {
+    return this.#storage.entities
   }
 
-  findViewObject (id: string) {
-    return this.#storage.viewObjects.find(p => p.object.id === id)
+  findEntity (id: string) {
+    return this.#storage.entities.find(p => p.target.id === id)
   }
 
   update () {
@@ -48,12 +48,12 @@ export class State {
     this.delegates.push(delegate)
   }
 
-  addViewObject (viewObject: ViewObject) {
+  addViewObject (viewObject: Entity<Drawable>) {
     this.#storage.addViewObject(viewObject)
     viewObject.create(this.selectedLayer!)
   }
 
-  addViewObjects (viewObjects: ViewObject[]) {
+  addViewObjects (viewObjects: Entity<Drawable>[]) {
     viewObjects.forEach(p => this.addViewObject(p))
   }
 }

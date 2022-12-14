@@ -6,11 +6,18 @@ export class Toolbar extends StateComponent<HTMLDivElement> {
 
   build () {
     const root = this.rootElement
-    const el = document.createElement('button')
-    el.textContent = 'Create'
-    root.append(el)
-    const el2 = document.createElement('button')
-    el2.textContent = 'Move'
-    root.append(el2)
+
+    root.append(this.createButton('font'))
+    root.append(this.createButton('shapes'))
+    root.append(this.createButton('mouse-pointer'))
+  }
+
+  private createButton (icon: string) {
+    const btn = document.createElement('button')
+    btn.className = 'btn btn-secondary outline'
+    const i = document.createElement('i')
+    i.className = 'fa fa-' + icon
+    btn.append(i)
+    return btn
   }
 }

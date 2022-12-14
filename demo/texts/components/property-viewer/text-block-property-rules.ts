@@ -1,5 +1,5 @@
 import { TextBlock } from '../../../../src/index'
-import { ViewObject } from '../../model/view-object'
+import { EntityReadonly } from '../../model/entities/entity-readonly'
 import { Rules } from './property-rules'
 
 const Bold = ['normal', 'bold', 'lighter', 'bolder', '100', '200', '300', '400', '500', '600', '700', '800', '900']
@@ -10,10 +10,10 @@ const VerticalAlignment = ['top', 'center', 'bottom']
 const Baseline = ['top', 'hanging', 'middle', 'alphabetic', 'ideographic', 'bottom']
 const FontNames = ['Arial', 'Courier New', 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif', 'serif']
 
-export function createTextBlockPropertyRules (viewObject: ViewObject): Rules {
-  const textBlock = viewObject.object as TextBlock
-  const isTransparent = (viewObject: ViewObject) =>
-    !(viewObject.object as TextBlock).style.outlineColor || textBlock.style.outlineColor === 'transparent'
+export function createTextBlockPropertyRules (viewObject: EntityReadonly<TextBlock>): Rules {
+  const textBlock = viewObject.target
+  const isTransparent = (viewObject: EntityReadonly<TextBlock>) =>
+    !viewObject.target.style.outlineColor || textBlock.style.outlineColor === 'transparent'
 
   return new Rules(viewObject)
     .category('Text Style')

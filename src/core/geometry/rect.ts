@@ -170,4 +170,9 @@ export class Rect implements IRect, Size {
     }
     throw new Error('mismatch parameters')
   }
+
+  static assign (dist: IRect, src: IRect): void {
+    dist.x = src.x; dist.y = src.y
+    dist.width = src.width; dist.height = src.height
+  }
 }

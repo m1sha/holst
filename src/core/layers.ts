@@ -17,7 +17,7 @@ import { Shape2 } from './shape2'
 import { Group } from './group'
 export class Layer implements Orderable {
   private objects: Orderable[] = []
-  private styleManager: StyleManager
+  readonly styleManager: StyleManager
   private arrange: Arrange
   mask: Shape | null
   order: number

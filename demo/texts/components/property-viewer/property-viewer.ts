@@ -29,7 +29,7 @@ export class PropertyViewer extends StateComponent<HTMLDivElement> {
         return
       }
 
-      this.setRules(createTextBlockPropertyRules(this.state.selectedObject))
+      this.setRules(createTextBlockPropertyRules(this.state.selectedObject as any))
       this.build()
       // this.rebuild()
     })

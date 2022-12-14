@@ -1,28 +1,28 @@
-import { Layer } from '../../../src'
-import { ViewObject } from './view-object'
+import { Drawable } from '../../../src'
+import { Entity } from './entities/entity'
+import { EntityReadonly } from './entities/entity-readonly'
 
 export class ObjectStorage {
-  viewObjects: ViewObject[] = []
-  addViewObject (viewObject: ViewObject) {
-    this.viewObjects.push(viewObject)
+  entities: Entity<Drawable>[] = []
+  addViewObject (entity: Entity<Drawable>) {
+    this.entities.push(entity)
   }
 
-  update (layer: Layer) {
-    layer.clear()
-    this.viewObjects.forEach(p => p.update(layer))
+  update () {
+    this.entities.forEach(p => p.update())
   }
 
-  select (viewObject: Readonly<ViewObject>) {
+  select (entity: EntityReadonly<Drawable>) {
     this.unselect()
-    for (const object of this.viewObjects) {
-      if (object.object.id === viewObject.object.id) {
-        object.selected = true
+    for (const origin of this.entities) {
+      if (origin.equals(entity)) {
+        origin.selected = true
         return
       }
     }
   }
 
   unselect () {
-    this.viewObjects.forEach(p => (p.selected = false))
+    this.entities.forEach(p => (p.selected = false))
   }
 }

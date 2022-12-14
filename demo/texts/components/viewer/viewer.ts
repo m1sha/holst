@@ -13,7 +13,7 @@ export class Viewer extends StateComponent<HTMLCanvasElement> {
   }
 
   build () {
-    this.state.viewObjects.forEach(p => this.movement.add(p.object as TextBlock))
+    this.state.entities.forEach(p => this.movement.add(p.target as TextBlock))
 
     const ctx = this.rootElement.getContext('2d')!
     const renderer = new Renderer2D(ctx)

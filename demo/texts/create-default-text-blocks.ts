@@ -1,5 +1,5 @@
 import { TextBlock, Point, TextStyle, IPoint, Color } from '../../src/index'
-import { ViewObject } from './model/view-object'
+import { Entity } from './model/entities/entity'
 
 export function createDefaultTextBlocks () {
   const textBlock0 = createText('Some Text\n', new Point(10, 100))
@@ -18,12 +18,12 @@ export function createDefaultTextBlocks () {
   textBlock.overflow = 'word-break + clip'
 
   return [
-    new ViewObject(textBlock0),
-    new ViewObject(textBlock1),
-    new ViewObject(textBlock2),
-    new ViewObject(textBlock3),
-    new ViewObject(textBlock4),
-    new ViewObject(textBlock)
+    new Entity(textBlock0),
+    new Entity(textBlock1),
+    new Entity(textBlock2),
+    new Entity(textBlock3),
+    new Entity(textBlock4),
+    new Entity(textBlock)
   ]
 }
 

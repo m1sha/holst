@@ -15,6 +15,7 @@ import { Rect } from './core/geometry/rect'
 import { Renderer2D } from './core/render/renderer2D'
 import { Scene } from './core/scene'
 import Shape from './core/shape'
+import { Shape2 } from './core/shape2'
 import { Sprite } from './core/sprite'
 import { SvgPathD } from './core/svg/svg-path-d'
 import { Color } from './core/colors/color'
@@ -56,6 +57,7 @@ export {
   Renderer2D,
   Scene,
   Shape,
+  Shape2,
   Sprite,
   StyleManager,
   SvgPathD,

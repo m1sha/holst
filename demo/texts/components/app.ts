@@ -28,8 +28,8 @@ export class App {
 
     this.toolbar.build()
 
-    this.objectList.filter = item => item.object.type === 'text'
-    this.objectList.title = item => item.object.text ? item.object.text.replaceAll('\n', ' ') : ''
+    this.objectList.filter = item => item.target.type === 'text'
+    this.objectList.title = item => item.target.text ? item.target.text.replaceAll('\n', ' ') : ''
     this.objectList.build()
 
     this.propertyViewer.build()

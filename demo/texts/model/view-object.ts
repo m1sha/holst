@@ -1,6 +1,6 @@
 import { Drawable, Layer, TextBlock, Shape, Color } from '../../../src'
 
-export class ViewObject {
+export class ViewObjectOld {
   readonly object: Drawable
   private boundsFrame: Shape | null
   private selectFrame: Shape | null
