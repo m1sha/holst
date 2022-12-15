@@ -23,6 +23,7 @@ export class AppState {
   }
 
   get selectedTool () { return this.#selectedTool }
+
   get selectedLayer () {
     if (this.#selectedLayer) return this.#selectedLayer
     return (this.#selectedLayer = this.scene.createLayer())
@@ -39,23 +40,15 @@ export class AppState {
     return this.#storage.entities
   }
 
-  set selectedTool (tool: Tool) {
-    this.#selectedTool = tool
-    // this.sendCommand(this, 'selectedTool')
-  }
-
-  // addSelectedEntity (entity: Entity<Drawable>) {
-  //   this.#selectedEntities.push(entity)
-  //   this.sendCommand(this, 'selectedEntity')
-  // }
-
-  // clearSelectedEntities () {
-  //   this.#selectedEntities = []
-  //   this.sendCommand(this, 'clearSelectedEntities')
+  // set selectedTool (tool: Tool) {
+  //   this.#selectedTool = tool
+  //   // this.sendCommand(this, 'selectedTool')
   // }
 
   sendCommand (sender: Component<HTMLElement> | AppState, command: Command<any>): void { this.invokers.forEach(p => p(sender, command)) }
+
   addInvoker (callback: CommandInvokerCallback) { this.invokers.push(callback) }
+
   addEntities (entities: Entity<Drawable>[]) {
     entities.forEach(item => {
       this.#storage.add(item)
@@ -65,9 +58,9 @@ export class AppState {
 
   private onStateChanged (sender: AppState | Component<HTMLElement>, command: Command<any>): void {
     if (command instanceof SelectEntitiesCommand) {
-      const item = this.entities.find(p => command.data && command.data.indexOf(p.target.id) > -1)
       this.#selectedEntities = []
-      if (item) this.#selectedEntities.push(item)
+      command.invoke(this.#storage, this)
     }
+    this.#storage.refresh()
   }
 }

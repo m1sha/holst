@@ -13,6 +13,14 @@ export class EntitiesStorage {
     this.entities.forEach(entity => entity.update())
   }
 
+  findById (id: string) {
+    return this.entities.find(entity => entity.target.id === id)
+  }
+
+  filterByIds (ids: string[]) {
+    return this.entities.filter(entity => ids.indexOf(entity.target.id) > -1)
+  }
+
   // select (entities: EntityReadonly<Drawable>[]) {
   //   this.unselect()
   //   for (const origin of this.entities) {

@@ -19,7 +19,7 @@ export class Entity<T extends Drawable> {
     this.boundsFrame = Shape.create(layer.styleManager.shapes('bounds-frame')).rect(this.target.bounds)
     this.selectFrame = Shape.create(layer.styleManager.shapes('select-frame')).rect(this.target.bounds.outline(-8))
     this.boundsFrame.hidden = !this.showBounds
-    this.selectFrame.hidden = !this.selectFrame
+    this.selectFrame.hidden = !this.selected
     layer.add(this.boundsFrame)
     layer.add(this.selectFrame)
   }
@@ -31,7 +31,7 @@ export class Entity<T extends Drawable> {
     }
 
     if (this.selectFrame) {
-      this.selectFrame.hidden = !this.selectFrame
+      this.selectFrame.hidden = !this.selected
       Rect.assign(this.selectFrame.rects[0], this.target.bounds.outline(-8))
     }
   }
