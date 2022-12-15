@@ -1,13 +1,13 @@
 import { PropertyViewer } from './property-viewer/property-viewer'
 import { ObjectList } from './object-list/object-list'
 import { Toolbar } from './toolbar/toolbar'
-import { State } from '../model/state'
 import { createDefaultTextBlocks } from '../create-default-text-blocks'
 import { Viewer } from './viewer/viewer'
 import { Grid } from './grid/grid'
+import { AppState } from '../model/app-state'
 
 export class App {
-  private state: State
+  private state: AppState
   private grid: Grid
   private propertyViewer: PropertyViewer
   private objectList: ObjectList
@@ -15,7 +15,7 @@ export class App {
   private viewer: Viewer
 
   constructor () {
-    this.state = new State()
+    this.state = new AppState()
     this.grid = new Grid()
     this.propertyViewer = new PropertyViewer(this.state)
     this.objectList = new ObjectList(this.state)
@@ -24,7 +24,7 @@ export class App {
   }
 
   create (appDiv: HTMLDivElement) {
-    this.state.addViewObjects(createDefaultTextBlocks())
+    this.state.addEntities(createDefaultTextBlocks())
 
     this.toolbar.build()
 

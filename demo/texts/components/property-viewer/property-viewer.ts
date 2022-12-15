@@ -1,9 +1,10 @@
 import { createTextBlockPropertyRules } from './text-block-property-rules'
-import { State } from '../../model/state'
 import { Rules } from './property-rules'
 import { createCategory, createCheckBox, createInput, createLabel, createRow, createSelect } from './property-viewer-control-builders'
 import { PropertyViewerControl } from './property-viewer-control'
 import { StateComponent } from '../base/state-component'
+import { AppState } from '../../model/app-state'
+import { Component } from '../base/component'
 
 export type Rule = {
   title: string
@@ -19,21 +20,6 @@ export type Rule = {
 export class PropertyViewer extends StateComponent<HTMLDivElement> {
   private rules: Rules | null = null
   private controls: PropertyViewerControl[] = []
-
-  constructor (state: State) {
-    super(state)
-    this.state.addOnChange(() => {
-      if (!this.state.selectedObject) {
-        this.clearRules()
-        this.build()
-        return
-      }
-
-      this.setRules(createTextBlockPropertyRules(this.state.selectedObject as any))
-      this.build()
-      // this.rebuild()
-    })
-  }
 
   setRules (rules: Rules) {
     this.rules = rules
@@ -87,6 +73,18 @@ export class PropertyViewer extends StateComponent<HTMLDivElement> {
     for (const control of this.controls) {
       control.update()
     }
+  }
+
+  protected onStateChanged (sender: AppState | Component<HTMLElement>, commandName: string, data: any): void {
+    if (sender instanceof PropertyViewer) return
+    if (!this.state.selectedEntities) {
+      this.clearRules()
+      this.build()
+      return
+    }
+
+    this.setRules(createTextBlockPropertyRules(this.state.selectedEntities[0] as any))
+    this.build()
   }
 
   protected get name (): string { return 'property-viewer' }

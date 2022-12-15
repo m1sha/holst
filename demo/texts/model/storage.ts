@@ -1,28 +1,28 @@
 import { Drawable } from '../../../src'
 import { Entity } from './entities/entity'
-import { EntityReadonly } from './entities/entity-readonly'
+// import { EntityReadonly } from './entities/entity-readonly'
 
-export class ObjectStorage {
-  entities: Entity<Drawable>[] = []
-  addViewObject (entity: Entity<Drawable>) {
+export class EntitiesStorage {
+  entities: Array<Entity<Drawable>> = []
+
+  add (entity: Entity<Drawable>) {
     this.entities.push(entity)
   }
 
-  update () {
-    this.entities.forEach(p => p.update())
+  refresh () {
+    this.entities.forEach(entity => entity.update())
   }
 
-  select (entity: EntityReadonly<Drawable>) {
-    this.unselect()
-    for (const origin of this.entities) {
-      if (origin.equals(entity)) {
-        origin.selected = true
-        return
-      }
-    }
-  }
+  // select (entities: EntityReadonly<Drawable>[]) {
+  //   this.unselect()
+  //   for (const origin of this.entities) {
+  //     if (!entities.some(entity => origin.equals(entity))) continue
 
-  unselect () {
-    this.entities.forEach(p => (p.selected = false))
-  }
+  //     origin.selected = true
+  //   }
+  // }
+
+  // unselect () {
+  //   this.entities.forEach(p => (p.selected = false))
+  // }
 }

@@ -7,6 +7,7 @@ export class Entity<T extends Drawable> {
   readonly target: T
   selected: boolean = false
   showBounds: boolean = false
+  layer: Layer | null = null
 
   constructor (target: T) {
     this.target = target
@@ -14,7 +15,7 @@ export class Entity<T extends Drawable> {
 
   create (layer: Layer) {
     layer.add(this.target as any)
-
+    this.layer = layer
     this.boundsFrame = Shape.create(layer.styleManager.shapes('bounds-frame')).rect(this.target.bounds)
     this.selectFrame = Shape.create(layer.styleManager.shapes('select-frame')).rect(this.target.bounds.outline(-8))
     this.boundsFrame.hidden = !this.showBounds

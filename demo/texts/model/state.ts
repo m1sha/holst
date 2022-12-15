@@ -1,21 +1,26 @@
 import { Drawable, Layer, Scene } from '../../../src'
-import { ObjectStorage } from './storage'
+import { EntitiesStorage } from './storage'
 import { Entity } from './entities/entity'
 
+/** @deprecated */
 export class State {
   private delegates: (() => void)[] = []
   private selectedLayer: Layer | null = null
-  private techLayer: Layer | null = null
+  // private techLayer: Layer | null = null
   #scene: Scene | null = null
-  #storage: ObjectStorage = new ObjectStorage()
+  #storage: EntitiesStorage = new EntitiesStorage()
 
   constructor () {
     this.selectedLayer = this.scene.createLayer()
-    this.techLayer = this.scene.createLayer()
+    // this.techLayer = this.scene.createLayer()
   }
 
   get scene () {
-    if (!this.#scene) this.#scene = new Scene()
+    if (!this.#scene) {
+      this.#scene = new Scene()
+      this.#scene.styleManager.defineShapeStyle('select-frame', { stroke: '#838383' })
+      this.#scene.styleManager.defineShapeStyle('bounds-frame', { stroke: '#333', lineDash: [5, 4] })
+    }
     return this.#scene
   }
 
@@ -29,7 +34,7 @@ export class State {
     } else {
       this.#storage.unselect()
     }
-    this.#storage.update()
+    this.#storage.refresh()
   }
 
   get entities (): Readonly<Readonly<Entity<Drawable>>[]> {
@@ -49,7 +54,7 @@ export class State {
   }
 
   addViewObject (viewObject: Entity<Drawable>) {
-    this.#storage.addViewObject(viewObject)
+    this.#storage.add(viewObject)
     viewObject.create(this.selectedLayer!)
   }
 

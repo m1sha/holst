@@ -1,14 +1,17 @@
 import { Drawable, Point, Shape, TextBlock } from '../../../../../src'
 import { MouseEventDecorator } from '../../../../../src/core/events/decorators'
 import { InteractiveEvent } from '../../../../../src/core/events/interactive'
-import { State } from '../../../model/state'
+import { AppState } from '../../../model/app-state'
+import { Viewer } from '../viewer'
 
 export class MovementController {
-  private state: State
+  private state: AppState
+  private viewer: Viewer
   private drawables: (Shape | TextBlock)[] = []
 
-  constructor (state: State) {
+  constructor (state: AppState, viewer: Viewer) {
     this.state = state
+    this.viewer = viewer
   }
 
   add (drawable: Shape | TextBlock) {
@@ -22,8 +25,9 @@ export class MovementController {
       .on('hover', e => { e.cursor = 'pointer' })
       .on('leave', e => { e.cursor = 'default' })
       .on('mousedown', e => {
-        this.state.selectedObject = this.state.findEntity(drawable.id)
-        this.state.update()
+        // this.state.selectedObject = this.state.findEntity(drawable.id)
+        // this.state.update()
+        this.state.sendCommand(this.viewer, 'selectEntityById', drawable.id)
         delta = new Point(drawable.bounds).dec(getPoint(e))
       })
       .on('mousemove', e => {
@@ -38,7 +42,7 @@ export class MovementController {
         delta = Point.zero
         // getPoint(e)
         e.cursor = 'pointer'
-        this.state.update()
+        // this.state.update()
       })
   }
 }

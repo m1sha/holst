@@ -1,15 +1,15 @@
 import { Renderer2D, TextBlock } from '../../../../src'
-import { State } from '../../model/state'
+import { AppState } from '../../model/app-state'
+import { Component } from '../base/component'
 import { StateComponent } from '../base/state-component'
 import { MovementController } from './movement/movement-controller'
 
 export class Viewer extends StateComponent<HTMLCanvasElement> {
   private movement: MovementController
 
-  constructor (state: State) {
+  constructor (state: AppState) {
     super(state)
-    this.state.addOnChange(() => this.update())
-    this.movement = new MovementController(this.state)
+    this.movement = new MovementController(this.state, this)
   }
 
   build () {
@@ -22,6 +22,10 @@ export class Viewer extends StateComponent<HTMLCanvasElement> {
 
   update () {
     //
+  }
+
+  protected onStateChanged (sender: AppState | Component<HTMLElement>, data: any): void {
+    this.update()
   }
 
   protected get name (): string { return 'viewer' }

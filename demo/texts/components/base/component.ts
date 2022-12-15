@@ -1,4 +1,7 @@
+import { uid } from '../../../../src/utils/uid'
+
 export abstract class Component<TRootElement extends HTMLElement> {
+  readonly id: string = uid()
   #rootElement: TRootElement | null = null
 
   get rootElement (): TRootElement {
