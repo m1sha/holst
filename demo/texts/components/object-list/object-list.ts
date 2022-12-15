@@ -1,5 +1,6 @@
 import { AppState } from '../../model/app-state'
-import { CommandNames } from '../../model/command-names'
+import { Command } from '../../model/commands/command'
+import { SelectEntitiesCommand } from '../../model/commands/select-entities-command'
 import { Component } from '../base/component'
 import { StateComponent } from '../base/state-component'
 
@@ -25,12 +26,12 @@ export class ObjectList extends StateComponent<HTMLDivElement> {
       if (this.title) p.textContent = this.title(item)
 
       div.addEventListener('click', () => {
-        this.send('selectEntityById', item.target.id)
+        this.send(new SelectEntitiesCommand([item.target.id], 'none'))
       })
     }
   }
 
-  protected onStateChanged (sender: AppState | Component<HTMLElement>, commandName: CommandNames, data: any): void {
+  protected onStateChanged (sender: AppState | Component<HTMLElement>, command: Command<any>): void {
     this.build()
   }
 

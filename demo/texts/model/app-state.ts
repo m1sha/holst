@@ -1,13 +1,14 @@
 import { Drawable, Layer, Scene } from '../../../src'
 import { Component } from '../components/base/component'
-import { CommandNames } from './command-names'
+import { Command } from './commands/command'
+import { SelectEntitiesCommand } from './commands/select-entities-command'
 import { Entity } from './entities/entity'
 import { EntitiesStorage } from './storage'
 import { defineStyles } from './styles'
 import { SelectTool, Tool } from './tool'
 
 /* eslint no-use-before-define: "off" */
-type CommandInvokerCallback = (sender: Component<HTMLElement> | AppState, commandName: CommandNames, data: any) => void
+type CommandInvokerCallback = (sender: Component<HTMLElement> | AppState, command: Command<any>) => void
 
 export class AppState {
   #scene: Scene | null = null
@@ -18,7 +19,7 @@ export class AppState {
   private invokers: CommandInvokerCallback[] = []
 
   constructor () {
-    this.addInvoker((sender, command, data) => this.onStateChanged(sender, command, data))
+    this.addInvoker((sender, command) => this.onStateChanged(sender, command))
   }
 
   get selectedTool () { return this.#selectedTool }
@@ -53,7 +54,7 @@ export class AppState {
   //   this.sendCommand(this, 'clearSelectedEntities')
   // }
 
-  sendCommand (sender: Component<HTMLElement> | AppState, commandName: CommandNames, data?: any): void { this.invokers.forEach(p => p(sender, commandName, data)) }
+  sendCommand (sender: Component<HTMLElement> | AppState, command: Command<any>): void { this.invokers.forEach(p => p(sender, command)) }
   addInvoker (callback: CommandInvokerCallback) { this.invokers.push(callback) }
   addEntities (entities: Entity<Drawable>[]) {
     entities.forEach(item => {
@@ -62,10 +63,11 @@ export class AppState {
     })
   }
 
-  private onStateChanged (sender: AppState | Component<HTMLElement>, commandName: CommandNames, data: any): void {
-    if (commandName === 'selectEntityById') {
-      const item = this.entities.find(p => p.target.id === data)
-      if (item) this.selectedEntities.push(item)
+  private onStateChanged (sender: AppState | Component<HTMLElement>, command: Command<any>): void {
+    if (command instanceof SelectEntitiesCommand) {
+      const item = this.entities.find(p => command.data && command.data.indexOf(p.target.id) > -1)
+      this.#selectedEntities = []
+      if (item) this.#selectedEntities.push(item)
     }
   }
 }

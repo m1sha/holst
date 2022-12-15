@@ -5,6 +5,8 @@ import { PropertyViewerControl } from './property-viewer-control'
 import { StateComponent } from '../base/state-component'
 import { AppState } from '../../model/app-state'
 import { Component } from '../base/component'
+import { Command } from '../../model/commands/command'
+import { SelectEntitiesCommand } from '../../model/commands/select-entities-command'
 
 export type Rule = {
   title: string
@@ -75,8 +77,10 @@ export class PropertyViewer extends StateComponent<HTMLDivElement> {
     }
   }
 
-  protected onStateChanged (sender: AppState | Component<HTMLElement>, commandName: string, data: any): void {
+  protected onStateChanged (sender: AppState | Component<HTMLElement>, command: Command<any>): void {
     if (sender instanceof PropertyViewer) return
+    if (!(command instanceof SelectEntitiesCommand)) return
+
     if (!this.state.selectedEntities) {
       this.clearRules()
       this.build()

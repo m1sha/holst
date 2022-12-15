@@ -2,6 +2,7 @@ import { Drawable, Point, Shape, TextBlock } from '../../../../../src'
 import { MouseEventDecorator } from '../../../../../src/core/events/decorators'
 import { InteractiveEvent } from '../../../../../src/core/events/interactive'
 import { AppState } from '../../../model/app-state'
+import { SelectEntitiesCommand } from '../../../model/commands/select-entities-command'
 import { Viewer } from '../viewer'
 
 export class MovementController {
@@ -25,9 +26,7 @@ export class MovementController {
       .on('hover', e => { e.cursor = 'pointer' })
       .on('leave', e => { e.cursor = 'default' })
       .on('mousedown', e => {
-        // this.state.selectedObject = this.state.findEntity(drawable.id)
-        // this.state.update()
-        this.state.sendCommand(this.viewer, 'selectEntityById', drawable.id)
+        this.state.sendCommand(this.viewer, new SelectEntitiesCommand([drawable.id], 'none'))
         delta = new Point(drawable.bounds).dec(getPoint(e))
       })
       .on('mousemove', e => {

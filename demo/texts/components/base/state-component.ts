@@ -1,5 +1,5 @@
 import { AppState } from '../../model/app-state'
-import { CommandNames } from '../../model/command-names'
+import { Command } from '../../model/commands/command'
 import { Component } from './component'
 
 export abstract class StateComponent<TRootElement extends HTMLElement> extends Component<TRootElement> {
@@ -9,12 +9,12 @@ export abstract class StateComponent<TRootElement extends HTMLElement> extends C
     super()
     this.state = state
 
-    this.state.addInvoker((sender, commandName, data) => this.onStateChanged(sender, commandName, data))
+    this.state.addInvoker((sender, command) => this.onStateChanged(sender, command))
   }
 
-  protected send (commandName: CommandNames, data?: any) {
-    this.state.sendCommand(this, commandName, data)
+  protected send (command: Command<any>) {
+    this.state.sendCommand(this, command)
   }
 
-  protected onStateChanged (sender: Component<HTMLElement> | AppState, commandName: CommandNames, data: any) {}
+  protected onStateChanged (sender: Component<HTMLElement> | AppState, command: Command<any>) {}
 }
