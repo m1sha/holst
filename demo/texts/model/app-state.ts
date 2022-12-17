@@ -1,5 +1,6 @@
 import { Drawable, Layer, Scene } from '../../../src'
 import { Component } from '../components/base/component'
+import { ChangeToolCommand } from './commands/change-tool-command'
 import { Command } from './commands/command'
 import { SelectEntitiesCommand } from './commands/select-entities-command'
 import { Entity } from './entities/entity'
@@ -60,6 +61,10 @@ export class AppState {
     if (command instanceof SelectEntitiesCommand) {
       this.#selectedEntities = []
       command.invoke(this.#storage, this)
+    }
+
+    if (command instanceof ChangeToolCommand) {
+      this.#selectedTool = command.data!
     }
     this.#storage.refresh()
   }

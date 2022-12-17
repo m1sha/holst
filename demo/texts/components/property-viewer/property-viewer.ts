@@ -7,6 +7,7 @@ import { AppState } from '../../model/app-state'
 import { Component } from '../base/component'
 import { Command } from '../../model/commands/command'
 import { SelectEntitiesCommand } from '../../model/commands/select-entities-command'
+import { ChangeEntityValueCommand } from '../../model/commands/change-entity-value-command'
 
 export type Rule = {
   title: string
@@ -51,19 +52,19 @@ export class PropertyViewer extends StateComponent<HTMLDivElement> {
         .setLabel(label)
 
       if (rule.type === 'input') {
-        const input = createInput(rule, div)
+        const input = createInput(rule, div, value => this.send(new ChangeEntityValueCommand(value)))
         if (rule.dataType === 'numeric') input.type = 'number'
         if (rule.dataType === 'color') input.type = 'color'
         control.setInput(input)
       }
 
       if (rule.type === 'checkbox') {
-        const input = createCheckBox(rule, div)
+        const input = createCheckBox(rule, div, value => this.send(new ChangeEntityValueCommand(value)))
         control.setInput(input)
       }
 
       if (rule.type === 'select' && rule.options) {
-        const input = createSelect(rule, div)
+        const input = createSelect(rule, div, value => this.send(new ChangeEntityValueCommand(value)))
         control.setInput(input)
       }
 

@@ -2,6 +2,7 @@ import { Drawable, Point, Shape, TextBlock } from '../../../../../src'
 import { MouseEventDecorator } from '../../../../../src/core/events/decorators'
 import { InteractiveEvent } from '../../../../../src/core/events/interactive'
 import { AppState } from '../../../model/app-state'
+import { MoveEntitiesCommand } from '../../../model/commands/move-entities-command'
 import { SelectEntitiesCommand } from '../../../model/commands/select-entities-command'
 import { Viewer } from '../viewer'
 
@@ -36,6 +37,7 @@ export class MovementController {
         const t = drawable as TextBlock
         t.target.x = delta.x + p.x
         t.target.y = delta.y + p.y
+        this.state.sendCommand(this.viewer, new MoveEntitiesCommand([drawable.id], t.target))
       })
       .on('mouseup', e => {
         delta = Point.zero
