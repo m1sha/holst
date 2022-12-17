@@ -18,7 +18,7 @@ export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape | Shape2,
     ctx.shadowBlur = blur
     ctx.shadowColor = color instanceof Color ? color.toString() : color
   }
-
+  ctx.translate(0.5, 0.5) // line thickness 1px
   if (style.fillStrokeOrder === 'stroke-first') {
     stoke(ctx, style, path)
     fill(ctx, style, path)
