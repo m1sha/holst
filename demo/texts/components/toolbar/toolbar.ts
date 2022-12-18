@@ -17,6 +17,12 @@ export class Toolbar extends StateComponent<HTMLDivElement> {
     createShapesBtn[1].addEventListener('click', () => this.send(new ChangeToolCommand(new CreateRectTool())))
     selectBtn[1].addEventListener('click', () => this.send(new ChangeToolCommand(new SelectTool())))
 
+    switch (this.state.selectedTool.name) {
+      case 'create-text': createTextBtn[1].click(); break
+      case 'create-rect': createShapesBtn[1].click(); break
+      case 'select': selectBtn[1].click(); break
+    }
+
     root.append(createTextBtn[0])
     root.append(createShapesBtn[0])
     root.append(selectBtn[0])
