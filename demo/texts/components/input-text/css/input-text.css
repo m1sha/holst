@@ -1,0 +1,11 @@
+.viewer-wrapper {
+  position: relative;
+}
+
+.input-text {
+  position: absolute;
+}
+
+.input-text:focus {
+  outline: 0px solid transparent;
+}

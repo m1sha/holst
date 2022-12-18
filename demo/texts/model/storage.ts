@@ -20,17 +20,4 @@ export class EntitiesStorage {
   filterByIds (ids: string[]) {
     return this.entities.filter(entity => ids.indexOf(entity.target.id) > -1)
   }
-
-  // select (entities: EntityReadonly<Drawable>[]) {
-  //   this.unselect()
-  //   for (const origin of this.entities) {
-  //     if (!entities.some(entity => origin.equals(entity))) continue
-
-  //     origin.selected = true
-  //   }
-  // }
-
-  // unselect () {
-  //   this.entities.forEach(p => (p.selected = false))
-  // }
 }

@@ -5,6 +5,7 @@ import { createDefaultTextBlocks } from '../create-default-text-blocks'
 import { Viewer } from './viewer/viewer'
 import { Grid } from './grid/grid'
 import { AppState } from '../model/app-state'
+import { InputText } from './input-text/input-text'
 
 export class App {
   private state: AppState
@@ -13,6 +14,7 @@ export class App {
   private objectList: ObjectList
   private toolbar: Toolbar
   private viewer: Viewer
+  private inputText: InputText
 
   constructor () {
     this.state = new AppState()
@@ -21,6 +23,7 @@ export class App {
     this.objectList = new ObjectList(this.state)
     this.toolbar = new Toolbar(this.state)
     this.viewer = new Viewer(this.state)
+    this.inputText = new InputText(this.state)
   }
 
   create (appDiv: HTMLDivElement) {
@@ -42,7 +45,9 @@ export class App {
       'top-side': this.toolbar,
       'body-side': {
         'left-side': this.objectList,
-        'middle-side': this.viewer,
+        'middle-side': {
+          'viewer-wrapper': [this.inputText, this.viewer]
+        },
         'right-side': this.propertyViewer
       }
     }

@@ -1,5 +1,7 @@
 import { Renderer2D, TextBlock } from '../../../../src'
 import { AppState } from '../../model/app-state'
+import { AddedEntityCommand } from '../../model/commands/added-entity-command'
+import { ChangeBackgroundSizeCommand } from '../../model/commands/change-background-size-command'
 import { Command } from '../../model/commands/command'
 import { CreateRectTool, CreateTextTool, SelectTool } from '../../model/tool'
 import { Component } from '../base/component'
@@ -15,8 +17,6 @@ export class Viewer extends StateComponent<HTMLCanvasElement> {
   }
 
   build () {
-    this.state.entities.forEach(p => this.movement.add(p.target as TextBlock))
-
     const ctx = this.rootElement.getContext('2d')!
     const renderer = new Renderer2D(ctx)
     renderer.render(this.state.scene)
@@ -27,6 +27,8 @@ export class Viewer extends StateComponent<HTMLCanvasElement> {
       if (tool instanceof CreateRectTool) this.rootElement.style.cursor = 'crosshair'
       if (tool instanceof SelectTool) this.rootElement.style.cursor = 'default'
     }
+
+    this.send(new ChangeBackgroundSizeCommand({ width: this.rootElement.width, height: this.rootElement.height }))
   }
 
   update () {
@@ -34,6 +36,9 @@ export class Viewer extends StateComponent<HTMLCanvasElement> {
   }
 
   protected onStateChanged (sender: AppState | Component<HTMLElement>, command: Command<any>): void {
+    if (command instanceof AddedEntityCommand) {
+      this.movement.add(command.data!.target as TextBlock)
+    }
     this.update()
   }
 
