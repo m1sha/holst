@@ -1,5 +1,6 @@
 import { AppState } from '../../model/app-state'
 import { Command } from '../../model/commands/command'
+import { DeleteEntitiesCommand } from '../../model/commands/delete-entities-command'
 import { SelectEntitiesCommand } from '../../model/commands/select-entities-command'
 import { Component } from '../base/component'
 import { StateComponent } from '../base/state-component'
@@ -21,13 +22,26 @@ export class ObjectList extends StateComponent<HTMLDivElement> {
       div.className = selected ? 'object-list-item selected' : 'object-list-item'
       if (!this.filter || !this.filter(item)) continue
       root.append(div)
+
       const p = document.createElement('p')
       div.append(p)
       if (this.title) p.textContent = this.title(item)
 
-      div.addEventListener('click', () => {
+      p.addEventListener('click', () => {
         this.send(new SelectEntitiesCommand([item.target.id], 'none'))
       })
+
+      const ref = document.createElement('a')
+      ref.href = 'javascript::void(0)'
+      const icon = document.createElement('i')
+      icon.className = 'fa fa-trash'
+      ref.append(icon)
+      ref.addEventListener('click', () => {
+        this.send(new DeleteEntitiesCommand([item.target.id]))
+        return false
+      })
+
+      div.append(ref)
     }
   }
 

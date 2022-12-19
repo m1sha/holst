@@ -161,6 +161,10 @@ export class Layer implements Orderable {
     removeItem(this.objects, p => (p as Raster).id === raster.id)
   }
 
+  remove (id: string): void {
+    removeItem(this.objects, p => (p as Shape).id === id)
+  }
+
   sendToBack (item: Shape | TextBlock | Raster) {
     this.arrange.sendToBack(item)
   }

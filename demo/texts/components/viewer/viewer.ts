@@ -45,7 +45,7 @@ export class Viewer extends StateComponent<HTMLCanvasElement> {
   protected get name (): string { return 'viewer' }
   protected get elementType (): string { return 'canvas' }
   protected onElementSetting (element: HTMLCanvasElement) {
-    element.width = 800
-    element.height = 600
+    element.width = 1200
+    element.height = 1600
   }
 }

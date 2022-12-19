@@ -6,6 +6,7 @@ import { ChangeToolCommand } from './commands/change-tool-command'
 import { Command } from './commands/command'
 import { CreateInputTextCommand } from './commands/create-input-text-command'
 import { CreateTextCommand } from './commands/create-text-command'
+import { DeleteEntitiesCommand } from './commands/delete-entities-command'
 import { InputTextCommand } from './commands/input-text-command'
 import { SelectEntitiesCommand } from './commands/select-entities-command'
 import { Entity } from './entities/entity'
@@ -95,6 +96,13 @@ export class AppState {
 
     if (command instanceof CreateTextCommand) {
       command.invoke(this)
+    }
+
+    if (command instanceof DeleteEntitiesCommand) {
+      command.data!.forEach(p => {
+        this.#storage.remove(p)
+        this.selectedLayer.remove(p)
+      })
     }
 
     this.#storage.refresh()

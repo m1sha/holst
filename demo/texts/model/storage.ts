@@ -1,4 +1,5 @@
 import { Drawable } from '../../../src'
+import { removeItem } from '../../../src/utils/array'
 import { Entity } from './entities/entity'
 // import { EntityReadonly } from './entities/entity-readonly'
 
@@ -19,5 +20,9 @@ export class EntitiesStorage {
 
   filterByIds (ids: string[]) {
     return this.entities.filter(entity => ids.indexOf(entity.target.id) > -1)
+  }
+
+  remove (id: string) {
+    removeItem(this.entities, p => p.target.id === id)
   }
 }

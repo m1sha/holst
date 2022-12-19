@@ -2,24 +2,29 @@
   margin-right: 12px
 
 .object-list-item
-  border: 1px solid #b1b1b1
-  padding: 2px
+  display: flex
+  border-bottom: 1px solid #e1e1e1
+  border-radius: 4px
+  padding: 2px 4px
   font-size: 12px
-  margin-bottom: 4px
+  margin-bottom: 2px
   width: 200px
+  justify-content: space-between
+  align-items: center
 
 .object-list-item p
-  width: 180px
-  text-overflow: ellipsis "[..]"
+  width: 170px
+  text-overflow: ellipsis ellipsis
   overflow: hidden
   white-space: nowrap
   display: flex
   margin: 0
-
 
 .object-list-item:hover
   background-color: #e1e1e1
   cursor: pointer
 
 .object-list-item.selected
-  border: 1px solid #f86300
+  background-color: #007896
+  & > *
+    color: #f1f1f1
