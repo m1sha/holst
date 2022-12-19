@@ -8,6 +8,8 @@ import { Component } from '../base/component'
 import { Command } from '../../model/commands/command'
 import { SelectEntitiesCommand } from '../../model/commands/select-entities-command'
 import { ChangeEntityValueCommand } from '../../model/commands/change-entity-value-command'
+import { TextBlock } from '../../../../src'
+import { createShapePropertyRules } from './shape-property-rules'
 
 export type Rule = {
   title: string
@@ -88,7 +90,11 @@ export class PropertyViewer extends StateComponent<HTMLDivElement> {
       return
     }
 
-    this.setRules(createTextBlockPropertyRules(this.state.selectedEntities[0] as any))
+    const rules = this.state.selectedEntities[0].target instanceof TextBlock
+      ? createTextBlockPropertyRules(this.state.selectedEntities[0] as any)
+      : createShapePropertyRules(this.state.selectedEntities[0] as any)
+
+    this.setRules(rules)
     this.build()
   }
 

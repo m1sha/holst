@@ -23,6 +23,10 @@ export class ObjectList extends StateComponent<HTMLDivElement> {
       if (!this.filter || !this.filter(item)) continue
       root.append(div)
 
+      const icon = document.createElement('i')
+      icon.className = item.target.type === 'text' ? 'fa fa-font' : 'fa fa-shapes'
+      div.append(icon)
+
       const p = document.createElement('p')
       div.append(p)
       if (this.title) p.textContent = this.title(item)
@@ -33,9 +37,9 @@ export class ObjectList extends StateComponent<HTMLDivElement> {
 
       const ref = document.createElement('a')
       ref.href = 'javascript::void(0)'
-      const icon = document.createElement('i')
-      icon.className = 'fa fa-trash'
-      ref.append(icon)
+      const icon2 = document.createElement('i')
+      icon2.className = 'fa fa-trash'
+      ref.append(icon2)
       ref.addEventListener('click', () => {
         this.send(new DeleteEntitiesCommand([item.target.id]))
         return false

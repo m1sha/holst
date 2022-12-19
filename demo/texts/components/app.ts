@@ -31,8 +31,11 @@ export class App {
 
     this.toolbar.build()
 
-    this.objectList.filter = item => item.target.type === 'text'
-    this.objectList.title = item => item.target.text ? item.target.text.replaceAll('\n', ' ') : ''
+    this.objectList.filter = item => item.target.type === 'text' || item.target.type === 'shape'
+    this.objectList.title = item => {
+      if (item.target.type === 'shape') return item.target.name
+      if (item.target.type === 'text') return item.target.text ? item.target.text.replaceAll('\n', ' ') : ''
+    }
     this.objectList.build()
 
     this.propertyViewer.build()

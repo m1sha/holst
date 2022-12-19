@@ -1,4 +1,4 @@
-import { Drawable, Point, Shape, TextBlock } from '../../../../../src'
+import { Drawable, IPoint, Point, Shape, TextBlock } from '../../../../../src'
 import { MouseEventDecorator } from '../../../../../src/core/events/decorators'
 import { InteractiveEvent } from '../../../../../src/core/events/interactive'
 import { AppState } from '../../../model/app-state'
@@ -50,10 +50,17 @@ export class MovementController {
         if (!e.event.pressed) return
         e.cursor = 'move'
         const p = getPoint(e)
-        const t = drawable as TextBlock
-        t.target.x = delta.x + p.x
-        t.target.y = delta.y + p.y
-        this.state.sendCommand(this.viewer, new MoveEntitiesCommand([drawable.id], t.target))
+        if (drawable instanceof TextBlock) {
+          drawable.target.x = delta.x + p.x
+          drawable.target.y = delta.y + p.y
+          this.state.sendCommand(this.viewer, new MoveEntitiesCommand([drawable.id], drawable.target))
+        }
+        if (drawable instanceof Shape) {
+          const target = drawable.figures.first() as IPoint
+          target.x = delta.x + p.x
+          target.y = delta.y + p.y
+          this.state.sendCommand(this.viewer, new MoveEntitiesCommand([drawable.id], target))
+        }
       })
       .on('mouseup', e => {
         delta = Point.zero
