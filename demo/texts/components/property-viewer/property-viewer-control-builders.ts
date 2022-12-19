@@ -1,3 +1,4 @@
+import { EntityValue } from '../../model/commands/change-entity-value-command'
 import { Rules } from './property-rules'
 import { Rule } from './property-viewer'
 
@@ -22,28 +23,30 @@ export function createLabel ({ title }: Rule, parentNode: HTMLDivElement) {
   return label
 }
 
-export function createInput (rule: Rule, parentNode: HTMLDivElement) {
+export function createInput (rule: Rule, parentNode: HTMLDivElement, callback: (value: EntityValue) => void) {
   const input = document.createElement('input')
   input.value = rule.value()
   input.onchange = e => {
     rule.change((e.target as HTMLInputElement).value)
+    callback(new EntityValue())
   }
   parentNode.append(input)
   return input
 }
 
-export function createCheckBox (rule: Rule, parentNode: HTMLDivElement) {
+export function createCheckBox (rule: Rule, parentNode: HTMLDivElement, callback: (value: EntityValue) => void) {
   const input = document.createElement('input')
   input.type = 'checkbox'
   input.checked = Boolean(rule.value())
   input.onchange = e => {
     rule.change((e.target as HTMLInputElement).checked)
+    callback(new EntityValue())
   }
   parentNode.append(input)
   return input
 }
 
-export function createSelect (rule: Rule, parentNode: HTMLDivElement) {
+export function createSelect (rule: Rule, parentNode: HTMLDivElement, callback: (value: EntityValue) => void) {
   const select = document.createElement('select')
   for (const opt of rule.options!) {
     const option = document.createElement('option')
@@ -54,6 +57,7 @@ export function createSelect (rule: Rule, parentNode: HTMLDivElement) {
   select.selectedIndex = rule.options!.indexOf(rule.value())
   select.onchange = e => {
     rule.change((e.target as HTMLSelectElement).value)
+    callback(new EntityValue())
   }
   parentNode.append(select)
   return select

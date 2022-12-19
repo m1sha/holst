@@ -1,9 +1,15 @@
 import { createTextBlockPropertyRules } from './text-block-property-rules'
-import { State } from '../../model/state'
 import { Rules } from './property-rules'
 import { createCategory, createCheckBox, createInput, createLabel, createRow, createSelect } from './property-viewer-control-builders'
 import { PropertyViewerControl } from './property-viewer-control'
 import { StateComponent } from '../base/state-component'
+import { AppState } from '../../model/app-state'
+import { Component } from '../base/component'
+import { Command } from '../../model/commands/command'
+import { SelectEntitiesCommand } from '../../model/commands/select-entities-command'
+import { ChangeEntityValueCommand } from '../../model/commands/change-entity-value-command'
+import { TextBlock } from '../../../../src'
+import { createShapePropertyRules } from './shape-property-rules'
 
 export type Rule = {
   title: string
@@ -19,21 +25,6 @@ export type Rule = {
 export class PropertyViewer extends StateComponent<HTMLDivElement> {
   private rules: Rules | null = null
   private controls: PropertyViewerControl[] = []
-
-  constructor (state: State) {
-    super(state)
-    this.state.addOnChange(() => {
-      if (!this.state.selectedObject) {
-        this.clearRules()
-        this.build()
-        return
-      }
-
-      this.setRules(createTextBlockPropertyRules(this.state.selectedObject))
-      this.build()
-      // this.rebuild()
-    })
-  }
 
   setRules (rules: Rules) {
     this.rules = rules
@@ -63,19 +54,19 @@ export class PropertyViewer extends StateComponent<HTMLDivElement> {
         .setLabel(label)
 
       if (rule.type === 'input') {
-        const input = createInput(rule, div)
+        const input = createInput(rule, div, value => this.send(new ChangeEntityValueCommand(value)))
         if (rule.dataType === 'numeric') input.type = 'number'
         if (rule.dataType === 'color') input.type = 'color'
         control.setInput(input)
       }
 
       if (rule.type === 'checkbox') {
-        const input = createCheckBox(rule, div)
+        const input = createCheckBox(rule, div, value => this.send(new ChangeEntityValueCommand(value)))
         control.setInput(input)
       }
 
       if (rule.type === 'select' && rule.options) {
-        const input = createSelect(rule, div)
+        const input = createSelect(rule, div, value => this.send(new ChangeEntityValueCommand(value)))
         control.setInput(input)
       }
 
@@ -87,6 +78,24 @@ export class PropertyViewer extends StateComponent<HTMLDivElement> {
     for (const control of this.controls) {
       control.update()
     }
+  }
+
+  protected onStateChanged (sender: AppState | Component<HTMLElement>, command: Command<any>): void {
+    if (sender instanceof PropertyViewer) return
+    if (!(command instanceof SelectEntitiesCommand)) return
+
+    if (!this.state.selectedEntities) {
+      this.clearRules()
+      this.build()
+      return
+    }
+
+    const rules = this.state.selectedEntities[0].target instanceof TextBlock
+      ? createTextBlockPropertyRules(this.state.selectedEntities[0] as any)
+      : createShapePropertyRules(this.state.selectedEntities[0] as any)
+
+    this.setRules(rules)
+    this.build()
   }
 
   protected get name (): string { return 'property-viewer' }

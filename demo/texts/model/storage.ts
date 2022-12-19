@@ -1,28 +1,28 @@
-import { Layer } from '../../../src'
-import { ViewObject } from './view-object'
+import { Drawable } from '../../../src'
+import { removeItem } from '../../../src/utils/array'
+import { Entity } from './entities/entity'
+// import { EntityReadonly } from './entities/entity-readonly'
 
-export class ObjectStorage {
-  viewObjects: ViewObject[] = []
-  addViewObject (viewObject: ViewObject) {
-    this.viewObjects.push(viewObject)
+export class EntitiesStorage {
+  entities: Array<Entity<Drawable>> = []
+
+  add (entity: Entity<Drawable>) {
+    this.entities.push(entity)
   }
 
-  update (layer: Layer) {
-    layer.clear()
-    this.viewObjects.forEach(p => p.update(layer))
+  refresh () {
+    this.entities.forEach(entity => entity.update())
   }
 
-  select (viewObject: Readonly<ViewObject>) {
-    this.unselect()
-    for (const object of this.viewObjects) {
-      if (object.object.id === viewObject.object.id) {
-        object.selected = true
-        return
-      }
-    }
+  findById (id: string) {
+    return this.entities.find(entity => entity.target.id === id)
   }
 
-  unselect () {
-    this.viewObjects.forEach(p => (p.selected = false))
+  filterByIds (ids: string[]) {
+    return this.entities.filter(entity => ids.indexOf(entity.target.id) > -1)
+  }
+
+  remove (id: string) {
+    removeItem(this.entities, p => p.target.id === id)
   }
 }

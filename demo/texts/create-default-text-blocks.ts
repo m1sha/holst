@@ -1,7 +1,8 @@
-import { TextBlock, Point, TextStyle, IPoint, Color } from '../../src/index'
-import { ViewObject } from './model/view-object'
+import { TextBlock, Point, TextStyle, IPoint, Color, Shape } from '../../src/index'
+import { Entity } from './model/entities/entity'
 
 export function createDefaultTextBlocks () {
+  const rect0 = Shape.create({ fill: '#734471' }).rect(10, 10, 150, 100)
   const textBlock0 = createText('Some Text\n', new Point(10, 100))
   const textBlock1 = createText('Some Text\nSome Text', new Point(120, 100))
   const textBlock2 = createText('Some Text', new Point(250, 100))
@@ -17,13 +18,17 @@ export function createDefaultTextBlocks () {
   textBlock.size = { width: 100, height: 50 }
   textBlock.overflow = 'word-break + clip'
 
+  const rect = Shape.create({ fill: '#334411' }).rect(10, 190, 150, 100)
+
   return [
-    new ViewObject(textBlock0),
-    new ViewObject(textBlock1),
-    new ViewObject(textBlock2),
-    new ViewObject(textBlock3),
-    new ViewObject(textBlock4),
-    new ViewObject(textBlock)
+    new Entity(rect0),
+    new Entity(textBlock0),
+    new Entity(textBlock1),
+    new Entity(textBlock2),
+    new Entity(textBlock3),
+    new Entity(textBlock4),
+    new Entity(textBlock),
+    new Entity(rect)
   ]
 }
 
