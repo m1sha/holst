@@ -46,7 +46,10 @@ export class App {
       'body-side': {
         'left-side': this.objectList,
         'middle-side': {
-          'viewer-wrapper': [this.inputText, this.viewer]
+          'viewer-wrapper': [
+            this.inputText,
+            { 'viewer-scroll': this.viewer }
+          ]
         },
         'right-side': this.propertyViewer
       }

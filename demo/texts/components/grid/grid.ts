@@ -32,7 +32,12 @@ export class Grid extends Component<HTMLDivElement> {
 
       if (Array.isArray(value)) {
         for (const item of value) {
-          if (item instanceof Component) panel.addElement(item.rootElement)
+          if (item instanceof Component) {
+            panel.addElement(item.rootElement)
+            continue
+          }
+
+          this.addPanel(item, panel.panels)
         }
         continue
       }
