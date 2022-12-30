@@ -4,7 +4,7 @@
   "description": "2D graphic library",
   "main": "index.js",
   "scripts": {
-    "build:dev": "cross-env mode=production libraryTarget= webpack --watch",
+    "build:dev": "cross-env mode=development libraryTarget= webpack --watch",
     "build:node": "cross-env mode=production libraryTarget=umd webpack",
     "test:watch": "npx jest --watch",
     "format": "prettier --write src/**/*.ts tests/**/*.ts"
