@@ -1,14 +1,7 @@
 import { Drawable, IPoint, Layer, Scene, Shape } from '../../../src'
 import { Component } from '../components/base/component'
 import { AddedEntityCommand } from './commands/added-entity-command'
-import { ChangeBackgroundSizeCommand } from './commands/change-background-size-command'
-import { ChangeToolCommand } from './commands/change-tool-command'
 import { Command } from './commands/command'
-import { CreateInputTextCommand } from './commands/create-input-text-command'
-import { CreateTextCommand } from './commands/create-text-command'
-import { DeleteEntitiesCommand } from './commands/delete-entities-command'
-import { InputTextCommand } from './commands/input-text-command'
-import { SelectEntitiesCommand } from './commands/select-entities-command'
 import { Entity } from './entities/entity'
 import { EntitiesStorage } from './storage'
 import { defineStyles } from './styles'
@@ -16,6 +9,22 @@ import { SelectTool, Tool } from './tool'
 
 /* eslint no-use-before-define: "off" */
 type CommandInvokerCallback = (sender: Component<HTMLElement> | AppState, command: Command<any>) => void
+
+export interface MutableAppState {
+  scene: () => Scene
+  selectedTool: () => Tool
+  selectedLayer: () => Layer
+  selectedEntities: () => Entity<Drawable>[]
+  currentTextPosition: () => IPoint
+  currentText: () => string
+  storage: () => EntitiesStorage
+  clearSelected: () => void
+  setTool: (tool: Tool) => void
+  setCurrentTextPosition: (point: IPoint) => void
+  setCurrentText: (text: string) => void
+  background: () => Shape
+  addEntities: (entities: Entity<Drawable>[]) => void
+}
 
 export class AppState {
   #scene: Scene | null = null
@@ -66,8 +75,6 @@ export class AppState {
 
   addEntities (entities: Entity<Drawable>[]) {
     entities.forEach(item => {
-      this.#storage.add(item)
-      item.create(this.selectedLayer)
       this.sendCommand(this, new AddedEntityCommand(item))
     })
   }
@@ -81,38 +88,25 @@ export class AppState {
   }
 
   private onStateChanged (sender: AppState | Component<HTMLElement>, command: Command<any>): void {
-    if (command instanceof SelectEntitiesCommand) {
-      this.#selectedEntities = []
-      command.invoke(this.#storage, this)
-    }
-
-    if (command instanceof ChangeToolCommand) {
-      this.#selectedTool = command.data!
-    }
-
-    if (command instanceof ChangeBackgroundSizeCommand) {
-      command.invoke(this.background)
-    }
-
-    if (command instanceof CreateInputTextCommand) {
-      this.#currentTextPosition = command.data![1]
-    }
-
-    if (command instanceof InputTextCommand) {
-      this.#currentText = command.data!
-    }
-
-    if (command instanceof CreateTextCommand) {
-      command.invoke(this)
-    }
-
-    if (command instanceof DeleteEntitiesCommand) {
-      command.data!.forEach(p => {
-        this.#storage.remove(p)
-        this.selectedLayer.remove(p)
-      })
-    }
-
+    command.execute(this.mutable)
     this.#storage.refresh()
+  }
+
+  private get mutable (): MutableAppState {
+    return {
+      currentText: () => this.#currentText,
+      currentTextPosition: () => this.#currentTextPosition,
+      scene: () => this.#scene!,
+      selectedEntities: () => this.#selectedEntities,
+      selectedLayer: () => this.selectedLayer,
+      selectedTool: () => this.#selectedTool,
+      storage: () => this.#storage,
+      clearSelected: () => (this.#selectedEntities = []),
+      setTool: tool => (this.#selectedTool = tool),
+      setCurrentTextPosition: point => (this.#currentTextPosition = point),
+      setCurrentText: text => (this.#currentText = text),
+      background: () => this.background,
+      addEntities: entities => this.addEntities(entities)
+    }
   }
 }

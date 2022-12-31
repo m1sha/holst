@@ -1,13 +1,17 @@
 import { Color, IPoint, TextBlock, TextStyle } from '../../../../src'
-import { AppState } from '../app-state'
+import { MutableAppState } from '../app-state'
 import { Entity } from '../entities/entity'
 import { Command } from './command'
 
 export class CreateTextCommand extends Command<void> {
-  invoke (state: AppState) {
-    const textBlock = this.createText(state.currentText, state.currentTextPosition)
+  execute (appState: MutableAppState): void {
+    const textBlock = this.createText(appState.currentText(), appState.currentTextPosition())
     const entity = new Entity(textBlock)
-    state.addEntities([entity])
+    appState.addEntities([entity])
+  }
+
+  rollback (appState: MutableAppState): void {
+    throw new Error('Method not implemented.')
   }
 
   private createText (str: string, pos: IPoint) {

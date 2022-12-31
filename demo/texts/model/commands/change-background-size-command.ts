@@ -1,4 +1,5 @@
-import { Shape, Size } from '../../../../src'
+import { Size } from '../../../../src'
+import { MutableAppState } from '../app-state'
 import { Command } from './command'
 
 export class ChangeBackgroundSizeCommand extends Command<Size> {
@@ -7,10 +8,14 @@ export class ChangeBackgroundSizeCommand extends Command<Size> {
     this.data = size
   }
 
-  invoke (shape: Shape) {
+  execute (appState: MutableAppState): void {
     if (!this.data) return
-    const rect = shape.rects[0]
+    const rect = appState.background().rects[0]
     rect.height = this.data.height
     rect.width = this.data.width
+  }
+
+  rollback (appState: MutableAppState): void {
+    throw new Error('Method not implemented.')
   }
 }
