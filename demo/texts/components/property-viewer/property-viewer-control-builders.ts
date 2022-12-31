@@ -27,8 +27,8 @@ export function createInput (rule: Rule, parentNode: HTMLDivElement, callback: (
   const input = document.createElement('input')
   input.value = rule.value()
   input.onchange = e => {
-    rule.change((e.target as HTMLInputElement).value)
-    callback(new EntityValue())
+    const value = (e.target as HTMLInputElement).value
+    callback(new EntityValue(value, rule.dataType))
   }
   parentNode.append(input)
   return input
@@ -39,8 +39,8 @@ export function createCheckBox (rule: Rule, parentNode: HTMLDivElement, callback
   input.type = 'checkbox'
   input.checked = Boolean(rule.value())
   input.onchange = e => {
-    rule.change((e.target as HTMLInputElement).checked)
-    callback(new EntityValue())
+    const value = (e.target as HTMLInputElement).checked
+    callback(new EntityValue(value, rule.dataType))
   }
   parentNode.append(input)
   return input
@@ -56,8 +56,8 @@ export function createSelect (rule: Rule, parentNode: HTMLDivElement, callback: 
   }
   select.selectedIndex = rule.options!.indexOf(rule.value())
   select.onchange = e => {
-    rule.change((e.target as HTMLSelectElement).value)
-    callback(new EntityValue())
+    const value = (e.target as HTMLSelectElement).value
+    callback(new EntityValue(value, rule.dataType))
   }
   parentNode.append(select)
   return select

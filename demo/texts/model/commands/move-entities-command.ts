@@ -13,6 +13,6 @@ export class MoveEntitiesCommand extends Command<string[]> {
   }
 
   rollback (appState: MutableAppState): void {
-    throw new Error('Method not implemented.')
+    console.log('MoveEntitiesCommand')
   }
 }

@@ -1,17 +1,19 @@
 import { MutableAppState } from '../app-state'
 import { Command } from './command'
 
-export class InputTextCommand extends Command<string> {
-  constructor (value: string) {
+export class StartMoveEntitiesCommand extends Command<string[]> {
+  ids: string[]
+
+  constructor (ids: string[]) {
     super()
-    this.data = value
+    this.ids = ids
   }
 
   execute (appState: MutableAppState): void {
-    appState.setCurrentText(this.data!)
+    //
   }
 
   rollback (appState: MutableAppState): void {
-    console.log('InputTextCommand')
+    //
   }
 }

@@ -3,9 +3,11 @@ import { MouseEventDecorator } from '../../../../../src/core/events/decorators'
 import { InteractiveEvent } from '../../../../../src/core/events/interactive'
 import { AppState } from '../../../model/app-state'
 import { CreateInputTextCommand } from '../../../model/commands/create-input-text-command'
+import { EndMoveEntitiesCommand } from '../../../model/commands/end-move-entities-command'
 // import { CreateTextCommand } from '../../../model/commands/create-text-command'
 import { MoveEntitiesCommand } from '../../../model/commands/move-entities-command'
 import { SelectEntitiesCommand } from '../../../model/commands/select-entities-command'
+import { StartMoveEntitiesCommand } from '../../../model/commands/start-move-entities-command'
 import { Viewer } from '../viewer'
 
 export class MovementController {
@@ -44,6 +46,7 @@ export class MovementController {
       .on('mousedown', e => {
         e.event.stopPropagation()
         this.state.sendCommand(this.viewer, new SelectEntitiesCommand([drawable.id], 'none'))
+        this.state.sendCommand(this.viewer, new StartMoveEntitiesCommand([drawable.id]))
         delta = new Point(drawable.bounds).dec(getPoint(e))
       })
       .on('mousemove', e => {
@@ -67,6 +70,7 @@ export class MovementController {
         // getPoint(e)
         e.cursor = 'pointer'
         // this.state.update()
+        this.state.sendCommand(this.viewer, new EndMoveEntitiesCommand([drawable.id]))
       })
   }
 }

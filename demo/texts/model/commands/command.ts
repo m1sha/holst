@@ -6,4 +6,6 @@ export abstract class Command<TData> {
   abstract execute (appState: MutableAppState): void
 
   abstract rollback (appState: MutableAppState): void
+
+  get needRegistrate () { return true }
 }

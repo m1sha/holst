@@ -54,19 +54,19 @@ export class PropertyViewer extends StateComponent<HTMLDivElement> {
         .setLabel(label)
 
       if (rule.type === 'input') {
-        const input = createInput(rule, div, value => this.send(new ChangeEntityValueCommand(value)))
+        const input = createInput(rule, div, value => this.send(new ChangeEntityValueCommand(value, rule, input)))
         if (rule.dataType === 'numeric') input.type = 'number'
         if (rule.dataType === 'color') input.type = 'color'
         control.setInput(input)
       }
 
       if (rule.type === 'checkbox') {
-        const input = createCheckBox(rule, div, value => this.send(new ChangeEntityValueCommand(value)))
+        const input = createCheckBox(rule, div, value => this.send(new ChangeEntityValueCommand(value, rule, input)))
         control.setInput(input)
       }
 
       if (rule.type === 'select' && rule.options) {
-        const input = createSelect(rule, div, value => this.send(new ChangeEntityValueCommand(value)))
+        const input = createSelect(rule, div, value => this.send(new ChangeEntityValueCommand(value, rule, input)))
         control.setInput(input)
       }
 

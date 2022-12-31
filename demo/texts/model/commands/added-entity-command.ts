@@ -15,6 +15,6 @@ export class AddedEntityCommand extends Command<Entity<Drawable>> {
   }
 
   rollback (appState: MutableAppState): void {
-    throw new Error('Method not implemented.')
+    console.log('AddedEntityCommand')
   }
 }

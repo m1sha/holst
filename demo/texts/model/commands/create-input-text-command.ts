@@ -13,6 +13,6 @@ export class CreateInputTextCommand extends Command<IPoint[]> {
   }
 
   rollback (appState: MutableAppState): void {
-    throw new Error('Method not implemented.')
+    console.log('CreateInputTextCommand')
   }
 }

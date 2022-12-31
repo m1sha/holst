@@ -16,6 +16,8 @@ export class ChangeBackgroundSizeCommand extends Command<Size> {
   }
 
   rollback (appState: MutableAppState): void {
-    throw new Error('Method not implemented.')
+    // nothing occurs
   }
+
+  get needRegistrate () { return false }
 }

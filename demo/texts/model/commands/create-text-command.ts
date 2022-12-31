@@ -11,7 +11,7 @@ export class CreateTextCommand extends Command<void> {
   }
 
   rollback (appState: MutableAppState): void {
-    throw new Error('Method not implemented.')
+    console.log('CreateTextCommand')
   }
 
   private createText (str: string, pos: IPoint) {

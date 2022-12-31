@@ -2,6 +2,7 @@ import { Drawable, IPoint, Layer, Scene, Shape } from '../../../src'
 import { Component } from '../components/base/component'
 import { AddedEntityCommand } from './commands/added-entity-command'
 import { Command } from './commands/command'
+import { Commander } from './commands/commander'
 import { Entity } from './entities/entity'
 import { EntitiesStorage } from './storage'
 import { defineStyles } from './styles'
@@ -27,6 +28,7 @@ export interface MutableAppState {
 }
 
 export class AppState {
+  #commander: Commander = new Commander()
   #scene: Scene | null = null
   #selectedTool: Tool = new SelectTool()
   #selectedLayer: Layer | null = null
@@ -80,14 +82,17 @@ export class AppState {
   }
 
   undo () {
-    alert('undo')
+    this.#commander.undo(this.mutable)
+    this.#storage.refresh()
   }
 
   redo () {
-    alert('redo')
+    this.#commander.redo(this.mutable)
+    this.#storage.refresh()
   }
 
   private onStateChanged (sender: AppState | Component<HTMLElement>, command: Command<any>): void {
+    this.#commander.add(command)
     command.execute(this.mutable)
     this.#storage.refresh()
   }

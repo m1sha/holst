@@ -19,6 +19,6 @@ export class SelectEntitiesCommand extends Command<string[]> {
   }
 
   rollback (appState: MutableAppState): void {
-    throw new Error('Method not implemented.')
+    console.log('SelectEntitiesCommand')
   }
 }
