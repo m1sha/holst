@@ -2,13 +2,14 @@ import { AppState } from '../../model/app-state'
 import { Command } from '../../model/commands/command'
 import { DeleteEntitiesCommand } from '../../model/commands/delete-entities-command'
 import { SelectEntitiesCommand } from '../../model/commands/select-entities-command'
+import { VisibleEntitiesCommand } from '../../model/commands/visible-entities-command'
 import { Component } from '../base/component'
 import { StateComponent } from '../base/state-component'
 import { EntityCard } from './entity-card'
 
 export type ObjectItemTemplate = (item: any, div: HTMLDivElement) => boolean
 
-export class ObjectList extends StateComponent<HTMLDivElement> {
+export class EntityList extends StateComponent<HTMLDivElement> {
   cards: EntityCard[] = []
   filter: ((item: any) => boolean) | null = null
   title: ((item: any) => any) | null = null
@@ -28,6 +29,7 @@ export class ObjectList extends StateComponent<HTMLDivElement> {
       if (this.title) card.title = this.title(item)
       card.onClick = () => this.send(new SelectEntitiesCommand([item.target.id], 'none'))
       card.onDeleteClick = () => this.send(new DeleteEntitiesCommand([item.target.id]))
+      card.onVisibleClick = visible => this.send(new VisibleEntitiesCommand(visible, item))
       card.create(root, selected)
       this.cards.push(card)
     }

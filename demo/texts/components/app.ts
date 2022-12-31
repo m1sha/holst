@@ -1,5 +1,5 @@
 import { PropertyViewer } from './property-viewer/property-viewer'
-import { ObjectList } from './object-list/object-list'
+import { EntityList } from './entity-list/entity-list'
 import { Toolbar } from './toolbar/toolbar'
 import { createDefaultTextBlocks } from '../create-default-text-blocks'
 import { Viewer } from './viewer/viewer'
@@ -11,7 +11,7 @@ export class App {
   private state: AppState
   private grid: Grid
   private propertyViewer: PropertyViewer
-  private objectList: ObjectList
+  private objectList: EntityList
   private toolbar: Toolbar
   private viewer: Viewer
   private inputText: InputText
@@ -20,7 +20,7 @@ export class App {
     this.state = new AppState()
     this.grid = new Grid()
     this.propertyViewer = new PropertyViewer(this.state)
-    this.objectList = new ObjectList(this.state)
+    this.objectList = new EntityList(this.state)
     this.toolbar = new Toolbar(this.state)
     this.viewer = new Viewer(this.state)
     this.inputText = new InputText(this.state)

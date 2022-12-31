@@ -9,6 +9,7 @@ export class EntityCard {
   title: string = ''
   onClick: (() => void) | null = null
   onDeleteClick: (() => void) | null = null
+  onVisibleClick: ((value: boolean) => void) | null = null
 
   constructor (entity: Entity<Drawable>) {
     this.entity = entity
@@ -24,6 +25,14 @@ export class EntityCard {
     const cardTitle = html.p(this.title)
     html.child(cardDiv, cardTitle)
     html.click(cardTitle, () => { if (this.onClick) this.onClick() })
+
+    const visibleButton = html.a()
+    const visibleIcon = html.i(!this.entity.target.hidden ? 'fa fa-eye' : 'fa fa-eye-slash')
+    html.child(visibleButton, visibleIcon)
+    html.child(cardDiv, visibleButton)
+    html.click(visibleButton, () => {
+      if (this.onVisibleClick) this.onVisibleClick(this.entity.target.hidden)
+    })
 
     const deleteButton = html.a()
     const deleteIcon = html.i('fa fa-trash')

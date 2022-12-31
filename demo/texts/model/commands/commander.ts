@@ -17,7 +17,9 @@ export class Commander {
     }
 
     if (this.#heap > this.#commands.length) {
-      while (this.#heap > this.#commands.length) this.#commands.pop()
+      while (this.#heap > this.#commands.length) {
+        this.#commands.pop()
+      }
     }
     this.#commands.push(command)
     this.#heap++
@@ -34,7 +36,8 @@ export class Commander {
 
   redo (state: MutableAppState) {
     if (this.#heap + 1 > this.#commands.length) return
-    this.#commands[this.#heap - 1].execute(state)
     this.#heap++
+    const command = this.#commands[this.#heap - 1]
+    command.execute(state)
   }
 }

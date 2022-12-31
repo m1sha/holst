@@ -16,7 +16,7 @@ const HTML = {
   },
   a: () => {
     const r = document.createElement('a')
-    r.href = 'javascript::void(0)'
+    r.href = 'javascript:void(0)'
     return r
   },
   click: (el: HTMLElement, callback: () => void) => {
