@@ -1,22 +1,25 @@
 .toolbar
   display: flex
+  & > *
+    margin: 4px 2px
 
-.toolbar > *
-  margin: 4px 2px
+  .toolbar-button
+    display: flex
+    min-width: 42px
+    border: 1px solid #9d9d9d
+    border-radius: 4px
+    align-items: center
+    justify-content: center
+    padding: 4px 0
+    cursor: pointer
 
-.toolbar-button
-  display: flex
-  min-width: 42px
-  border: 1px solid #9d9d9d
-  border-radius: 4px
-  align-items: center
-  justify-content: center
-  padding: 4px 0
-  cursor: pointer
+    &:hover
+      border: 1px solid #6d6d6d
 
-.toolbar-button:hover
-  border: 1px solid #6d6d6d
+  .toolbar-button-wrapper input:checked ~ .toolbar-button
+    border: 1px solid #3d3d3d
+    background-color: #f0f0f0
 
-.toolbar-button-wrapper input:checked ~ .toolbar-button
-  border: 1px solid #3d3d3d
-  background-color: #f0f0f0
+  .toolbar-separator
+    display: block
+    width: 12px

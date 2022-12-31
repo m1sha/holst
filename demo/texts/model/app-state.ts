@@ -72,6 +72,14 @@ export class AppState {
     })
   }
 
+  undo () {
+    alert('undo')
+  }
+
+  redo () {
+    alert('redo')
+  }
+
   private onStateChanged (sender: AppState | Component<HTMLElement>, command: Command<any>): void {
     if (command instanceof SelectEntitiesCommand) {
       this.#selectedEntities = []
