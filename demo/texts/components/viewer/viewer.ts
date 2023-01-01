@@ -6,14 +6,14 @@ import { Command } from '../../model/commands/command'
 import { CreateRectTool, CreateTextTool, SelectTool } from '../../model/tool'
 import { Component } from '../base/component'
 import { StateComponent } from '../base/state-component'
-import { MovementController } from './movement/movement-controller'
+import { ActionController } from './action-controller'
 
 export class Viewer extends StateComponent<HTMLCanvasElement> {
-  private movement: MovementController
+  private controller: ActionController
 
   constructor (state: AppState) {
     super(state)
-    this.movement = new MovementController(this.state, this)
+    this.controller = new ActionController(this.state, this)
   }
 
   build () {
@@ -37,7 +37,7 @@ export class Viewer extends StateComponent<HTMLCanvasElement> {
 
   protected onStateChanged (sender: AppState | Component<HTMLElement>, command: Command<any>): void {
     if (command instanceof AddedEntityCommand) {
-      this.movement.add(command.data!.target as TextBlock)
+      this.controller.add(command.data!.target as TextBlock)
     }
     this.update()
   }
