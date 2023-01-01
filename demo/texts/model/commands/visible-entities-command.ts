@@ -15,9 +15,11 @@ export class VisibleEntitiesCommand extends Command<any> {
 
   execute (appState: MutableAppState): void {
     this.entity.target.hidden = !this.visible
+    super.execute(appState)
   }
 
   rollback (appState: MutableAppState): void {
     this.entity.target.hidden = this.visible
+    super.rollback(appState)
   }
 }

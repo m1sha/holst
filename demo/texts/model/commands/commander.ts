@@ -8,11 +8,15 @@ export class Commander {
   #commands: Command<Entity<Drawable>>[] = []
   #heap: number = 0
 
-  add (command: Command<Entity<Drawable>>) {
+  has (command: Command<Entity<Drawable>>): boolean {
+    return this.#commands.some(p => p.id === command.id)
+  }
+
+  add (command: Command<Entity<Drawable>>): void {
     if (!command.needRegistrate) return
 
-    if (this.#commands[this.#commands.length - 1] instanceof MoveEntitiesCommand && command instanceof MoveEntitiesCommand) {
-      this.#commands[this.#commands.length - 1].data = command.data
+    if (this.lastCommand instanceof MoveEntitiesCommand && command instanceof MoveEntitiesCommand) {
+      this.lastCommand.data = command.data
       return
     }
 
@@ -22,14 +26,14 @@ export class Commander {
       }
     }
     this.#commands.push(command)
-    this.#heap++
+    this.#heap = this.#commands.length
 
     console.dir(command)
   }
 
   undo (state: MutableAppState) {
     if (this.#heap - 1 < 0) return
-    const command = this.#commands[this.#heap - 1]
+    const command = this.command
     command.rollback(state)
     this.#heap--
   }
@@ -37,7 +41,15 @@ export class Commander {
   redo (state: MutableAppState) {
     if (this.#heap + 1 > this.#commands.length) return
     this.#heap++
-    const command = this.#commands[this.#heap - 1]
+    const command = this.command
     command.execute(state)
+  }
+
+  get command () {
+    return this.#commands[this.#heap - 1]
+  }
+
+  private get lastCommand () {
+    return this.#commands[this.#commands.length - 1]
   }
 }

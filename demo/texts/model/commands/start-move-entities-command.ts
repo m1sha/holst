@@ -10,10 +10,10 @@ export class StartMoveEntitiesCommand extends Command<string[]> {
   }
 
   execute (appState: MutableAppState): void {
-    //
+    super.execute(appState)
   }
 
   rollback (appState: MutableAppState): void {
-    //
+    super.rollback(appState)
   }
 }

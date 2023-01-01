@@ -8,10 +8,12 @@ export class CreateTextCommand extends Command<void> {
     const textBlock = this.createText(appState.currentText(), appState.currentTextPosition())
     const entity = new Entity(textBlock)
     appState.addEntities([entity])
+    super.execute(appState)
   }
 
   rollback (appState: MutableAppState): void {
     console.log('CreateTextCommand')
+    super.rollback(appState)
   }
 
   private createText (str: string, pos: IPoint) {

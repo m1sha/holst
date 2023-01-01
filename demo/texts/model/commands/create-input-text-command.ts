@@ -10,9 +10,11 @@ export class CreateInputTextCommand extends Command<IPoint[]> {
 
   execute (appState: MutableAppState): void {
     appState.setCurrentTextPosition(this.data![1])
+    super.execute(appState)
   }
 
   rollback (appState: MutableAppState): void {
     console.log('CreateInputTextCommand')
+    super.rollback(appState)
   }
 }

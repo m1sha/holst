@@ -14,9 +14,11 @@ export class DeleteEntitiesCommand extends Command<string[]> {
       storage.remove(p)
       selectedLayer.remove(p)
     })
+    super.execute(appState)
   }
 
   rollback (appState: MutableAppState): void {
     console.log('DeleteEntitiesCommand')
+    super.rollback(appState)
   }
 }

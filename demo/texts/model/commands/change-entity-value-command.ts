@@ -27,6 +27,7 @@ export class ChangeEntityValueCommand extends Command<EntityValue> {
   execute (appState: MutableAppState): void {
     this.previousValue = this.rule.value()
     this.rule.change(this.data!.value)
+    super.execute(appState)
   }
 
   rollback (appState: MutableAppState): void {
@@ -44,5 +45,7 @@ export class ChangeEntityValueCommand extends Command<EntityValue> {
       el.selectedIndex = this.rule.options!.indexOf(this.previousValue)
       el.value = this.previousValue
     }
+
+    super.rollback(appState)
   }
 }

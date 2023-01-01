@@ -12,9 +12,11 @@ export class AddedEntityCommand extends Command<Entity<Drawable>> {
   execute (appState: MutableAppState): void {
     appState.storage().add(this.data!)
     this.data!.create(appState.selectedLayer())
+    super.execute(appState)
   }
 
   rollback (appState: MutableAppState): void {
     console.log('AddedEntityCommand')
+    super.rollback(appState)
   }
 }

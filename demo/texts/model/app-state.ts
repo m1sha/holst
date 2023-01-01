@@ -82,18 +82,20 @@ export class AppState {
   }
 
   undo () {
+    const command = this.#commander.command
     this.#commander.undo(this.mutable)
-    this.#storage.refresh()
+    this.sendCommand(this, command)
   }
 
   redo () {
+    const command = this.#commander.command
     this.#commander.redo(this.mutable)
-    this.#storage.refresh()
+    this.sendCommand(this, command)
   }
 
   private onStateChanged (sender: AppState | Component<HTMLElement>, command: Command<any>): void {
-    this.#commander.add(command)
-    command.execute(this.mutable)
+    if (!this.#commander.has(command)) this.#commander.add(command)
+    if (command.canExecuted) command.execute(this.mutable)
     this.#storage.refresh()
   }
 

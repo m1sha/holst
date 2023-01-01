@@ -16,9 +16,13 @@ export class SelectEntitiesCommand extends Command<string[]> {
     storage.entities.forEach(p => (p.selected = false))
     items.forEach(p => (p.selected = true))
     if (items) appState.selectedEntities().push(...items)
+
+    super.execute(appState)
   }
 
   rollback (appState: MutableAppState): void {
     console.log('SelectEntitiesCommand')
+
+    super.rollback(appState)
   }
 }

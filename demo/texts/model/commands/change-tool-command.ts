@@ -12,9 +12,11 @@ export class ChangeToolCommand extends Command<Tool> {
   execute (appState: MutableAppState): void {
     this.previousTool = appState.selectedTool()
     appState.setTool(this.data!)
+    super.execute(appState)
   }
 
   rollback (appState: MutableAppState): void {
     appState.setTool(this.previousTool!)
+    super.rollback(appState)
   }
 }
