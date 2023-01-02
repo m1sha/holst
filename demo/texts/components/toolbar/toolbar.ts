@@ -1,53 +1,86 @@
+import { AppState } from '../../model/app-state'
 import { ChangeToolCommand } from '../../model/commands/change-tool-command'
-import { CreateRectTool, CreateTextTool, MoveTool, RotateTool, SelectTool, TransformTool } from '../../model/tool'
+import { Command } from '../../model/commands/command'
+import { ToolNames } from '../../model/tool'
+import { Component } from '../base/component'
 import { StateComponent } from '../base/state-component'
-import { RadioToolbarButton, ToolbarButton, createSeparator } from './toolbar-buttons'
+import { createSeparator, ToolbarButtons } from './toolbar-buttons'
 
 export class Toolbar extends StateComponent<HTMLDivElement> {
-  private buttons: ToolbarButton[] = []
+  private buttons: ToolbarButtons = new ToolbarButtons(this.rootElement)
   protected get name (): string { return 'toolbar' }
   protected get elementType (): string { return 'div' }
 
   build () {
     const root = this.rootElement
+    const buttons = this.buttons
 
-    const undoBtn = new ToolbarButton('createText', 'undo').create(root)
-    const redoBtn = new ToolbarButton('createText', 'redo').create(root)
-    undoBtn.onClick = () => this.state.undo()
-    redoBtn.onClick = () => this.state.redo()
-
-    createSeparator(root)
-
-    const createTextBtn = new RadioToolbarButton('createText', 'font', 'toolbar').create(root)
-    const createShapesBtn = new RadioToolbarButton('createShape', 'shapes', 'toolbar').create(root)
+    buttons.createButton('undo', 'undo').onClick = () => this.state.undo()
+    buttons.createButton('redo', 'redo').onClick = () => this.state.redo()
 
     createSeparator(root)
 
-    const selectBtn = new RadioToolbarButton('selectTool', 'mouse-pointer', 'toolbar').create(root)
-    const moveBtn = new RadioToolbarButton('moveTool', 'arrows-alt', 'toolbar').create(root)
-    const rotateBtn = new RadioToolbarButton('moveTool', 'sync', 'toolbar').create(root)
-    const transformBtn = new RadioToolbarButton('moveTool', 'vector-square', 'toolbar').create(root)
-    createTextBtn.onClick = () => this.send(new ChangeToolCommand(new CreateTextTool()))
-    createShapesBtn.onClick = () => this.send(new ChangeToolCommand(new CreateRectTool()))
-    selectBtn.onClick = () => this.send(new ChangeToolCommand(new SelectTool()))
-    moveBtn.onClick = () => this.send(new ChangeToolCommand(new MoveTool()))
-    rotateBtn.onClick = () => this.send(new ChangeToolCommand(new RotateTool()))
-    transformBtn.onClick = () => this.send(new ChangeToolCommand(new TransformTool()))
+    buttons.createRadio('create-text', 'font', 'toolbar')
+      .title('Create text')
+      .onClick = () => this.changeTool('create-text')
+    buttons.createRadio('create-sketch', 'shapes', 'toolbar')
+      .title('Create sketch')
+      .onClick = () => this.changeTool('create-sketch')
+    buttons.createRadio('create-raster', 'image', 'toolbar')
+      .title('Create raster')
+      .onClick = () => this.changeTool('create-raster')
 
-    switch (this.state.selectedTool.name) {
-      case 'create-text': createTextBtn.click(); break
-      case 'create-rect': createShapesBtn.click(); break
-      case 'select': selectBtn.click(); break
-      case 'move': selectBtn.click(); break
-      case 'rotate': selectBtn.click(); break
-      case 'transform': selectBtn.click(); break
+    createSeparator(root)
+
+    buttons.createRadio('select', 'mouse-pointer', 'toolbar')
+      .title('Select object(s)')
+      .onClick = () => this.changeTool('select')
+    buttons.createRadio('move', 'arrows-alt', 'toolbar')
+      .title('Move object(s)')
+      .onClick = () => this.changeTool('move')
+    buttons.createRadio('rotate', 'sync', 'toolbar')
+      .title('Rotate object(s)')
+      .onClick = () => this.changeTool('rotate')
+    buttons.createRadio('transform', 'vector-square', 'toolbar')
+      .title('Transform object')
+      .onClick = () => this.changeTool('transform')
+
+    createSeparator(root)
+
+    buttons.createRadio('sketchPenTool', 'square', 'sketch-draw-tools')
+    buttons.createRadio('sketchBrushTool', 'circle', 'sketch-draw-tools')
+    buttons.createRadio('sketchDrawPolygonTool', 'draw-polygon', 'sketch-draw-tools')
+
+    buttons.visibleRadioGroup('sketch-draw-tools', false)
+
+    buttons.createRadio('rasterPenTool', 'pen', 'raster-draw-tools')
+    buttons.createRadio('rasterBrushTool', 'paint-brush', 'raster-draw-tools')
+    buttons.createRadio('rasterDrawPolygonTool', 'draw-polygon', 'raster-draw-tools')
+    buttons.createRadio('rasterSplotchTool', 'splotch', 'raster-draw-tools')
+    buttons.createRadio('rasterEraserTool', 'eraser', 'raster-draw-tools')
+    buttons.createRadio('rasterFillTool', 'fill', 'raster-draw-tools')
+
+    buttons.visibleRadioGroup('raster-draw-tools', false)
+
+    const toolName = this.state.selectedTool.name
+    buttons.click(toolName)
+  }
+
+  protected onStateChanged (sender: AppState | Component<HTMLElement>, command: Command<any>): void {
+    if (command instanceof ChangeToolCommand) {
+      const toolName = command.data!
+      this.buttons.setCheck(toolName, true)
+
+      this.buttons.visibleRadioGroup('sketch-draw-tools', toolName === 'create-sketch')
+      this.buttons.visibleRadioGroup('raster-draw-tools', toolName === 'create-raster')
     }
-
-    this.buttons.push(...[undoBtn, redoBtn, createTextBtn, createShapesBtn, selectBtn, moveBtn, rotateBtn, transformBtn])
   }
 
   destroy () {
-    this.buttons.forEach(p => p.destroy())
-    this.buttons = []
+    this.buttons.destroy()
+  }
+
+  private changeTool (toolName: ToolNames) {
+    this.send(new ChangeToolCommand(toolName))
   }
 }

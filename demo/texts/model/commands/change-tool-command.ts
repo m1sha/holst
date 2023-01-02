@@ -1,16 +1,16 @@
 import { MutableAppState } from '../app-state'
-import { Tool } from '../tool'
+import { ToolNames } from '../tool'
 import { Command } from './command'
 
-export class ChangeToolCommand extends Command<Tool> {
-  private previousTool: Tool | null = null
-  constructor (tool: Tool) {
+export class ChangeToolCommand extends Command<ToolNames> {
+  private previousTool: ToolNames | null = null
+  constructor (toolName: ToolNames) {
     super()
-    this.data = tool
+    this.data = toolName
   }
 
   execute (appState: MutableAppState): void {
-    this.previousTool = appState.selectedTool()
+    this.previousTool = appState.selectedTool()?.name
     appState.setTool(this.data!)
     super.execute(appState)
   }

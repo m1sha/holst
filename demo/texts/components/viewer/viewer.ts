@@ -3,7 +3,7 @@ import { AppState } from '../../model/app-state'
 import { AddedEntityCommand } from '../../model/commands/added-entity-command'
 import { ChangeBackgroundSizeCommand } from '../../model/commands/change-background-size-command'
 import { Command } from '../../model/commands/command'
-import { CreateRectTool, CreateTextTool, SelectTool } from '../../model/tool'
+import { CreateSketchTool, CreateTextTool, SelectTool } from '../../model/tool'
 import { Component } from '../base/component'
 import { StateComponent } from '../base/state-component'
 import { ActionController } from './action-controller'
@@ -24,7 +24,7 @@ export class Viewer extends StateComponent<HTMLCanvasElement> {
     renderer.onFrameChanged = () => {
       const tool = this.state.selectedTool
       if (tool instanceof CreateTextTool) this.rootElement.style.cursor = 'text'
-      if (tool instanceof CreateRectTool) this.rootElement.style.cursor = 'crosshair'
+      if (tool instanceof CreateSketchTool) this.rootElement.style.cursor = 'crosshair'
       if (tool instanceof SelectTool) this.rootElement.style.cursor = 'default'
     }
 

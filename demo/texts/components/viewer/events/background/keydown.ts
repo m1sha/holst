@@ -2,14 +2,14 @@ import { KeyboardEventDecorator } from '../../../../../../src/core/events/decora
 import { InteractiveEvent } from '../../../../../../src/core/events/interactive'
 import { AppState } from '../../../../model/app-state'
 import { ChangeToolCommand } from '../../../../model/commands/change-tool-command'
-import { MoveTool, RotateTool, SelectTool, Tool, TransformTool } from '../../../../model/tool'
+import { ToolNames } from '../../../../model/tool'
 import { Viewer } from '../../viewer'
 
 export function onBackgroundKeydown (e: InteractiveEvent<KeyboardEventDecorator>, state: AppState, viewer: Viewer) {
   const event = e.event.origin
   event.stopImmediatePropagation()
-  event.preventDefault()
   const key = event.key.toLowerCase()
+  if (key !== 'f12') event.preventDefault()
 
   if (key === 'control' || key === 'alt' || key === 'shift') return
 
@@ -17,22 +17,22 @@ export function onBackgroundKeydown (e: InteractiveEvent<KeyboardEventDecorator>
 
   printKey(event)
 
-  let tool: Tool | null = null
+  let tool: ToolNames | null = null
   switch (key) {
     case 'q': {
-      if (name !== 'select') tool = new SelectTool()
+      if (name !== 'select') tool = 'select'
       break
     }
     case 'w': {
-      if (name !== 'move') tool = new MoveTool()
+      if (name !== 'move') tool = 'move'
       break
     }
     case 'e': {
-      if (name !== 'rotate') tool = new RotateTool()
+      if (name !== 'rotate') tool = 'rotate'
       break
     }
     case 'r': {
-      if (name !== 'transform') tool = new TransformTool()
+      if (name !== 'transform') tool = 'transform'
       break
     }
   }

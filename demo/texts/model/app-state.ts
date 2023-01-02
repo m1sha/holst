@@ -6,7 +6,7 @@ import { Commander } from './commands/commander'
 import { Entity } from './entities/entity'
 import { EntitiesStorage } from './storage'
 import { defineStyles } from './styles'
-import { SelectTool, Tool } from './tool'
+import { SelectTool, Tool, ToolBox, ToolNames } from './tool'
 
 /* eslint no-use-before-define: "off" */
 type CommandInvokerCallback = (sender: Component<HTMLElement> | AppState, command: Command<any>) => void
@@ -20,7 +20,7 @@ export interface MutableAppState {
   currentText: () => string
   storage: () => EntitiesStorage
   clearSelected: () => void
-  setTool: (tool: Tool) => void
+  setTool: (toolName: ToolNames) => void
   setCurrentTextPosition: (point: IPoint) => void
   setCurrentText: (text: string) => void
   background: () => Shape
@@ -36,10 +36,12 @@ export class AppState {
   #currentTextPosition: IPoint = { x: 0, y: 0 }
   #currentText: string = ''
   #storage: EntitiesStorage = new EntitiesStorage()
+  #toolBox: ToolBox
   private invokers: CommandInvokerCallback[] = []
   background: Shape
 
   constructor () {
+    this.#toolBox = new ToolBox()
     const layer0 = this.scene.createLayer()
     this.background = layer0.createShape('background').rect(0, 0, 0, 0)
     this.addInvoker((sender, command) => this.onStateChanged(sender, command))
@@ -109,7 +111,7 @@ export class AppState {
       selectedTool: () => this.#selectedTool,
       storage: () => this.#storage,
       clearSelected: () => (this.#selectedEntities = []),
-      setTool: tool => (this.#selectedTool = tool),
+      setTool: toolName => (this.#selectedTool = this.#toolBox.getByName(toolName)),
       setCurrentTextPosition: point => (this.#currentTextPosition = point),
       setCurrentText: text => (this.#currentText = text),
       background: () => this.background,
