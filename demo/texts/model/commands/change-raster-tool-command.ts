@@ -1,0 +1,24 @@
+import { MutableAppState } from '../app-state'
+import { CreateRasterTool, RasterToolNames } from '../tool'
+import { Command } from './command'
+
+export class ChangeRasterToolCommand extends Command<RasterToolNames> {
+  private previousTool: RasterToolNames | null = null
+  constructor (toolName: RasterToolNames) {
+    super()
+    this.data = toolName
+  }
+
+  execute (appState: MutableAppState): void {
+    if (appState.selectedTool()?.name !== 'create-raster') return
+    const t = appState.selectedTool() as CreateRasterTool
+    this.previousTool = t.selectedTool.name
+    appState.setRasterTool(this.data!)
+    super.execute(appState)
+  }
+
+  rollback (appState: MutableAppState): void {
+    appState.setRasterTool(this.previousTool!)
+    super.rollback(appState)
+  }
+}

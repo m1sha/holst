@@ -6,6 +6,7 @@ import { Viewer } from './viewer/viewer'
 import { Grid } from './grid/grid'
 import { AppState } from '../model/app-state'
 import { InputText } from './input-text/input-text'
+import { createDefaultRasters } from '../create-default-rasters'
 
 export class App {
   private state: AppState
@@ -26,14 +27,17 @@ export class App {
     this.inputText = new InputText(this.state)
   }
 
-  create (appDiv: HTMLDivElement) {
+  async create (appDiv: HTMLDivElement) {
+    const rasters = await createDefaultRasters()
+    this.state.addEntities(rasters)
     this.state.addEntities(createDefaultTextBlocks())
 
     this.toolbar.build()
 
-    this.objectList.filter = item => item.target.type === 'text' || item.target.type === 'shape'
+    this.objectList.filter = item => item.target.type === 'text' || item.target.type === 'shape' || item.target.type === 'raster'
     this.objectList.title = item => {
       if (item.target.type === 'shape') return item.target.name
+      if (item.target.type === 'raster') return item.target.name
       if (item.target.type === 'text') return item.target.text ? item.target.text.replaceAll('\n', ' ') : ''
     }
     this.objectList.build()

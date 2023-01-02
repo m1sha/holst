@@ -1,11 +1,14 @@
 import { KeyboardEventDecorator } from '../../../../../../src/core/events/decorators'
 import { InteractiveEvent } from '../../../../../../src/core/events/interactive'
 import { AppState } from '../../../../model/app-state'
+import { CancelDrawFrameRectCommand } from '../../../../model/commands/cancel-draw-frame-rect-command'
 import { ChangeToolCommand } from '../../../../model/commands/change-tool-command'
 import { ToolNames } from '../../../../model/tool'
 import { Viewer } from '../../viewer'
 
 export function onBackgroundKeydown (e: InteractiveEvent<KeyboardEventDecorator>, state: AppState, viewer: Viewer) {
+  console.dir(document.activeElement)
+  if (document.activeElement?.tagName.toLowerCase() !== 'body') return
   const event = e.event.origin
   event.stopImmediatePropagation()
   const key = event.key.toLowerCase()
@@ -38,6 +41,7 @@ export function onBackgroundKeydown (e: InteractiveEvent<KeyboardEventDecorator>
   }
 
   if (tool) state.sendCommand(viewer, new ChangeToolCommand(tool))
+  if (name === 'create-raster' && key === 'escape') state.sendCommand(viewer, new CancelDrawFrameRectCommand())
 }
 
 function printKey (event: KeyboardEvent) {

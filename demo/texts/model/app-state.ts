@@ -6,7 +6,7 @@ import { Commander } from './commands/commander'
 import { Entity } from './entities/entity'
 import { EntitiesStorage } from './storage'
 import { defineStyles } from './styles'
-import { SelectTool, Tool, ToolBox, ToolNames } from './tool'
+import { CreateRasterTool, RasterToolNames, SelectTool, Tool, ToolBox, ToolNames } from './tool'
 
 /* eslint no-use-before-define: "off" */
 type CommandInvokerCallback = (sender: Component<HTMLElement> | AppState, command: Command<any>) => void
@@ -21,6 +21,7 @@ export interface MutableAppState {
   storage: () => EntitiesStorage
   clearSelected: () => void
   setTool: (toolName: ToolNames) => void
+  setRasterTool: (toolName: RasterToolNames) => void
   setCurrentTextPosition: (point: IPoint) => void
   setCurrentText: (text: string) => void
   background: () => Shape
@@ -112,6 +113,7 @@ export class AppState {
       storage: () => this.#storage,
       clearSelected: () => (this.#selectedEntities = []),
       setTool: toolName => (this.#selectedTool = this.#toolBox.getByName(toolName)),
+      setRasterTool: toolName => ((this.#selectedTool as CreateRasterTool).setTool(toolName)),
       setCurrentTextPosition: point => (this.#currentTextPosition = point),
       setCurrentText: text => (this.#currentText = text),
       background: () => this.background,

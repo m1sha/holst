@@ -8,8 +8,10 @@ import { Component } from '../base/component'
 import { Command } from '../../model/commands/command'
 import { SelectEntitiesCommand } from '../../model/commands/select-entities-command'
 import { ChangeEntityValueCommand } from '../../model/commands/change-entity-value-command'
-import { TextBlock } from '../../../../src'
+import { Shape, TextBlock } from '../../../../src'
 import { createShapePropertyRules } from './shape-property-rules'
+import { Raster } from '../../../../src/core/raster'
+import { createRasterPropertyRules } from './create-raster-property-rules'
 
 export type Rule = {
   title: string
@@ -90,11 +92,20 @@ export class PropertyViewer extends StateComponent<HTMLDivElement> {
       return
     }
 
-    const rules = this.state.selectedEntities[0].target instanceof TextBlock
-      ? createTextBlockPropertyRules(this.state.selectedEntities[0] as any)
-      : createShapePropertyRules(this.state.selectedEntities[0] as any)
+    let rules: Rules | null = null
+    if (this.state.selectedEntities[0].target instanceof TextBlock) {
+      rules = createTextBlockPropertyRules(this.state.selectedEntities[0] as any)
+    }
 
-    this.setRules(rules)
+    if (this.state.selectedEntities[0].target instanceof Shape) {
+      rules = createShapePropertyRules(this.state.selectedEntities[0] as any)
+    }
+
+    if (this.state.selectedEntities[0].target instanceof Raster) {
+      rules = createRasterPropertyRules(this.state.selectedEntities[0] as any)
+    }
+
+    if (rules) this.setRules(rules)
     this.build()
   }
 

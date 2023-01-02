@@ -1,3 +1,4 @@
+import { IPoint } from '../../../src/core/geometry/point'
 
 export type ToolNames = 'select' | 'move' | 'rotate' | 'transform' | 'create-text' | 'create-sketch' | 'create-raster'
 export abstract class Tool {
@@ -28,8 +29,70 @@ export class CreateSketchTool extends Tool {
   get name (): ToolNames { return 'create-sketch' }
 }
 
+export type RasterToolNames = 'pen' | 'brush' | 'polygon' | 'shape' | 'fill' | 'erase'
+
+abstract class RasterTool {
+  abstract get name (): RasterToolNames
+}
+
+class PenTool extends RasterTool {
+  get name (): RasterToolNames { return 'pen' }
+}
+
 export class CreateRasterTool extends Tool {
+  private tools: RasterTool[] = []
+  #startPoint: IPoint | null = null
+  #endPoint: IPoint | null = null
+  #created: boolean = false
+
+  constructor () {
+    super()
+    this.tools.push(...[
+      new PenTool()
+    ])
+  }
+
   get name (): ToolNames { return 'create-raster' }
+
+  get selectedTool (): RasterTool {
+    return this.tools[0]
+  }
+
+  get created () {
+    return this.#created
+  }
+
+  get startPoint () {
+    return this.#startPoint
+  }
+
+  get endPoint () {
+    return this.#endPoint
+  }
+
+  setTool (name: RasterToolNames) {
+
+  }
+
+  hasStartPoint () {
+    return Boolean(this.#startPoint)
+  }
+
+  setStartPoint (point: IPoint) {
+    this.#startPoint = point
+  }
+
+  setEndPoint (point: IPoint) {
+    this.#endPoint = point
+  }
+
+  create () {
+    this.#created = true
+  }
+
+  clear () {
+    this.#startPoint = null
+  }
 }
 
 export class ToolBox {

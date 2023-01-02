@@ -7,6 +7,7 @@ import { Drawable } from '../../../../../../src/core/drawable'
 import { TextBlock } from '../../../../../../src/core/label'
 import Shape from '../../../../../../src/core/shape'
 import { MoveEntitiesCommand } from '../../../../model/commands/move-entities-command'
+import { Raster } from '../../../../../../src/core/raster'
 
 type Delta = Record<string, Point>
 const getPoint = (e: InteractiveEvent<MouseEventDecorator>) => new Point(e.event.origin.offsetX, e.event.origin.offsetY)
@@ -31,6 +32,11 @@ export function onEntityMousemove (e: InteractiveEvent<MouseEventDecorator>, sta
         target.x = d.x + p.x
         target.y = d.y + p.y
         state.sendCommand(viewer, new MoveEntitiesCommand([drawable.id], target))
+      }
+      if (drawable instanceof Raster) {
+        drawable.distRect.x = d.x + p.x
+        drawable.distRect.y = d.y + p.y
+        state.sendCommand(viewer, new MoveEntitiesCommand([drawable.id], drawable.distRect))
       }
       break
     }

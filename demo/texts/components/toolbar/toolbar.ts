@@ -1,7 +1,8 @@
 import { AppState } from '../../model/app-state'
+import { ChangeRasterToolCommand } from '../../model/commands/change-raster-tool-command'
 import { ChangeToolCommand } from '../../model/commands/change-tool-command'
 import { Command } from '../../model/commands/command'
-import { ToolNames } from '../../model/tool'
+import { RasterToolNames, ToolNames } from '../../model/tool'
 import { Component } from '../base/component'
 import { StateComponent } from '../base/state-component'
 import { createSeparator, ToolbarButtons } from './toolbar-buttons'
@@ -54,6 +55,8 @@ export class Toolbar extends StateComponent<HTMLDivElement> {
     buttons.visibleRadioGroup('sketch-draw-tools', false)
 
     buttons.createRadio('rasterPenTool', 'pen', 'raster-draw-tools')
+      .title('Pen tool')
+      .onClick = () => this.changeRasterTool('pen')
     buttons.createRadio('rasterBrushTool', 'paint-brush', 'raster-draw-tools')
     buttons.createRadio('rasterDrawPolygonTool', 'draw-polygon', 'raster-draw-tools')
     buttons.createRadio('rasterSplotchTool', 'splotch', 'raster-draw-tools')
@@ -82,5 +85,9 @@ export class Toolbar extends StateComponent<HTMLDivElement> {
 
   private changeTool (toolName: ToolNames) {
     this.send(new ChangeToolCommand(toolName))
+  }
+
+  private changeRasterTool (toolName: RasterToolNames) {
+    this.send(new ChangeRasterToolCommand(toolName))
   }
 }
