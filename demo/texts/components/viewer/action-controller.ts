@@ -1,6 +1,7 @@
 import { Drawable, Point, Shape, TextBlock } from '../../../../src'
 import { AppState } from '../../model/app-state'
 import { onBackgroundClick } from './events/background/click'
+import { onBackgroundKeydown } from './events/background/keydown'
 import { onEntityMousedown } from './events/entity/mousedown'
 import { onEntityMousemove } from './events/entity/mousemove'
 import { onEntityMouseup } from './events/entity/mouseup'
@@ -30,6 +31,7 @@ export class ActionController {
     const background = this.state.background
     background
       .on('click', e => onBackgroundClick(e, this.state, this.viewer))
+      .on('keydown', e => onBackgroundKeydown(e, this.state, this.viewer))
   }
 
   private setEntityEvents (drawable: Drawable) {
