@@ -1,5 +1,5 @@
 import { MutableAppState } from '../app-state'
-import { CreateRasterTool } from '../tools/create-raster-tool/create-raster-tool'
+import { CreateRasterTool } from '../tools/create-tools/create-raster-tool'
 import { Command } from './command'
 
 export class CancelDrawFrameRectCommand extends Command<any> {

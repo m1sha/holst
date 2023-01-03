@@ -1,11 +1,17 @@
 import { Tool, ToolNames } from './tool'
-import { SelectTool } from './select-tool'
-import { MoveTool } from './move-tool'
-import { RotateTool } from './rotate-tool'
-import { TransformTool } from './transform-tool'
-import { CreateTextTool } from './create-text-tool'
-import { CreateSketchTool } from './create-sketch-tool'
-import { CreateRasterTool } from './create-raster-tool/create-raster-tool'
+import { SelectTool } from './manipulation-tools/select-tool'
+import { MoveTool } from './manipulation-tools/move-tool'
+import { RotateTool } from './manipulation-tools/rotate-tool'
+import { TransformTool } from './manipulation-tools/transform-tool'
+import { CreateTextTool } from './create-tools/create-text-tool'
+import { CreateSketchTool } from './create-tools/create-sketch-tool'
+import { CreateRasterTool } from './create-tools/create-raster-tool'
+import { BrushTool } from './raster-tools/brush-tool'
+import { EraserTool } from './raster-tools/eraser-tool'
+import { FillTool } from './raster-tools/fill-tool'
+import { PenTool } from './raster-tools/pen-tool'
+import { PolygonTool } from './raster-tools/polygon-tool'
+import { ShapeTool } from './raster-tools/shape-tool'
 
 export class ToolBox {
   private tools: Tool[] = []
@@ -18,7 +24,13 @@ export class ToolBox {
       new TransformTool(),
       new CreateTextTool(),
       new CreateSketchTool(),
-      new CreateRasterTool()
+      new CreateRasterTool(),
+      new PenTool(),
+      new BrushTool(),
+      new PolygonTool(),
+      new ShapeTool(),
+      new FillTool(),
+      new EraserTool()
     ])
   }
 

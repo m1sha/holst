@@ -1,12 +1,10 @@
 import { Raster } from '../../../../src/core/raster'
 import { lastItem } from '../../../../src/utils/array'
 import { AppState } from '../../model/app-state'
-import { ChangeRasterToolCommand } from '../../model/commands/change-raster-tool-command'
 import { ChangeToolCommand } from '../../model/commands/change-tool-command'
 import { Command } from '../../model/commands/command'
 import { SelectEntitiesCommand } from '../../model/commands/select-entities-command'
 import { SelectLastEntityCommand } from '../../model/commands/select-last-entity-command'
-import { RasterToolNames } from '../../model/tools/create-raster-tool/raster-tool'
 import { ToolNames } from '../../model/tools/tool'
 import { Component } from '../base/component'
 import { StateComponent } from '../base/state-component'
@@ -61,7 +59,7 @@ export class Toolbar extends StateComponent<HTMLDivElement> {
 
     buttons.createRadio('rasterPenTool', 'pen', 'raster-draw-tools')
       .title('Pen tool')
-      .onClick = () => this.changeRasterTool('pen')
+      .onClick = () => this.changeTool('pen')
     buttons.createRadio('rasterBrushTool', 'paint-brush', 'raster-draw-tools')
     buttons.createRadio('rasterDrawPolygonTool', 'draw-polygon', 'raster-draw-tools')
     buttons.createRadio('rasterSplotchTool', 'splotch', 'raster-draw-tools')
@@ -93,9 +91,5 @@ export class Toolbar extends StateComponent<HTMLDivElement> {
 
   private changeTool (toolName: ToolNames) {
     this.send(new ChangeToolCommand(toolName))
-  }
-
-  private changeRasterTool (toolName: RasterToolNames) {
-    this.send(new ChangeRasterToolCommand(toolName))
   }
 }

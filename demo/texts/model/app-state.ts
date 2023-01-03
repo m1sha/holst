@@ -7,12 +7,9 @@ import { Commander } from './commands/commander'
 import { Entity } from './entities/entity'
 import { EntitiesStorage } from './storage'
 import { defineStyles } from './styles'
-import { CreateRasterTool } from './tools/create-raster-tool/create-raster-tool'
-import { RasterToolNames } from './tools/create-raster-tool/raster-tool'
-import { SelectTool } from './tools/select-tool'
+import { SelectTool } from './tools/manipulation-tools/select-tool'
 import { Tool, ToolNames } from './tools/tool'
 import { ToolBox } from './tools/tool-box'
-// import { CreateRasterTool, RasterToolNames, SelectTool, Tool, ToolBox, ToolNames } from './tool'
 
 /* eslint no-use-before-define: "off" */
 type CommandInvokerCallback = (sender: Component<HTMLElement> | AppState, command: Command<any>) => void
@@ -29,7 +26,6 @@ export interface MutableAppState {
   clearSelected: () => void
   setDefaultCursor: (cursor: MouseCursorTypes) => void
   setTool: (toolName: ToolNames) => void
-  setRasterTool: (toolName: RasterToolNames) => void
   setCurrentTextPosition: (point: IPoint) => void
   setCurrentText: (text: string) => void
   background: () => Shape
@@ -126,7 +122,6 @@ export class AppState {
       clearSelected: () => (this.#selectedEntities = []),
       setDefaultCursor: cursor => (this.#defaultCursor = cursor),
       setTool: toolName => (this.#selectedTool = this.#toolBox.getByName(toolName)),
-      setRasterTool: toolName => ((this.#selectedTool as CreateRasterTool).setTool(toolName)),
       setCurrentTextPosition: point => (this.#currentTextPosition = point),
       setCurrentText: text => (this.#currentText = text),
       background: () => this.background,

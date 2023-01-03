@@ -2,7 +2,7 @@ import { MouseEventDecorator } from '../../../../../../src/core/events/decorator
 import { InteractiveEvent } from '../../../../../../src/core/events/interactive'
 import { AppState } from '../../../../model/app-state'
 import { DrawFrameRectCommand } from '../../../../model/commands/draw-frame-rect-command'
-import { CreateRasterTool } from '../../../../model/tools/create-raster-tool/create-raster-tool'
+import { CreateRasterTool } from '../../../../model/tools/create-tools/create-raster-tool'
 import { Viewer } from '../../viewer'
 
 export function onBackgroundMousemove (e: InteractiveEvent<MouseEventDecorator>, state: AppState, viewer: Viewer) {
