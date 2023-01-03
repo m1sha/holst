@@ -1,8 +1,9 @@
 import { IPoint } from '../../../src/core/geometry/point'
-
+import { MouseCursorTypes } from '../../../src/core/events/mouse-cursor-types'
 export type ToolNames = 'select' | 'move' | 'rotate' | 'transform' | 'create-text' | 'create-sketch' | 'create-raster'
 export abstract class Tool {
   abstract get name (): ToolNames
+  get cursor (): MouseCursorTypes { return 'default' }
 }
 
 export class SelectTool extends Tool {
@@ -23,10 +24,12 @@ export class TransformTool extends Tool {
 
 export class CreateTextTool extends Tool {
   get name (): ToolNames { return 'create-text' }
+  get cursor (): MouseCursorTypes { return 'text' }
 }
 
 export class CreateSketchTool extends Tool {
   get name (): ToolNames { return 'create-sketch' }
+  get cursor (): MouseCursorTypes { return 'crosshair' }
 }
 
 export type RasterToolNames = 'pen' | 'brush' | 'polygon' | 'shape' | 'fill' | 'erase'
@@ -53,6 +56,8 @@ export class CreateRasterTool extends Tool {
   }
 
   get name (): ToolNames { return 'create-raster' }
+
+  get cursor (): MouseCursorTypes { return 'crosshair' }
 
   get selectedTool (): RasterTool {
     return this.tools[0]

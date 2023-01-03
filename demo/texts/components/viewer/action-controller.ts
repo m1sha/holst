@@ -43,7 +43,7 @@ export class ActionController {
   private setEntityEvents (drawable: Drawable) {
     drawable
       .on('hover', e => { e.cursor = 'pointer' })
-      .on('leave', e => { e.cursor = 'default' })
+      .on('leave', e => { e.cursor = this.state.defaultCursor })
       .on('mousedown', e => onEntityMousedown(e, this.state, this.viewer, drawable, this.delta))
       .on('mousemove', e => onEntityMousemove(e, this.state, this.viewer, drawable, this.delta))
       .on('mouseup', e => onEntityMouseup(e, this.state, this.viewer, drawable, this.delta))

@@ -1,4 +1,5 @@
 import { Drawable, IPoint, Layer, Scene, Shape } from '../../../src'
+import { MouseCursorTypes } from '../../../src/core/events/mouse-cursor-types'
 import { Component } from '../components/base/component'
 import { AddedEntityCommand } from './commands/added-entity-command'
 import { Command } from './commands/command'
@@ -13,6 +14,7 @@ type CommandInvokerCallback = (sender: Component<HTMLElement> | AppState, comman
 
 export interface MutableAppState {
   scene: () => Scene
+  defaultCursor: () => MouseCursorTypes
   selectedTool: () => Tool
   selectedLayer: () => Layer
   selectedEntities: () => Entity<Drawable>[]
@@ -20,6 +22,7 @@ export interface MutableAppState {
   currentText: () => string
   storage: () => EntitiesStorage
   clearSelected: () => void
+  setDefaultCursor: (cursor: MouseCursorTypes) => void
   setTool: (toolName: ToolNames) => void
   setRasterTool: (toolName: RasterToolNames) => void
   setCurrentTextPosition: (point: IPoint) => void
@@ -31,6 +34,7 @@ export interface MutableAppState {
 export class AppState {
   #commander: Commander = new Commander()
   #scene: Scene | null = null
+  #defaultCursor: MouseCursorTypes = 'default'
   #selectedTool: Tool = new SelectTool()
   #selectedLayer: Layer | null = null
   #selectedEntities: Entity<Drawable>[] = []
@@ -47,6 +51,8 @@ export class AppState {
     this.background = layer0.createShape('background').rect(0, 0, 0, 0)
     this.addInvoker((sender, command) => this.onStateChanged(sender, command))
   }
+
+  get defaultCursor () { return this.#defaultCursor }
 
   get selectedTool () { return this.#selectedTool }
 
@@ -107,11 +113,13 @@ export class AppState {
       currentText: () => this.#currentText,
       currentTextPosition: () => this.#currentTextPosition,
       scene: () => this.#scene!,
+      defaultCursor: () => this.defaultCursor,
       selectedEntities: () => this.#selectedEntities,
       selectedLayer: () => this.selectedLayer,
       selectedTool: () => this.#selectedTool,
       storage: () => this.#storage,
       clearSelected: () => (this.#selectedEntities = []),
+      setDefaultCursor: cursor => (this.#defaultCursor = cursor),
       setTool: toolName => (this.#selectedTool = this.#toolBox.getByName(toolName)),
       setRasterTool: toolName => ((this.#selectedTool as CreateRasterTool).setTool(toolName)),
       setCurrentTextPosition: point => (this.#currentTextPosition = point),
