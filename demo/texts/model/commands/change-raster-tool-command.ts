@@ -1,5 +1,6 @@
 import { MutableAppState } from '../app-state'
-import { CreateRasterTool, RasterToolNames } from '../tool'
+import { CreateRasterTool } from '../tools/create-raster-tool/create-raster-tool'
+import { RasterToolNames } from '../tools/create-raster-tool/raster-tool'
 import { Command } from './command'
 
 export class ChangeRasterToolCommand extends Command<RasterToolNames> {

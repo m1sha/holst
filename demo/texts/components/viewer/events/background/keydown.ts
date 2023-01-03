@@ -3,7 +3,7 @@ import { InteractiveEvent } from '../../../../../../src/core/events/interactive'
 import { AppState } from '../../../../model/app-state'
 import { CancelDrawFrameRectCommand } from '../../../../model/commands/cancel-draw-frame-rect-command'
 import { ChangeToolCommand } from '../../../../model/commands/change-tool-command'
-import { ToolNames } from '../../../../model/tool'
+import { ToolNames } from '../../../../model/tools/tool'
 import { Viewer } from '../../viewer'
 
 export function onBackgroundKeydown (e: InteractiveEvent<KeyboardEventDecorator>, state: AppState, viewer: Viewer) {

@@ -3,7 +3,7 @@ import { InteractiveEvent } from '../../../../../../src/core/events/interactive'
 import { AppState } from '../../../../model/app-state'
 import { CreateRasterCommand } from '../../../../model/commands/create-raster-command'
 import { SelectLastEntityCommand } from '../../../../model/commands/select-last-entity-command'
-import { CreateRasterTool } from '../../../../model/tool'
+import { CreateRasterTool } from '../../../../model/tools/create-raster-tool/create-raster-tool'
 import { Viewer } from '../../viewer'
 
 export function onBackgroundMouseup (e: InteractiveEvent<MouseEventDecorator>, state: AppState, viewer: Viewer) {

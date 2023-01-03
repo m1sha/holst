@@ -1,6 +1,6 @@
 import { MouseCursorTypes } from '../../../../src/core/events/mouse-cursor-types'
 import { MutableAppState } from '../app-state'
-import { ToolNames } from '../tool'
+import { ToolNames } from '../tools/tool'
 import { Command } from './command'
 
 export class ChangeToolCommand extends Command<ToolNames> {
