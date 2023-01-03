@@ -35,3 +35,7 @@ export function removeItem<T> (items: T[], predicate: ((item: T, index: number) 
   }
   if (index >= 0) items.splice(index, 1)
 }
+
+export function lastItem<T> (items: T[]): T {
+  return items[items.length - 1]
+}

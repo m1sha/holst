@@ -12,6 +12,7 @@ import { Shape, TextBlock } from '../../../../src'
 import { createShapePropertyRules } from './shape-property-rules'
 import { Raster } from '../../../../src/core/raster'
 import { createRasterPropertyRules } from './create-raster-property-rules'
+import { SelectLastEntityCommand } from '../../model/commands/select-last-entity-command'
 
 export type Rule = {
   title: string
@@ -84,7 +85,7 @@ export class PropertyViewer extends StateComponent<HTMLDivElement> {
 
   protected onStateChanged (sender: AppState | Component<HTMLElement>, command: Command<any>): void {
     if (sender instanceof PropertyViewer) return
-    if (!(command instanceof SelectEntitiesCommand)) return
+    if (!(command instanceof SelectEntitiesCommand) && !(command instanceof SelectLastEntityCommand)) return
 
     if (!this.state.selectedEntities) {
       this.clearRules()
