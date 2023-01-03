@@ -6,13 +6,13 @@ import { StateComponent } from '../base/state-component'
 import { AppState } from '../../model/app-state'
 import { Component } from '../base/component'
 import { Command } from '../../model/commands/command'
-import { SelectEntitiesCommand } from '../../model/commands/select-entities-command'
-import { ChangeEntityValueCommand } from '../../model/commands/change-entity-value-command'
+import { SelectEntitiesCommand } from '../../model/commands/entities/select/select-entities-command'
+import { ChangeEntityValueCommand } from '../../model/commands/entities/change-entity-value-command'
 import { Shape, TextBlock } from '../../../../src'
 import { createShapePropertyRules } from './shape-property-rules'
 import { Raster } from '../../../../src/core/raster'
 import { createRasterPropertyRules } from './create-raster-property-rules'
-import { SelectLastEntityCommand } from '../../model/commands/select-last-entity-command'
+import { SelectLastEntityCommand } from '../../model/commands/entities/select/select-last-entity-command'
 
 export type Rule = {
   title: string

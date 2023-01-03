@@ -1,7 +1,7 @@
-import { Color, IPoint, TextBlock, TextStyle } from '../../../../src'
-import { MutableAppState } from '../app-state'
-import { Entity } from '../entities/entity'
-import { Command } from './command'
+import { Color, IPoint, TextBlock, TextStyle } from '../../../../../src'
+import { MutableAppState } from '../../app-state'
+import { Entity } from '../../entities/entity'
+import { Command } from '../command'
 
 export class CreateTextCommand extends Command<void> {
   execute (appState: MutableAppState): void {

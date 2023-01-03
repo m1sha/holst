@@ -2,7 +2,7 @@ import { Drawable } from '../../../../src'
 import { MutableAppState } from '../app-state'
 import { Entity } from '../entities/entity'
 import { Command } from './command'
-import { MoveEntitiesCommand } from './move-entities-command'
+import { MoveEntitiesCommand } from './entities/moves/move-entities-command'
 
 export class Commander {
   #commands: Command<Entity<Drawable>>[] = []

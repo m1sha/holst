@@ -1,9 +1,9 @@
-import { Rect } from '../../../../src'
-import { IPoint } from '../../../../src/core/geometry/point'
-import { Raster } from '../../../../src/core/raster'
-import { MutableAppState } from '../app-state'
-import { Entity } from '../entities/entity'
-import { Command } from './command'
+import { Rect } from '../../../../../src'
+import { IPoint } from '../../../../../src/core/geometry/point'
+import { Raster } from '../../../../../src/core/raster'
+import { MutableAppState } from '../../app-state'
+import { Entity } from '../../entities/entity'
+import { Command } from '../command'
 
 export type FrameRect = { p1: IPoint, p2: IPoint }
 

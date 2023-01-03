@@ -1,8 +1,8 @@
 import { MouseEventDecorator } from '../../../../../../src/core/events/decorators'
 import { InteractiveEvent } from '../../../../../../src/core/events/interactive'
 import { AppState } from '../../../../model/app-state'
-import { CreateRasterCommand } from '../../../../model/commands/create-raster-command'
-import { SelectLastEntityCommand } from '../../../../model/commands/select-last-entity-command'
+import { CreateRasterCommand } from '../../../../model/commands/create/create-raster-command'
+import { SelectLastEntityCommand } from '../../../../model/commands/entities/select/select-last-entity-command'
 import { CreateRasterTool } from '../../../../model/tools/create-tools/create-raster-tool'
 import { Viewer } from '../../viewer'
 

@@ -1,7 +1,7 @@
-import { MutableAppState } from '../app-state'
-import { Command } from './command'
+import { MutableAppState } from '../../../app-state'
+import { Command } from '../../command'
 
-export class EndMoveEntitiesCommand extends Command<string[]> {
+export class StartMoveEntitiesCommand extends Command<string[]> {
   ids: string[]
 
   constructor (ids: string[]) {

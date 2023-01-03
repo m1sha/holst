@@ -1,6 +1,6 @@
-import { IPoint } from '../../../../src'
-import { MutableAppState } from '../app-state'
-import { Command } from './command'
+import { IPoint } from '../../../../../../src'
+import { MutableAppState } from '../../../app-state'
+import { Command } from '../../command'
 
 export class MoveEntitiesCommand extends Command<string[]> {
   constructor (ids: string[], point: IPoint) {

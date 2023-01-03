@@ -1,7 +1,7 @@
 import { Point } from '../../../../../../src/core/geometry/point'
 import { MouseEventDecorator } from '../../../../../../src/core/events/decorators'
 import { InteractiveEvent } from '../../../../../../src/core/events/interactive'
-import { CreateInputTextCommand } from '../../../../model/commands/create-input-text-command'
+import { CreateInputTextCommand } from '../../../../model/commands/create/create-input-text-command'
 import { AppState } from '../../../../model/app-state'
 import { Viewer } from '../../viewer'
 

@@ -4,7 +4,7 @@ import { InteractiveEvent } from '../../../../../../src/core/events/interactive'
 import { AppState } from '../../../../model/app-state'
 import { Viewer } from '../../viewer'
 import { Drawable } from '../../../../../../src/core/drawable'
-import { EndMoveEntitiesCommand } from '../../../../model/commands/end-move-entities-command'
+import { EndMoveEntitiesCommand } from '../../../../model/commands/entities/moves/end-move-entities-command'
 
 type Delta = Record<string, Point>
 // const getPoint = (e: InteractiveEvent<MouseEventDecorator>) => new Point(e.event.origin.offsetX, e.event.origin.offsetY)

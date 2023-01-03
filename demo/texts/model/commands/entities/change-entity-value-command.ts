@@ -1,6 +1,6 @@
-import { Rule } from '../../components/property-viewer/property-viewer'
-import { MutableAppState } from '../app-state'
-import { Command } from './command'
+import { Rule } from '../../../components/property-viewer/property-viewer'
+import { MutableAppState } from '../../app-state'
+import { Command } from '../command'
 
 export class EntityValue {
   value: any

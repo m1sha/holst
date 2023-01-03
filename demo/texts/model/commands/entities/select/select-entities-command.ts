@@ -1,5 +1,5 @@
-import { MutableAppState } from '../app-state'
-import { Command } from './command'
+import { MutableAppState } from '../../../app-state'
+import { Command } from '../../command'
 
 export class SelectEntitiesCommand extends Command<string[]> {
   readonly selectType: 'none' | 'add'

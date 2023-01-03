@@ -1,7 +1,7 @@
-import { Drawable } from '../../../../src/core/drawable'
-import { MutableAppState } from '../app-state'
-import { Entity } from '../entities/entity'
-import { Command } from './command'
+import { Drawable } from '../../../../../src/core/drawable'
+import { MutableAppState } from '../../app-state'
+import { Entity } from '../../entities/entity'
+import { Command } from '../command'
 
 export class VisibleEntitiesCommand extends Command<any> {
   private visible: boolean

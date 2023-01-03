@@ -1,4 +1,4 @@
-import { EntityValue } from '../../model/commands/change-entity-value-command'
+import { EntityValue } from '../../model/commands/entities/change-entity-value-command'
 import { Rules } from './property-rules'
 import { Rule } from './property-viewer'
 

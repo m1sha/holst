@@ -1,5 +1,5 @@
-import { MutableAppState } from '../app-state'
-import { Command } from './command'
+import { MutableAppState } from '../../app-state'
+import { Command } from '../command'
 
 export class DeleteEntitiesCommand extends Command<string[]> {
   constructor (ids: string[]) {

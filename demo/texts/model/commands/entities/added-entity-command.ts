@@ -1,7 +1,7 @@
-import { Drawable } from '../../../../src'
-import { MutableAppState } from '../app-state'
-import { Entity } from '../entities/entity'
-import { Command } from './command'
+import { Drawable } from '../../../../../src'
+import { MutableAppState } from '../../app-state'
+import { Entity } from '../../entities/entity'
+import { Command } from '../command'
 
 export class AddedEntityCommand extends Command<Entity<Drawable>> {
   constructor (entity: Entity<Drawable>) {

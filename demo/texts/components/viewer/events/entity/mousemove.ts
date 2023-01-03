@@ -6,7 +6,7 @@ import { Viewer } from '../../viewer'
 import { Drawable } from '../../../../../../src/core/drawable'
 import { TextBlock } from '../../../../../../src/core/label'
 import Shape from '../../../../../../src/core/shape'
-import { MoveEntitiesCommand } from '../../../../model/commands/move-entities-command'
+import { MoveEntitiesCommand } from '../../../../model/commands/entities/moves/move-entities-command'
 import { Raster } from '../../../../../../src/core/raster'
 
 type Delta = Record<string, Point>

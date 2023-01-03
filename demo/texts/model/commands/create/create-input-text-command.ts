@@ -1,6 +1,6 @@
-import { IPoint } from '../../../../src'
-import { MutableAppState } from '../app-state'
-import { Command } from './command'
+import { IPoint } from '../../../../../src'
+import { MutableAppState } from '../../app-state'
+import { Command } from '../command'
 
 export class CreateInputTextCommand extends Command<IPoint[]> {
   constructor (point: IPoint, offsetPoint: IPoint) {

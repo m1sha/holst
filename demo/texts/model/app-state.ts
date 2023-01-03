@@ -1,7 +1,7 @@
 import { Drawable, IPoint, Layer, Scene, Shape } from '../../../src'
 import { MouseCursorTypes } from '../../../src/core/events/mouse-cursor-types'
 import { Component } from '../components/base/component'
-import { AddedEntityCommand } from './commands/added-entity-command'
+import { AddedEntityCommand } from './commands/entities/added-entity-command'
 import { Command } from './commands/command'
 import { Commander } from './commands/commander'
 import { Entity } from './entities/entity'

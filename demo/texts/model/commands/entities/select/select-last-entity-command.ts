@@ -1,6 +1,6 @@
-import { lastItem } from '../../../../src/utils/array'
-import { MutableAppState } from '../app-state'
-import { Command } from './command'
+import { lastItem } from '../../../../../../src/utils/array'
+import { MutableAppState } from '../../../app-state'
+import { Command } from '../../command'
 
 export class SelectLastEntityCommand extends Command<never> {
   execute (appState: MutableAppState): void {

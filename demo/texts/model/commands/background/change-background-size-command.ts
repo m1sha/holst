@@ -1,6 +1,6 @@
-import { Size } from '../../../../src'
-import { MutableAppState } from '../app-state'
-import { Command } from './command'
+import { Size } from '../../../../../src'
+import { MutableAppState } from '../../app-state'
+import { Command } from '../command'
 
 export class ChangeBackgroundSizeCommand extends Command<Size> {
   constructor (size: Size) {

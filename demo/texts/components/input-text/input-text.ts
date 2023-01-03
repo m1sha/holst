@@ -1,8 +1,8 @@
 import { IPoint } from '../../../../src'
 import { AppState } from '../../model/app-state'
 import { Command } from '../../model/commands/command'
-import { CreateInputTextCommand } from '../../model/commands/create-input-text-command'
-import { CreateTextCommand } from '../../model/commands/create-text-command'
+import { CreateInputTextCommand } from '../../model/commands/create/create-input-text-command'
+import { CreateTextCommand } from '../../model/commands/create/create-text-command'
 import { InputTextCommand } from '../../model/commands/input-text-command'
 
 import { Component } from '../base/component'
