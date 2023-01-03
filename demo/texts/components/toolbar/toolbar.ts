@@ -1,7 +1,11 @@
+import { Raster } from '../../../../src/core/raster'
+import { lastItem } from '../../../../src/utils/array'
 import { AppState } from '../../model/app-state'
 import { ChangeRasterToolCommand } from '../../model/commands/change-raster-tool-command'
 import { ChangeToolCommand } from '../../model/commands/change-tool-command'
 import { Command } from '../../model/commands/command'
+import { SelectEntitiesCommand } from '../../model/commands/select-entities-command'
+import { SelectLastEntityCommand } from '../../model/commands/select-last-entity-command'
 import { RasterToolNames } from '../../model/tools/create-raster-tool/raster-tool'
 import { ToolNames } from '../../model/tools/tool'
 import { Component } from '../base/component'
@@ -74,9 +78,12 @@ export class Toolbar extends StateComponent<HTMLDivElement> {
     if (command instanceof ChangeToolCommand) {
       const toolName = command.data!
       this.buttons.setCheck(toolName, true)
-
       this.buttons.visibleRadioGroup('sketch-draw-tools', toolName === 'create-sketch')
-      this.buttons.visibleRadioGroup('raster-draw-tools', toolName === 'create-raster')
+    }
+
+    if (command instanceof SelectEntitiesCommand || command instanceof SelectLastEntityCommand) {
+      const entity = lastItem(this.state.selectedEntities)
+      this.buttons.visibleRadioGroup('raster-draw-tools', entity ? entity.target instanceof Raster : false)
     }
   }
 
