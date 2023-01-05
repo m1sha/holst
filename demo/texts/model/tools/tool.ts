@@ -1,4 +1,9 @@
+import { Drawable } from '../../../../src/core/drawable'
+import { MouseEventDecorator } from '../../../../src/core/events/decorators'
+import { InteractiveEvent } from '../../../../src/core/events/interactive'
 import { MouseCursorTypes } from '../../../../src/core/events/mouse-cursor-types'
+import { Component } from '../../components/base/component'
+import { AppState } from '../app-state'
 
 type ManipulationToolNames = 'select' | 'move' | 'rotate' | 'transform'
 type CreateEntityToolNames = 'create-text' | 'create-sketch' | 'create-raster'
@@ -8,4 +13,8 @@ export type ToolNames = ManipulationToolNames | CreateEntityToolNames | RasterTo
 export abstract class Tool {
   abstract get name (): ToolNames
   get cursor (): MouseCursorTypes { return 'default' }
+
+  abstract mousedown (e: InteractiveEvent<MouseEventDecorator>, drawable: Drawable, state: AppState, component: Component<HTMLElement>): void
+  abstract mousemove (e: InteractiveEvent<MouseEventDecorator>, drawable: Drawable, state: AppState, component: Component<HTMLElement>): void
+  abstract mouseup (e: InteractiveEvent<MouseEventDecorator>, drawable: Drawable, state: AppState, component: Component<HTMLElement>): void
 }
