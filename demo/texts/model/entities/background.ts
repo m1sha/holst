@@ -1,16 +1,22 @@
-import { Rect, Point, Layer, Shape } from '../../../../src'
+import { Rect, Point, Layer, Shape, Size } from '../../../../src'
 import { Drawable, DrawableType } from '../../../../src/core/drawable'
 
 export class Background extends Drawable {
   shape: Shape
 
   constructor (layer: Layer) {
-    super(1)
+    super(0)
     this.shape = layer.createShape('background').rect(0, 0, 0, 0)
   }
 
+  changeSize (size: Size) {
+    const rect = this.shape.rects[0]
+    rect.height = size.height
+    rect.width = size.width
+  }
+
   getType (): DrawableType {
-    return this.shape.getType()
+    return 'shape'
   }
 
   get bounds (): Rect {

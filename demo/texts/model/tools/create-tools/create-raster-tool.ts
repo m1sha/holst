@@ -1,23 +1,43 @@
 import { Drawable } from '../../../../../src'
-import { MouseEventDecorator } from '../../../../../src/core/events/decorators'
+import { KeyboardEventDecorator, MouseEventDecorator } from '../../../../../src/core/events/decorators'
 import { InteractiveEvent } from '../../../../../src/core/events/interactive'
 import { MouseCursorTypes } from '../../../../../src/core/events/mouse-cursor-types'
 import { IPoint } from '../../../../../src/core/geometry/point'
 import { Component } from '../../../components/base/component'
 import { AppState } from '../../app-state'
+import { DrawFrameRectCommand } from '../../commands/draw-frame-rect-command'
+import { CreateRasterCommand } from '../../commands/create/create-raster-command'
+import { SelectLastEntityCommand } from '../../commands/entities/select/select-last-entity-command'
 import { Tool, ToolNames } from '../tool'
+import { CancelDrawFrameRectCommand } from '../../commands/cancel-draw-frame-rect-command'
 
 export class CreateRasterTool extends Tool {
   mousedown (e: InteractiveEvent<MouseEventDecorator>, drawable: Drawable, state: AppState, component: Component<HTMLElement>) {
-    // throw new Error('Method not implemented.')
+    if (this.hasStartPoint()) return
+
+    this.setStartPoint({ x: e.event.origin.offsetX, y: e.event.origin.offsetY })
   }
 
   mousemove (e: InteractiveEvent<MouseEventDecorator>, drawable: Drawable, state: AppState, component: Component<HTMLElement>) {
-    // throw new Error('Method not implemented.')
+    if (!this.hasStartPoint()) return
+
+    this.setEndPoint({ x: e.event.origin.offsetX, y: e.event.origin.offsetY })
+
+    state.sendCommand(component, new DrawFrameRectCommand(this.startPoint!, this.endPoint!))
   }
 
   mouseup (e: InteractiveEvent<MouseEventDecorator>, drawable: Drawable, state: AppState, component: Component<HTMLElement>) {
-    // throw new Error('Method not implemented.')
+    if (!this.created) {
+      this.create()
+      state.sendCommand(component, new CreateRasterCommand(this.startPoint!, this.endPoint!))
+      state.sendCommand(component, new SelectLastEntityCommand())
+      this.clear()
+    }
+  }
+
+  keydown (e: InteractiveEvent<KeyboardEventDecorator>, drawable: Drawable, state: AppState, component: Component<HTMLElement>): void {
+    const key = e.event.origin.key.toLowerCase()
+    if (key === 'escape') state.sendCommand(state, new CancelDrawFrameRectCommand())
   }
 
   #startPoint: IPoint | null = null

@@ -1,24 +1,16 @@
 import { Drawable, Shape, TextBlock } from '../../../../src'
 import { AppState } from '../../model/app-state'
-import { onBackgroundClick } from './events/background/click'
-import { onBackgroundKeydown } from './events/background/keydown'
-import { onBackgroundMousedown } from './events/background/mousedown'
-import { onBackgroundMousemove } from './events/background/mousemove'
-import { onBackgroundMouseup } from './events/background/mouseup'
+import { defaultKeyboardEvent } from '../../model/default-keyboard-event'
 import { Viewer } from './viewer'
-
-// type Delta = Record<string, Point>
 
 export class ActionController {
   private state: AppState
   private viewer: Viewer
   private drawables: (Shape | TextBlock)[] = []
-  // private delta: Delta
 
   constructor (state: AppState, viewer: Viewer) {
     this.state = state
     this.viewer = viewer
-    // this.delta = {}
     this.setBackgroundEvents()
   }
 
@@ -29,18 +21,22 @@ export class ActionController {
 
   private setBackgroundEvents () {
     const background = this.state.background
-    background
-      .on('click', e => onBackgroundClick(e, this.state, this.viewer))
-      .on('mouseup', e => onBackgroundMouseup(e, this.state, this.viewer))
-      .on('mousemove', e => onBackgroundMousemove(e, this.state, this.viewer))
-      .on('mousedown', e => onBackgroundMousedown(e, this.state, this.viewer))
-      .on('keydown', e => onBackgroundKeydown(e, this.state, this.viewer))
+    background.shape
+      .on('click', e => this.state.selectedTool.click(e, background, this.state, this.viewer))
+      .on('mouseup', e => this.state.selectedTool.mouseup(e, background, this.state, this.viewer))
+      .on('mousemove', e => this.state.selectedTool.mousemove(e, background, this.state, this.viewer))
+      .on('mousedown', e => this.state.selectedTool.mousedown(e, background, this.state, this.viewer))
+      .on('keydown', e => {
+        if (defaultKeyboardEvent(e, background, this.state, this.viewer)) return
+        this.state.selectedTool.keydown(e, background, this.state, this.viewer)
+      })
   }
 
   private setEntityEvents (drawable: Drawable) {
     drawable
       // .on('hover', e => { e.cursor = 'pointer' })
       // .on('leave', e => { e.cursor = this.state.defaultCursor })
+      .on('click', e => e.event.stopPropagation())
       .on('mousedown', e => this.state.selectedTool.mousedown(e, drawable, this.state, this.viewer))
       .on('mousemove', e => this.state.selectedTool.mousemove(e, drawable, this.state, this.viewer))
       .on('mouseup', e => this.state.selectedTool.mouseup(e, drawable, this.state, this.viewer))

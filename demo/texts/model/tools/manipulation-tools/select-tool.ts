@@ -5,10 +5,12 @@ import { Component } from '../../../components/base/component'
 import { AppState } from '../../app-state'
 import { Tool, ToolNames } from '../tool'
 import { SelectEntitiesCommand } from '../../../model/commands/entities/select/select-entities-command'
+import { Background } from '../../entities/background'
 
 export class SelectTool extends Tool {
   mousedown (e: InteractiveEvent<MouseEventDecorator>, drawable: Drawable, state: AppState, component: Component<HTMLElement>) {
     e.event.stopPropagation()
+    if (drawable instanceof Background) return
     state.sendCommand(component, new SelectEntitiesCommand([drawable.id], 'none'))
   }
 

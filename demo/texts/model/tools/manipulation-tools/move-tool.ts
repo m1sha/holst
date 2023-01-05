@@ -11,6 +11,7 @@ import Shape from '../../../../../src/core/shape'
 import { Raster } from '../../../../../src/core/raster'
 import { MoveEntitiesCommand } from '../../commands/entities/moves/move-entities-command'
 import { EndMoveEntitiesCommand } from '../../commands/entities/moves/end-move-entities-command'
+import { Background } from '../../entities/background'
 
 type Delta = Record<string, Point>
 const getPoint = (e: InteractiveEvent<MouseEventDecorator>) => new Point(e.event.origin.offsetX, e.event.origin.offsetY)
@@ -20,6 +21,7 @@ export class MoveTool extends Tool {
 
   mousedown (e: InteractiveEvent<MouseEventDecorator>, drawable: Drawable, state: AppState, component: Component<HTMLElement>) {
     e.event.stopPropagation()
+    if (drawable instanceof Background) return
     this.delta[drawable.id] = new Point(drawable.bounds).dec(getPoint(e))
     state.sendCommand(component, new StartMoveEntitiesCommand([drawable.id]))
   }

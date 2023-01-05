@@ -1,4 +1,4 @@
-import { Drawable, IPoint, Layer, Scene, Shape } from '../../../src'
+import { Drawable, IPoint, Layer, Scene } from '../../../src'
 import { MouseCursorTypes } from '../../../src/core/events/mouse-cursor-types'
 import { Component } from '../components/base/component'
 import { AddedEntityCommand } from './commands/entities/added-entity-command'
@@ -10,6 +10,7 @@ import { defineStyles } from './styles'
 import { SelectTool } from './tools/manipulation-tools/select-tool'
 import { Tool, ToolNames } from './tools/tool'
 import { ToolBox } from './tools/tool-box'
+import { Background } from './entities/background'
 
 /* eslint no-use-before-define: "off" */
 type CommandInvokerCallback = (sender: Component<HTMLElement> | AppState, command: Command<any>) => void
@@ -28,7 +29,7 @@ export interface MutableAppState {
   setTool: (toolName: ToolNames) => void
   setCurrentTextPosition: (point: IPoint) => void
   setCurrentText: (text: string) => void
-  background: () => Shape
+  background: () => Background
   addEntities: (entities: Entity<Drawable>[]) => void
 }
 
@@ -44,12 +45,12 @@ export class AppState {
   #storage: EntitiesStorage = new EntitiesStorage()
   #toolBox: ToolBox
   private invokers: CommandInvokerCallback[] = []
-  background: Shape
+  background: Background
 
   constructor () {
     this.#toolBox = new ToolBox()
     const layer0 = this.scene.createLayer()
-    this.background = layer0.createShape('background').rect(0, 0, 0, 0)
+    this.background = new Background(layer0)
     this.addInvoker((sender, command) => this.onStateChanged(sender, command))
   }
 

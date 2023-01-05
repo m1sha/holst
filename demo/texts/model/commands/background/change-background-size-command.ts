@@ -10,9 +10,8 @@ export class ChangeBackgroundSizeCommand extends Command<Size> {
 
   execute (appState: MutableAppState): void {
     if (!this.data) return
-    const rect = appState.background().rects[0]
-    rect.height = this.data.height
-    rect.width = this.data.width
+
+    appState.background().changeSize(this.data)
   }
 
   rollback (appState: MutableAppState): void {
