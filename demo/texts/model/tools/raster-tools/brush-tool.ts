@@ -18,5 +18,5 @@ export class BrushTool extends Tool {
     // throw new Error('Method not implemented.')
   }
 
-  get name (): ToolNames { return 'brush' }
+  get name (): ToolNames { return 'raster-brush' }
 }

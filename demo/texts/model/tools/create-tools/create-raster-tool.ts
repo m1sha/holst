@@ -10,6 +10,7 @@ import { CreateRasterCommand } from '../../commands/create/create-raster-command
 import { SelectLastEntityCommand } from '../../commands/entities/select/select-last-entity-command'
 import { Tool, ToolNames } from '../tool'
 import { CancelDrawFrameRectCommand } from '../../commands/cancel-draw-frame-rect-command'
+import { ChangeToolCommand } from '../../commands/change-tool-command'
 
 export class CreateRasterTool extends Tool {
   mousedown (e: InteractiveEvent<MouseEventDecorator>, drawable: Drawable, state: AppState, component: Component<HTMLElement>) {
@@ -27,10 +28,10 @@ export class CreateRasterTool extends Tool {
   }
 
   mouseup (e: InteractiveEvent<MouseEventDecorator>, drawable: Drawable, state: AppState, component: Component<HTMLElement>) {
-    if (!this.created) {
-      this.create()
+    if (this.startPoint && this.endPoint) {
       state.sendCommand(component, new CreateRasterCommand(this.startPoint!, this.endPoint!))
       state.sendCommand(component, new SelectLastEntityCommand())
+      state.sendCommand(component, new ChangeToolCommand('raster-pen'))
       this.clear()
     }
   }
@@ -42,16 +43,13 @@ export class CreateRasterTool extends Tool {
 
   #startPoint: IPoint | null = null
   #endPoint: IPoint | null = null
-  #created: boolean = false
 
   get name (): ToolNames { return 'create-raster' }
   get cursor (): MouseCursorTypes { return 'crosshair' }
-  get created () { return this.#created }
   get startPoint () { return this.#startPoint }
   get endPoint () { return this.#endPoint }
   hasStartPoint () { return Boolean(this.#startPoint) }
   setStartPoint (point: IPoint) { this.#startPoint = point }
   setEndPoint (point: IPoint) { this.#endPoint = point }
-  create () { this.#created = true }
-  clear () { this.#startPoint = null }
+  clear () { this.#startPoint = null; this.#endPoint = null }
 }

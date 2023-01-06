@@ -7,7 +7,7 @@ import { AppState } from '../app-state'
 
 type ManipulationToolNames = 'select' | 'move' | 'rotate' | 'transform'
 type CreateEntityToolNames = 'create-text' | 'create-sketch' | 'create-raster'
-type RasterToolNames = 'pen' | 'brush' | 'polygon' | 'shape' | 'fill' | 'eraser'
+type RasterToolNames = 'raster-pen' | 'raster-brush' | 'raster-polygon' | 'raster-shape' | 'raster-fill' | 'raster-eraser'
 
 export type ToolNames = ManipulationToolNames | CreateEntityToolNames | RasterToolNames
 export abstract class Tool {

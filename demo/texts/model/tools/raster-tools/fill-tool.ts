@@ -18,5 +18,5 @@ export class FillTool extends Tool {
     // throw new Error('Method not implemented.')
   }
 
-  get name (): ToolNames { return 'fill' }
+  get name (): ToolNames { return 'raster-fill' }
 }

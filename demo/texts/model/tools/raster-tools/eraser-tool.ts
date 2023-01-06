@@ -18,5 +18,5 @@ export class EraserTool extends Tool {
     // throw new Error('Method not implemented.')
   }
 
-  get name (): ToolNames { return 'eraser' }
+  get name (): ToolNames { return 'raster-eraser' }
 }

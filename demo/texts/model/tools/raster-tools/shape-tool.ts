@@ -18,5 +18,5 @@ export class ShapeTool extends Tool {
     // throw new Error('Method not implemented.')
   }
 
-  get name (): ToolNames { return 'shape' }
+  get name (): ToolNames { return 'raster-shape' }
 }
