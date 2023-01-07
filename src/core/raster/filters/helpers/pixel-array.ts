@@ -18,6 +18,7 @@ export class PixelArray {
     this.data[i] = (u32 & 0xff0000) >> 16
     this.data[i + 1] = (u32 & 0x00ff00) >> 8
     this.data[i + 2] = u32 & 0x0000ff
+    // this.data[i + 3] = 255
   }
 
   getRGB (index: number): number[] {

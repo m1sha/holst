@@ -12,7 +12,7 @@ export class RasterCanvas {
     this.canvas = document.createElement('canvas')
     this.ctx = this.canvas.getContext('2d')!
     this.backgroundColor = Color.white
-    this.foregroundColor = Color.black
+    this.foregroundColor = Color.orange
 
     if (size) this.setSize(size)
   }
@@ -26,10 +26,16 @@ export class RasterCanvas {
     this.canvas.height = height
   }
 
-  pen ({ x, y }: IPoint) {
-    this.ctx.fillStyle = this.foregroundColor.toString()
+  penStart ({ x, y }: IPoint) {
+    this.ctx.strokeStyle = this.foregroundColor.toString()
+    // this.ctx.translate(-0.5, -0.5)
     this.ctx.beginPath()
-    this.ctx.rect(x, y, 1, 1)
-    this.ctx.closePath()
+    this.ctx.moveTo(x - 0.5, y - 0.5)
+  }
+
+  penMove ({ x, y }: IPoint) {
+    this.ctx.lineTo(x - 0.5, y - 0.5)
+    this.ctx.stroke()
+    // this.ctx.closePath()
   }
 }
