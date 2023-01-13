@@ -261,7 +261,7 @@ class MockCanvasRenderingContext2D implements ICanvasRenderingContext2D {
   }
 
   translate (x: number, y: number): void {
-    throw new Error('Method not implemented.')
+    //
   }
 
   drawFocusIfNeeded(element: Element): void;

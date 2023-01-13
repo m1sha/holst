@@ -1,0 +1,1 @@
+sass -s compressed --watch D:\dev\js\holst\demo\texts\components\scss\index.sass D:\dev\js\holst\demo\texts\components\css\style.css

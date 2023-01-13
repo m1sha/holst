@@ -13,6 +13,7 @@ import { Figures } from './figures'
 import { Drawable, DrawableType } from './drawable'
 import { Shadow } from './styles/shadow'
 import { Size } from './geometry/size'
+import { Rasterizer } from './render/rasterizer'
 
 export default class Shape extends Drawable {
   #cache: Path2DBase | null = null
@@ -263,6 +264,10 @@ export default class Shape extends Drawable {
     }
 
     return this.#cache!!
+  }
+
+  rasterize () {
+    return Rasterizer.rasterizeShape(this)
   }
 
   copyPath () {

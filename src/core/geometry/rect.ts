@@ -170,4 +170,15 @@ export class Rect implements IRect, Size {
     }
     throw new Error('mismatch parameters')
   }
+
+  static fromTwoPoints (p1: IPoint, p2: IPoint) {
+    const s = new Point(Math.min(p1.x, p2.x), Math.min(p1.y, p2.y))
+    const e = new Point(Math.max(p1.x, p2.x), Math.max(p1.y, p2.y)).dec(s)
+    return new Rect(s, { width: e.x, height: e.y })
+  }
+
+  static assign (dist: IRect, src: IRect): void {
+    dist.x = src.x; dist.y = src.y
+    dist.width = src.width; dist.height = src.height
+  }
 }

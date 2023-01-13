@@ -5,3 +5,6 @@
 package-lock.json
 **/.vscode/
 **/img/sprites/
+
+**/demo/**/*.css.map
+**/demo/**/*.css

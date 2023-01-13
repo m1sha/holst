@@ -2,7 +2,7 @@
   { "name": "shape2", "title": "Shapes v2" },
   { "name": "shape-bounds", "title": "Shape bounds" },
   { "name": "containers", "title": "Containers" },
-  { "name": "texts", "title": "Text", "css": [ "/components/css/app.css", "/components/property-viewer/css/property-viewer.css", "/components/object-list/css/object-list.css"]},
+  { "name": "texts", "title": "Text", "css": ["/components/css/style.css"]},
   { "name": "sprites", "title": "Sprite animation" },
   { "name": "matrix", "title": "Animation base on matrixes" },
   { "name": "movement", "title": "Animation base on Cubic-Bezier" },

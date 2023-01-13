@@ -1,0 +1,43 @@
+*
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+
+.property-viewer
+  width: 320px
+  margin-left: 12px
+  padding-right: 12px
+  overflow-y: auto
+  max-height: calc(100vh - 50px)
+
+.property-rules-category
+  color: #717171
+  font-size: 18px
+  font-weight: 400
+  margin-bottom: 8px
+  border-bottom: 1px solid #b3b3b3
+
+.property-rules-category:not(:first-child)
+  margin-top: 16px
+
+.property-rule
+  display: flex
+  align-items: center
+  border-bottom: 1px solid #e3e3e3
+
+  label, input, select
+    width: 50%
+
+  input[type="checkbox"]
+    width: 20px
+    padding-left: 0
+    margin-left: 0
+
+  label
+    color: #212121
+    font-weight: 400
+    font-size: 14px
+
+  input, select
+    border-radius: 3px
+    padding: 4px 8px
+    border: 1px solid #f3f3f3
+    margin: 2px 0

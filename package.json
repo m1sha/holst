@@ -4,10 +4,11 @@
   "description": "2D graphic library",
   "main": "index.js",
   "scripts": {
-    "build:dev": "cross-env mode=production libraryTarget= webpack --watch",
+    "dev": "cross-env mode=development libraryTarget= webpack --watch",
+    "build:css": "sass-build.bat",
+    "build:web": "cross-env mode=production libraryTarget= webpack --watch",
     "build:node": "cross-env mode=production libraryTarget=umd webpack",
-    "test:watch": "npx jest --watch",
-    "format": "prettier --write src/**/*.ts tests/**/*.ts"
+    "test": "npx jest --watch"
   },
   "repository": {
     "url": "https://github.com/m1sha/holst"

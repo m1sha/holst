@@ -5,6 +5,8 @@ import { Drawable, DrawableType } from './drawable'
 import { UseFilters } from './raster/filters/use-filters'
 import { Point } from './geometry/point'
 import { Matrix2D } from './matrix'
+import { RasterCanvas } from './render/raster-canvas'
+import { Color } from './colors/color'
 
 export type AnyImageType = HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap
 
@@ -14,6 +16,7 @@ export class Raster extends Drawable {
   hidden: boolean = false
   #transform: Matrix2D = Matrix2D.identity
   #channels: Channels | null = null
+  #canvas: RasterCanvas | null = null
   src: AnyImageType
   srcRect: IRect
   distRect: IRect
@@ -57,10 +60,21 @@ export class Raster extends Drawable {
     this.src = img
   }
 
+  combine (imagedata: ImageData, mask: Color) {
+    const origin = this.getData()
+    const img = RasterDataTransfer.combine(origin, imagedata, mask)
+    this.src = img
+  }
+
   get channels (): Channels {
     if (this.#channels) return this.#channels
     this.#channels = new Channels(this.getData())
     return this.#channels
+  }
+
+  get canvas (): RasterCanvas {
+    if (this.#canvas) return this.#canvas
+    return (this.#canvas = new RasterCanvas(this.distRect))
   }
 
   clone () {
