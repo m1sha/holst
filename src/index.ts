@@ -14,6 +14,7 @@ import { MutablePath2D } from './core/path2d/mutable-path2d'
 import { Point } from './core/geometry/point'
 import { Rect } from './core/geometry/rect'
 import { Renderer2D } from './core/render/renderer2D'
+import { Renderer2DV } from './core/render/renderer2DV'
 import { Scene } from './core/scene'
 import Shape from './core/shape'
 import { Shape2 } from './core/shape2'
@@ -57,6 +58,7 @@ export {
   Point,
   Rect,
   Renderer2D,
+  Renderer2DV,
   Scene,
   Shape,
   Shape2,

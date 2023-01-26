@@ -1,1 +1,2 @@
-sass -s compressed --watch D:\dev\js\holst\demo\texts\components\scss\index.sass D:\dev\js\holst\demo\texts\components\css\style.css
+#sass -s compressed --watch D:\dev\js\holst\demo\texts\components\scss\index.sass D:\dev\js\holst\demo\texts\components\css\style.css
+sass -s compressed --watch D:\dev\js\holst\demo\multicanvas-renderer\sass\index.sass D:\dev\js\holst\demo\multicanvas-renderer\index.css
