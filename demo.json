@@ -9,6 +9,5 @@
   { "name": "collisions", "title": "Collisions detection" },
   { "name": "raster-filters", "title": "Raster filters", "css": ["/index.css"] },
   { "name": "readme", "title": "Example from readme" },
-  { "name": "dynamic-canvas-renderer", "title": "Dynamic Canvas", "css": ["/index.css"] },
-  { "name": "multicanvas-renderer", "title": "Multicanvas", "css": ["/index.css"] }
+  { "name": "dynamic-renderer", "title": "Dynamic Canvas", "css": ["/index.css"] }
 ]

@@ -4,7 +4,7 @@ import { Scene } from '../scene'
 import CanvasRenderingContext2DFactory from './canvas-rendering-context-2d-factory'
 import { RendererBase } from './renderer'
 
-export class MultiCanvasRenderer extends RendererBase {
+export class DynamicRenderer2D extends RendererBase {
   #scene: Scene | null = null
   #element: HTMLDivElement
   private backgroundCanvas: HTMLCanvasElement

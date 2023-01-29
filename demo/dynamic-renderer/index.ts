@@ -1,4 +1,4 @@
-import { Scene, MultiCanvasRenderer, Color } from '../../src/index'
+import { Scene, DynamicRenderer2D, Color } from '../../src/index'
 
 export function createDemo (app: HTMLDivElement) {
   const scene = new Scene()
@@ -13,7 +13,7 @@ export function createDemo (app: HTMLDivElement) {
   }
   ani.play()
 
-  const renderer = new MultiCanvasRenderer({ width: 800, height: 600 })
+  const renderer = new DynamicRenderer2D({ width: 800, height: 600 })
   renderer.render(scene)
   app.append(renderer.element)
 }
