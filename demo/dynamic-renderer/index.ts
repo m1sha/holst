@@ -3,7 +3,12 @@ import { Scene, DynamicRenderer2D, Color } from '../../src/index'
 export function createDemo (app: HTMLDivElement) {
   const scene = new Scene()
   const layer0 = scene.createLayer()
-  layer0.createShape({ fill: '#881222' }).rect(20, 20, 150, 200)
+  const rect = layer0
+    .createShape({ fill: '#881222' })
+    .rect(20, 20, 150, 200)
+
+  rect.on('click', () => (rect.style.fill = rect.style.fill === '#881222' ? '#181222' : '#881222'))
+
   layer0.order = 100
 
   const r = scene.createLayer().createShape({ fill: '#881892' }).rect(120, 20, 150, 200)

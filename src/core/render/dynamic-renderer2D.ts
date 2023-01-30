@@ -9,7 +9,7 @@ type CanvasLayer = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, o
 export class DynamicRenderer2D extends RendererBase {
   #scene: Scene | null = null
   #element: HTMLDivElement
-  private backgroundCanvas: HTMLCanvasElement
+  private foregroundCanvas: HTMLCanvasElement
   private canvases: Record<string, CanvasLayer> = {}
   private actionCanvas: CanvasLayer
   readonly viewportSize: Size
@@ -17,12 +17,12 @@ export class DynamicRenderer2D extends RendererBase {
   constructor (viewportSize: Size) {
     super()
     this.viewportSize = viewportSize
-    this.backgroundCanvas = this.createCanvas(0).canvas
     this.#element = document.createElement('div')
     this.#element.className = 'wrapper'
-    this.#element.append(this.backgroundCanvas)
-    this.actionCanvas = this.createCanvas(9999)
+    this.actionCanvas = this.createCanvas(9998)
+    this.foregroundCanvas = this.createCanvas(9999).canvas
     this.#element.append(this.actionCanvas.canvas)
+    this.#element.append(this.foregroundCanvas)
   }
 
   render (scene: Scene): void {
@@ -52,7 +52,7 @@ export class DynamicRenderer2D extends RendererBase {
   }
 
   protected getCanvas (): HTMLCanvasElement {
-    return this.backgroundCanvas
+    return this.foregroundCanvas
   }
 
   private createCanvas (order: number) {

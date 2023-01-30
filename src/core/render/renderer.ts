@@ -1,7 +1,7 @@
 import { AnimationHandler } from '../animations/animation-handler'
 import { EventHandler } from '../events/event-handler2'
 import { Scene } from '../scene'
-import { EventType } from '../events/event-type'
+// import { EventType } from '../events/event-type'
 import { Layer } from '../layers'
 import { sort } from '../../utils/sorter'
 import Orderable from '../orderable'
@@ -27,14 +27,6 @@ export abstract class RendererBase implements IRenderer {
   abstract clear (): void
 
   protected abstract getCanvas(): HTMLCanvasElement
-
-  addEventListener (a: (eventType: EventType, event: Event | MouseEvent | KeyboardEvent) => void, ...events: EventType[]) {
-    for (let i = 0; i < events.length; i++) {
-      const event = events[i]
-      const canvas = this.getCanvas() as unknown as Record<string, unknown>
-      canvas['on' + event] = (e: Event) => a(event, e)
-    }
-  }
 
   setAnimationRate (rate: number) {
     this.animationHandler.rate = rate
