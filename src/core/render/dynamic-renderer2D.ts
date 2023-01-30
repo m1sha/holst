@@ -4,11 +4,14 @@ import { Scene } from '../scene'
 import CanvasRenderingContext2DFactory from './canvas-rendering-context-2d-factory'
 import { RendererBase } from './renderer'
 
+type CanvasLayer = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, order: number }
+
 export class DynamicRenderer2D extends RendererBase {
   #scene: Scene | null = null
   #element: HTMLDivElement
   private backgroundCanvas: HTMLCanvasElement
-  private canvases: Record<string, { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D }> = {}
+  private canvases: Record<string, CanvasLayer> = {}
+  private actionCanvas: CanvasLayer
   readonly viewportSize: Size
 
   constructor (viewportSize: Size) {
@@ -18,6 +21,8 @@ export class DynamicRenderer2D extends RendererBase {
     this.#element = document.createElement('div')
     this.#element.className = 'wrapper'
     this.#element.append(this.backgroundCanvas)
+    this.actionCanvas = this.createCanvas(9999)
+    this.#element.append(this.actionCanvas.canvas)
   }
 
   render (scene: Scene): void {
@@ -29,7 +34,7 @@ export class DynamicRenderer2D extends RendererBase {
       const ctx = this.getContext(layer)
       this.drawLayer(layer, ctx)
     }
-    // this.drawLayer(scene.actionLayer, this.ctx)
+    this.drawLayer(scene.actionLayer, this.actionCanvas.ctx)
   }
 
   clear (): void {
@@ -50,10 +55,10 @@ export class DynamicRenderer2D extends RendererBase {
     return this.backgroundCanvas
   }
 
-  private createCanvas (index: number) {
+  private createCanvas (order: number) {
     const { canvas, ctx } = CanvasRenderingContext2DFactory.create(this.viewportSize)
-    canvas.style.zIndex = index.toString()
-    return { canvas, ctx }
+    canvas.style.zIndex = order.toString()
+    return { canvas, ctx, order }
   }
 
   private getContext ({ id, order }: Layer) {
@@ -62,6 +67,7 @@ export class DynamicRenderer2D extends RendererBase {
     item = this.createCanvas(order)
     this.canvases[id] = item
     this.#element.append(item.canvas)
+    if (item.order !== order) item.canvas.style.zIndex = order.toString()
     return item.ctx
   }
 }
