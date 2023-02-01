@@ -4,14 +4,14 @@ import { Scene } from '../scene'
 import CanvasRenderingContext2DFactory from './canvas-rendering-context-2d-factory'
 import { RendererBase } from './renderer'
 
-type CanvasLayer = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, order: number }
+type Layout = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, order: number }
 
 export class DynamicRenderer2D extends RendererBase {
   #scene: Scene | null = null
   #element: HTMLDivElement
   private foregroundCanvas: HTMLCanvasElement
-  private canvases: Record<string, CanvasLayer> = {}
-  private actionCanvas: CanvasLayer
+  private layouts: Record<string, Layout> = {}
+  private actionCanvas: Layout
   readonly viewportSize: Size
 
   constructor (viewportSize: Size) {
@@ -26,7 +26,10 @@ export class DynamicRenderer2D extends RendererBase {
   }
 
   render (scene: Scene): void {
-    this.#scene = scene
+    if (!this.#scene) {
+      this.#scene = scene
+      this.#scene.onRemoveLayer = layer => this.removeLayer(layer)
+    }
     super.render(scene)
     const layers = this.sortLayers(scene.layers as Layer[])
     for (const layer of layers) {
@@ -43,7 +46,8 @@ export class DynamicRenderer2D extends RendererBase {
       if (!layer.modified) continue
 
       const { width, height } = this.viewportSize
-      this.canvases[layer.id].ctx.clearRect(0, 0, width, height)
+      const layout = this.layouts[layer.id]
+      if (layout) layout.ctx.clearRect(0, 0, width, height)
     }
   }
 
@@ -55,19 +59,29 @@ export class DynamicRenderer2D extends RendererBase {
     return this.foregroundCanvas
   }
 
-  private createCanvas (order: number) {
+  private createCanvas (order: number, id?: string) {
     const { canvas, ctx } = CanvasRenderingContext2DFactory.create(this.viewportSize)
     canvas.style.zIndex = order.toString()
+    if (id) canvas.className = id
     return { canvas, ctx, order }
   }
 
   private getContext ({ id, order }: Layer) {
-    let item = this.canvases[id]
-    if (item) return item.ctx
-    item = this.createCanvas(order)
-    this.canvases[id] = item
-    this.#element.append(item.canvas)
-    if (item.order !== order) item.canvas.style.zIndex = order.toString()
-    return item.ctx
+    let layout = this.layouts[id]
+    if (layout) {
+      if (layout.order !== order) layout.canvas.style.zIndex = order.toString()
+      return layout.ctx
+    }
+
+    layout = this.createCanvas(order, id)
+    this.layouts[id] = layout
+    this.#element.append(layout.canvas)
+    if (layout.order !== order) layout.canvas.style.zIndex = order.toString()
+    return layout.ctx
+  }
+
+  private removeLayer ({ id }: Layer) {
+    const elem = this.#element.getElementsByClassName(id)[0]
+    if (elem) this.#element.removeChild(elem)
   }
 }

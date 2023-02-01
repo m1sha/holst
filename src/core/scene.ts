@@ -41,10 +41,14 @@ export class Scene {
       if (args.length !== 1) throw new Error('unsupported number of parameters.')
       const value = args[0]
       if (typeof value === 'number') {
+        if (this.onRemoveLayer) this.onRemoveLayer(this._layers[value])
         removeItem(this._layers, value)
       }
       if (typeof value === 'string') {
-        removeItem(this._layers, p => p.name === value)
+        const index = this._layers.findIndex(p => p.name === value)
+        if (index < 0) throw new Error(`The layer ${value} isn't found.`)
+        if (this.onRemoveLayer) this.onRemoveLayer(this._layers[index])
+        removeItem(this._layers, index)
       }
     }
 
@@ -98,7 +102,7 @@ export class Scene {
 
     /** @internal */ eventHandler: SceneEventHandler = new SceneEventHandler()
 
-    /* @internal */ invokeAnimation (t: number) {
-      this.taskManager.invoke(t)
-    }
+    /* @internal */ invokeAnimation (t: number) { this.taskManager.invoke(t) }
+
+    /** @internal */ onRemoveLayer: ((layer: Layer) => void) | null = null
 }

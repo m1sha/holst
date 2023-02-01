@@ -22,4 +22,13 @@ export function createDemo (app: HTMLDivElement) {
   const renderer = new DynamicRenderer2D({ width: 800, height: 600 })
   renderer.render(scene)
   app.append(renderer.element)
+
+  const layerForDelete = scene.createLayer()
+  layerForDelete.createShape({ fill: '#112288' }).circle(400, 300, 150)
+  layerForDelete.name = 'layerForDelete'
+
+  scene.createLayer()
+    .createShape({ fill: '#f12288' })
+    .circle(400, 300, 50)
+    .on('click', () => scene.removeLayer('layerForDelete'))
 }
