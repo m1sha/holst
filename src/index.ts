@@ -6,13 +6,14 @@ import { Brightness } from './core/raster/filters/brightness'
 import { GreyScale } from './core/raster/filters/greyscale'
 import { Randomize } from './core/raster/filters/randomize'
 import { Drawable } from './core/drawable'
-import { DynamicCanvasRenderer2D } from './core/render/dynamic-canvas-renderer-2d'
+import { DynamicRenderer2D } from './core/render/dynamic-renderer2D'
 import { Layer } from './core/layers'
 import { Matrix2D } from './core/matrix'
 import { MutablePath2D } from './core/path2d/mutable-path2d'
 import { Point } from './core/geometry/point'
 import { Rect } from './core/geometry/rect'
 import { Renderer2D } from './core/render/renderer2D'
+import { Renderer2DV } from './core/render/renderer2DV'
 import { Scene } from './core/scene'
 import Shape from './core/shape'
 import { Shape2 } from './core/shape2'
@@ -42,7 +43,7 @@ export {
   GreyScale,
   CubicBezier,
   Drawable,
-  DynamicCanvasRenderer2D,
+  DynamicRenderer2D,
   BitmapReader,
   BitmapWriter,
   ConstraintGrid,
@@ -55,6 +56,7 @@ export {
   Point,
   Rect,
   Renderer2D,
+  Renderer2DV,
   Scene,
   Shape,
   Shape2,

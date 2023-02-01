@@ -15,10 +15,13 @@ import { removeItem } from '../utils/array'
 import { calcBounds } from '../utils/utils'
 import { Shape2 } from './shape2'
 import { Group } from './group'
+import { uid } from 'utils/uid'
+import { Drawable } from './drawable'
 export class Layer implements Orderable {
   private objects: Orderable[] = []
-  readonly styleManager: StyleManager
   private arrange: Arrange
+  readonly styleManager: StyleManager
+  readonly id: string
   mask: Shape | null
   order: number
   name: string
@@ -27,6 +30,7 @@ export class Layer implements Orderable {
   canvasOrder: 'foreground' | 'background' = 'foreground'
 
   constructor (order: number, styleManager: StyleManager, name?: string) {
+    this.id = uid()
     this.name = name || 'Layer' + order
     this.order = order
     this.mask = null
@@ -203,5 +207,9 @@ export class Layer implements Orderable {
 
   get entities (): Readonly<Orderable[]> {
     return this.objects
+  }
+
+  get modified (): boolean {
+    return this.objects.some(p => (p as Drawable).modified)
   }
 }
