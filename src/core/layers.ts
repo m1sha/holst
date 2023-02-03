@@ -15,7 +15,7 @@ import { removeItem } from '../utils/array'
 import { calcBounds } from '../utils/utils'
 import { Sketch } from './sketch'
 import { Group } from './group'
-import { uid } from 'utils/uid'
+import { uid } from '../utils/uid'
 import { Drawable } from './drawable'
 import { sort } from '../utils/sorter'
 export class Layer implements Orderable {
