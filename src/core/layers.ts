@@ -17,8 +17,9 @@ import { Sketch } from './sketch'
 import { Group } from './group'
 import { uid } from 'utils/uid'
 import { Drawable } from './drawable'
+import { sort } from '../utils/sorter'
 export class Layer implements Orderable {
-  private objects: Orderable[] = []
+  #drawables: Drawable[] = []
   private arrange: Arrange
   readonly styleManager: StyleManager
   readonly id: string
@@ -49,7 +50,7 @@ export class Layer implements Orderable {
     const stl = (typeof style === 'string') ? this.styleManager.shapes(style) : style
     if (!path) path = new MutablePath2D()
     const result = new Shape(path, this.arrange.order, stl)
-    this.objects.push(result)
+    this.#drawables.push(result)
     result.frozen = this.frozen
     result.globalTransform = this.globalTransform
     return result
@@ -60,33 +61,33 @@ export class Layer implements Orderable {
     const result = new TextBlock(text, stl, this.arrange.order)
     if (target) result.target = target
     result.globalTransform = this.globalTransform
-    this.objects.push(result)
+    this.#drawables.push(result)
     return result
   }
 
-  add (entity: Sketch | Shape | TextBlock | Raster | Sprite | Group): void {
-    if (entity instanceof Sketch) {
-      this.addSketch(entity)
+  add (drawable: Sketch | Shape | TextBlock | Raster | Sprite | Group): void {
+    if (drawable instanceof Sketch) {
+      this.addSketch(drawable)
       return
     }
-    if (entity instanceof Shape) {
-      this.addShape(entity)
+    if (drawable instanceof Shape) {
+      this.addShape(drawable)
       return
     }
-    if (entity instanceof TextBlock) {
-      this.addTextBlock(entity)
+    if (drawable instanceof TextBlock) {
+      this.addTextBlock(drawable)
       return
     }
-    if (entity instanceof Raster) {
-      this.addRaster(entity)
+    if (drawable instanceof Raster) {
+      this.addRaster(drawable)
       return
     }
-    if (entity instanceof Sprite) {
-      this.addSprite(entity)
+    if (drawable instanceof Sprite) {
+      this.addSprite(drawable)
       return
     }
-    if (entity instanceof Group) {
-      this.addGroup(entity)
+    if (drawable instanceof Group) {
+      this.addGroup(drawable)
       return
     }
     throw new Error('The entity has an unknown type')
@@ -96,45 +97,40 @@ export class Layer implements Orderable {
     if (!shape.order) shape.order = this.arrange.order
     shape.frozen = this.frozen
     shape.globalTransform = this.globalTransform
-    this.objects.push(shape)
+    this.#drawables.push(shape)
   }
 
   addSketch (shape: Sketch): void {
     if (!shape.order) shape.order = this.arrange.order
     shape.globalTransform = this.globalTransform
-    this.objects.push(shape)
+    this.#drawables.push(shape)
   }
 
   addTextBlock (textBlock: TextBlock): void {
     if (!textBlock.order) textBlock.order = this.arrange.order
     textBlock.globalTransform = this.globalTransform
     // textBlock.frozen = this.frozen
-    this.objects.push(textBlock)
-  }
-
-  /** @deprecated */
-  createImage (raster: Raster) {
-    this.objects.push(raster)
+    this.#drawables.push(textBlock)
   }
 
   addRaster (raster: Raster) {
     if (!raster.order) raster.order = this.arrange.order
-    this.objects.push(raster)
+    this.#drawables.push(raster)
   }
 
   addSprite (sprite: Sprite) {
     if (!sprite.order) sprite.order = this.arrange.order
-    this.objects.push(sprite)
+    this.#drawables.push(sprite)
   }
 
   addGroup (group: Group) {
     if (!group.order) group.order = this.arrange.order
-    this.objects.push(group)
+    this.#drawables.push(group)
   }
 
   clear () {
-    this.objects = []
-    this.arrange = new Arrange(this.objects)
+    this.#drawables = []
+    this.arrange = new Arrange(this.#drawables)
   }
 
   createMask (defaultRect?: boolean): Shape {
@@ -149,24 +145,16 @@ export class Layer implements Orderable {
     this.mask = null
   }
 
-  removeShape (shape: Shape): void {
-    removeItem(this.objects, p => (p as Shape).id === shape.id)
+  remove (drawable: Drawable): void {
+    this.removeById(drawable.id)
   }
 
-  removeTextBlock (text: TextBlock): void {
-    removeItem(this.objects, p => (p as TextBlock).id === text.id)
+  removeById (id: string): void {
+    removeItem(this.#drawables, p => p.id === id)
   }
 
-  removeSprite (sprite: Sprite): void {
-    removeItem(this.objects, p => (p as Sprite).id === sprite.id)
-  }
-
-  removeRaster (raster: Raster): void {
-    removeItem(this.objects, p => (p as Raster).id === raster.id)
-  }
-
-  remove (id: string): void {
-    removeItem(this.objects, p => (p as Shape).id === id)
+  removeByName (name: string): void {
+    removeItem(this.#drawables, p => p.name === name)
   }
 
   sendToBack (item: Shape | TextBlock | Raster) {
@@ -186,34 +174,34 @@ export class Layer implements Orderable {
   }
 
   get shapes (): Shape[] {
-    return this.objects.filter(p => p instanceof Shape) as Shape[]
+    return this.#drawables.filter(p => p instanceof Shape) as Shape[]
   }
 
   get sketches (): Sketch[] {
-    return this.objects.filter(p => p instanceof Sketch) as Sketch[]
+    return this.#drawables.filter(p => p instanceof Sketch) as Sketch[]
   }
 
   get textBlocks (): TextBlock[] {
-    return this.objects.filter(p => p instanceof TextBlock) as TextBlock[]
+    return this.#drawables.filter(p => p instanceof TextBlock) as TextBlock[]
   }
 
   get rasters (): Raster[] {
-    return this.objects.filter(p => p instanceof Raster) as Raster[]
+    return this.#drawables.filter(p => p instanceof Raster) as Raster[]
   }
 
   get sprites (): Sprite[] {
-    return this.objects.filter(p => p instanceof Sprite) as Sprite[]
+    return this.#drawables.filter(p => p instanceof Sprite) as Sprite[]
   }
 
   get groups (): Group[] {
-    return this.objects.filter(p => p instanceof Group) as Group[]
+    return this.#drawables.filter(p => p instanceof Group) as Group[]
   }
 
-  get entities (): Readonly<Orderable[]> {
-    return this.objects
+  get drawables (): Readonly<Drawable[]> {
+    return sort(this.#drawables)
   }
 
   get modified (): boolean {
-    return this.objects.some(p => (p as Drawable).modified)
+    return this.#drawables.some(p => p.modified)
   }
 }

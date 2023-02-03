@@ -12,7 +12,7 @@ export class DeleteEntitiesCommand extends Command<string[]> {
     const selectedLayer = appState.selectedLayer()
     this.data!.forEach(p => {
       storage.remove(p)
-      selectedLayer.remove(p)
+      selectedLayer.removeById(p)
     })
     super.execute(appState)
   }
