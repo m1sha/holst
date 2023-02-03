@@ -1,5 +1,5 @@
 [
-  { "name": "shape2", "title": "Shapes v2" },
+  { "name": "sketch", "title": "Sketches" },
   { "name": "shape-bounds", "title": "Shape bounds" },
   { "name": "containers", "title": "Containers" },
   { "name": "texts", "title": "Text", "css": ["/components/css/style.css"]},

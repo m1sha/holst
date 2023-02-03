@@ -13,7 +13,7 @@ import { Sprite } from './sprite'
 import { Matrix2D } from './matrix'
 import { removeItem } from '../utils/array'
 import { calcBounds } from '../utils/utils'
-import { Shape2 } from './shape2'
+import { Sketch } from './sketch'
 import { Group } from './group'
 import { uid } from 'utils/uid'
 import { Drawable } from './drawable'
@@ -64,9 +64,9 @@ export class Layer implements Orderable {
     return result
   }
 
-  add (entity: Shape2 | Shape | TextBlock | Raster | Sprite | Group): void {
-    if (entity instanceof Shape2) {
-      this.addShape2(entity)
+  add (entity: Sketch | Shape | TextBlock | Raster | Sprite | Group): void {
+    if (entity instanceof Sketch) {
+      this.addSketch(entity)
       return
     }
     if (entity instanceof Shape) {
@@ -99,7 +99,7 @@ export class Layer implements Orderable {
     this.objects.push(shape)
   }
 
-  addShape2 (shape: Shape2): void {
+  addSketch (shape: Sketch): void {
     if (!shape.order) shape.order = this.arrange.order
     shape.globalTransform = this.globalTransform
     this.objects.push(shape)
@@ -187,6 +187,10 @@ export class Layer implements Orderable {
 
   get shapes (): Shape[] {
     return this.objects.filter(p => p instanceof Shape) as Shape[]
+  }
+
+  get sketches (): Sketch[] {
+    return this.objects.filter(p => p instanceof Sketch) as Sketch[]
   }
 
   get textBlocks (): TextBlock[] {
