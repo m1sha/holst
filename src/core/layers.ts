@@ -56,6 +56,14 @@ export class Layer implements Orderable {
     return result
   }
 
+  createSketch (style: ShapeStyle | string | null = null) {
+    const stl = (typeof style === 'string') ? this.styleManager.shapes(style) : style
+    const result = new Sketch(this.arrange.order, stl)
+    this.#drawables.push(result)
+    result.globalTransform = this.globalTransform
+    return result
+  }
+
   createTextBlock (text: string, style: TextStyle | string, target?: IPoint): TextBlock {
     const stl = (typeof style === 'string') ? this.styleManager.texts(style) : style
     const result = new TextBlock(text, stl, this.arrange.order)
