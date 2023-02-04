@@ -16,7 +16,7 @@ import { Renderer2D } from './core/render/renderer2D'
 import { Renderer2DV } from './core/render/renderer2DV'
 import { Scene } from './core/scene'
 import Shape from './core/shape'
-import { Shape2 } from './core/shape2'
+import { Sketch } from './core/sketch'
 import { Sprite } from './core/sprite'
 import { SvgPathD } from './core/svg/svg-path-d'
 import { Color } from './core/colors/color'
@@ -59,7 +59,7 @@ export {
   Renderer2DV,
   Scene,
   Shape,
-  Shape2,
+  Sketch,
   Sprite,
   StyleManager,
   SvgPathD,

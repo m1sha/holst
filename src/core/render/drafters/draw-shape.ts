@@ -1,10 +1,10 @@
 import Shape from '../../shape'
-import { Shape2 } from '../../shape2'
+import { Sketch } from '../../sketch'
 import { Color } from '../../colors/color'
 import { applyGraphicStyle } from '../../styles/apply-graphic-style'
 import { ShapeStyle } from '../../styles/shape-style'
 
-export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape | Shape2, clip: Shape | null) {
+export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape | Sketch, clip: Shape | null) {
   ctx.save()
 
   if (clip) ctx.clip(clip.toPath2D())

@@ -1,10 +1,8 @@
 import { AnimationHandler } from '../animations/animation-handler'
 import { EventHandler } from '../events/event-handler2'
 import { Scene } from '../scene'
-// import { EventType } from '../events/event-type'
 import { Layer } from '../layers'
 import { sort } from '../../utils/sorter'
-import Orderable from '../orderable'
 import { Drawable } from '../drawable'
 import { drawDrawables } from './drafters/draw-drawables'
 export interface IRenderer {
@@ -40,10 +38,8 @@ export abstract class RendererBase implements IRenderer {
     return this.animationHandler.fps
   }
 
-  protected drawLayer ({ entities, mask }: Readonly<Layer>, ctx: CanvasRenderingContext2D) {
-    const list = sort(entities as Orderable[]) as Drawable[]
-
-    drawDrawables(ctx, list, mask, item => this.setHandler(item))
+  protected drawLayer ({ drawables, mask }: Readonly<Layer>, ctx: CanvasRenderingContext2D) {
+    drawDrawables(ctx, drawables, mask, item => this.setHandler(item))
   }
 
   protected setHandler (obj: Drawable) {

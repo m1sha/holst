@@ -15,7 +15,7 @@ import Context2DFactory from './render/canvas-rendering-context-2d-factory'
 import { Shadow } from './styles/shadow'
 import { ShapeStyle, ShapeStyleImpl } from './styles/shape-style'
 
-export class Shape2 extends Drawable {
+export class Sketch extends Drawable {
   #transform: Matrix2D = Matrix2D.identity
   #figureStack: FigureStack
   style: ShapeStyleImpl
@@ -27,13 +27,13 @@ export class Shape2 extends Drawable {
     this.style = new ShapeStyleImpl(style || {}, () => (this.modified = true))
   }
 
-  rect (x: number, y: number, width: number, height: number, corners?: Corner4 | number): this | Shape2
+  rect (x: number, y: number, width: number, height: number, corners?: Corner4 | number): this | Sketch
   // eslint-disable-next-line no-dupe-class-members
-  rect (point: IPoint, size: Size, corners?: Corner4 | number): this | Shape2
+  rect (point: IPoint, size: Size, corners?: Corner4 | number): this | Sketch
   // eslint-disable-next-line no-dupe-class-members
-  rect (rect: IRect, corners?: Corner4 | number): this | Shape2
+  rect (rect: IRect, corners?: Corner4 | number): this | Sketch
   // eslint-disable-next-line no-dupe-class-members
-  rect (...args: Array<any>): this | Shape2 {
+  rect (...args: Array<any>): this | Sketch {
     let figure: Rectangle | null = null
     if (
       (args.length === 1 && typeof args[0] === 'object' && Object.hasOwn(args[0], 'width')) ||
@@ -65,11 +65,11 @@ export class Shape2 extends Drawable {
     return figure
   }
 
-  circle (center: IPoint, radius: number, segmentCount?: number, smooth?: number): this | Shape2
+  circle (center: IPoint, radius: number, segmentCount?: number, smooth?: number): this | Sketch
   // eslint-disable-next-line no-dupe-class-members
-  circle (x: number, y: number, radius: number, segmentCount?: number, smooth?: number): this | Shape2
+  circle (x: number, y: number, radius: number, segmentCount?: number, smooth?: number): this | Sketch
   // eslint-disable-next-line no-dupe-class-members
-  circle (...args: Array<any>): this | Shape2 {
+  circle (...args: Array<any>): this | Sketch {
     let figure: Circle | null = null
 
     if (args.length >= 3 && typeof args[0] === 'number' && typeof args[1] === 'number' && typeof args[2] === 'number') {
@@ -89,11 +89,11 @@ export class Shape2 extends Drawable {
     return this
   }
 
-  arc (center: IPoint, radius: number, startAngle?: number, endAngle?: number, counterclockwise?: boolean): this | Shape2
+  arc (center: IPoint, radius: number, startAngle?: number, endAngle?: number, counterclockwise?: boolean): this | Sketch
   // eslint-disable-next-line no-dupe-class-members
-  arc (x: number, y: number, radius: number, startAngle?: number, endAngle?: number, counterclockwise?: boolean): this | Shape2
+  arc (x: number, y: number, radius: number, startAngle?: number, endAngle?: number, counterclockwise?: boolean): this | Sketch
   // eslint-disable-next-line no-dupe-class-members
-  arc (...args: Array<any>): this | Shape2 {
+  arc (...args: Array<any>): this | Sketch {
     let figure: Arc | null = null
 
     if (args.length >= 3 && typeof args[0] === 'number' && typeof args[1] === 'number' && typeof args[2] === 'number') {
@@ -113,11 +113,11 @@ export class Shape2 extends Drawable {
     return this
   }
 
-  ellipse (center: IPoint, radiusX: number, radiusY: number, rotation?: number, startAngle?: number, endAngle?: number, counterclockwise?: boolean): this | Shape2
+  ellipse (center: IPoint, radiusX: number, radiusY: number, rotation?: number, startAngle?: number, endAngle?: number, counterclockwise?: boolean): this | Sketch
   // eslint-disable-next-line no-dupe-class-members
-  ellipse (x: number, y: number, radiusX: number, radiusY: number, rotation?: number, startAngle?: number, endAngle?: number, counterclockwise?: boolean): this | Shape2
+  ellipse (x: number, y: number, radiusX: number, radiusY: number, rotation?: number, startAngle?: number, endAngle?: number, counterclockwise?: boolean): this | Sketch
   // eslint-disable-next-line no-dupe-class-members
-  ellipse (...args: Array<any>): this | Shape2 {
+  ellipse (...args: Array<any>): this | Sketch {
     let figure: Ellipse | null = null
 
     if (args.length >= 4 && typeof args[0] === 'number' && typeof args[1] === 'number' && typeof args[2] === 'number') {
@@ -163,6 +163,6 @@ export class Shape2 extends Drawable {
   }
 
   static create (style?: ShapeStyle) {
-    return new Shape2(0, style || {})
+    return new Sketch(0, style || {})
   }
 }
