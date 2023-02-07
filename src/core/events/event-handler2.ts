@@ -93,6 +93,7 @@ export class EventHandler implements IEventHandler {
     this.element.onmouseup = e => resolver.onmouseup(e)
     this.element.onmousedown = e => resolver.onmousedown(e)
     this.element.onmouseleave = e => resolver.onmouseleave(e)
+    const document = DomDocumentFactory.document()
     document.onkeyup = e => resolver.onkeyup(e)
     document.onkeydown = e => resolver.onkeydown(e)
     this.element.onwheel = e => resolver.onwheel(e)
@@ -123,3 +124,9 @@ export class InteractiveEvent<TEvent> {
     this.canvas.style.cursor = value
   }
 }
+
+const DomDocumentFactory = {
+  document: () => document
+}
+
+export { DomDocumentFactory }
