@@ -21,13 +21,13 @@ import { sort } from '../utils/sorter'
 export class Layer implements Orderable {
   #drawables: Drawable[] = []
   private arrange: Arrange
+  protected globalTransform: Matrix2D | null = null
   readonly styleManager: StyleManager
   readonly id: string
   mask: Shape | null
   order: number
   name: string
   frozen: boolean = false
-  globalTransform: Matrix2D | null = null
   canvasOrder: 'foreground' | 'background' = 'foreground'
 
   constructor (order: number, styleManager: StyleManager, name?: string) {
