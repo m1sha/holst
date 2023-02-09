@@ -1,3 +1,4 @@
+import { internal } from '../../utils/internal'
 import { Size } from '../geometry/size'
 import { Layer } from '../layers'
 import { Scene } from '../scene'
@@ -5,6 +6,7 @@ import CanvasRenderingContext2DFactory from './canvas-rendering-context-2d-facto
 import { RendererBase } from './renderer'
 
 type Layout = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, order: number }
+interface DynamicLayer { onRemoveLayer: ((layer: Layer) => void) }
 
 export class DynamicRenderer2D extends RendererBase {
   #scene: Scene | null = null
@@ -28,7 +30,7 @@ export class DynamicRenderer2D extends RendererBase {
   render (scene: Scene): void {
     if (!this.#scene) {
       this.#scene = scene
-      this.#scene.onRemoveLayer = layer => this.removeLayer(layer)
+      internal<DynamicLayer>(this.#scene).onRemoveLayer = layer => this.removeLayer(layer)
     }
     super.render(scene)
     const layers = this.sortLayers(scene.layers as Layer[])

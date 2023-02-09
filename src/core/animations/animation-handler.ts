@@ -1,6 +1,8 @@
 /* global FrameRequestCallback */
 import { Scene } from '../scene'
 import { IRenderer } from '../render/renderer'
+import { internal } from '../../utils/internal'
+import { IAnimationProvider } from './animation-provider'
 
 export class AnimationHandler {
   private renderer: IRenderer
@@ -58,7 +60,7 @@ export class AnimationHandler {
         throw new Error('scene is not defined')
       }
       this.renderer.clear()
-      this.scene.invokeAnimation(timestamp)
+      internal<IAnimationProvider>(this.scene).invokeAnimation(timestamp)
       if (this.renderer.onFrameChanged) this.renderer.onFrameChanged()
       this.renderer.render(this.scene)
 

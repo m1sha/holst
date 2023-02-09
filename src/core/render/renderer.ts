@@ -5,6 +5,8 @@ import { Layer } from '../layers'
 import { sort } from '../../utils/sorter'
 import { Drawable } from '../drawable'
 import { drawDrawables } from './drafters/draw-drawables'
+import { internal } from '../../utils/internal'
+import { IEventHandlerProvider } from '../events/event-handler-provider'
 export interface IRenderer {
   render (scene: Scene): void
   clear (): void
@@ -19,7 +21,8 @@ export abstract class RendererBase implements IRenderer {
   render (scene: Scene): void {
     if (this.animationHandler.isStarted) return
     this.animationHandler.start(scene)
-    this.eventHandler.setSceneEventHandlers(scene.eventHandler)
+    const eventHandler = internal<IEventHandlerProvider>(scene).eventHandler
+    this.eventHandler.setSceneEventHandlers(eventHandler)
   }
 
   abstract clear (): void
