@@ -1,5 +1,8 @@
 import { GraphicStyle } from './graphic-style'
 import { FillStrokeOrder } from './fill-stroke-order'
+import { Shadow } from './shadow'
+import { internal } from '../../utils/internal'
+import { IChangePropertyProvider } from '../change-property-provider'
 
 export type FontWeight = 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'
 export type FontVariant = 'normal' | 'small-caps'
@@ -13,6 +16,7 @@ export interface TextStyle {
   italic?: boolean
   fontVariant?: FontVariant
   fillStrokeOrder?: FillStrokeOrder
+  readonly shadow?: Shadow
 }
 
 export class TextStyleImpl implements TextStyle {
@@ -26,6 +30,7 @@ export class TextStyleImpl implements TextStyle {
   #italic?: boolean
   #fontVariant?: FontVariant
   #fillStrokeOrder?: FillStrokeOrder
+  #shadow?: Shadow
 
   constructor (style: TextStyle, onSetDelegate: () => void) {
     this.#onSetDelegate = onSetDelegate
@@ -38,6 +43,8 @@ export class TextStyleImpl implements TextStyle {
     this.#italic = style.italic ? style.italic : false
     this.#fontVariant = style.fontVariant ? style.fontVariant : 'normal'
     this.#fillStrokeOrder = style.fillStrokeOrder ? style.fillStrokeOrder : 'fill-first'
+    this.#shadow = style.shadow
+    this.setShadowChangeProperty(style.shadow)
   }
 
   get color (): GraphicStyle {
@@ -123,6 +130,15 @@ export class TextStyleImpl implements TextStyle {
     this.#onSetDelegate()
   }
 
+  get shadow (): Shadow | undefined {
+    return this.#shadow
+  }
+
+  set shadow (value: Shadow | undefined) {
+    this.#shadow = value
+    this.setShadowChangeProperty(this.#shadow)
+  }
+
   clone (): TextStyle {
     return {
       color: this.#color,
@@ -133,7 +149,15 @@ export class TextStyleImpl implements TextStyle {
       bold: this.#bold,
       italic: this.#italic,
       fontVariant: this.#fontVariant,
-      fillStrokeOrder: this.#fillStrokeOrder
+      fillStrokeOrder: this.#fillStrokeOrder,
+      shadow: this.#shadow
+    }
+  }
+
+  private setShadowChangeProperty (value: Shadow | undefined) {
+    if (!value) return
+    internal<IChangePropertyProvider>(value).onChangeProperty = () => {
+      this.#onSetDelegate()
     }
   }
 }

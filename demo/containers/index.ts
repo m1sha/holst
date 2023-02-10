@@ -1,3 +1,4 @@
+import { Shadow } from '../../src/core/styles/shadow'
 import { Assets, Scene, Renderer2D, Rect, Point, Anchor, IPoint, Color, Drawable, Shape } from '../../src/index'
 
 export async function createDemo (appDiv: HTMLDivElement) {
@@ -43,11 +44,13 @@ function setEvents (drawable: Drawable) {
   drawable
     .on('hover', e => {
       e.event.stopPropagation()
-      if (drawable instanceof Shape) drawable.shadow.set({ x: 10, y: 4 }, 8, '#aaa')
+      if (drawable instanceof Shape) {
+        drawable.style.shadow = new Shadow({ x: 10, y: 4 }, 8, '#aaa')
+      }
     })
     .on('leave', e => {
       e.event.stopPropagation()
-      if (drawable instanceof Shape) drawable.shadow.clear()
+      if (drawable instanceof Shape) drawable.style.shadow = undefined
     })
     .on('mousedown', e => {
       e.event.stopPropagation()

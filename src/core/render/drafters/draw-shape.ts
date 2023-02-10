@@ -11,8 +11,8 @@ export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape | Sketch,
 
   const { style } = shape
   const path = shape.toPath2D()
-  if (shape.shadow.has()) {
-    const { x, y, blur, color } = shape.shadow.values()
+  if (style.shadow) {
+    const { x, y, blur, color } = style.shadow.values()
     ctx.shadowOffsetX = x
     ctx.shadowOffsetY = y
     ctx.shadowBlur = blur
