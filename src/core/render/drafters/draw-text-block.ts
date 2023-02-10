@@ -4,11 +4,20 @@ import { Matrix2D } from '../../matrix'
 import { applyAnchor } from '../../anchor'
 import Shape from '../../shape'
 import { applyGraphicStyle } from '../../styles/apply-graphic-style'
+import { Color } from '../../colors/color'
 
 export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock, clip: Shape | null) {
   ctx.save()
 
   if (clip) ctx.clip(clip.toPath2D())
+
+  if (block.style.shadow) {
+    const { x, y, blur, color } = block.style.shadow.values()
+    ctx.shadowOffsetX = x
+    ctx.shadowOffsetY = y
+    ctx.shadowBlur = blur
+    ctx.shadowColor = color instanceof Color ? color.toString() : color
+  }
 
   assignTextStyle(ctx, block.style)
   ctx.setTransform(block.getTransform().mul(block.globalTransform ?? Matrix2D.identity))

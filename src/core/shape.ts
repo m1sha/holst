@@ -11,7 +11,6 @@ import { Corner4 } from './geometry/corner4'
 import { IVector } from './geometry/vector'
 import { Figures } from './figures'
 import { Drawable, DrawableType } from './drawable'
-import { Shadow } from './styles/shadow'
 import { Size } from './geometry/size'
 import { Rasterizer } from './render/rasterizer'
 
@@ -20,10 +19,8 @@ export default class Shape extends Drawable {
   private readonly mutablePath: MutablePath2D
   readonly relative: RelativeMutablePath2D
   style: ShapeStyleImpl
-
   frozen: boolean = false
   readonly figures: Figures
-  readonly shadow: Shadow = new Shadow()
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
     super(order)
