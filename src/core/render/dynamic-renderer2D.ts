@@ -20,7 +20,7 @@ export class DynamicRenderer2D extends RendererBase {
     super()
     this.viewportSize = viewportSize
     this.#element = document.createElement('div')
-    this.#element.className = 'wrapper'
+    this.#element.style.position = 'relative'
     this.actionCanvas = this.createCanvas(9998)
     this.foregroundCanvas = this.createCanvas(9999).canvas
     this.#element.append(this.actionCanvas.canvas)
@@ -63,6 +63,7 @@ export class DynamicRenderer2D extends RendererBase {
 
   private createCanvas (order: number, id?: string) {
     const { canvas, ctx } = CanvasRenderingContext2DFactory.create(this.viewportSize)
+    canvas.style.position = 'absolute'
     canvas.style.zIndex = order.toString()
     if (id) canvas.className = id
     return { canvas, ctx, order }
