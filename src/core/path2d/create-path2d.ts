@@ -3,6 +3,7 @@ import { Matrix2D } from '../matrix'
 import { IPoint, Point } from '../geometry/point'
 import { Path2DElement } from './path2d-element'
 import { drawSegmentedCircle } from '../geometry/segmented-circle'
+import { round } from '../../utils/round'
 
 type HandlerInputType = {
   path: Path2D,
@@ -55,7 +56,7 @@ handlers.ArcTo = ({ path, element, d, transform, globalTransform }) => {
   if (globalTransform) {
     r *= globalTransform.a
   }
-  path.arcTo(p1.x, p1.y, p2.x, p2.y, r)
+  path.arcTo(round(p1.x), round(p1.y), round(p2.x), round(p2.y), round(r))
 }
 
 handlers.BezierCurveTo = ({ path, element, d, transform, globalTransform }) => {
@@ -64,7 +65,7 @@ handlers.BezierCurveTo = ({ path, element, d, transform, globalTransform }) => {
   const { x, y } = calcPoint(element, d, transform, globalTransform)
   const cp1 = calcPoint({ x: cp1x, y: cp1y }, d, transform, globalTransform)
   const cp2 = calcPoint({ x: cp2x, y: cp2y }, d, transform, globalTransform)
-  path.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, x, y)
+  path.bezierCurveTo(round(cp1.x), round(cp1.y), round(cp2.x), round(cp2.y), round(x), round(y))
 }
 
 handlers.ClosePath = ({ path, element }) => {
@@ -86,26 +87,26 @@ handlers.Ellipse = ({ path, element, d, transform, globalTransform }) => {
     radius.y *= globalTransform.d
   }
 
-  path.ellipse(x, y, radius.x, radius.y, rotation, startAngle, endAngle, counterclockwise)
+  path.ellipse(round(x), round(y), round(radius.x), round(radius.y), rotation, startAngle, endAngle, counterclockwise)
 }
 
 handlers.LineTo = ({ path, element, d, transform, globalTransform }) => {
   if (element.type !== 'LineTo') return
   const { x, y } = calcPoint(element, d, transform, globalTransform)
-  path.lineTo(x, y)
+  path.lineTo(round(x), round(y))
 }
 
 handlers.MoveTo = ({ path, element, d, transform, globalTransform }) => {
   if (element.type !== 'MoveTo') return
   const { x, y } = calcPoint(element, d, transform, globalTransform)
-  path.moveTo(x, y)
+  path.moveTo(round(x), round(y))
 }
 
 handlers.QuadraticCurveTo = ({ path, element, d, transform, globalTransform }) => {
   if (element.type !== 'QuadraticCurveTo') return
   const cp = calcPoint({ x: element.cpx, y: element.cpy }, d, transform, globalTransform)
   const p = calcPoint(element, d, transform, globalTransform)
-  path.quadraticCurveTo(cp.x, cp.y, p.x, p.y)
+  path.quadraticCurveTo(round(cp.x), round(cp.y), round(p.x), round(p.y))
 }
 
 handlers.Rect = ({ path, element, d, transform, globalTransform }) => {
@@ -115,10 +116,10 @@ handlers.Rect = ({ path, element, d, transform, globalTransform }) => {
   const p1 = calcPoint({ x: x + w, y }, d, transform, globalTransform)
   const p2 = calcPoint({ x: x + w, y: y + h }, d, transform, globalTransform)
   const p3 = calcPoint({ x: x, y: y + h }, d, transform, globalTransform)
-  path.moveTo(p0.x, p0.y)
-  path.lineTo(p1.x, p1.y)
-  path.lineTo(p2.x, p2.y)
-  path.lineTo(p3.x, p3.y)
+  path.moveTo(round(p0.x), round(p0.y))
+  path.lineTo(round(p1.x), round(p1.y))
+  path.lineTo(round(p2.x), round(p2.y))
+  path.lineTo(round(p3.x), round(p3.y))
   path.closePath()
 }
 
@@ -126,7 +127,8 @@ handlers.Circle = ({ path, element, d, transform, stack, globalTransform }) => {
   if (element.type !== 'Circle') return
   const { x, y, radius } = element
   const pack = packager(path, d, transform, stack, globalTransform)
-  exec('Ellipse', pack({ type: 'Ellipse', x, y, radiusX: radius, radiusY: radius, rotation: 0, startAngle: 0, endAngle: Math.PI * 2 }))
+  const r = round(radius)
+  exec('Ellipse', pack({ type: 'Ellipse', x: round(x), y: round(y), radiusX: r, radiusY: r, rotation: 0, startAngle: 0, endAngle: Math.PI * 2 }))
 }
 
 handlers.SegmentedCircle = ({ path, element, d, transform, stack, globalTransform }) => {
