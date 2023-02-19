@@ -4,8 +4,6 @@
   "description": "2D graphic library",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env mode=development libraryTarget= webpack --watch",
-    "build:css": "sass-build.bat",
     "build:web": "cross-env mode=production libraryTarget= webpack --watch",
     "build:node": "cross-env mode=production libraryTarget=umd webpack",
     "test": "npx jest --watch"
