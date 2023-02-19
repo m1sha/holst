@@ -1,4 +1,4 @@
-import { Raster } from 'core/raster'
+import { Raster } from '../../raster'
 import { Filter } from './filter'
 
 export class UseFilters {

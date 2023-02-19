@@ -1,3 +1,4 @@
+import { DOMPointCorners } from '../../../src/core/path2d/path2d-base'
 import { ArcCommand, LineToCommand, MoveToCommand, RectCommand, TestCommandDispatcher } from './test-draw-command'
 
 export default class TestPath2D implements Path2D {
@@ -50,6 +51,10 @@ export default class TestPath2D implements Path2D {
 
   rect (x: number, y: number, w: number, h: number): void {
     if (this.dispatcher) this.dispatcher.add(new RectCommand(x, y, w, h))
+  }
+
+  roundRect (x: number, y: number, w: number, h: number, radii?: number | DOMPointCorners | (number | DOMPointCorners)[]): void {
+    throw new Error('Method not implemented.')
   }
 
   closePath (): void {
