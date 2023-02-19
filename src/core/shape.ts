@@ -111,7 +111,7 @@ export default class Shape extends Drawable {
   roundRect (rect: IRect, radius: number | Corner4): this | Shape {
     const { x, y, width, height } = rect
     const r = typeof radius === 'number' ? { tl: radius, tr: radius, bl: radius, br: radius } : radius
-    this.mutablePath.roundRect(x, y, width, height, r.tl, r.tr, r.bl, r.br)
+    this.mutablePath.roundRect(x, y, width, height, [r.tl, r.tr, r.bl, r.br])
     this.modified = true
     return this
   }
