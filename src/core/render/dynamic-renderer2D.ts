@@ -16,6 +16,7 @@ export class DynamicRenderer2D extends RendererBase {
   private layouts: Record<string, Layout> = {}
   private actionCanvas: Layout
   readonly viewportSize: Size
+  useOffscreenRendering = true
 
   constructor (viewportSize: Size) {
     super()
@@ -38,8 +39,14 @@ export class DynamicRenderer2D extends RendererBase {
     for (const layer of layers) {
       if (!layer.modified) continue
       const layout = this.getLayout(layer)
-      this.drawLayer(layer, layout.offscreen.ctx)
-      layout.ctx.drawImage(layout.offscreen.canvas, 0, 0)
+
+      if (this.useOffscreenRendering) {
+        this.drawLayer(layer, layout.offscreen.ctx)
+        layout.ctx.drawImage(layout.offscreen.canvas, 0, 0)
+        continue
+      }
+
+      this.drawLayer(layer, layout.ctx)
     }
     this.drawLayer(scene.actionLayer, this.actionCanvas.ctx)
   }
@@ -52,7 +59,7 @@ export class DynamicRenderer2D extends RendererBase {
       const { width, height } = this.viewportSize
       const layout = this.layouts[layer.id]
       if (layout) {
-        layout.offscreen.ctx.clearRect(0, 0, width, height)
+        if (this.useOffscreenRendering) layout.offscreen.ctx.clearRect(0, 0, width, height)
         layout.ctx.clearRect(0, 0, width, height)
       }
     }
