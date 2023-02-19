@@ -11,7 +11,7 @@ index.html
 
 index.ts
 ```ts
-import { Scene, Renderer2D, Color, Shape } from 'holst'
+import { Scene, DynamicRenderer2D, Color, Shape } from 'holst'
 
 const scene = new Scene()
 const forwardAnimation = scene.createAnimation({ duration: 1500 })
