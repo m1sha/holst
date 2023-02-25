@@ -1,5 +1,4 @@
 const path = require('path')
-const demos = require('./demo.json')
 
 const config = {
   mode: process.env.mode,
@@ -26,14 +25,11 @@ const config = {
 }
 
 if (process.env.libraryTarget === 'umd') {
+  config.entry['holst.umd'] = './src/index.ts'
   config.output.libraryTarget = 'umd'
 } else {
-  for (const item of demos) {
-    config.entry[item.name + '.bundle'] = './demo/' + item.name + '/index.ts'
-  }
-  // config.entry['getpalette.bundle'] = './demo/getpalette/index.ts'
-
-  config.output.library = 'demo'
+  config.entry.holst = './src/index.ts'
+  config.output.library = 'holst'
 }
 
 module.exports = config

@@ -5,7 +5,8 @@ import { Scene } from '../scene'
 import CanvasRenderingContext2DFactory from './canvas-rendering-context-2d-factory'
 import { RendererBase } from './renderer'
 
-type Layout = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, order: number }
+type Offscreen = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D }
+type Layout = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, offscreen: Offscreen, order: number }
 interface DynamicLayer { onRemoveLayer: ((layer: Layer) => void) }
 
 export class DynamicRenderer2D extends RendererBase {
@@ -15,14 +16,15 @@ export class DynamicRenderer2D extends RendererBase {
   private layouts: Record<string, Layout> = {}
   private actionCanvas: Layout
   readonly viewportSize: Size
+  useOffscreenRendering = true
 
   constructor (viewportSize: Size) {
     super()
     this.viewportSize = viewportSize
     this.#element = document.createElement('div')
     this.#element.style.position = 'relative'
-    this.actionCanvas = this.createCanvas(9998)
-    this.foregroundCanvas = this.createCanvas(9999).canvas
+    this.actionCanvas = this.createLayout(9998)
+    this.foregroundCanvas = this.createLayout(9999).canvas
     this.#element.append(this.actionCanvas.canvas)
     this.#element.append(this.foregroundCanvas)
   }
@@ -36,8 +38,15 @@ export class DynamicRenderer2D extends RendererBase {
     const layers = this.sortLayers(scene.layers as Layer[])
     for (const layer of layers) {
       if (!layer.modified) continue
-      const ctx = this.getContext(layer)
-      this.drawLayer(layer, ctx)
+      const layout = this.getLayout(layer)
+
+      if (this.useOffscreenRendering) {
+        this.drawLayer(layer, layout.offscreen.ctx)
+        layout.ctx.drawImage(layout.offscreen.canvas, 0, 0)
+        continue
+      }
+
+      this.drawLayer(layer, layout.ctx)
     }
     this.drawLayer(scene.actionLayer, this.actionCanvas.ctx)
   }
@@ -49,7 +58,10 @@ export class DynamicRenderer2D extends RendererBase {
 
       const { width, height } = this.viewportSize
       const layout = this.layouts[layer.id]
-      if (layout) layout.ctx.clearRect(0, 0, width, height)
+      if (layout) {
+        if (this.useOffscreenRendering) layout.offscreen.ctx.clearRect(0, 0, width, height)
+        layout.ctx.clearRect(0, 0, width, height)
+      }
     }
   }
 
@@ -61,26 +73,27 @@ export class DynamicRenderer2D extends RendererBase {
     return this.foregroundCanvas
   }
 
-  private createCanvas (order: number, id?: string) {
+  private createLayout (order: number, id?: string): Layout {
     const { canvas, ctx } = CanvasRenderingContext2DFactory.create(this.viewportSize)
+    const offscreen = CanvasRenderingContext2DFactory.create(this.viewportSize)
     canvas.style.position = 'absolute'
     canvas.style.zIndex = order.toString()
     if (id) canvas.className = id
-    return { canvas, ctx, order }
+    return { canvas, ctx, offscreen, order }
   }
 
-  private getContext ({ id, order }: Layer) {
+  private getLayout ({ id, order }: Layer): Layout {
     let layout = this.layouts[id]
     if (layout) {
       if (layout.order !== order) layout.canvas.style.zIndex = order.toString()
-      return layout.ctx
+      return layout
     }
 
-    layout = this.createCanvas(order, id)
+    layout = this.createLayout(order, id)
     this.layouts[id] = layout
     this.#element.append(layout.canvas)
     if (layout.order !== order) layout.canvas.style.zIndex = order.toString()
-    return layout.ctx
+    return layout
   }
 
   private removeLayer ({ id }: Layer) {

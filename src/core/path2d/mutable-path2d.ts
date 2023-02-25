@@ -1,6 +1,6 @@
 import { Path2DElement } from './path2d-element'
 import { Matrix2D } from '../matrix'
-import { Path2DBase } from './path2d-base'
+import { DOMPointCorners, Path2DBase } from './path2d-base'
 import { IPoint, Point } from '../geometry/point'
 import { createPath2D } from './create-path2d'
 import { createPoints } from './create-points'
@@ -64,7 +64,16 @@ export class MutablePath2D implements Path2DBase {
     this.stack.push({ type: 'Rect', x, y, width: w, height: h })
   }
 
-  roundRect (x: number, y: number, w: number, h: number, tl: number, tr: number, bl: number, br: number): void {
+  roundRect (x: number, y: number, w: number, h: number, radii?: number | DOMPointCorners | (number | DOMPointCorners)[]): void {
+  // roundRect (x: number, y: number, w: number, h: number, tl: number, tr: number, bl: number, br: number): void {
+    let tl = 0; let tr = 0; let bl = 0; let br = 0
+    if (radii) {
+      if (typeof radii === 'number') {
+        tl = radii; tr = radii; bl = radii; br = radii
+      } else if (Array.isArray(radii) && typeof radii[0] === 'number' && typeof radii[1] === 'number' && typeof radii[2] === 'number' && typeof radii[3] === 'number') {
+        tl = radii[0]; tr = radii[1]; bl = radii[2]; br = radii[3]
+      }
+    }
     this.stack.push({ type: 'RoundRect', x, y, width: w, height: h, tl, tr, bl, br })
   }
 

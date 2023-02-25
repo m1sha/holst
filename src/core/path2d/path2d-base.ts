@@ -1,3 +1,10 @@
+export interface DOMPointCorners {
+  w?: number;
+  x?: number;
+  y?: number;
+  z?: number;
+}
+
 export interface Path2DBase {
   addPath (path: Path2D, transform?: unknown): void
   arc (x: number, y: number, radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean): void
@@ -17,5 +24,6 @@ export interface Path2DBase {
   moveTo (x: number, y: number): void
   quadraticCurveTo (cpx: number, cpy: number, x: number, y: number): void
   rect (x: number, y: number, w: number, h: number): void
+  roundRect(x: number, y: number, w: number, h: number, radii?: number | DOMPointCorners | (number | DOMPointCorners)[]): void;
   closePath (): void
 }

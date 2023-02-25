@@ -3,6 +3,7 @@
 import { Size } from '../../src/core/geometry/size'
 import { ICanvasRenderingContext2D } from '../../src/core/render/canvas-rendering-context-2d'
 import { GlobalAnimationFrameHandlerFactory } from '../../src/core/animations/animation-handler'
+import { DOMPointCorners } from '../../src/core/path2d/path2d-base'
 
 class Logger {
   messages: unknown[] = []
@@ -170,6 +171,10 @@ class MockCanvasRenderingContext2D implements ICanvasRenderingContext2D {
 
   rect (x: number, y: number, w: number, h: number): void {
     this.logger.add(`rect { x: ${x}, y: ${y}, w: ${w}, h: ${h} }`)
+  }
+
+  roundRect (x: number, y: number, w: number, h: number, radii?: number | DOMPointCorners | (number | DOMPointCorners)[]): void {
+    throw new Error('Method not implemented.')
   }
 
   lineCap: CanvasLineCap = 'butt'
