@@ -97,9 +97,9 @@ export class MutablePath2D implements Path2DBase {
     return GlobalPath2DFactory.create(this.stack, d, this.transform, globalTransform)
   }
 
-  toPoints (globalTransform?: Matrix2D, anchor?: Anchor): IPoint[] {
+  toPoints (anchor?: Anchor): IPoint[] {
     const d = anchor ? getAnchorPoint(anchor) : Point.zero
-    return createPoints(this.stack, d, this.transform, globalTransform)
+    return createPoints(this.stack, d, this.transform)
   }
 
   copy () {

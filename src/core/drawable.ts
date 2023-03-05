@@ -5,7 +5,6 @@ import Orderable from './orderable'
 import { uid } from '../utils/uid'
 import { Point } from './geometry/point'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
-import { Matrix2D } from './matrix'
 import { Transformable } from './transformable'
 
 export type DrawableType = 'shape' | 'text' | 'raster' | 'sprite' | 'group'
@@ -20,7 +19,6 @@ export abstract class Drawable extends Transformable implements Interactive, Ord
 
   order: number
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
-  /** @internal */ globalTransform: Matrix2D | null = null
 
   constructor (order: number) {
     super()

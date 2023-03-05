@@ -216,8 +216,9 @@ export default class Shape extends Drawable {
     return this
   }
 
+  /** @deprecated */
   merge (shape: Shape): this | Shape {
-    this.mutablePath.addPath(shape.toPath2D())
+    this.mutablePath.addPath(shape.#cache!!)
     this.modified = true
     return this
   }
@@ -234,15 +235,17 @@ export default class Shape extends Drawable {
   }
 
   inPath (p: Point): boolean {
-    return Context2DFactory.default.ctx.isPointInPath(this.toPath2D(), p.x, p.y) // IsPointInPolygon4(this.mutablePath.toPoints(), p)
+    if (!this.#cache) throw Error('Shape must be rendered before')
+    return Context2DFactory.default.ctx.isPointInPath(this.#cache!!, p.x, p.y) // IsPointInPolygon4(this.mutablePath.toPoints(), p)
   }
 
   inStroke (p: IPoint): boolean {
-    return Context2DFactory.default.ctx.isPointInStroke(this.toPath2D(), p.x, p.y)
+    if (!this.#cache) throw Error('Shape must be rendered before')
+    return Context2DFactory.default.ctx.isPointInStroke(this.#cache!!, p.x, p.y)
   }
 
   get bounds (): Rect {
-    const points = this.mutablePath.toPoints(this.frozen ? Matrix2D.identity : this.globalTransform ?? Matrix2D.identity, this.anchor || undefined)
+    const points = this.mutablePath.toPoints(this.anchor || undefined)
     const rect = calcBounds(points)
     // if (this.anchor && this.anchor.container) {
     //   const b = getAnchorPoint(this.anchor)
@@ -252,10 +255,10 @@ export default class Shape extends Drawable {
     return rect
   }
 
-  toPath2D (): Path2DBase {
+  toPath2D (viewportMatrix: Matrix2D): Path2DBase {
     const modified = this.anchor && this.anchor.isModified(this)
     if (this.modified || modified) {
-      this.#cache = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : this.globalTransform ?? Matrix2D.identity, this.anchor || undefined)
+      this.#cache = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : viewportMatrix, this.anchor || undefined)
       this.modified = false
       this.anchor && this.anchor.setUnmodified(this)
     }

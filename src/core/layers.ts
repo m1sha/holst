@@ -52,7 +52,6 @@ export class Layer implements Orderable {
     const result = new Shape(path, this.arrange.order, stl)
     this.#drawables.push(result)
     result.frozen = this.frozen
-    result.globalTransform = this.globalTransform
     return result
   }
 
@@ -60,7 +59,6 @@ export class Layer implements Orderable {
     const stl = (typeof style === 'string') ? this.styleManager.shapes(style) : style
     const result = new Sketch(this.arrange.order, stl)
     this.#drawables.push(result)
-    result.globalTransform = this.globalTransform
     return result
   }
 
@@ -68,7 +66,6 @@ export class Layer implements Orderable {
     const stl = (typeof style === 'string') ? this.styleManager.texts(style) : style
     const result = new TextBlock(text, stl, this.arrange.order)
     if (target) result.target = target
-    result.globalTransform = this.globalTransform
     this.#drawables.push(result)
     return result
   }
@@ -104,19 +101,16 @@ export class Layer implements Orderable {
   addShape (shape: Shape): void {
     if (!shape.order) shape.order = this.arrange.order
     shape.frozen = this.frozen
-    shape.globalTransform = this.globalTransform
     this.#drawables.push(shape)
   }
 
   addSketch (shape: Sketch): void {
     if (!shape.order) shape.order = this.arrange.order
-    shape.globalTransform = this.globalTransform
     this.#drawables.push(shape)
   }
 
   addTextBlock (textBlock: TextBlock): void {
     if (!textBlock.order) textBlock.order = this.arrange.order
-    textBlock.globalTransform = this.globalTransform
     // textBlock.frozen = this.frozen
     this.#drawables.push(textBlock)
   }

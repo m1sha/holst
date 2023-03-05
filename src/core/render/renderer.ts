@@ -7,6 +7,8 @@ import { Drawable } from '../drawable'
 import { drawDrawables } from './drafters/draw-drawables'
 import { internal } from '../../utils/internal'
 import { IEventHandlerProvider } from '../events/event-handler-provider'
+import { Rect } from '../../core/geometry/rect'
+import { Matrix2D } from '../../core/matrix'
 export interface IRenderer {
   render (scene: Scene): void
   clear (): void
@@ -17,6 +19,8 @@ export abstract class RendererBase implements IRenderer {
   #eventHandler: EventHandler | null = null
   #animationHandler: AnimationHandler | null = null
   onFrameChanged: (() => void) | null = null
+  protected viewport: Rect = new Rect(0, 0, 0, 0)
+  protected viewportMatrix: Matrix2D = Matrix2D.identity
 
   render (scene: Scene): void {
     if (this.animationHandler.isStarted) return
@@ -42,7 +46,7 @@ export abstract class RendererBase implements IRenderer {
   }
 
   protected drawLayer ({ drawables, mask }: Readonly<Layer>, ctx: CanvasRenderingContext2D) {
-    drawDrawables(ctx, drawables, mask, item => this.setHandler(item))
+    drawDrawables(ctx, drawables, mask, this.viewportMatrix, item => this.setHandler(item))
   }
 
   protected setHandler (obj: Drawable) {

@@ -1,17 +1,14 @@
 import { Layer } from '../layers'
 import { Scene } from '../scene'
-import { Viewport } from '../viewport'
 import { RendererBase } from './renderer'
 
 export class Renderer2D extends RendererBase {
   readonly ctx: CanvasRenderingContext2D
-  readonly viewport: Viewport
 
   constructor (ctx: CanvasRenderingContext2D) {
     super()
     this.ctx = ctx
     this.ctx.imageSmoothingEnabled = true
-    this.viewport = new Viewport(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
   }
 
   render (scene: Scene): void {
