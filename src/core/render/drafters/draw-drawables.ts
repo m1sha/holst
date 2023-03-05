@@ -11,14 +11,14 @@ import { drawSprite } from './draw-sprite'
 import { Group } from '../../group'
 import { Matrix2D } from '../../matrix'
 
-export function drawDrawables (ctx: CanvasRenderingContext2D, list: Readonly<Drawable[]>, mask: Shape | null, viewportMatrix: Matrix2D, callback: (item: Drawable) => void) {
+export function drawDrawables (ctx: CanvasRenderingContext2D, list: Readonly<Drawable[]>, mask: Shape | null, viewportMatrix: Matrix2D, forceRedraw: boolean, callback: (item: Drawable) => void) {
   for (const item of list) {
     if (item.hidden) continue
-    if (item instanceof Shape || item instanceof Sketch) drawShape(ctx, item, mask, viewportMatrix)
+    if (item instanceof Shape || item instanceof Sketch) drawShape(ctx, item, mask, viewportMatrix, forceRedraw)
     if (item instanceof TextBlock) drawTextBlock(ctx, item, mask, viewportMatrix)
     if (item instanceof Raster) drawRaster(ctx, item, mask, viewportMatrix)
     if (item instanceof Sprite) drawSprite(ctx, item, mask, viewportMatrix)
-    if (item instanceof Group) drawDrawables(ctx, item.items, mask, viewportMatrix, callback)
+    if (item instanceof Group) drawDrawables(ctx, item.items, mask, viewportMatrix, forceRedraw, callback)
     callback(item)
   }
 }

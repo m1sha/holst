@@ -14,8 +14,8 @@ export class Renderer2D extends RendererBase {
   render (scene: Scene): void {
     super.render(scene)
     const layers = this.sortLayers(scene.layers as Layer[])
-    for (const layer of layers) this.drawLayer(layer, this.ctx)
-    this.drawLayer(scene.actionLayer, this.ctx)
+    for (const layer of layers) this.drawLayer(layer, this.ctx, false)
+    this.drawLayer(scene.actionLayer, this.ctx, false)
   }
 
   clear (): void {

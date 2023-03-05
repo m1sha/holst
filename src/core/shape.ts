@@ -255,9 +255,9 @@ export default class Shape extends Drawable {
     return rect
   }
 
-  toPath2D (viewportMatrix: Matrix2D): Path2DBase {
+  toPath2D (viewportMatrix: Matrix2D, forceRedraw: boolean = false): Path2DBase {
     const modified = this.anchor && this.anchor.isModified(this)
-    if (this.modified || modified) {
+    if (this.modified || modified || forceRedraw) {
       this.#cache = this.mutablePath.createPath2D(this.frozen ? Matrix2D.identity : viewportMatrix, this.anchor || undefined)
       this.modified = false
       this.anchor && this.anchor.setUnmodified(this)

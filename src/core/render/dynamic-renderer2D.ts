@@ -1,3 +1,4 @@
+import { Matrix2D } from '../matrix'
 import { IDisposable } from '../../utils/disposable'
 import { internal } from '../../utils/internal'
 import { Size } from '../geometry/size'
@@ -24,6 +25,7 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
   private resized: boolean = false
   private resizeObserver: ResizeObserver
   private scrollChangedEventListener: (ev: Event) => void
+  private forceRedraw: boolean = false
   useOffscreenRendering = true
   onViewportResized: ((size: Size) => void) | null = null
   onScrollChanged: ((size: Size) => void) | null = null
@@ -55,25 +57,26 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
     super.render(scene)
     const layers = this.sortLayers(scene.layers as Layer[])
     for (const layer of layers) {
-      if (!layer.modified && !this.resized) continue
+      if (!layer.modified && !this.resized && !this.forceRedraw) continue
       const layout = this.getLayout(layer)
 
       if (this.useOffscreenRendering) {
-        this.drawLayer(layer, layout.offscreen.ctx)
+        this.drawLayer(layer, layout.offscreen.ctx, this.forceRedraw)
         layout.ctx.drawImage(layout.offscreen.canvas, 0, 0)
         continue
       }
 
-      this.drawLayer(layer, layout.ctx)
+      this.drawLayer(layer, layout.ctx, this.forceRedraw)
     }
-    this.drawLayer(scene.actionLayer, this.actionCanvas.ctx)
+    this.drawLayer(scene.actionLayer, this.actionCanvas.ctx, this.forceRedraw)
     this.resized = false
+    this.forceRedraw = false
   }
 
   clear (): void {
     if (!this.#scene) return
     for (const layer of this.#scene.layers) {
-      if (!layer.modified) continue
+      if (!layer.modified && !this.forceRedraw) continue
 
       const { width, height } = this.viewportSize
       const layout = this.layouts[layer.id]
@@ -153,6 +156,8 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
   }
 
   private scrollChanged () {
+    this.viewportMatrix = Matrix2D.identity.translate({ x: -Math.round(this.#container.scrollLeft), y: Math.round(this.#container.scrollTop) })
+    this.forceRedraw = true
     if (this.onScrollChanged) this.onScrollChanged({ width: Math.round(this.#container.scrollLeft), height: Math.round(this.#container.scrollTop) })
   }
 
