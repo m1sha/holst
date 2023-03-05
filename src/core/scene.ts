@@ -5,8 +5,10 @@ import { TaskManager } from './tasks/task-manager'
 import { Animation, AnimationOptions } from './animations/animation'
 import { removeItem } from '../utils/array'
 import { SceneEventHandler } from './events/event-handler2'
+import { Size } from './geometry/size'
 
 export class Scene {
+    #size: Size
     private _layers: Layer []
     private taskManager: TaskManager
     private arrange: Arrange
@@ -17,6 +19,7 @@ export class Scene {
     readonly styleManager: StyleManager
 
     constructor () {
+      this.#size = { width: 0, height: 0 }
       this._layers = []
       this.arrange = new Arrange(this._layers)
       this.styleManager = new StyleManager()
@@ -51,6 +54,7 @@ export class Scene {
     }
 
     clearAllLayers () {
+      this.#size = { width: 0, height: 0 }
       this.clearActiveLayer()
       for (const layer of [...this._layers]) layer.clear()
       this._layers = []
@@ -86,5 +90,19 @@ export class Scene {
 
     get layers (): Readonly<Layer>[] {
       return this._layers
+    }
+
+    get size (): Readonly<Size> {
+      if (!this._layers.length) return this.#size
+      const size: Size = { width: 0, height: 0 }
+      for (const layer of this._layers) {
+        if (!layer.modified) continue
+        const { width, height } = this.size
+        if (width > size.width) size.width = width
+        if (height > size.height) size.height = height
+      }
+      if (size.width > this.#size.width) this.#size.width = size.width
+      if (size.height > this.#size.height) this.#size.height = size.height
+      return this.#size
     }
 }

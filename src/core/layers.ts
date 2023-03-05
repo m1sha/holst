@@ -1,7 +1,7 @@
 import { Raster } from './raster'
 import { TextBlock } from './label'
 import { TextStyle } from './styles/label-style'
-import { Point, IPoint } from './geometry/point'
+import { IPoint } from './geometry/point'
 import { Rect } from './geometry/rect'
 import Shape from './shape'
 import { ShapeStyle } from './styles/shape-style'
@@ -12,14 +12,15 @@ import { Arrange } from './arrange'
 import { Sprite } from './sprite'
 import { Matrix2D } from './matrix'
 import { removeItem } from '../utils/array'
-import { calcBounds } from '../utils/utils'
 import { Sketch } from './sketch'
 import { Group } from './group'
 import { uid } from '../utils/uid'
 import { Drawable } from './drawable'
 import { sort } from '../utils/sorter'
+import { Size } from './geometry/size'
 export class Layer implements Orderable {
   #drawables: Drawable[] = []
+  #bounds: Rect
   private arrange: Arrange
   protected globalTransform: Matrix2D | null = null
   readonly styleManager: StyleManager
@@ -31,6 +32,7 @@ export class Layer implements Orderable {
   canvasOrder: 'foreground' | 'background' = 'foreground'
 
   constructor (order: number, styleManager: StyleManager, name?: string) {
+    this.#bounds = new Rect(0, 0, 0, 0)
     this.id = uid()
     this.name = name || 'Layer' + order
     this.order = order
@@ -41,9 +43,29 @@ export class Layer implements Orderable {
   }
 
   get bounds (): Readonly<Rect> {
-    const points: Point[] = []
-    for (const rect of this.shapes.map(p => p.bounds)) points.push(...rect.points)
-    return calcBounds(points)
+    if (!this.#drawables.length) return this.#bounds
+    const result = new Rect(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER)
+
+    for (const drawable of this.#drawables) {
+      if (!drawable.modified) continue
+      const { x, y, width, height } = drawable.bounds
+      if (x < result.x) result.x = x
+      if (y < result.y) result.y = y
+      if (width > result.width) result.width = width
+      if (height > result.height) result.height = height
+    }
+
+    if (result.x < this.#bounds.x) this.#bounds.x = result.x
+    if (result.y < this.#bounds.y) this.#bounds.y = result.y
+    if (result.width > this.#bounds.width) this.#bounds.width = result.width
+    if (result.height > this.#bounds.height) this.#bounds.height = result.height
+
+    return this.#bounds
+  }
+
+  get size (): Readonly<Size> {
+    const { absWidth, absHeight } = this.bounds
+    return { width: absWidth, height: absHeight }
   }
 
   createShape (style: ShapeStyle | string | null = null, path?: MutablePath2D): Shape {
@@ -131,6 +153,7 @@ export class Layer implements Orderable {
   }
 
   clear () {
+    this.#bounds = new Rect(0, 0, 0, 0)
     this.#drawables = []
     this.arrange = new Arrange(this.#drawables)
   }
