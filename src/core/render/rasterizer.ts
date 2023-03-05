@@ -5,7 +5,7 @@ import { drawShape } from './drafters/draw-shape'
 export class Rasterizer {
   static rasterizeShape (shape: Shape) {
     const ctx = document.createElement('canvas').getContext('2d')!
-    drawShape(ctx, shape, null, Matrix2D.identity)
+    drawShape(ctx, shape, null, Matrix2D.identity, false)
     return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
   }
 }
