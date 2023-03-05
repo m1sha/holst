@@ -156,7 +156,7 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
   }
 
   private scrollChanged () {
-    this.viewportMatrix = Matrix2D.identity.translate({ x: -Math.round(this.#container.scrollLeft), y: Math.round(this.#container.scrollTop) })
+    this.viewportMatrix = Matrix2D.identity.translate({ x: -Math.round(this.#container.scrollLeft), y: -Math.round(this.#container.scrollTop) })
     this.forceRedraw = true
     if (this.onScrollChanged) this.onScrollChanged({ width: Math.round(this.#container.scrollLeft), height: Math.round(this.#container.scrollTop) })
   }
