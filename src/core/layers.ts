@@ -32,7 +32,7 @@ export class Layer implements Orderable {
   canvasOrder: 'foreground' | 'background' = 'foreground'
 
   constructor (order: number, styleManager: StyleManager, name?: string) {
-    this.#bounds = new Rect(0, 0, 0, 0)
+    this.#bounds = new Rect(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 0, 0)
     this.id = uid()
     this.name = name || 'Layer' + order
     this.order = order
@@ -44,15 +44,15 @@ export class Layer implements Orderable {
 
   get bounds (): Readonly<Rect> {
     if (!this.#drawables.length) return this.#bounds
-    const result = new Rect(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER)
+    const result = new Rect(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 0, 0)
 
     for (const drawable of this.#drawables) {
       if (!drawable.modified) continue
-      const { x, y, width, height } = drawable.bounds
+      const { x, y, absWidth, absHeight } = drawable.bounds
       if (x < result.x) result.x = x
       if (y < result.y) result.y = y
-      if (width > result.width) result.width = width
-      if (height > result.height) result.height = height
+      if (absWidth > result.width) result.width = absWidth
+      if (absHeight > result.height) result.height = absHeight
     }
 
     if (result.x < this.#bounds.x) this.#bounds.x = result.x
@@ -64,8 +64,8 @@ export class Layer implements Orderable {
   }
 
   get size (): Readonly<Size> {
-    const { absWidth, absHeight } = this.bounds
-    return { width: absWidth, height: absHeight }
+    const { width, height } = this.bounds
+    return { width, height }
   }
 
   createShape (style: ShapeStyle | string | null = null, path?: MutablePath2D): Shape {
@@ -153,7 +153,7 @@ export class Layer implements Orderable {
   }
 
   clear () {
-    this.#bounds = new Rect(0, 0, 0, 0)
+    this.#bounds = new Rect(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 0, 0)
     this.#drawables = []
     this.arrange = new Arrange(this.#drawables)
   }

@@ -97,7 +97,7 @@ export class Scene {
       const size: Size = { width: 0, height: 0 }
       for (const layer of this._layers) {
         if (!layer.modified) continue
-        const { width, height } = this.size
+        const { width, height } = layer.size
         if (width > size.width) size.width = width
         if (height > size.height) size.height = height
       }
