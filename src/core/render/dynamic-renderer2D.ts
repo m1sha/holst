@@ -55,6 +55,7 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
       internal<DynamicLayer>(this.#scene).onRemoveLayer = layer => this.removeLayer(layer)
     }
     super.render(scene)
+    this.updateSceneSize()
     const layers = this.sortLayers(scene.layers as Layer[])
     for (const layer of layers) {
       if (!layer.modified && !this.resized && !this.forceRedraw) continue
@@ -159,6 +160,13 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
     this.viewportMatrix = Matrix2D.identity.translate({ x: -Math.round(this.#container.scrollLeft), y: -Math.round(this.#container.scrollTop) })
     this.forceRedraw = true
     if (this.onScrollChanged) this.onScrollChanged({ width: Math.round(this.#container.scrollLeft), height: Math.round(this.#container.scrollTop) })
+  }
+
+  private updateSceneSize () {
+    if (!this.options.wrapperClass) return
+    const { width, height } = this.#scene!.size
+    this.#wrapper.style.width = width + 'px'
+    this.#wrapper.style.height = height + 'px'
   }
 
   dispose (): void {
