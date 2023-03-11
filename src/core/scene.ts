@@ -4,7 +4,6 @@ import { StyleManager } from './styles/style-manager'
 import { TaskManager } from './tasks/task-manager'
 import { Animation, AnimationOptions } from './animations/animation'
 import { removeItem } from '../utils/array'
-import { SceneEventHandler } from './events/event-handler2'
 import { Size } from './geometry/size'
 
 export class Scene {
@@ -12,7 +11,6 @@ export class Scene {
     private _layers: Layer []
     private taskManager: TaskManager
     private arrange: Arrange
-    protected eventHandler: SceneEventHandler = new SceneEventHandler()
     protected invokeAnimation (t: number) { this.taskManager.invoke(t) }
     protected onRemoveLayer: ((layer: Layer) => void) | null = null
     readonly actionLayer: Layer

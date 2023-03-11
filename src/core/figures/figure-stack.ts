@@ -3,9 +3,14 @@ import { Figure } from './figure'
 import { Rect } from '../geometry/rect'
 
 export class FigureStack {
+  static path2dCreateFactory: (() => Path2DBase) = () => new Path2D()
   #figures: Figure[] = []
-  #path: Path2DBase = FigureStack.path2dCreateFactory()
+  #path: Path2DBase
   #bounds: Rect = new Rect(0, 0, 0, 0)
+
+  constructor () {
+    this.#path = FigureStack.path2dCreateFactory()
+  }
 
   add (figure: Figure) {
     this.#figures.push(figure)
@@ -30,6 +35,4 @@ export class FigureStack {
     if (this.#figures.some(p => p.modified)) this.update()
     return this.#path
   }
-
-  static path2dCreateFactory: (() => Path2DBase) = () => new Path2D()
 }

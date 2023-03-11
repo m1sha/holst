@@ -16,7 +16,6 @@ import { Shadow } from './styles/shadow'
 import { ShapeStyle, ShapeStyleImpl } from './styles/shape-style'
 
 export class Sketch extends Drawable {
-  #transform: Matrix2D = Matrix2D.identity
   #figureStack: FigureStack
   style: ShapeStyleImpl
   readonly shadow: Shadow = new Shadow()
