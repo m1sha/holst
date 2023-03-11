@@ -1,4 +1,3 @@
-import { Matrix2D } from '../matrix'
 import { IDisposable } from '../../utils/disposable'
 import { internal } from '../../utils/internal'
 import { Size } from '../geometry/size'
@@ -6,6 +5,7 @@ import { Layer } from '../layers'
 import { Scene } from '../scene'
 import CanvasRenderingContext2DFactory from './canvas-rendering-context-2d-factory'
 import { RendererBase } from './renderer'
+import { IViewport, Viewport } from '../viewport'
 
 type Offscreen = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D }
 type Layout = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, offscreen: Offscreen, order: number }
@@ -17,36 +17,37 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
   #scene: Scene | null = null
   #container: HTMLDivElement
   #wrapper: HTMLDivElement
-  #viewportSize: Size
   private foregroundCanvas: HTMLCanvasElement
   private layouts: Record<string, Layout> = {}
   private actionCanvas: Layout
   private options: RendererOptions
   private resized: boolean = false
-  private resizeObserver: ResizeObserver
-  private scrollChangedEventListener: (ev: Event) => void
   private forceRedraw: boolean = false
+  #viewport: IViewport
   useOffscreenRendering = true
-  onViewportResized: ((size: Size) => void) | null = null
-  onScrollChanged: ((size: Size) => void) | null = null
 
   constructor (viewportSize: Size, options?: RendererOptions) {
     super()
-    this.#viewportSize = viewportSize
     this.options = options ?? {}
-    this.actionCanvas = this.createLayout(9998)
-    this.foregroundCanvas = this.createLayout(9999).canvas
     this.#container = document.createElement('div')
     this.#wrapper = document.createElement('div')
+    this.#viewport = internal<IViewport>(new Viewport(viewportSize, this.#container, this.#wrapper,
+      () => {
+        if (!this.options.containerClass) return
+        this.resize()
+        this.resized = true
+      },
+      () => {
+        this.forceRedraw = true
+      }
+    ))
+    this.actionCanvas = this.createLayout(9998)
+    this.foregroundCanvas = this.createLayout(9999).canvas
     if (this.options.containerClass) this.#container.className = this.options.containerClass
     !this.options.wrapperClass ? this.#wrapper.style.position = 'relative' : this.#wrapper.className = this.options.wrapperClass
     this.#container.append(this.#wrapper)
     this.#wrapper.append(this.actionCanvas.canvas)
     this.#wrapper.append(this.foregroundCanvas)
-    this.scrollChangedEventListener = () => this.scrollChanged()
-    this.#container.addEventListener('scroll', () => this.scrollChanged())
-    this.resizeObserver = new ResizeObserver(() => this.resizeViewport())
-    this.resizeObserver.observe(this.#container)
   }
 
   render (scene: Scene): void {
@@ -55,21 +56,25 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
       internal<DynamicLayer>(this.#scene).onRemoveLayer = layer => this.removeLayer(layer)
     }
     super.render(scene)
-    this.updateSceneSize()
+    if (this.options.wrapperClass) {
+      const size = this.#scene!.size
+      this.#viewport.updateSpaceSize(size)
+    }
+
     const layers = this.sortLayers(scene.layers as Layer[])
     for (const layer of layers) {
       if (!layer.modified && !this.resized && !this.forceRedraw) continue
       const layout = this.getLayout(layer)
 
       if (this.useOffscreenRendering) {
-        this.drawLayer(layer, layout.offscreen.ctx, this.forceRedraw)
+        this.drawLayer(layer, layout.offscreen.ctx, this.#viewport.viewportMatrix, this.forceRedraw)
         layout.ctx.drawImage(layout.offscreen.canvas, 0, 0)
         continue
       }
 
-      this.drawLayer(layer, layout.ctx, this.forceRedraw)
+      this.drawLayer(layer, layout.ctx, this.#viewport.viewportMatrix, this.forceRedraw)
     }
-    this.drawLayer(scene.actionLayer, this.actionCanvas.ctx, this.forceRedraw)
+    this.drawLayer(scene.actionLayer, this.actionCanvas.ctx, this.#viewport.viewportMatrix, this.forceRedraw)
     this.resized = false
     this.forceRedraw = false
   }
@@ -79,7 +84,7 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
     for (const layer of this.#scene.layers) {
       if (!layer.modified && !this.forceRedraw) continue
 
-      const { width, height } = this.viewportSize
+      const { width, height } = this.#viewport.size
       const layout = this.layouts[layer.id]
       if (layout) {
         if (this.useOffscreenRendering) layout.offscreen.ctx.clearRect(0, 0, width, height)
@@ -88,9 +93,7 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
     }
   }
 
-  resize ({ width, height }: Size): void {
-    this.#viewportSize.width = width
-    this.#viewportSize.height = height
+  resize (): void {
     this.changeForegroundSize()
     this.changeLayoutSize(this.actionCanvas)
     for (const id of Object.keys(this.layouts)) this.changeLayoutSize(this.layouts[id])
@@ -100,8 +103,8 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
     return this.#container
   }
 
-  get viewportSize (): Readonly<Size> {
-    return this.#viewportSize
+  get viewport (): Viewport {
+    return internal<Viewport>(this.#viewport)
   }
 
   protected getCanvas (): HTMLCanvasElement {
@@ -109,8 +112,8 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
   }
 
   private createLayout (order: number, id?: string): Layout {
-    const { canvas, ctx } = CanvasRenderingContext2DFactory.create(this.viewportSize)
-    const offscreen = CanvasRenderingContext2DFactory.create(this.viewportSize)
+    const { canvas, ctx } = CanvasRenderingContext2DFactory.create(this.#viewport.size)
+    const offscreen = CanvasRenderingContext2DFactory.create(this.#viewport.size)
     !this.options.canvasClass ? canvas.style.position = 'absolute' : canvas.className = this.options.canvasClass
     canvas.style.zIndex = order.toString()
     if (id) canvas.classList.add(id)
@@ -137,41 +140,19 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
   }
 
   private changeLayoutSize (layout: Layout): void {
-    layout.canvas.width = this.viewportSize.width
-    layout.canvas.height = this.viewportSize.height
-    layout.offscreen.canvas.width = this.viewportSize.width
-    layout.offscreen.canvas.height = this.viewportSize.height
+    const { width, height } = this.#viewport.size
+    layout.canvas.width = width
+    layout.canvas.height = height
+    layout.offscreen.canvas.width = width
+    layout.offscreen.canvas.height = height
   }
 
   private changeForegroundSize (): void {
-    this.foregroundCanvas.width = this.viewportSize.width
-    this.foregroundCanvas.height = this.viewportSize.height
-  }
-
-  private resizeViewport () {
-    const size: Size = { width: this.#container.clientWidth, height: this.#container.clientHeight }
-    this.resize(size)
-    if (!this.onViewportResized) return
-    this.onViewportResized(size)
-    this.resized = true
-  }
-
-  private scrollChanged () {
-    this.viewportMatrix = Matrix2D.identity.translate({ x: -Math.round(this.#container.scrollLeft), y: -Math.round(this.#container.scrollTop) })
-    this.forceRedraw = true
-    if (this.onScrollChanged) this.onScrollChanged({ width: Math.round(this.#container.scrollLeft), height: Math.round(this.#container.scrollTop) })
-  }
-
-  private updateSceneSize () {
-    if (!this.options.wrapperClass) return
-    const { width, height } = this.#scene!.size
-    this.#wrapper.style.width = width + 'px'
-    this.#wrapper.style.height = height + 'px'
+    this.foregroundCanvas.width = this.#viewport.size.width
+    this.foregroundCanvas.height = this.#viewport.size.height
   }
 
   dispose (): void {
-    this.resizeObserver.unobserve(this.#container)
-    this.resizeObserver.disconnect()
-    this.#wrapper.removeEventListener('scroll', this.scrollChangedEventListener)
+    this.#viewport.dispose()
   }
 }
