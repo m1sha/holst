@@ -5,7 +5,8 @@ import { Layer } from '../layers'
 import { sort } from '../../utils/sorter'
 import { Drawable } from '../drawable'
 import { drawDrawables } from './drafters/draw-drawables'
-import { Matrix2D } from '../../core/matrix'
+import { Matrix2D } from '../matrix'
+import { Rect } from '../geometry/rect'
 export interface IRenderer {
   render (scene: Scene): void
   clear (): void
@@ -38,8 +39,8 @@ export abstract class RendererBase implements IRenderer {
     return this.animationHandler.fps
   }
 
-  protected drawLayer ({ drawables, mask }: Readonly<Layer>, ctx: CanvasRenderingContext2D, viewportMatrix: Matrix2D, forceRedraw: boolean) {
-    drawDrawables(ctx, drawables, mask, viewportMatrix, forceRedraw, item => this.setHandler(item))
+  protected drawLayer ({ drawables, mask }: Readonly<Layer>, ctx: CanvasRenderingContext2D, viewportMatrix: Matrix2D, viewportRect: Rect, forceRedraw: boolean) {
+    drawDrawables(ctx, drawables, mask, viewportMatrix, viewportRect, forceRedraw, item => this.setHandler(item))
   }
 
   protected setHandler (obj: Drawable) {

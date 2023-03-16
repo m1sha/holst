@@ -67,14 +67,14 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
       const layout = this.getLayout(layer)
 
       if (this.useOffscreenRendering) {
-        this.drawLayer(layer, layout.offscreen.ctx, this.#viewport.viewportMatrix, this.forceRedraw)
+        this.drawLayer(layer, layout.offscreen.ctx, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
         layout.ctx.drawImage(layout.offscreen.canvas, 0, 0)
         continue
       }
 
-      this.drawLayer(layer, layout.ctx, this.#viewport.viewportMatrix, this.forceRedraw)
+      this.drawLayer(layer, layout.ctx, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
     }
-    this.drawLayer(scene.actionLayer, this.actionCanvas.ctx, this.#viewport.viewportMatrix, this.forceRedraw)
+    this.drawLayer(scene.actionLayer, this.actionCanvas.ctx, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
     this.resized = false
     this.forceRedraw = false
   }

@@ -16,7 +16,7 @@ export abstract class Drawable extends Transformable implements Interactive, Ord
   hidden: boolean
   onModified: (() => void) | null
   name: string
-
+  frozen: boolean = false
   order: number
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
 

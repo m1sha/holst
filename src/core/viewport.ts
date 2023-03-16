@@ -1,16 +1,18 @@
 import { Size } from './geometry/size'
 import { IPoint } from './geometry/point'
 import { Matrix2D } from './matrix'
+import { Rect } from './geometry/rect'
 
 export interface IViewport {
   viewportMatrix: Matrix2D
-  dispose (): void
   get size (): Readonly<Size>
+  get bounds (): Rect
   updateSpaceSize ({ width, height }: Size): void
+  dispose (): void
 }
 
 export class Viewport {
-  #size: Size
+  #bounds: Rect
   #zoomValue: number
   #container: HTMLDivElement
   #space: HTMLDivElement
@@ -23,7 +25,7 @@ export class Viewport {
   /** @internal */ protected viewportMatrix: Matrix2D = Matrix2D.identity
 
   constructor (size: Size, container: HTMLDivElement, space: HTMLDivElement, resizedCallback: () => void, scrollChangedCallback: () => void) {
-    this.#size = size
+    this.#bounds = new Rect(0, 0, size.width, size.height)
     this.#zoomValue = 1
     this.#container = container
     this.#space = space
@@ -53,7 +55,7 @@ export class Viewport {
   }
 
   get size (): Readonly<Size> {
-    return this.#size
+    return this.#bounds
   }
 
   get spaceSize (): Readonly<Size> {
@@ -65,10 +67,15 @@ export class Viewport {
     this.#space.style.height = (height * this.#zoomValue) + 'px'
   }
 
+  /** @internal */ protected get bounds (): Rect {
+    return this.#bounds
+  }
+
   private resizeViewport () {
     const size: Size = { width: this.#container.clientWidth, height: this.#container.clientHeight }
     if (!size.width && !size.height) return
-    this.#size = size
+    this.#bounds.width = size.width
+    this.#bounds.height = size.height
     this.#viewportResizedCallback()
 
     if (!this.onResized) return

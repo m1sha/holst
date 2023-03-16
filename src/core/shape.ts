@@ -19,7 +19,6 @@ export default class Shape extends Drawable {
   private readonly mutablePath: MutablePath2D
   readonly relative: RelativeMutablePath2D
   style: ShapeStyleImpl
-  frozen: boolean = false
   readonly figures: Figures
 
   constructor (path: MutablePath2D, order: number, style: ShapeStyle | null = null) {
