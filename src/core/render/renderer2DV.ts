@@ -30,6 +30,11 @@ export class Renderer2DV extends RendererBase {
     this.ctx.clearRect(0, 0, width, height)
   }
 
+  size (): Size {
+    const { width, height } = this.getCanvas()
+    return { width, height }
+  }
+
   protected getCanvas (): HTMLCanvasElement {
     return this.ctx.canvas
   }
