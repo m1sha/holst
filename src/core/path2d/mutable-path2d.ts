@@ -78,9 +78,11 @@ export class MutablePath2D implements Path2DBase {
   }
 
   polygon (points: {x: number; y: number}[]) {
+    let moveTo = false
     for (const point of points) {
       this.lineTo(point.x, point.y)
-      this.moveTo(point.x, point.y)
+      if (!moveTo) this.moveTo(point.x, point.y)
+      moveTo = true
     }
   }
 
