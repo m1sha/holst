@@ -23,6 +23,7 @@ export class Viewport {
   onResized: ((size: Size) => void) | null = null
   onScrollChanged: ((point: IPoint) => void) | null = null
   /** @internal */ protected viewportMatrix: Matrix2D = Matrix2D.identity
+  useResizable = true
 
   constructor (size: Size, container: HTMLDivElement, space: HTMLDivElement, resizedCallback: () => void, scrollChangedCallback: () => void) {
     this.#bounds = new Rect(0, 0, size.width, size.height)
@@ -72,6 +73,7 @@ export class Viewport {
   }
 
   private resizeViewport () {
+    if (!this.useResizable) return
     const size: Size = { width: this.#container.clientWidth, height: this.#container.clientHeight }
     if (!size.width && !size.height) return
     this.#bounds.width = size.width
