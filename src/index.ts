@@ -28,12 +28,14 @@ import { TextBlock } from './core/label'
 import { StyleManager } from './core/styles/style-manager'
 import { LinearGradient } from './core/gradients/linear-gradient'
 import { RadialGradient } from './core/gradients/radial-gradient'
+import { Shadow } from './core/styles/shadow'
 export * from './core/styles/shape-style'
 export * from './core/styles/label-style'
 export * from './core/drawable'
 export * from './core/geometry/point'
 export * from './core/geometry/rect'
 export * from './core/geometry/size'
+export * from './core/constraint-grid'
 
 export {
   Anchor,
@@ -65,5 +67,6 @@ export {
   SvgPathD,
   TextBlock,
   LinearGradient,
-  RadialGradient
+  RadialGradient,
+  Shadow
 }
