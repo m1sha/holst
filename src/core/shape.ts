@@ -325,6 +325,12 @@ export default class Shape extends Drawable {
     return `${this.name} ${figures}`
   }
 
+  clone (): Shape {
+    const result = Shape.create(this.copyStyle(), this.copyPath())
+    result.setTransformFrom(this)
+    return result
+  }
+
   static create (style: ShapeStyle | null = null, path2d: MutablePath2D = new MutablePath2D()) {
     return new Shape(path2d ?? new MutablePath2D(), 0, style)
   }
