@@ -4,11 +4,12 @@ import { Assets } from './core/assets'
 import { CubicBezier } from './core/motion/cubic-bezier'
 import { Brightness } from './core/raster/filters/brightness'
 import { GreyScale } from './core/raster/filters/greyscale'
+import { Group } from './core/group'
 import { Randomize } from './core/raster/filters/randomize'
 import { Drawable } from './core/drawable'
 import { DynamicRenderer2D } from './core/render/dynamic-renderer2D'
 import { Layer } from './core/layers'
-import { Matrix2D } from './core/matrix'
+import { Matrix2D, identity } from './core/matrix'
 import { MutablePath2D } from './core/path2d/mutable-path2d'
 import { Point } from './core/geometry/point'
 import { Rect } from './core/geometry/rect'
@@ -43,6 +44,7 @@ export {
   Assets,
   Brightness,
   GreyScale,
+  Group,
   CubicBezier,
   Drawable,
   DynamicRenderer2D,
@@ -53,6 +55,7 @@ export {
   HSV,
   Layer,
   Matrix2D,
+  identity,
   MutablePath2D,
   Randomize,
   Point,

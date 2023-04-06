@@ -1,5 +1,5 @@
 import { Path2DElement } from './path2d-element'
-import { Matrix2D } from '../matrix'
+import { Matrix2D, identity } from '../matrix'
 import { DOMPointCorners, Path2DBase } from './path2d-base'
 import { IPoint, Point } from '../geometry/point'
 import { createPath2D } from './create-path2d'
@@ -102,6 +102,11 @@ export class MutablePath2D implements Path2DBase {
   toPoints (anchor?: Anchor): IPoint[] {
     const d = anchor ? getAnchorPoint(anchor) : Point.zero
     return createPoints(this.stack, d, this.transform)
+  }
+
+  toOriginalSizePoints (anchor?: Anchor): IPoint[] {
+    const d = anchor ? getAnchorPoint(anchor) : Point.zero
+    return createPoints(this.stack, d, identity())
   }
 
   copy () {

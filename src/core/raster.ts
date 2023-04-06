@@ -33,6 +33,10 @@ export class Raster extends Drawable {
     return new Rect(this.distRect)
   }
 
+  get originalBounds (): Rect {
+    return new Rect(this.srcRect)
+  }
+
   static createImage (url: string, callback?: (ev: Event) => void, onerror?: (ev: string | Event) => void) {
     const img = new Image()
     const srcRect = new Rect(0, 0, 0, 0)

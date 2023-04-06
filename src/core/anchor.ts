@@ -61,7 +61,7 @@ export function applyAnchor (drawable: Drawable): IPoint {
 
 export function getAnchorPoint (anchor: Anchor): IPoint {
   if (!anchor.container) return Point.zero
-  const p = new Point(anchor.container.bounds)
+  const p = new Point(anchor.container.originalBounds)
   //  // while (true) {
   //   if (!anchor.container.anchor || !anchor.container.anchor.container) return p
   //   const p2 = anchor.container.anchor.container.bounds

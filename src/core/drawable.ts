@@ -41,9 +41,11 @@ export abstract class Drawable extends Transformable implements Interactive, Ord
     return this
   }
 
-  abstract getType(): DrawableType
-  abstract get bounds(): Rect
+  abstract getType (): DrawableType
+  abstract get bounds (): Rect
+  abstract get originalBounds (): Rect
   abstract inPath(p: Point): boolean
+  abstract clone (): Drawable | this
 
   setAnchor (anchor: Anchor) {
     this.#anchor = anchor

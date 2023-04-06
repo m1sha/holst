@@ -15,9 +15,10 @@ type HandlerInputType = {
 }
 
 const calcPoint = (p: IPoint, d: IPoint, transform: Matrix2D, globalTransform?: Matrix2D): IPoint => {
-  const t2 = globalTransform ?? Matrix2D.identity
-  const r = new Point(p).add(d)
-  return t2.applyMatrix(transform.applyMatrix(r))
+  const point = transform.applyMatrix(new Point(p).add(d))
+  return globalTransform
+    ? globalTransform.applyMatrix(point)
+    : point
 }
 
 const handlers: Record<string, (input: HandlerInputType) => void> = {}

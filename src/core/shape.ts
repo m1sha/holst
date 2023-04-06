@@ -254,6 +254,12 @@ export default class Shape extends Drawable {
     return rect
   }
 
+  get originalBounds (): Rect {
+    const points = this.mutablePath.toOriginalSizePoints(this.anchor || undefined)
+    const rect = calcBounds(points)
+    return rect
+  }
+
   toPath2D (viewportMatrix: Matrix2D, forceRedraw: boolean = false): Path2DBase {
     const modified = this.anchor && this.anchor.isModified(this)
     if (this.modified || modified || forceRedraw) {
