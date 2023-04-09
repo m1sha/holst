@@ -3,6 +3,8 @@ import { Animation } from './core/animations/animation'
 import { Assets } from './core/assets'
 import { CubicBezier } from './core/motion/cubic-bezier'
 import { Brightness } from './core/raster/filters/brightness'
+import { Exporter } from './core/data-exchange/exporter'
+import { Importer } from './core/data-exchange/importer'
 import { GreyScale } from './core/raster/filters/greyscale'
 import { Group } from './core/group'
 import { Randomize } from './core/raster/filters/randomize'
@@ -52,6 +54,8 @@ export {
   BitmapWriter,
   ConstraintGrid,
   Color,
+  Exporter,
+  Importer,
   HSV,
   Layer,
   Matrix2D,
