@@ -14,10 +14,13 @@ export interface TextStyleDTO {
 }
 
 export interface TextBlockDTO {
-  type: 'text',
-  style: TextStyleDTO,
-  text: string,
-  target: { x: number, y: number },
+  type: 'text'
+  id: string
+  name: string,
+  anchor?: string
+  style: TextStyleDTO
+  text: string
+  target: { x: number, y: number }
   order: number
   transform?: string
   size?: { width: number, height: number }

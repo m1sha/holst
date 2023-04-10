@@ -1,14 +1,18 @@
 import Shape from '../../shape'
+import { AnchorDTO } from '../contract/anchor'
 import { DrawableDTO } from '../contract/drawable'
 import { FigureDTO } from '../contract/shape'
+import { exportAnchor } from './export-anchor'
 import { exportShapeStyle } from './export-shape-style'
 import { exportTransform } from './export-transform'
 
-export function exportShape (shape: Shape): DrawableDTO {
+export function exportShape (shape: Shape, anchors: AnchorDTO[]): DrawableDTO {
   const figures = exportFigures(shape)
   const result: DrawableDTO = {
     type: 'shape',
-    anchor: undefined,
+    id: shape.id,
+    name: shape.name,
+    anchor: shape.anchor ? exportAnchor(shape.anchor, anchors) : undefined,
     figures,
     order: shape.order,
     style: exportShapeStyle(shape.style),

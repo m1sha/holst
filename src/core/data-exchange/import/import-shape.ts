@@ -2,14 +2,26 @@ import Shape from '../../shape'
 import { ShapeDTO } from '../contract/shape'
 import { importShapeStyle } from './import-shape-style'
 import { parseTransform } from './parse-transform'
+import { ImportOptions } from './import-options'
+import { importAnchor } from './import-anchor'
+import { internal } from '../../../utils/internal'
 
-export function importShape (dto: ShapeDTO): Shape {
+export function importShape (dto: ShapeDTO, options: ImportOptions): Shape {
   const style = importShapeStyle(dto.style)
   const result = Shape.create(style)
+  internal<{ id: string }>(result).id = dto.id
   result.order = dto.order
+
   if (dto.transform) {
     result.injectTransform(parseTransform(dto.transform))
   }
+
+  if (dto.anchor) {
+    const anchorDto = options.anchorsDto.find(p => p.id === dto.anchor)
+    if (!anchorDto) throw new Error('anchor is not fround')
+    result.setAnchor(importAnchor(anchorDto, options.anchors, options.drawables))
+  }
+
   for (const f of dto.figures ?? []) {
     switch (f.type) {
       case 'rect':

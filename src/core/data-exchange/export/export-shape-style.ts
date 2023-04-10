@@ -1,5 +1,6 @@
 import { ShapeStyle } from '../../styles/shape-style'
 import { ShapeStyleDTO } from '../contract/shape'
+import { exportShadow } from './export-shadow'
 
 export function exportShapeStyle (style: ShapeStyle): ShapeStyleDTO {
   const result: ShapeStyleDTO = {
@@ -11,7 +12,8 @@ export function exportShapeStyle (style: ShapeStyle): ShapeStyleDTO {
     lineDashOffset: style.lineDashOffset || undefined,
     lineJoin: style.lineJoin === 'bevel' ? undefined : style.lineJoin,
     lineWidth: style.lineWidth === 1 ? undefined : style.lineWidth,
-    miterLimit: style.miterLimit
+    miterLimit: style.miterLimit,
+    shadow: style.shadow ? exportShadow(style.shadow) : undefined
   }
   return result
 }

@@ -1,13 +1,16 @@
 import { Raster } from '../../raster'
 import { RasterDTO } from '../contract/raster'
-import { Assets } from '../../assets'
 import { parseTransform } from './parse-transform'
+import { ImportOptions } from './import-options'
+import { importAnchor } from './import-anchor'
+import { internal } from '../../../utils/internal'
 
-export async function importRaster (dto: RasterDTO, assets: Assets): Promise<Raster> {
-  const name = (assets.count + 1) + ''
-  assets.add(name, dto.src)
-  await assets.busy
-  const result = assets.get(name)
+export async function importRaster (dto: RasterDTO, options: ImportOptions): Promise<Raster> {
+  const name = (options.assets.count + 1) + ''
+  options.assets.add(name, dto.src)
+  await options.assets.busy
+  const result = options.assets.get(name)
+  internal<{ id: string }>(result).id = dto.id
 
   if (dto.distRect) {
     if (dto.distRect.x) result.distRect.x = dto.distRect.x
@@ -25,6 +28,12 @@ export async function importRaster (dto: RasterDTO, assets: Assets): Promise<Ras
 
   if (dto.order) result.order = dto.order
   if (dto.transform) result.injectTransform(parseTransform(dto.transform))
+
+  if (dto.anchor) {
+    const anchorDto = options.anchorsDto.find(p => p.id === dto.anchor)
+    if (!anchorDto) throw new Error('anchor is not fround')
+    result.setAnchor(importAnchor(anchorDto, options.anchors, options.drawables))
+  }
 
   return result
 }

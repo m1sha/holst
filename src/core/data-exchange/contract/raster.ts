@@ -1,5 +1,7 @@
 export interface RasterDTO {
   type: 'raster'
+  id: string
+  name: string
   order: number
   anchor?: string
   transform?: string

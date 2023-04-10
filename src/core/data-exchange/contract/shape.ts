@@ -37,7 +37,9 @@ export type FigureDTO =
   | ClosePathDTO
 
 export interface ShapeDTO {
-  type: 'shape',
+  type: 'shape'
+  id: string
+  name: string
   style: ShapeStyleDTO
   order: number
   anchor?: string

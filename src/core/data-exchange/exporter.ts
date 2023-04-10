@@ -8,29 +8,32 @@ import { Group } from '../group'
 import { exportGroup } from './export/export-group'
 import { exportRaster } from './export/export-raster'
 import { Raster } from '../raster'
+import { AnchorDTO } from './contract/anchor'
 
 export class Exporter {
-  export (scene: Scene): SceneDTO {
+  static export (scene: Scene): SceneDTO {
+    const anchors: AnchorDTO[] = []
     const result: SceneDTO = {
       version: '1.0.0',
-      layers: []
+      layers: [],
+      anchors
     }
 
     for (const layer of scene.layers) {
-      const layerDto: LayerDTO = { id: layer.id, drawables: [] }
+      const layerDto: LayerDTO = { id: layer.id, name: layer.name, order: layer.order, drawables: [] }
       for (const drawable of layer.drawables) {
         switch (drawable.type) {
           case 'shape':
-            layerDto.drawables.push(exportShape(drawable as Shape))
+            layerDto.drawables.push(exportShape(drawable as Shape, anchors))
             break
           case 'text':
-            layerDto.drawables.push(exportTextBlock(drawable as TextBlock))
+            layerDto.drawables.push(exportTextBlock(drawable as TextBlock, anchors))
             break
           case 'raster':
-            layerDto.drawables.push(exportRaster(drawable as Raster))
+            layerDto.drawables.push(exportRaster(drawable as Raster, anchors))
             break
           case 'group':
-            layerDto.drawables.push(exportGroup(drawable as Group))
+            layerDto.drawables.push(exportGroup(drawable as Group, anchors))
             break
         }
       }

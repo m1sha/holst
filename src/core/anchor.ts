@@ -1,3 +1,4 @@
+import { uid } from '../utils/uid'
 import { Drawable } from './drawable'
 import { Point, IPoint } from './geometry/point'
 
@@ -5,6 +6,7 @@ export class Anchor {
   #container: Drawable | null = null
   #modifyMap: Map<string, boolean> = new Map()
   #drawables: Drawable[] = []
+  readonly id: string = uid()
 
   get container (): Drawable | null {
     return this.#container
