@@ -1,4 +1,5 @@
 import { Matrix2D } from '../matrix'
+import { IPoint } from './point'
 import { Rect } from './rect'
 
 export class Radial {
@@ -30,5 +31,12 @@ export class Radial {
       Matrix2D.identity.rotate(this.endAngle / Math.PI * 180, this).applyMatrix({ x: x + this.radiusY, y })
     }
     return new Rect(x, y, w, h)
+  }
+
+  static getPoint (angle: number, x: number, y: number, radiusX: number, radiusY?: number): IPoint {
+    return {
+      x: Math.cos(angle) * radiusX + x,
+      y: Math.sin(angle) * (radiusY ?? radiusX) + y
+    }
   }
 }

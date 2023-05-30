@@ -119,12 +119,16 @@ export class Matrix2D {
   }
 
   static get identity (): Matrix2D {
-    return matrix(1, 0, 0, 1, 0, 0)
+    return identity()
   }
 
   // private get instance () {
   //   return (MatrixFactory.instance as unknown) as IDOMMatrix2D
   // }
+}
+
+export function identity (): Matrix2D {
+  return matrix(1, 0, 0, 1, 0, 0)
 }
 
 export function matrix (a: number, b: number, c: number, d: number, e: number, f: number): Matrix2D {

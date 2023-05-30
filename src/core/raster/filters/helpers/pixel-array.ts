@@ -33,4 +33,12 @@ export class PixelArray {
     this.data[i + 1] = rgb[1]
     this.data[i + 2] = rgb[2]
   }
+
+  getIndex ({ x, y }: { x: number, y: number }) {
+    return y * this.imageData.width + x
+  }
+
+  get maxIndex (): number {
+    return this.imageData.width * this.imageData.height
+  }
 }

@@ -47,7 +47,6 @@ export class EventHandler implements IEventHandler {
   type: 'bag' | 'common' = 'common'
   private handlers: EventHandlers
   private element: HTMLCanvasElement
-  private sceneEventHandler: SceneEventHandler | null = null
 
   constructor (canvas: HTMLCanvasElement) {
     this.element = canvas
@@ -81,12 +80,8 @@ export class EventHandler implements IEventHandler {
     }
   }
 
-  setSceneEventHandlers (sceneEventHandler: SceneEventHandler) {
-    this.sceneEventHandler = sceneEventHandler
-  }
-
   private init () {
-    const resolver = new HandlerResolver(this.element, this.handlers, this.sceneEventHandler?.handlers)
+    const resolver = new HandlerResolver(this.element, this.handlers)
     this.element.onclick = e => resolver.onclick(e)
     this.element.ondblclick = e => resolver.ondblclick(e)
     this.element.onmousemove = e => resolver.onmousemove(e)

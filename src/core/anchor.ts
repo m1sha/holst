@@ -1,3 +1,4 @@
+import { uid } from '../utils/uid'
 import { Drawable } from './drawable'
 import { Point, IPoint } from './geometry/point'
 
@@ -5,6 +6,7 @@ export class Anchor {
   #container: Drawable | null = null
   #modifyMap: Map<string, boolean> = new Map()
   #drawables: Drawable[] = []
+  readonly id: string = uid()
 
   get container (): Drawable | null {
     return this.#container
@@ -61,7 +63,7 @@ export function applyAnchor (drawable: Drawable): IPoint {
 
 export function getAnchorPoint (anchor: Anchor): IPoint {
   if (!anchor.container) return Point.zero
-  const p = new Point(anchor.container.bounds)
+  const p = new Point(anchor.container.originalBounds)
   //  // while (true) {
   //   if (!anchor.container.anchor || !anchor.container.anchor.container) return p
   //   const p2 = anchor.container.anchor.container.bounds

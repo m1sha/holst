@@ -2,7 +2,11 @@ import { Point } from '../geometry/point'
 import { MutablePath2D } from '../path2d/mutable-path2d'
 import { SvgPathDElement } from './svg-path-d-element'
 
-export function toPath2D (items: SvgPathDElement[], position: Point, path2d?: MutablePath2D): { path: MutablePath2D, position: Point } {
+export function toPath2D (
+  items: SvgPathDElement[],
+  position: Point,
+  path2d?: MutablePath2D
+): { path: MutablePath2D; position: Point } {
   const path = path2d || new MutablePath2D()
   position.x = 0
   position.y = 0
@@ -76,7 +80,7 @@ export function toPath2D (items: SvgPathDElement[], position: Point, path2d?: Mu
         path.lineTo(position.x, position.y)
         continue
       case 'v': {
-        path.moveTo(position.x, position.y)
+        if (!path.recorder.count) path.moveTo(position.x, position.y)
         position.y += item.height
         path.lineTo(position.x, position.y)
         continue
@@ -86,7 +90,7 @@ export function toPath2D (items: SvgPathDElement[], position: Point, path2d?: Mu
         path.lineTo(position.x, position.y)
         continue
       case 'h': {
-        path.moveTo(position.x, position.y)
+        if (!path.recorder.count) path.moveTo(position.x, position.y)
         position.x += item.width
         path.lineTo(position.x, position.y)
         continue

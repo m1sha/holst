@@ -6,10 +6,10 @@ import Shape from '../../shape'
 import { applyGraphicStyle } from '../../styles/apply-graphic-style'
 import { Color } from '../../colors/color'
 
-export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock, clip: Shape | null) {
+export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock, clip: Shape | null, viewportMatrix: Matrix2D) {
   ctx.save()
 
-  if (clip) ctx.clip(clip.toPath2D())
+  if (clip) ctx.clip(clip.toPath2D(viewportMatrix))
 
   if (block.style.shadow) {
     const { x, y, blur, color } = block.style.shadow.values()
@@ -20,7 +20,7 @@ export function drawTextBlock (ctx: CanvasRenderingContext2D, block: TextBlock, 
   }
 
   assignTextStyle(ctx, block.style)
-  ctx.setTransform(block.getTransform().mul(block.globalTransform ?? Matrix2D.identity))
+  ctx.setTransform(block.getTransform().mul(viewportMatrix))
   ctx.textBaseline = block.baseline
 
   const cut = block.overflow === 'clip' || block.overflow === 'word-break + clip'

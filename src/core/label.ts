@@ -113,6 +113,10 @@ export class TextBlock extends Drawable {
     return new Rect(this.target, this.computedSize)
   }
 
+  get originalBounds (): Rect {
+    return new Rect(this.target, this.computedSize)
+  }
+
   get position (): IPoint {
     return applyAnchor(this)
   }
@@ -191,6 +195,19 @@ export class TextBlock extends Drawable {
 
   getType (): DrawableType {
     return 'text'
+  }
+
+  clone (): TextBlock {
+    const result = new TextBlock(this.text, this.copyStyle(), this.order)
+    result.target = new Point(this.target)
+    result.alignment = this.alignment
+    result.verticalAlignment = this.verticalAlignment
+    result.overflow = this.overflow
+    result.baseline = this.baseline
+    result.lineHeight = this.lineHeight
+    if (this.size) result.size = { width: this.size.width, height: this.size.height }
+    result.transform = this.transform.copy()
+    return result
   }
 
   static create (text: string, style: TextStyle, target?: IPoint) {

@@ -26,6 +26,10 @@ export class Sprite extends Drawable {
     return new Rect(this.position, this.tileSize)
   }
 
+  get originalBounds (): Rect {
+    return new Rect(this.position, this.tileSize)
+  }
+
   set frame (value: number) {
     if (value > this.frames) throw Error(`The frame ${value} out of range`)
     this.framePosition.x = value * this.tileSize.width
@@ -45,6 +49,14 @@ export class Sprite extends Drawable {
 
   inPath (p: Point): boolean {
     return this.bounds.intersectsPoint(p)
+  }
+
+  clone (): Sprite {
+    const sprite = new Sprite(this.raster.clone(), { width: this.tileSize.width, height: this.tileSize.height }, this.order)
+    sprite.transform = this.transform.copy()
+    sprite.position = new Point(this.position)
+    sprite.framePosition = new Point(this.framePosition)
+    return sprite
   }
 
   protected get transform (): Matrix2D {

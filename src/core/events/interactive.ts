@@ -8,22 +8,27 @@ export interface InteractiveEvent<TEvent> {
   target: any
 }
 
+export type IMouseEvent = InteractiveEvent<MouseEventDecorator>
+export type IKeyboardEvent = InteractiveEvent<KeyboardEventDecorator>
+export type IFocusEvent = InteractiveEvent<FocusEventDecorator>
+export type IDragEvent = InteractiveEvent<DragEventDecorator>
+
 export interface EventType {
-  'click': InteractiveEvent<MouseEventDecorator>
-  'dblclick': InteractiveEvent<MouseEventDecorator>
-  'hover': InteractiveEvent<MouseEventDecorator>
-  'leave': InteractiveEvent<MouseEventDecorator>
-  'mousemove': InteractiveEvent<MouseEventDecorator>
-  'mousedown': InteractiveEvent<MouseEventDecorator>
-  'mouseup': InteractiveEvent<MouseEventDecorator>
-  'keyup': InteractiveEvent<KeyboardEventDecorator>
-  'keydown': InteractiveEvent<KeyboardEventDecorator>
-  'wheel': InteractiveEvent<MouseEventDecorator>
-  'focus': InteractiveEvent<FocusEventDecorator>
-  'blur': InteractiveEvent<FocusEventDecorator>
-  'dragover': InteractiveEvent<DragEventDecorator>
-  'dragleave': InteractiveEvent<DragEventDecorator>
-  'drop': InteractiveEvent<DragEventDecorator>
+  'click': IMouseEvent
+  'dblclick': IMouseEvent
+  'hover': IMouseEvent
+  'leave': IMouseEvent
+  'mousemove': IMouseEvent
+  'mousedown': IMouseEvent
+  'mouseup': IMouseEvent
+  'keyup': IKeyboardEvent
+  'keydown': IKeyboardEvent
+  'wheel': IMouseEvent
+  'focus': IFocusEvent
+  'blur': IFocusEvent
+  'dragover': IDragEvent
+  'dragleave': IDragEvent
+  'drop': IDragEvent
 }
 
 export type EventListener = <K extends keyof EventType>(ev: EventType[K]) => void

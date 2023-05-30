@@ -131,6 +131,13 @@ export class Color {
     return rgb2floatArray(this)
   }
 
+  equals (color: Color): boolean {
+    return this.a === color.a &&
+      this.r === color.r &&
+      this.g === color.g &&
+      this.b === color.b
+  }
+
   static readonly black = new Color('#000000')
   static readonly lightGrey = new Color('#d8d8d8')
   static readonly darkGrey = new Color('#484848')
@@ -148,6 +155,9 @@ export class Color {
   static readonly pink = new Color('#ff00ff')
   static readonly purple = new Color('#800080')
   static readonly teal = new Color('#008080')
+  static get random () {
+    return new Color(new HSV(Math.floor(Math.random() * 360), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)))
+  }
 
   static fromGradient (value: number, colors: (Color | string)[]): Color {
     return colorFromGradient(value, colors)

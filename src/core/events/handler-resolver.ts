@@ -1,6 +1,6 @@
 import { EventType } from './interactive'
 import { Point } from '../geometry/point'
-import { EventHandlers, InteractiveEvent, ListenerCallback, ListenerType } from './event-handler2'
+import { EventHandlers, InteractiveEvent, ListenerType } from './event-handler2'
 import { ActionSpecDic } from './action-spec-dic'
 import { MouseEventDecorator, KeyboardEventDecorator, DragEventDecorator } from './decorators'
 import { IHTMLCanvasElement } from '../render/html-canvas-element'
@@ -11,15 +11,13 @@ export class HandlerResolver {
   private hovered: ActionSpecDic
   private pressed: ActionSpecDic
   private dragged: ActionSpecDic
-  private sceneHandlers: Record<string, ListenerCallback>
 
-  constructor (canvas: IHTMLCanvasElement, handlers: EventHandlers, sceneHandlers?: Record<string, ListenerCallback>) {
+  constructor (canvas: IHTMLCanvasElement, handlers: EventHandlers) {
     this.handlers = handlers
     this.element = canvas
     this.hovered = new ActionSpecDic()
     this.pressed = new ActionSpecDic()
     this.dragged = new ActionSpecDic()
-    this.sceneHandlers = sceneHandlers ?? {}
   }
 
   onclick (e: MouseEvent) {

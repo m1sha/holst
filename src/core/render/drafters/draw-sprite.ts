@@ -3,12 +3,12 @@ import { applyAnchor } from '../../anchor'
 import { Sprite } from '../../sprite'
 import { Matrix2D } from '../../matrix'
 
-export function drawSprite (ctx: CanvasRenderingContext2D, sprite: Sprite, clip: Shape | null) {
+export function drawSprite (ctx: CanvasRenderingContext2D, sprite: Sprite, clip: Shape | null, viewportMatrix: Matrix2D) {
   ctx.save()
 
-  if (clip) ctx.clip(clip.toPath2D())
+  if (clip) ctx.clip(clip.toPath2D(viewportMatrix))
 
-  ctx.setTransform(sprite.getTransform().mul(sprite.globalTransform ?? Matrix2D.identity))
+  ctx.setTransform(sprite.getTransform().mul(viewportMatrix))
 
   const { x, y } = applyAnchor(sprite)
   ctx.drawImage(

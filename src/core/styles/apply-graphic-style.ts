@@ -9,6 +9,7 @@ import { Pattern } from '../pattern'
 import { Rect } from '../geometry/rect'
 import CanvasRenderingContext2DFactory from '../render/canvas-rendering-context-2d-factory'
 import { drawRaster } from '../render/drafters/draw-raster'
+import { Matrix2D } from '../matrix'
 
 export function applyGraphicStyle (style: GraphicStyle, ctx: CanvasRenderingContext2D): NativeGraphicStyle {
   if (style instanceof Color) return style.toString()
@@ -41,7 +42,7 @@ export function applyGraphicStyle (style: GraphicStyle, ctx: CanvasRenderingCont
     }
 
     const rendererContext = CanvasRenderingContext2DFactory.create(style.raster.distRect)
-    drawRaster(rendererContext.ctx, style.raster, null)
+    drawRaster(rendererContext.ctx, style.raster, null, Matrix2D.identity)
 
     return ctx.createPattern(rendererContext.canvas, style.repetition)!
   }

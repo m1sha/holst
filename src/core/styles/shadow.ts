@@ -14,11 +14,11 @@ export class Shadow {
   }
 
   get point (): Readonly<IPoint> | null {
-    return this.point
+    return this.#point
   }
 
   set point (value: IPoint | null) {
-    this.point = value
+    this.#point = value
     if (this.onChangeProperty) this.onChangeProperty()
   }
 

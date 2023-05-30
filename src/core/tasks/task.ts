@@ -52,7 +52,7 @@ export class Task {
 
   start (): Promise<void> {
     this.reset()
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.playResolve = resolve
     })
   }

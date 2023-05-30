@@ -1,38 +1,32 @@
-import { Matrix2D } from './matrix'
 import { Arrange } from './arrange'
 import { Layer } from './layers'
 import { StyleManager } from './styles/style-manager'
 import { TaskManager } from './tasks/task-manager'
 import { Animation, AnimationOptions } from './animations/animation'
 import { removeItem } from '../utils/array'
-import { EventType } from './events/interactive'
-import { SceneEventHandler } from './events/event-handler2'
-import { internal } from '../utils/internal'
-import { IWorldTransform } from './geometry/world-transform'
+import { Size } from './geometry/size'
 
 export class Scene {
+    #size: Size
     private _layers: Layer []
     private taskManager: TaskManager
     private arrange: Arrange
-    private globalTransform: Matrix2D
-    protected eventHandler: SceneEventHandler = new SceneEventHandler()
     protected invokeAnimation (t: number) { this.taskManager.invoke(t) }
     protected onRemoveLayer: ((layer: Layer) => void) | null = null
     readonly actionLayer: Layer
     readonly styleManager: StyleManager
 
     constructor () {
+      this.#size = { width: 0, height: 0 }
       this._layers = []
       this.arrange = new Arrange(this._layers)
       this.styleManager = new StyleManager()
       this.taskManager = new TaskManager()
       this.actionLayer = new Layer(0, this.styleManager)
-      this.globalTransform = Matrix2D.identity
     }
 
     createLayer (name?: string, frozen?: boolean): Layer {
       const result = new Layer(this.arrange.order, this.styleManager, name)
-      internal<IWorldTransform>(result).globalTransform = this.globalTransform
       this._layers.push(result)
       if (frozen) result.frozen = true
       return result
@@ -58,6 +52,7 @@ export class Scene {
     }
 
     clearAllLayers () {
+      this.#size = { width: 0, height: 0 }
       this.clearActiveLayer()
       for (const layer of [...this._layers]) layer.clear()
       this._layers = []
@@ -95,13 +90,17 @@ export class Scene {
       return this._layers
     }
 
-    on<EventTypeKey extends keyof EventType> (type: EventTypeKey, listener: (ev: EventType[EventTypeKey]) => void): this {
-      this.eventHandler.add(type, listener)
-      return this
-    }
-
-    off<EventTypeKey extends keyof EventType> (type: EventTypeKey): this {
-      this.eventHandler.remove(type)
-      return this
+    get size (): Readonly<Size> {
+      if (!this._layers.length) return this.#size
+      const size: Size = { width: 0, height: 0 }
+      for (const layer of this._layers) {
+        if (!layer.modified) continue
+        const { width, height } = layer.size
+        if (width > size.width) size.width = width
+        if (height > size.height) size.height = height
+      }
+      if (size.width > this.#size.width) this.#size.width = size.width
+      if (size.height > this.#size.height) this.#size.height = size.height
+      return this.#size
     }
 }

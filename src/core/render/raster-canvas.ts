@@ -1,24 +1,26 @@
 import { Color } from '../../core/colors/color'
 import { Size } from '../../core/geometry/size'
 import { IPoint } from '../../core/geometry/point'
+import { Raster } from '../../core/raster'
+import { fillRegion } from '../../core/raster/fill-region'
 
 export class RasterCanvas {
   private canvas: HTMLCanvasElement
+  private raster: Raster
   private ctx: CanvasRenderingContext2D
+  private path2d: Path2D
   backgroundColor: Color
   foregroundColor: Color
+  lineWidth: number = 1
 
-  constructor (size?: Size) {
+  constructor (raster: Raster) {
+    this.raster = raster
     this.canvas = document.createElement('canvas')
     this.ctx = this.canvas.getContext('2d')!
     this.backgroundColor = Color.white
     this.foregroundColor = Color.orange
-
-    if (size) this.setSize(size)
-  }
-
-  get data () {
-    return this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height)
+    this.path2d = new Path2D()
+    if (raster.distRect) this.setSize(raster.distRect)
   }
 
   setSize ({ width, height }: Size) {
@@ -26,16 +28,63 @@ export class RasterCanvas {
     this.canvas.height = height
   }
 
+  fillRegion ({ x, y }: IPoint, color: Color) {
+    const imageData = this.raster.getData()
+    fillRegion(imageData, { x, y }, color)
+    this.raster.setData(imageData)
+  }
+
   penStart ({ x, y }: IPoint) {
+    // this.ctx.save()
+    this.canvas = document.createElement('canvas')
+    this.ctx = this.canvas.getContext('2d', { willReadFrequently: true })!
+    if (this.raster.distRect) this.setSize(this.raster.distRect)
+    this.ctx.translate(0.5, 0.5)
     this.ctx.strokeStyle = this.foregroundColor.toString()
-    // this.ctx.translate(-0.5, -0.5)
-    this.ctx.beginPath()
-    this.ctx.moveTo(x - 0.5, y - 0.5)
+    this.ctx.lineWidth = this.lineWidth
+    // this.path2d = new Path2D()
+    this.ctx.moveTo(x, y)
   }
 
   penMove ({ x, y }: IPoint) {
-    this.ctx.lineTo(x - 0.5, y - 0.5)
+    this.ctx.lineTo(x, y)
+    // this.path2d.closePath()
     this.ctx.stroke()
-    // this.ctx.closePath()
+    // this.ctx.restore()
+    this.merge()
+  }
+
+  brush ({ x, y }: IPoint, r: number) {
+    this.ctx.save()
+    this.ctx.translate(0.5, 0.5)
+    this.ctx.fillStyle = this.foregroundColor.toString()
+    this.path2d = new Path2D()
+    this.path2d.arc(x, y, r, 0.001, Math.PI * 2)
+    this.ctx.fill(this.path2d)
+    this.ctx.restore()
+    this.merge()
+  }
+
+  setPixel ({ x, y }: IPoint) {
+    this.ctx.save()
+    this.ctx.translate(0.5, 0.5)
+    this.ctx.fillStyle = this.foregroundColor.toString()
+    this.path2d = new Path2D()
+    this.path2d.rect(x, y, 1, 1)
+    this.ctx.fill(this.path2d)
+    this.ctx.restore()
+    this.merge()
+  }
+
+  getPixel ({ x, y }: IPoint) {
+    const s = this.ctx.getImageData(x, y, 1, 1)
+    const r = s.data[0]
+    const g = s.data[1]
+    const b = s.data[2]
+    return new Color(r, g, b)
+  }
+
+  private merge () {
+    this.raster.merge(this.canvas)
   }
 }

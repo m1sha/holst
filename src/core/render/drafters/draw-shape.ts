@@ -3,14 +3,15 @@ import { Sketch } from '../../sketch'
 import { Color } from '../../colors/color'
 import { applyGraphicStyle } from '../../styles/apply-graphic-style'
 import { ShapeStyle } from '../../styles/shape-style'
+import { Matrix2D } from '../../matrix'
 
-export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape | Sketch, clip: Shape | null) {
+export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape | Sketch, clip: Shape | null, viewportMatrix: Matrix2D, forceRedraw: boolean) {
   ctx.save()
 
-  if (clip) ctx.clip(clip.toPath2D())
+  if (clip) ctx.clip(clip.toPath2D(viewportMatrix, forceRedraw))
 
   const { style } = shape
-  const path = shape.toPath2D()
+  const path = shape.toPath2D(viewportMatrix, forceRedraw)
   if (style.shadow) {
     const { x, y, blur, color } = style.shadow.values()
     ctx.shadowOffsetX = x

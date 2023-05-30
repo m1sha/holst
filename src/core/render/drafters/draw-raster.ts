@@ -3,12 +3,12 @@ import { applyAnchor } from '../../anchor'
 import { Raster } from '../../raster'
 import { Matrix2D } from '../../matrix'
 
-export function drawRaster (ctx: CanvasRenderingContext2D, raster: Raster, clip: Shape | null) {
+export function drawRaster (ctx: CanvasRenderingContext2D, raster: Raster, clip: Shape | null, viewportMatrix: Matrix2D) {
   ctx.save()
 
-  if (clip) ctx.clip(clip.toPath2D())
+  if (clip) ctx.clip(clip.toPath2D(viewportMatrix))
 
-  ctx.setTransform(raster.getTransform().mul(raster.globalTransform ?? Matrix2D.identity))
+  ctx.setTransform(raster.getTransform().mul(viewportMatrix))
 
   const { x, y } = applyAnchor(raster)
   ctx.drawImage(

@@ -5,7 +5,6 @@ import Orderable from './orderable'
 import { uid } from '../utils/uid'
 import { Point } from './geometry/point'
 import { EventHandlerBag, IEventHandler } from './events/event-handler2'
-import { Matrix2D } from './matrix'
 import { Transformable } from './transformable'
 
 export type DrawableType = 'shape' | 'text' | 'raster' | 'sprite' | 'group'
@@ -17,10 +16,9 @@ export abstract class Drawable extends Transformable implements Interactive, Ord
   hidden: boolean
   onModified: (() => void) | null
   name: string
-
+  frozen: boolean = false
   order: number
   /** @internal */ eventHandler: IEventHandler = new EventHandlerBag()
-  /** @internal */ globalTransform: Matrix2D | null = null
 
   constructor (order: number) {
     super()
@@ -43,9 +41,11 @@ export abstract class Drawable extends Transformable implements Interactive, Ord
     return this
   }
 
-  abstract getType(): DrawableType
-  abstract get bounds(): Rect
+  abstract getType (): DrawableType
+  abstract get bounds (): Rect
+  abstract get originalBounds (): Rect
   abstract inPath(p: Point): boolean
+  abstract clone (): Drawable | this
 
   setAnchor (anchor: Anchor) {
     this.#anchor = anchor

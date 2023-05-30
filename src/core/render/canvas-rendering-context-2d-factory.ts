@@ -14,9 +14,25 @@ export default class CanvasRenderingContext2DFactory {
 
   static create (size: Size) {
     const canvas = document.createElement('canvas')
-    canvas.width = size.width
-    canvas.height = size.height
+    canvas.width = size.width || 300
+    canvas.height = size.height || 300
     const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('CanvasRenderingContext2D is unsupported')
+    return { ctx: ctx, canvas: canvas }
+  }
+
+  static createOffscreen (size: Size) {
+    const canvas = new OffscreenCanvas(size.width || 300, size.height || 300)
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('CanvasRenderingContext2D is unsupported')
+    return { ctx: ctx, canvas: canvas }
+  }
+
+  static createBitmap (size: Size) {
+    const canvas = document.createElement('canvas')
+    canvas.width = size.width || 300
+    canvas.height = size.height || 300
+    const ctx = canvas.getContext('bitmaprenderer')
     if (!ctx) throw new Error('CanvasRenderingContext2D is unsupported')
     return { ctx: ctx, canvas: canvas }
   }

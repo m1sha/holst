@@ -16,7 +16,6 @@ import { Shadow } from './styles/shadow'
 import { ShapeStyle, ShapeStyleImpl } from './styles/shape-style'
 
 export class Sketch extends Drawable {
-  #transform: Matrix2D = Matrix2D.identity
   #figureStack: FigureStack
   style: ShapeStyleImpl
   readonly shadow: Shadow = new Shadow()
@@ -145,6 +144,10 @@ export class Sketch extends Drawable {
     return this.#figureStack.bounds
   }
 
+  get originalBounds (): Rect {
+    return this.#figureStack.bounds
+  }
+
   inPath (p: Point): boolean {
     return Context2DFactory.default.ctx.isPointInPath(this.#figureStack.path2d, p.x, p.y)
   }
@@ -152,6 +155,10 @@ export class Sketch extends Drawable {
   toPath2D (): Path2DBase {
     this.modified = false
     return this.#figureStack.path2d
+  }
+
+  clone (): Sketch {
+    return new Sketch(0, this.style.clone())
   }
 
   protected get transform (): Matrix2D {
