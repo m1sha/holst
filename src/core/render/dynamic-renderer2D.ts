@@ -7,8 +7,10 @@ import CanvasRenderingContext2DFactory from './canvas-rendering-context-2d-facto
 import { RendererBase } from './renderer'
 import { IViewport, Viewport } from '../viewport'
 
-type Offscreen = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D }
-type Layout = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, offscreen: Offscreen, order: number }
+// type Offscreen = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D }
+// type Layout = { canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, offscreen: Offscreen, order: number }
+type Offscreen = { canvas: OffscreenCanvas, ctx: OffscreenCanvasRenderingContext2D }
+type Layout = { canvas: HTMLCanvasElement, ctx: ImageBitmapRenderingContext, offscreen: Offscreen, order: number }
 interface DynamicLayer { onRemoveLayer: ((layer: Layer) => void) }
 
 export type RendererOptions = { containerClass?: string, wrapperClass?: string, canvasClass?: string }
@@ -67,28 +69,32 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
       const layout = this.getLayout(layer)
 
       if (this.useOffscreenRendering) {
-        this.drawLayer(layer, layout.offscreen.ctx, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
-        layout.ctx.drawImage(layout.offscreen.canvas, 0, 0)
+        this.drawLayer(layer, layout.offscreen.ctx as any, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
+        // layout.ctx.drawImage(layout.offscreen.canvas, 0, 0)
+        layout.ctx.transferFromImageBitmap(layout.offscreen.canvas.transferToImageBitmap())
         continue
       }
 
-      this.drawLayer(layer, layout.ctx, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
+      // this.drawLayer(layer, layout.ctx, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
     }
-    this.drawLayer(scene.actionLayer, this.actionCanvas.ctx, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
+    this.drawLayer(scene.actionLayer, this.actionCanvas.offscreen.ctx as any, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
+    this.actionCanvas.ctx.transferFromImageBitmap(this.actionCanvas.offscreen.canvas.transferToImageBitmap())
     this.resized = false
     this.forceRedraw = false
   }
 
   clear (): void {
     if (!this.#scene) return
+    const { width, height } = this.#viewport.size
+    if (this.useOffscreenRendering) this.actionCanvas.offscreen.ctx.clearRect(0, 0, width, height)
+    // this.actionCanvas.ctx.clearRect(0, 0, width, height)
     for (const layer of this.#scene.layers) {
       if (!layer.modified && !this.forceRedraw) continue
 
-      const { width, height } = this.#viewport.size
       const layout = this.layouts[layer.id]
       if (layout) {
         if (this.useOffscreenRendering) layout.offscreen.ctx.clearRect(0, 0, width, height)
-        layout.ctx.clearRect(0, 0, width, height)
+        // layout.ctx.clearRect(0, 0, width, height)
       }
     }
   }
@@ -112,8 +118,8 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
   }
 
   private createLayout (order: number, id?: string): Layout {
-    const { canvas, ctx } = CanvasRenderingContext2DFactory.create(this.#viewport.size)
-    const offscreen = CanvasRenderingContext2DFactory.create(this.#viewport.size)
+    const { canvas, ctx } = CanvasRenderingContext2DFactory.createBitmap(this.#viewport.size)
+    const offscreen = CanvasRenderingContext2DFactory.createOffscreen(this.#viewport.size)
     !this.options.canvasClass ? canvas.style.position = 'absolute' : canvas.className = this.options.canvasClass
     canvas.style.zIndex = order.toString()
     if (id) canvas.classList.add(id)
