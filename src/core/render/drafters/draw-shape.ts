@@ -5,13 +5,13 @@ import { applyGraphicStyle } from '../../styles/apply-graphic-style'
 import { ShapeStyle } from '../../styles/shape-style'
 import { Matrix2D } from '../../matrix'
 
-export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape | Sketch, clip: Shape | null, viewportMatrix: Matrix2D, forceRedraw: boolean) {
+export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape | Sketch, clip: Shape | null, viewportMatrix: Matrix2D, forceRedraw: boolean, disableShapeCache: boolean) {
   ctx.save()
 
   if (clip) ctx.clip(clip.toPath2D(viewportMatrix, forceRedraw))
 
   const { style } = shape
-  const path = shape.toPath2D(viewportMatrix, forceRedraw)
+  const path = shape.toPath2D(viewportMatrix, forceRedraw, disableShapeCache)
   if (style.shadow) {
     const { x, y, blur, color } = style.shadow.values()
     ctx.shadowOffsetX = x

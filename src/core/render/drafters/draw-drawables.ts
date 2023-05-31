@@ -19,6 +19,7 @@ export function drawDrawables (
   viewportMatrix: Matrix2D,
   viewportRect: Rect,
   forceRedraw: boolean,
+  disableShapeCache: boolean,
   callback: (item: Drawable) => void
 ) {
   for (const item of list) {
@@ -27,25 +28,25 @@ export function drawDrawables (
     //   continue
     // }
 
-    if (item instanceof Shape || item instanceof Sketch) drawShape(ctx, item, mask, viewportMatrix, forceRedraw)
+    if (item instanceof Shape || item instanceof Sketch) drawShape(ctx, item, mask, viewportMatrix, forceRedraw, disableShapeCache)
     if (item instanceof TextBlock) drawTextBlock(ctx, item, mask, viewportMatrix)
     if (item instanceof Raster) drawRaster(ctx, item, mask, viewportMatrix)
     if (item instanceof Sprite) drawSprite(ctx, item, mask, viewportMatrix)
-    if (item instanceof Group) drawDrawables(ctx, item.items, mask, viewportMatrix, viewportRect, forceRedraw, callback)
+    if (item instanceof Group) drawDrawables(ctx, item.items, mask, viewportMatrix, viewportRect, forceRedraw, disableShapeCache, callback)
     callback(item)
   }
 }
 
-function rectOverlapViewport (
-  { x, y, absWidth, absHeight }: Rect,
-  { topLeft, bottomRight }: Rect,
-  matrix: Matrix2D
-): boolean {
-  const { x: left, y: top } = matrix.applyMatrix(topLeft)
-  const { x: right, y: bottom } = matrix.applyMatrix(bottomRight)
+// function rectOverlapViewport (
+//   { x, y, absWidth, absHeight }: Rect,
+//   { topLeft, bottomRight }: Rect,
+//   matrix: Matrix2D
+// ): boolean {
+//   const { x: left, y: top } = matrix.applyMatrix(topLeft)
+//   const { x: right, y: bottom } = matrix.applyMatrix(bottomRight)
 
-  return (
-    (left >= x && left <= absWidth && top >= y && top <= absHeight) ||
-    (right >= x && right <= absWidth && bottom >= y && bottom <= absHeight)
-  )
-}
+//   return (
+//     (left >= x && left <= absWidth && top >= y && top <= absHeight) ||
+//     (right >= x && right <= absWidth && bottom >= y && bottom <= absHeight)
+//   )
+// }

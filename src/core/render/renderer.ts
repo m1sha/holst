@@ -17,6 +17,7 @@ export abstract class RendererBase implements IRenderer {
   #eventHandler: EventHandler | null = null
   #animationHandler: AnimationHandler | null = null
   onFrameChanged: (() => void) | null = null
+  disableShapeCache: boolean = false
 
   render (scene: Scene): void {
     if (this.animationHandler.isStarted) return
@@ -40,7 +41,7 @@ export abstract class RendererBase implements IRenderer {
   }
 
   protected drawLayer ({ drawables, mask }: Readonly<Layer>, ctx: CanvasRenderingContext2D, viewportMatrix: Matrix2D, viewportRect: Rect, forceRedraw: boolean) {
-    drawDrawables(ctx, drawables, mask, viewportMatrix, viewportRect, forceRedraw, item => this.setHandler(item))
+    drawDrawables(ctx, drawables, mask, viewportMatrix, viewportRect, forceRedraw, this.disableShapeCache, item => this.setHandler(item))
   }
 
   protected setHandler (obj: Drawable) {
