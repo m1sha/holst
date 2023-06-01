@@ -21,8 +21,10 @@ import { Size } from './geometry/size'
 export class Layer implements Orderable {
   #drawables: Drawable[] = []
   #bounds: Rect
+  #hidden: boolean
   private arrange: Arrange
   protected globalTransform: Matrix2D | null = null
+  protected onHidden: (() => void) | null = null
   readonly styleManager: StyleManager
   readonly id: string
   mask: Shape | null
@@ -39,6 +41,7 @@ export class Layer implements Orderable {
     this.mask = null
     this.styleManager = styleManager
     this.arrange = new Arrange([])
+    this.#hidden = false
     this.clear()
   }
 
@@ -66,6 +69,15 @@ export class Layer implements Orderable {
   get size (): Readonly<Size> {
     const { width, height } = this.bounds
     return { width, height }
+  }
+
+  get hidden () {
+    return this.#hidden
+  }
+
+  set hidden (value: boolean) {
+    this.#hidden = value
+    if (this.onHidden) this.onHidden()
   }
 
   createShape (style: ShapeStyle | string | null = null, path?: MutablePath2D): Shape {

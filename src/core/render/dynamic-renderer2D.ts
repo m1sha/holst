@@ -69,6 +69,8 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
       const layout = this.getLayout(layer)
 
       if (this.useOffscreenRendering) {
+        (layer as any).onHidden = () => this.setLayoutVisible(layer)
+        if (layer.hidden) continue
         this.drawLayer(layer, layout.offscreen.ctx as any, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
         // layout.ctx.drawImage(layout.offscreen.canvas, 0, 0)
         layout.ctx.transferFromImageBitmap(layout.offscreen.canvas.transferToImageBitmap())
@@ -156,6 +158,11 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
   private changeForegroundSize (): void {
     this.foregroundCanvas.width = this.#viewport.size.width
     this.foregroundCanvas.height = this.#viewport.size.height
+  }
+
+  private setLayoutVisible ({ id, hidden }: Layer) {
+    const layout = this.layouts[id]
+    layout.canvas.style.display = hidden ? 'none' : 'block'
   }
 
   dispose (): void {
