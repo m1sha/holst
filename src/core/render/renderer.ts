@@ -40,8 +40,8 @@ export abstract class RendererBase implements IRenderer {
     return this.animationHandler.fps
   }
 
-  protected drawLayer ({ drawables, mask }: Readonly<Layer>, ctx: CanvasRenderingContext2D, viewportMatrix: Matrix2D, viewportRect: Rect, forceRedraw: boolean) {
-    drawDrawables(ctx, drawables, mask, viewportMatrix, viewportRect, forceRedraw, this.disableShapeCache, item => this.setHandler(item))
+  protected drawLayer ({ drawables, mask }: Readonly<Layer>, ctx: CanvasRenderingContext2D, viewportMatrix: Matrix2D, viewportRect: Rect, forceRedraw: boolean, dpr: number = 1) {
+    drawDrawables(ctx, drawables, mask, viewportMatrix, viewportRect, forceRedraw, this.disableShapeCache, dpr, item => this.setHandler(item))
   }
 
   protected setHandler (obj: Drawable) {

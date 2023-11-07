@@ -12,26 +12,30 @@ export default class CanvasRenderingContext2DFactory {
     return { ctx: this.ctx, canvas: this.canvas }
   }
 
-  static create (size: Size) {
+  static create (size: Size, dpr: number = 1) {
     const canvas = document.createElement('canvas')
-    canvas.width = size.width || 300
-    canvas.height = size.height || 300
+    canvas.width = (size.width || 300) * dpr
+    canvas.height = (size.height || 300) * dpr
+    canvas.style.width = canvas.width + 'px'
+    canvas.style.height = canvas.height + 'px'
     const ctx = canvas.getContext('2d')
     if (!ctx) throw new Error('CanvasRenderingContext2D is unsupported')
     return { ctx: ctx, canvas: canvas }
   }
 
-  static createOffscreen (size: Size) {
-    const canvas = new OffscreenCanvas(size.width || 300, size.height || 300)
+  static createOffscreen (size: Size, dpr: number = 1) {
+    const canvas = new OffscreenCanvas((size.width || 300) * dpr, (size.height || 300) * dpr)
     const ctx = canvas.getContext('2d')
     if (!ctx) throw new Error('CanvasRenderingContext2D is unsupported')
     return { ctx: ctx, canvas: canvas }
   }
 
-  static createBitmap (size: Size) {
+  static createBitmap (size: Size, dpr: number = 1) {
     const canvas = document.createElement('canvas')
-    canvas.width = size.width || 300
-    canvas.height = size.height || 300
+    canvas.width = (size.width || 300) * dpr
+    canvas.height = (size.height || 300) * dpr
+    canvas.style.width = canvas.width + 'px'
+    canvas.style.height = canvas.height + 'px'
     const ctx = canvas.getContext('bitmaprenderer')
     if (!ctx) throw new Error('CanvasRenderingContext2D is unsupported')
     return { ctx: ctx, canvas: canvas }

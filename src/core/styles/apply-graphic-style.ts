@@ -42,7 +42,7 @@ export function applyGraphicStyle (style: GraphicStyle, ctx: CanvasRenderingCont
     }
 
     const rendererContext = CanvasRenderingContext2DFactory.create(style.raster.distRect)
-    drawRaster(rendererContext.ctx, style.raster, null, Matrix2D.identity)
+    drawRaster(rendererContext.ctx, style.raster, null, Matrix2D.identity, 1)
 
     return ctx.createPattern(rendererContext.canvas, style.repetition)!
   }

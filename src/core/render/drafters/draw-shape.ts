@@ -5,7 +5,7 @@ import { applyGraphicStyle } from '../../styles/apply-graphic-style'
 import { ShapeStyle } from '../../styles/shape-style'
 import { Matrix2D } from '../../matrix'
 
-export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape | Sketch, clip: Shape | null, viewportMatrix: Matrix2D, forceRedraw: boolean, disableShapeCache: boolean) {
+export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape | Sketch, clip: Shape | null, viewportMatrix: Matrix2D, forceRedraw: boolean, disableShapeCache: boolean, dpr: number) {
   ctx.save()
 
   if (clip) ctx.clip(clip.toPath2D(viewportMatrix, forceRedraw))
@@ -27,6 +27,8 @@ export function drawShape (ctx: CanvasRenderingContext2D, shape: Shape | Sketch,
     fill(ctx, style, path)
     stoke(ctx, style, path)
   }
+
+  ctx.scale(dpr, dpr)
 
   ctx.restore()
 }

@@ -8,6 +8,7 @@ export interface IEventHandler {
   type: 'bag' | 'common'
   add<K extends keyof EventType>(interactive: Interactive, type: K, listener: (ev: EventType[K]) => void): void
   remove<K extends keyof EventType>(interactive: Interactive, type: K): void
+  removeAll (interactive: Interactive): void
 }
 
 type F<K extends keyof EventType> = { interactive: Interactive; listener: (ev: EventType[K]) => void }
@@ -28,6 +29,14 @@ export class EventHandlerBag implements IEventHandler {
 
   remove<K extends keyof EventType> (interactive: Interactive, type: K): void {
     removeItem(this.handlers[type], p => p.interactive.id === interactive.id)
+  }
+
+  removeAll (interactive: Interactive): void {
+    for (const type of ['click', 'dblclick', 'hover', 'leave', 'mousemove', 'mouseup', 'mousedown', 'wheel', 'focus', 'blur', 'dragover', 'dragleave', 'drop']) {
+      const listeners = this.handlers[type]
+      if (!listeners) continue
+      removeItem(listeners, p => p.interactive.id === interactive.id)
+    }
   }
 }
 
@@ -64,6 +73,14 @@ export class EventHandler implements IEventHandler {
     removeItem(this.handlers[type], p => p.interactive.id === interactive.id)
   }
 
+  removeAll (interactive: Interactive): void {
+    for (const type of ['click', 'dblclick', 'hover', 'leave', 'mousemove', 'mouseup', 'mousedown', 'wheel', 'focus', 'blur', 'dragover', 'dragleave', 'drop']) {
+      const listeners = this.handlers[type]
+      if (!listeners) continue
+      removeItem(listeners, p => p.interactive.id === interactive.id)
+    }
+  }
+
   fromBag (eventHandler: IEventHandler) {
     const handlers = (eventHandler as EventHandlerBag).handlers
     const keys = Object.keys(handlers)
@@ -88,6 +105,7 @@ export class EventHandler implements IEventHandler {
     this.element.onmouseup = e => resolver.onmouseup(e)
     this.element.onmousedown = e => resolver.onmousedown(e)
     this.element.onmouseleave = e => resolver.onmouseleave(e)
+    this.element.onmouseenter = e => resolver.onmouseenter(e)
     const document = DomDocumentFactory.document()
     document.onkeyup = e => resolver.onkeyup(e)
     document.onkeydown = e => resolver.onkeydown(e)

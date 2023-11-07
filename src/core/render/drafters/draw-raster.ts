@@ -3,7 +3,7 @@ import { applyAnchor } from '../../anchor'
 import { Raster } from '../../raster'
 import { Matrix2D } from '../../matrix'
 
-export function drawRaster (ctx: CanvasRenderingContext2D, raster: Raster, clip: Shape | null, viewportMatrix: Matrix2D) {
+export function drawRaster (ctx: CanvasRenderingContext2D, raster: Raster, clip: Shape | null, viewportMatrix: Matrix2D, dpr: number) {
   ctx.save()
 
   if (clip) ctx.clip(clip.toPath2D(viewportMatrix))
@@ -22,6 +22,8 @@ export function drawRaster (ctx: CanvasRenderingContext2D, raster: Raster, clip:
     raster.distRect?.width || 0,
     raster.distRect?.height || 0
   )
+
+  ctx.scale(dpr, dpr)
 
   ctx.restore()
 }

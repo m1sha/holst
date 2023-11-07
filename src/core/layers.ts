@@ -11,13 +11,14 @@ import Orderable from './orderable'
 import { Arrange } from './arrange'
 import { Sprite } from './sprite'
 import { Matrix2D } from './matrix'
-import { removeItem } from '../utils/array'
 import { Sketch } from './sketch'
 import { Group } from './group'
 import { uid } from '../utils/uid'
 import { Drawable } from './drawable'
 import { sort } from '../utils/sorter'
 import { Size } from './geometry/size'
+import { RasterMimeType, Rasterizer } from './render/rasterizer'
+import { removeItem } from '../utils/array'
 export class Layer implements Orderable {
   #drawables: Drawable[] = []
   #bounds: Rect
@@ -32,6 +33,7 @@ export class Layer implements Orderable {
   name: string
   frozen: boolean = false
   canvasOrder: 'foreground' | 'background' = 'foreground'
+  needRedraw: boolean = false
 
   constructor (order: number, styleManager: StyleManager, name?: string) {
     this.#bounds = new Rect(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 0, 0)
@@ -48,9 +50,10 @@ export class Layer implements Orderable {
   get bounds (): Readonly<Rect> {
     if (!this.#drawables.length) return this.#bounds
     const result = new Rect(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 0, 0)
+    const cacheEmpty = this.#bounds.equals(new Rect(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 0, 0))
 
     for (const drawable of this.#drawables) {
-      if (!drawable.modified) continue
+      if (!drawable.modified && !cacheEmpty) continue
       const { x, y, absWidth, absHeight } = drawable.bounds
       if (x < result.x) result.x = x
       if (y < result.y) result.y = y
@@ -183,15 +186,18 @@ export class Layer implements Orderable {
   }
 
   remove (drawable: Drawable): void {
-    this.removeById(drawable.id)
+    drawable.killAllHandlers()
+    removeItem(this.#drawables, p => p.id === drawable.id)
   }
 
   removeById (id: string): void {
-    removeItem(this.#drawables, p => p.id === id)
+    const drawable = this.#drawables.find(p => p.id === id)
+    if (drawable) this.remove(drawable)
   }
 
   removeByName (name: string): void {
-    removeItem(this.#drawables, p => p.name === name)
+    const drawable = this.#drawables.find(p => p.name === name)
+    if (drawable) this.remove(drawable)
   }
 
   sendToBack (item: Shape | TextBlock | Raster) {
@@ -240,5 +246,13 @@ export class Layer implements Orderable {
 
   get modified (): boolean {
     return this.#drawables.some(p => p.modified)
+  }
+
+  rasterize (type: RasterMimeType = 'image/webp', quality: number = 1, dpr: number = 1): string {
+    return Rasterizer.rasterizeLayer(this, type, quality, dpr)
+  }
+
+  static create (name?: string): Layer {
+    return new Layer(0, new StyleManager(), name)
   }
 }

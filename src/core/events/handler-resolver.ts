@@ -4,6 +4,7 @@ import { EventHandlers, InteractiveEvent, ListenerType } from './event-handler2'
 import { ActionSpecDic } from './action-spec-dic'
 import { MouseEventDecorator, KeyboardEventDecorator, DragEventDecorator } from './decorators'
 import { IHTMLCanvasElement } from '../render/html-canvas-element'
+import { HtmlHandlers } from './html-handlers'
 
 export class HandlerResolver {
   private handlers: EventHandlers
@@ -11,6 +12,7 @@ export class HandlerResolver {
   private hovered: ActionSpecDic
   private pressed: ActionSpecDic
   private dragged: ActionSpecDic
+  private htmlHandlers: HtmlHandlers
 
   constructor (canvas: IHTMLCanvasElement, handlers: EventHandlers) {
     this.handlers = handlers
@@ -18,6 +20,7 @@ export class HandlerResolver {
     this.hovered = new ActionSpecDic()
     this.pressed = new ActionSpecDic()
     this.dragged = new ActionSpecDic()
+    this.htmlHandlers = new HtmlHandlers()
   }
 
   onclick (e: MouseEvent) {
@@ -26,6 +29,7 @@ export class HandlerResolver {
 
       p.listener(this.createEvent(decorator, p))
     })
+    this.htmlHandlers.click(e)
   }
 
   ondblclick (e: MouseEvent): any {
@@ -75,6 +79,9 @@ export class HandlerResolver {
       decorator.hit = hit
       p.listener(this.createEvent(decorator, p))
     })
+
+    this.htmlHandlers.hover(e)
+    this.htmlHandlers.enter(e)
   }
 
   onmouseleave (e: MouseEvent) {
@@ -86,6 +93,10 @@ export class HandlerResolver {
     })
 
     this.pressed.clearAll()
+  }
+
+  onmouseenter (e: MouseEvent) {
+    this.htmlHandlers.enter(e)
   }
 
   onmouseup (e: MouseEvent) {

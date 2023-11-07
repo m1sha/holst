@@ -73,4 +73,8 @@ export abstract class Drawable extends Transformable implements Interactive, Ord
   update (): void {
     this.#modified = true
   }
+
+  killAllHandlers () {
+    this.eventHandler.removeAll(this)
+  }
 }

@@ -23,7 +23,7 @@ export class Raster extends Drawable {
   srcRect: IRect
   distRect: IRect
 
-  #imageData: ImageData | null = null
+  // #imageData: ImageData | null = null
 
   constructor (src: AnyImageType, srcRect: IRect, distRect: IRect, order: number = 0) {
     super(order)
@@ -71,7 +71,8 @@ export class Raster extends Drawable {
 
   getData (): ImageData {
     // if (this.#imageData) return this.#imageData
-    return (this.#imageData = RasterDataTransfer.read(this.src, this.distRect))
+    // return (this.#imageData = RasterDataTransfer.read(this.src, this.distRect))
+    return RasterDataTransfer.read(this.src, this.distRect)
   }
 
   setData (imagedata: ImageData) {

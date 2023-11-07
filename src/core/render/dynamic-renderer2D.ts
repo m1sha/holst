@@ -65,7 +65,7 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
 
     const layers = this.sortLayers(scene.layers as Layer[])
     for (const layer of layers) {
-      if (!layer.modified && !this.resized && !this.forceRedraw) continue
+      if (!layer.modified && !this.resized && !this.forceRedraw && !layer.needRedraw) continue
       const layout = this.getLayout(layer)
 
       if (this.useOffscreenRendering) {
@@ -74,12 +74,36 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
         this.drawLayer(layer, layout.offscreen.ctx as any, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
         // layout.ctx.drawImage(layout.offscreen.canvas, 0, 0)
         layout.ctx.transferFromImageBitmap(layout.offscreen.canvas.transferToImageBitmap())
+        layer.needRedraw = false
         continue
       }
 
       // this.drawLayer(layer, layout.ctx, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
     }
-    this.drawLayer(scene.actionLayer, this.actionCanvas.offscreen.ctx as any, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
+    for (const layer of scene.htmlLayers) {
+      if (!layer.modified && !this.resized && !this.forceRedraw) continue
+      // const layout = this.getLayout(layer)
+      let container = this.#wrapper
+      if (layer.useContainer) {
+        const oldContainer = this.#wrapper.getElementsByClassName(layer.id)[0]
+        if (oldContainer) {
+          layer.elements.forEach(el => {
+            if (oldContainer.getElementsByClassName(el.id)[0]) return
+            oldContainer.append(el.htmlElement)
+          })
+          continue
+        }
+        container = document.createElement(layer.containerElement) as HTMLDivElement
+        container.style.position = 'absolute'
+        container.classList.add(layer.id)
+        this.#wrapper.append(container)
+      }
+      layer.elements.forEach(el => {
+        if (this.#wrapper.getElementsByClassName(el.id)[0]) return
+        container.append(el.htmlElement)
+      })
+    }
+    this.drawLayer(scene.actionLayer, this.actionCanvas.offscreen.ctx as any, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw, this.dpr)
     this.actionCanvas.ctx.transferFromImageBitmap(this.actionCanvas.offscreen.canvas.transferToImageBitmap())
     this.resized = false
     this.forceRedraw = false
@@ -115,13 +139,17 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
     return internal<Viewport>(this.#viewport)
   }
 
+  get dpr () {
+    return window.devicePixelRatio
+  }
+
   protected getCanvas (): HTMLCanvasElement {
     return this.foregroundCanvas
   }
 
   private createLayout (order: number, id?: string): Layout {
-    const { canvas, ctx } = CanvasRenderingContext2DFactory.createBitmap(this.#viewport.size)
-    const offscreen = CanvasRenderingContext2DFactory.createOffscreen(this.#viewport.size)
+    const { canvas, ctx } = CanvasRenderingContext2DFactory.createBitmap(this.#viewport.size, this.dpr)
+    const offscreen = CanvasRenderingContext2DFactory.createOffscreen(this.#viewport.size, this.dpr)
     !this.options.canvasClass ? canvas.style.position = 'absolute' : canvas.className = this.options.canvasClass
     canvas.style.zIndex = order.toString()
     if (id) canvas.classList.add(id)

@@ -20,6 +20,7 @@ export function drawDrawables (
   viewportRect: Rect,
   forceRedraw: boolean,
   disableShapeCache: boolean,
+  dpr: number,
   callback: (item: Drawable) => void
 ) {
   for (const item of list) {
@@ -28,11 +29,11 @@ export function drawDrawables (
     //   continue
     // }
 
-    if (item instanceof Shape || item instanceof Sketch) drawShape(ctx, item, mask, viewportMatrix, forceRedraw, disableShapeCache)
-    if (item instanceof TextBlock) drawTextBlock(ctx, item, mask, viewportMatrix)
-    if (item instanceof Raster) drawRaster(ctx, item, mask, viewportMatrix)
-    if (item instanceof Sprite) drawSprite(ctx, item, mask, viewportMatrix)
-    if (item instanceof Group) drawDrawables(ctx, item.items, mask, viewportMatrix, viewportRect, forceRedraw, disableShapeCache, callback)
+    if (item instanceof Shape || item instanceof Sketch) drawShape(ctx, item, mask, viewportMatrix, forceRedraw, disableShapeCache, dpr)
+    if (item instanceof TextBlock) drawTextBlock(ctx, item, mask, viewportMatrix, dpr)
+    if (item instanceof Raster) drawRaster(ctx, item, mask, viewportMatrix, dpr)
+    if (item instanceof Sprite) drawSprite(ctx, item, mask, viewportMatrix, dpr)
+    if (item instanceof Group) drawDrawables(ctx, item.items, mask, viewportMatrix, viewportRect, forceRedraw, disableShapeCache, dpr, callback)
     callback(item)
   }
 }

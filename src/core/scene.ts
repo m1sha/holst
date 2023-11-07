@@ -5,10 +5,12 @@ import { TaskManager } from './tasks/task-manager'
 import { Animation, AnimationOptions } from './animations/animation'
 import { removeItem } from '../utils/array'
 import { Size } from './geometry/size'
+import { HtmlLayer } from './html/html-layer'
 
 export class Scene {
     #size: Size
     private _layers: Layer []
+    private _htmlLayers: HtmlLayer[] = []
     private taskManager: TaskManager
     private arrange: Arrange
     protected invokeAnimation (t: number) { this.taskManager.invoke(t) }
@@ -29,6 +31,12 @@ export class Scene {
       const result = new Layer(this.arrange.order, this.styleManager, name)
       this._layers.push(result)
       if (frozen) result.frozen = true
+      return result
+    }
+
+    createHtmlLayer (name?: string) {
+      const result = new HtmlLayer(this.arrange.order, this.styleManager, name)
+      this._htmlLayers.push(result)
       return result
     }
 
@@ -62,6 +70,11 @@ export class Scene {
       this.actionLayer.clear()
     }
 
+    clearHtmlLayers () {
+      for (const layer of [...this._htmlLayers]) layer.clear()
+      this._htmlLayers = []
+    }
+
     clearAllAnimations () {
       this.taskManager.clearAll()
     }
@@ -88,6 +101,10 @@ export class Scene {
 
     get layers (): Readonly<Layer>[] {
       return this._layers
+    }
+
+    get htmlLayers (): Readonly<HtmlLayer>[] {
+      return this._htmlLayers
     }
 
     get size (): Readonly<Size> {
