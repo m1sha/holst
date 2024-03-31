@@ -18,7 +18,7 @@ export class HtmlHandlers {
   enter (e: MouseEvent) {
     this.leaveAll()
     this.applyEvent(e, el => {
-      el.dispatchEvent(new MouseEvent('mouseenter'))
+      el.dispatchEvent(new MouseEvent('mouseenter', e))
       this.enteredIds.push(el.id)
     })
   }

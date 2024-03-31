@@ -13,7 +13,7 @@ type Offscreen = { canvas: OffscreenCanvas, ctx: OffscreenCanvasRenderingContext
 type Layout = { canvas: HTMLCanvasElement, ctx: ImageBitmapRenderingContext, offscreen: Offscreen, order: number }
 interface DynamicLayer { onRemoveLayer: ((layer: Layer) => void) }
 
-export type RendererOptions = { containerClass?: string, wrapperClass?: string, canvasClass?: string }
+export type RendererOptions = { containerClass?: string, wrapperClass?: string, canvasClass?: string, disableInteractive?: boolean, maxZIndex?: number }
 
 export class DynamicRenderer2D extends RendererBase implements IDisposable {
   #scene: Scene | null = null
@@ -43,13 +43,15 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
         this.forceRedraw = true
       }
     ))
-    this.actionCanvas = this.createLayout(9998)
-    this.foregroundCanvas = this.createLayout(9999).canvas
+
+    const zIndex = this.options.maxZIndex ?? 9999
+    this.actionCanvas = this.createLayout(zIndex - 1)
+    this.foregroundCanvas = this.createLayout(zIndex).canvas
     if (this.options.containerClass) this.#container.className = this.options.containerClass
     !this.options.wrapperClass ? this.#wrapper.style.position = 'relative' : this.#wrapper.className = this.options.wrapperClass
     this.#container.append(this.#wrapper)
-    this.#wrapper.append(this.actionCanvas.canvas)
-    this.#wrapper.append(this.foregroundCanvas)
+    if (!this.options.disableInteractive) this.#wrapper.append(this.actionCanvas.canvas)
+    if (!this.options.disableInteractive) this.#wrapper.append(this.foregroundCanvas)
   }
 
   render (scene: Scene): void {
@@ -156,10 +158,16 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
     return { canvas, ctx, offscreen, order }
   }
 
-  private getLayout ({ id, order }: Layer): Layout {
+  private getLayout ({ id, order, size }: Layer): Layout {
     let layout = this.layouts[id]
     if (layout) {
       if (layout.order !== order) layout.canvas.style.zIndex = order.toString()
+      if (layout.canvas.width !== size.width || layout.canvas.height !== size.height) {
+        layout.canvas.width = size.width
+        layout.canvas.height = size.height
+        layout.offscreen.canvas.width = size.width
+        layout.offscreen.canvas.height = size.height
+      }
       return layout
     }
 
