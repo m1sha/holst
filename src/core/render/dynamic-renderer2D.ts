@@ -165,6 +165,8 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
       if (layout.canvas.width !== size.width || layout.canvas.height !== size.height) {
         layout.canvas.width = size.width
         layout.canvas.height = size.height
+        layout.canvas.style.width = size.width + 'px'
+        layout.canvas.style.height = size.height + 'px'
         layout.offscreen.canvas.width = size.width
         layout.offscreen.canvas.height = size.height
       }
