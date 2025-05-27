@@ -1,6 +1,6 @@
 {
   "name": "holst",
-  "version": "1.7.25",
+  "version": "1.7.26",
   "description": "2D graphic library",
   "main": "index.js",
   "scripts": {
