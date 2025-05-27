@@ -13,6 +13,8 @@ export class HtmlLayer {
   useContainer: boolean = true
   containerElement: string = 'div'
   name: string
+  oneUse: boolean = false
+  used: boolean = false
 
   constructor (order: number, _: StyleManager, name?: string) {
     this.id = uid()
@@ -31,6 +33,18 @@ export class HtmlLayer {
 
   get modified () {
     return this.elements.some(text => text.modified)
+  }
+
+  get size () {
+    let width = 0
+    let height = 0
+    this.elements.forEach(el => {
+      const w = parseInt(el.htmlElement.style.width.replace('px', ''))
+      const h = parseInt(el.htmlElement.style.height.replace('px', ''))
+      width = isNaN(w) ? width : (w > width ? w : width)
+      height = isNaN(h) ? width : (h > height ? h : height)
+    })
+    return { width, height }
   }
 
   add (text: HtmlText | HtmlImg | HtmlButton | HtmlContainerElement): this {

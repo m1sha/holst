@@ -82,7 +82,12 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
 
       // this.drawLayer(layer, layout.ctx, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw)
     }
+
     for (const layer of scene.htmlLayers) {
+      if (layer.oneUse) {
+        if (layer.used) continue
+        ;(layer as any).used = true
+      }
       if (!layer.modified && !this.resized && !this.forceRedraw) continue
       // const layout = this.getLayout(layer)
       let container = this.#wrapper
@@ -105,6 +110,9 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
         container.append(el.htmlElement)
       })
     }
+
+    this.updateForegroundCanvasSize(scene)
+
     this.drawLayer(scene.actionLayer, this.actionCanvas.offscreen.ctx as any, this.#viewport.viewportMatrix, this.#viewport.bounds, this.forceRedraw, this.dpr)
     this.actionCanvas.ctx.transferFromImageBitmap(this.actionCanvas.offscreen.canvas.transferToImageBitmap())
     this.resized = false
@@ -201,6 +209,33 @@ export class DynamicRenderer2D extends RendererBase implements IDisposable {
   private setLayoutVisible ({ id, hidden }: Layer) {
     const layout = this.layouts[id]
     layout.canvas.style.display = hidden ? 'none' : 'block'
+  }
+
+  private updateForegroundCanvasSize (scene: Scene) {
+    let maxWidth = 0
+    let maxHeigh = 0
+    const calcMaxSize = (arr: { size: Size }[]) => {
+      arr.forEach(layer => {
+        const size = layer.size
+        if (maxWidth < size.width) maxWidth = size.width
+        if (maxHeigh < size.height) maxHeigh = size.height
+      })
+    }
+    calcMaxSize(scene.layers)
+    calcMaxSize(scene.htmlLayers)
+
+    if (maxWidth > 0 && maxHeigh > 0) {
+      this.actionCanvas.canvas.width = maxWidth
+      this.actionCanvas.canvas.height = maxHeigh
+      this.actionCanvas.canvas.style.width = maxWidth + 'px'
+      this.actionCanvas.canvas.style.height = maxHeigh + 'px'
+      this.actionCanvas.offscreen.canvas.width = maxWidth
+      this.actionCanvas.offscreen.canvas.height = maxHeigh
+      this.foregroundCanvas.width = maxWidth
+      this.foregroundCanvas.height = maxHeigh
+      this.foregroundCanvas.style.width = maxWidth + 'px'
+      this.foregroundCanvas.style.height = maxHeigh + 'px'
+    }
   }
 
   dispose (): void {
